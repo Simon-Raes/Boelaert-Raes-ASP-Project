@@ -9,6 +9,8 @@ using LayeredBusinessModel.DAO;
 
 namespace LayeredBusinessModel.BLL
 {
+
+    //test commit
     public class BierService
     {
         private BierDAO bierDAO;

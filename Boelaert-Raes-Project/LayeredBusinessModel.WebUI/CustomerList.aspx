@@ -9,7 +9,8 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    
+        Tijdelijke pagina om databaseconnection te testen.
+
         <asp:GridView ID="gvBeer" runat="server">
         </asp:GridView>
     

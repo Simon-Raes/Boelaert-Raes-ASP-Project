@@ -39,8 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Beer.cs" />
-    <Compile Include="Brewer.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="Dvd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

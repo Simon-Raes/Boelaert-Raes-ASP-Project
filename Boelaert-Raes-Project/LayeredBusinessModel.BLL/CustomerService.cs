@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.BLL
     {
         private CustomerDAO customerDAO;
 
-        public List<Customer> GetAll()
+        public List<Customer> getAll()
         {
             List<Customer> customerList = new List<Customer>();
             customerDAO = new CustomerDAO();
@@ -22,7 +22,23 @@ namespace LayeredBusinessModel.BLL
             return customerList;
         }
 
-       
+        public Customer getCustomerWithLogin(String login)
+        {
+            customerDAO = new CustomerDAO();
+            return customerDAO.getCustomerWithLogin(login);
+        }
+
+        public void updateCustomer(Customer customer)
+        {
+            customerDAO = new CustomerDAO();
+            customerDAO.updateCustomer(customer);
+        }
+
+        public Boolean addCustomer(Customer customer)
+        {
+            customerDAO = new CustomerDAO();
+            return customerDAO.addCustomer(customer);
+       }
     }
     
 }

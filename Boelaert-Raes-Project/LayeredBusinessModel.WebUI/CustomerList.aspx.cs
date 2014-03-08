@@ -21,7 +21,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 customerService = new CustomerService();
 
-                gvBeer.DataSource = customerService.GetAll();
+                gvBeer.DataSource = customerService.getAll();
                 gvBeer.DataBind();
             }
             

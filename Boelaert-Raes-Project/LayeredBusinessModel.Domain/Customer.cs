@@ -11,6 +11,7 @@ namespace LayeredBusinessModel.Domain
         public int customer_id { get; set; }
         public String name { get; set; }
         public String email { get; set; }
+        public String login { get; set; }
         public String password { get; set; }
 
         public int numberOfVisits { get; set; }

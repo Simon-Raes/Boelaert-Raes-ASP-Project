@@ -11,18 +11,21 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
+            <table>
+                <tr>
+                    <td>
+                        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
+                        <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2">
+                        </asp:Menu>
+                    </td>
+                    <td>
+                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" />
+                    </td>
+                </tr>
+            </table>
 
-
-
-
-
-            <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2">
-            </asp:Menu>
         </div>
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            
-
         </asp:ContentPlaceHolder>
     </form>
 </body>

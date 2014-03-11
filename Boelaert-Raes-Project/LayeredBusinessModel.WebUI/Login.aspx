@@ -9,5 +9,7 @@
 <br />
     <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" />
     <br />
+    Or click here to log-in with your eID.
+    <br />
     Don't have an account? Sign up here: <asp:Button ID="btnRegister" runat="server" Text="Sign up" OnClick="btnRegister_Click" />
 </asp:Content>

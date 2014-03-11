@@ -6,13 +6,11 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
-using LayeredBusinessModel.Domain;
 
 namespace LayeredBusinessModel.WebUI
 {
-    public partial class BeerList : System.Web.UI.Page
+    public partial class Customers : System.Web.UI.Page
     {
-        
         private CustomerService customerService;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -24,9 +22,6 @@ namespace LayeredBusinessModel.WebUI
                 gvBeer.DataSource = customerService.getAll();
                 gvBeer.DataBind();
             }
-            
         }
-
-       
     }
 }

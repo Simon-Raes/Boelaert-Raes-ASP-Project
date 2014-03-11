@@ -40,7 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Customer.cs" />
-    <Compile Include="Dvd.cs" />
+    <Compile Include="DvdCopy.cs" />
+    <Compile Include="DvdInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

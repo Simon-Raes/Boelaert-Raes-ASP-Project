@@ -59,11 +59,12 @@
   <ItemGroup>
     <Content Include="Account.aspx" />
     <Content Include="Catalog.aspx" />
-    <Content Include="CustomerList.aspx" />
+    <Content Include="Customers.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="tempMovie.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -81,12 +82,12 @@
     <Compile Include="Catalog.aspx.designer.cs">
       <DependentUpon>Catalog.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CustomerList.aspx.cs">
-      <DependentUpon>CustomerList.aspx</DependentUpon>
+    <Compile Include="Customers.aspx.cs">
+      <DependentUpon>Customers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CustomerList.aspx.designer.cs">
-      <DependentUpon>CustomerList.aspx</DependentUpon>
+    <Compile Include="Customers.aspx.designer.cs">
+      <DependentUpon>Customers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -119,6 +120,13 @@
     </Compile>
     <Compile Include="Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="tempMovie.aspx.cs">
+      <DependentUpon>tempMovie.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="tempMovie.aspx.designer.cs">
+      <DependentUpon>tempMovie.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

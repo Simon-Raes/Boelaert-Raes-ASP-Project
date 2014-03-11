@@ -19,7 +19,7 @@
                         </asp:Menu>
                     </td>
                     <td>
-                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" />
+                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false"/>
                     </td>
                 </tr>
             </table>

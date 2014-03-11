@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerService.cs" />
+    <Compile Include="DvdCopyService.cs" />
     <Compile Include="DvdInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShoppingCartService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LayeredBusinessModel.DAO\LayeredBusinessModel.DAO.csproj">

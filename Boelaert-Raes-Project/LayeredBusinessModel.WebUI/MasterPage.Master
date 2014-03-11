@@ -20,6 +20,7 @@
                     </td>
                     <td>
                         <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false"/>
+                        <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
                     </td>
                 </tr>
             </table>

@@ -96,19 +96,17 @@ namespace LayeredBusinessModel.DAO
             {
                 cnn.Open();
                 SqlDataReader reader = command.ExecuteReader();
-
+                /*
                 while (reader.Read())
                 {
                     customer = createCustomer(reader);
-                }
+                }*/
 
                 reader.Close();
 
             }
             catch (Exception ex)
-            {
-                //mag weg
-                customer = customer;
+            {                
             }
             finally
             {

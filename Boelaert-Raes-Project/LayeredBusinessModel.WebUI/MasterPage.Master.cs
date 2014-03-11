@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
+using LayeredBusinessModel.BLL;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -17,11 +18,18 @@ namespace LayeredBusinessModel.WebUI
             if (Session["user"] == null)
             {
                 btnLogin.Text = "Login";
+                //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
+                btnCart.Visible = false;
+                
             }
             else
             {
                 Customer user = (Customer) Session["user"];
                 btnLogin.Text = user.name;
+                btnCart.Visible = true;
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                List<DvdCopy> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                btnCart.Text = "Cart: " + cartContent.Count;
             }
         }
 
@@ -35,8 +43,12 @@ namespace LayeredBusinessModel.WebUI
             {
                 //redirect to account page (purchase history, account settings,...)
                 Response.Redirect("~/Account.aspx");
-
             }
+        }
+
+        protected void btnCart_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Cart.aspx");
         }
     }
 }

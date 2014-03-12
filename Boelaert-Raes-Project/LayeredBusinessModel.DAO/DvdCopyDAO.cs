@@ -124,8 +124,35 @@ namespace LayeredBusinessModel.DAO
                 cnn.Open();
 
                 //todo: moet waarschijnlijk niet met een reader gebeuren, maar het werkt voorlopig wel
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Close();
+                //SqlDataReader reader = command.ExecuteReader();
+
+                command.ExecuteNonQuery();
+                
+                //reader.Close();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
+
+        //update methode voor wanneer je geen volledig object kan gebruiken
+        public void updateDvdCopyInStockStatus(String dvdCopyID, Boolean in_stock)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+
+            SqlCommand command = new SqlCommand("UPDATE DvdCopy" +
+            " SET in_stock = '" + in_stock +
+            "' WHERE dvd_copy_id =" + dvdCopyID + ";", cnn);
+            try
+            {
+                cnn.Open();
+
+                command.ExecuteNonQuery();
 
             }
             catch (Exception ex)

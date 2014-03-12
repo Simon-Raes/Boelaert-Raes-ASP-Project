@@ -85,6 +85,31 @@ namespace LayeredBusinessModel.DAO
         }
 
 
+        public Boolean removeItemFromCart(String dvdCopyID)
+        {
+            Boolean status = false;
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            //todo: paramaters (of ander beter systeem) gebruiken!
+
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE dvd_copy_id = "+dvdCopyID, cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                status = false;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return status;
+        }
+
 
 
         public int getCartContentCountForCustomer(int id)

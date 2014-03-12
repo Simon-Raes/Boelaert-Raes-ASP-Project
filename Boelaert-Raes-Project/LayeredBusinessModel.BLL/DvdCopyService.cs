@@ -37,6 +37,11 @@ namespace LayeredBusinessModel.BLL
             dvdCopyDAO.updateDvdCopy(copy);
         }
 
-        
+        public void updateDvdCopyInStockStatus(String dvdCopyID, bool in_stock)
+        {
+            dvdCopyDAO = new DvdCopyDAO();
+            dvdCopyDAO.updateDvdCopyInStockStatus(dvdCopyID,in_stock);
+        }
+
     }
 }

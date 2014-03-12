@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using System.Data;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -26,5 +27,25 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
+
+
+
+        protected void gvCart_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int index = Convert.ToInt32(e.RowIndex);
+            
+            //remove copy from all shoppingcarts (could only be on one)
+            ShoppingCartService shoppingCartService = new ShoppingCartService();
+            shoppingCartService.removeItemFromCart(gvCart.Rows[index].Cells[0].Text);
+            
+            //set copy as in_stock
+            DvdCopyService dvdCopyService = new DvdCopyService();
+            dvdCopyService.updateDvdCopyInStockStatus(gvCart.Rows[index].Cells[0].Text, true);
+            
+            //todo: remove row from gridview on button click
+
+        }
+
+        
     }
 }

@@ -5,11 +5,16 @@
     <p>
         show content of shopping cart here:</p>
     <p>
-        <asp:GridView ID="gvCart" runat="server">
+        <asp:GridView ID="gvCart" runat="server" AutoGenerateColumns="False" OnRowDeleting="gvCart_RowDeleting">
+            <Columns>
+                <asp:BoundField AccessibleHeaderText="dvd_copy_id" DataField="dvd_copy_id" HeaderText="dvd_copy_id" />
+                <asp:BoundField AccessibleHeaderText="Serialnumber" DataField="serialnumber" HeaderText="Serialnumber" />
+                <asp:CommandField AccessibleHeaderText="Remove" DeleteText="Remove" ShowDeleteButton="True" />
+            </Columns>
         </asp:GridView>
     </p>
     <p>
-        todo: SQL joins om hier titels te krijgen in plaats van id nummers</p>
+        todo: echte titels ipv codes + remove gridview row on click</p>
     <p>
-        todo: optie om items terug uit cart te halen</p>
+        &nbsp;</p>
 </asp:Content>

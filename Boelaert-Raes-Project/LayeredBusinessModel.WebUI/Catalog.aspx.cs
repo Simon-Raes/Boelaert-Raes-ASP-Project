@@ -43,41 +43,43 @@ namespace LayeredBusinessModel.WebUI
         }
 
         protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)
-        {                       
+        {
+            List<DvdCopy> availabeCopies = null;
             
-            //todo: check if buy or rent was clicked
+            int index = Convert.ToInt32(e.CommandArgument.ToString());
 
-            if (e.CommandName == "Select")
+            //get all available copies of this movie + type (buy/rent)
+            DvdCopyService dvdCopyService = new DvdCopyService();
+            if (e.CommandName == "Buy")
             {
-                int index = Convert.ToInt32(e.CommandArgument.ToString());
+                availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
+            }
+            else if(e.CommandName =="Rent")
+            {
+                availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
+            }
 
-                //get all available copies of this movie
-                //todo: call buy OR rent method depending on the button that was clicked (now: always checking buy copies)
-                DvdCopyService dvdCopyService = new DvdCopyService();
-                List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
+            //only allow purchase if a copy is available
+            if(availabeCopies.Count>0)
+            {
+                //pick the first available copy and assign it to this user
+                DvdCopy chosenCopy = availabeCopies[0];
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, chosenCopy.dvd_copy_id);
 
-                //only allow purchase if a copy is available
-                if(availabeCopies.Count>0)
-                {
-                    //pick the first available copy and assign it to this user
-                    DvdCopy chosenCopy = availabeCopies[0];
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, chosenCopy.dvd_copy_id);
-
-                    //mark copy as NOT in_stock
-                    chosenCopy.in_stock = false;
-                    dvdCopyService.updateCopy(chosenCopy);
-                }
-                else
-                {
-                    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-                    string script = "alert(\"Item niet meer in stock!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(),
-                                          "ServerControlScript", script, true);
-                }
+                //mark copy as NOT in_stock
+                chosenCopy.in_stock = false;
+                dvdCopyService.updateCopy(chosenCopy);
+            }
+            else
+            {
+                //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+                string script = "alert(\"Item niet meer in stock!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            }
 
                 
-            }
+            
         }
 
        

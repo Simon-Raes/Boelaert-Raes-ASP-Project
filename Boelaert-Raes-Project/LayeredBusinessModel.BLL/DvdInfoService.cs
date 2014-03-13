@@ -19,10 +19,22 @@ namespace LayeredBusinessModel.BLL
             return dvdInfoDAO.getAllDvdInfos();
         }
 
-        public List<DvdInfo> getAllWithTitleSearch(String title)
+        public List<DvdInfo> searchDvdWithText(String title)
         {
             dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getAllWithTitleSearch(title);
+            return dvdInfoDAO.searchDvdWithText(title);
+        }
+
+        public List<DvdInfo> searchDvdWithTextAndCategory(String title, String categoryID)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.searchDvdWithTextAndCategory(title, categoryID);
+        }
+
+        public List<DvdInfo> searchDvdWithTextAndGenre(String title, String genreID)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.searchDvdWithTextAndGenre(title, genreID);
         }
     }
 }

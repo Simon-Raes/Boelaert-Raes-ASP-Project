@@ -24,12 +24,12 @@ namespace LayeredBusinessModel.DAO
 
             //SqlCommand command = new SqlCommand("SELECT * FROM ShoppingcartItem WHERE customer_id = " + id + ";", cnn);
 
-            //todo: extra join op dvd_info
-            SqlCommand command = new SqlCommand("SELECT ShoppingcartItem.dvd_copy_id, dvd_info_id, copy_type_id, serialnumber, note, in_stock " +
-            "FROM ShoppingcartItem " +            
+            //todo: extra join op dvd_info voor titel, etc
+            SqlCommand command = new SqlCommand("SELECT ShoppingcartItem.dvd_copy_id, dvd_info_id, copy_type_id, serialnumber, note, in_stock, startdate, enddate " +
+            "FROM ShoppingcartItem " +
             "INNER JOIN DvdCopy " +
             "ON ShoppingcartItem.dvd_copy_id = DvdCopy.dvd_copy_id " +
-            "WHERE customer_id = " + id , cnn);
+            "WHERE customer_id = " + id, cnn);
 
             try
             {
@@ -80,8 +80,34 @@ namespace LayeredBusinessModel.DAO
                 cnn.Close();
             }
             return status;
+        }
 
+        //overloaded method for adding rent items with dates
+        public Boolean addItemToCart(int customerID, int dvdCopyID, DateTime startdate, DateTime enddate)
+        {
+            Boolean status = false;
+            cnn = new SqlConnection(sDatabaseLocatie);
 
+            //todo: paramaters (of ander beter systeem) gebruiken!
+
+            SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
+            "(customer_id,dvd_copy_id, startdate, enddate)" +
+            "VALUES(" + customerID + "," + dvdCopyID + ",convert(datetime,'" + startdate + "',103),convert(datetime,'" + enddate + "',103))", cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                status = false;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return status;
         }
 
 
@@ -92,7 +118,7 @@ namespace LayeredBusinessModel.DAO
 
             //todo: paramaters (of ander beter systeem) gebruiken!
 
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE dvd_copy_id = "+dvdCopyID, cnn);
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE dvd_copy_id = " + dvdCopyID, cnn);
             try
             {
                 cnn.Open();

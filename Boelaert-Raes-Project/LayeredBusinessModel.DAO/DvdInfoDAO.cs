@@ -46,14 +46,97 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
-        public List<DvdInfo> getAllWithTitleSearch(String searchText)
+        public List<DvdInfo> searchDvdWithText(String searchText)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             List<DvdInfo> dvdlist = new List<DvdInfo>();
-            
+
             //todo: parameters
             //beter met CONTAINS dan wildcards+LIKE?
-            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE '%"+searchText+"%';", cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%';", cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdlist;
+        }
+
+        public List<DvdInfo> searchDvdWithTextAndCategory(String searchText, String categoryID)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+
+            //todo: parameters
+            //beter met CONTAINS dan wildcards+LIKE?    
+
+            //todo: fix bug
+            //haalt een record op voor elk genre van een dvdInfo (bv dvdInfo met 3 genres zal 3 keer in de resultset zitten, film met 1 genre 1 keer, etc...)
+
+            SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image " +
+            "FROM DvdInfo " +
+            "INNER JOIN DvdGenre " +
+            "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+            "INNER JOIN Genres " +
+            "ON DvdGenre.genre_id = Genres.genre_id " +
+            "WHERE Genres.category_id = " + categoryID +
+            "AND (DvdInfo.name LIKE '%" + searchText + "%' OR DvdInfo.barcode LIKE '%" + searchText + "%' OR DvdInfo.author LIKE '%" + searchText + "%')" , cnn);
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdlist;
+        }
+
+        public List<DvdInfo> searchDvdWithTextAndGenre(String searchText, String genreID)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+
+            //todo: parameters    
+
+            SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image " +
+            "FROM DvdInfo " +
+            "INNER JOIN DvdGenre " +
+            "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+            "WHERE DvdGenre.genre_id = " + genreID +
+            " AND (name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%')", cnn);
+
+
             try
             {
                 cnn.Open();
@@ -86,9 +169,10 @@ namespace LayeredBusinessModel.DAO
             {
                 dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
                 name = Convert.ToString(reader["name"]),
-                code = Convert.ToString(reader["code"]),
+                year = Convert.ToString(reader["year"]),
+                barcode = Convert.ToString(reader["barcode"]),
                 author = Convert.ToString(reader["author"]),
-                image = Convert.ToString(reader["image"]),
+                image = Convert.ToString(reader["image"])
             };
             return dvd;
         }

@@ -13,6 +13,6 @@ namespace LayeredBusinessModel.Domain
         public int copy_type_id { get; set; }
         public String serialnumber { get; set; }
         public String note { get; set; }
-        public Boolean in_stock { get; set; }
+        public Boolean in_stock { get; set; }        
     }
 }

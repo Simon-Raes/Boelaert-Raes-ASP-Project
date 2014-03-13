@@ -10,7 +10,8 @@ namespace LayeredBusinessModel.Domain
     {
         public int dvd_info_id { get; set; }
         public String name { get; set; }
-        public String code { get; set; }
+        public String year { get; set; }
+        public String barcode { get; set; }
         public String author { get; set; }
         public String image { get; set; }
     }

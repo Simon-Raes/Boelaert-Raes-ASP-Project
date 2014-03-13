@@ -14,7 +14,10 @@
         </asp:GridView>
     </p>
     <p>
-        todo: echte titels ipv codes + remove gridview row on click</p>
+        <asp:Button ID="btnCheckout" runat="server" OnClick="btnCheckout_Click" Text="Checkout" />
+    </p>
+    <p>
+        todo: echte titels ipv codes + joins met andere tabellen om zaken als start/enddate te krijgen + remove gridview row on click</p>
     <p>
         &nbsp;</p>
 </asp:Content>

@@ -46,6 +46,12 @@ namespace LayeredBusinessModel.WebUI
 
         }
 
+        protected void btnCheckout_Click(object sender, EventArgs e)
+        {
+            //todo: create new order (orderID, customerID, status(=new?))
+            //add records in orderline (orderlineID, orderID, type_id, dvd_coyp_id, startdate, enddate) date for rent
+        }
+
         
     }
 }

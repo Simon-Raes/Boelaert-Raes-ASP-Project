@@ -36,14 +36,12 @@
 
 
     <br />
-    <br />
-    <br />
-
-
-    <strong>Reserve movie (for renting only):</strong>
+         Is reserveren niet hetzelfde als huren vanaf een bepaalde datum?<br />
+         <br />
+         <strong>Reserve movie (for renting only):</strong>
         <table>
             <tr>
-                <td>start<asp:Calendar ID="calReservationStartDate" runat="server"></asp:Calendar>
+                <td>start<asp:Calendar ID="calReservationStartDate" runat="server" OnDayRender="calReservationStartDate_DayRender"></asp:Calendar>
                 </td>
                 <td>
                     <asp:Button ID="btnReserve" runat="server" Text="Reserve" OnClick="btnReserve_Click" />

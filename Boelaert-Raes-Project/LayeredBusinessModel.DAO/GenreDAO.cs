@@ -10,12 +10,8 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    public class GenreDAO
+    public class GenreDAO : DAO
     {
-        private string strSQL;
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
         public List<Genre> getGenresForCategory(int categoryID)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

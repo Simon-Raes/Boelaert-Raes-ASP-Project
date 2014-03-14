@@ -10,12 +10,8 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    public class CategoryDAO
-    {
-        private string strSQL;
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
+    public class CategoryDAO : DAO
+    {        
         public List<Category> getAll()
         {
             cnn = new SqlConnection(sDatabaseLocatie);

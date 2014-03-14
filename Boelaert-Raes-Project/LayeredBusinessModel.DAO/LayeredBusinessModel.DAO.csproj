@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="CategoryDAO.cs" />
     <Compile Include="CustomerDAO.cs" />
+    <Compile Include="DAO.cs" />
     <Compile Include="DvdCopyDAO.cs" />
     <Compile Include="DvdInfoDAO.cs" />
     <Compile Include="GenreDAO.cs" />

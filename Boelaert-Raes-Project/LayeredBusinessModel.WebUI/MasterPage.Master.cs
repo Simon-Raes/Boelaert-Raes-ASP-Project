@@ -20,16 +20,27 @@ namespace LayeredBusinessModel.WebUI
                 btnLogin.Text = "Login";
                 //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
                 btnCart.Visible = false;
+                               
                 
             }
             else
             {
+                //set buttons
                 Customer user = (Customer) Session["user"];
                 btnLogin.Text = user.name;
                 btnCart.Visible = true;
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<DvdCopy> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
                 btnCart.Text = "Cart: " + cartContent.Count;
+
+                //set personalised banners
+                if (user.numberOfVisits>5)
+                {
+                    //todo: 
+                    //favoriete genre van user opzoeken (op basis van ordergeschiedenis), enkel banners van dat genre weergeven
+                    arBanner.KeywordFilter = "scifi"; //temp vastgezet op scifi
+                }
+               
             }
         }
 

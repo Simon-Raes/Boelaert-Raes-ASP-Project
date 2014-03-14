@@ -9,12 +9,8 @@ using LayeredBusinessModel.Domain;
 using System.Configuration;
 namespace LayeredBusinessModel.DAO
 {
-    public class DvdCopyDAO
+    public class DvdCopyDAO : DAO
     {
-        private string strSQL;
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
         public List<DvdCopy> getAllCopiesForDvdInfo(String info_id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

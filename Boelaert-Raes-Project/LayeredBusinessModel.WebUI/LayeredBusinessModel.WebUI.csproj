@@ -63,10 +63,17 @@
     <Content Include="Customers.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
+    <Content Include="images\banner1.gif" />
+    <Content Include="images\banner2.gif" />
+    <Content Include="images\banner3.gif" />
+    <Content Include="images\banner4.gif" />
+    <Content Include="images\banner5.gif" />
+    <Content Include="images\orders_mockup.png" />
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
     <Content Include="Web.config" />
+    <Content Include="banners.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.aspx.cs">

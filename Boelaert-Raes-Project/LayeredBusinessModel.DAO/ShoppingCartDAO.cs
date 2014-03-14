@@ -10,25 +10,25 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    public class ShoppingCartDAO
+    public class ShoppingCartDAO : DAO
     {
-        private string strSQL;
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
-        public List<DvdCopy> getCartContentForCustomer(int id)
+        public List<ShoppingcartItem> getCartContentForCustomer(int id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdCopy> dvdCopiesInCart = new List<DvdCopy>();
+            List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
 
 
-            //SqlCommand command = new SqlCommand("SELECT * FROM ShoppingcartItem WHERE customer_id = " + id + ";", cnn);
 
-            //todo: extra join op dvd_info voor titel, etc
-            SqlCommand command = new SqlCommand("SELECT ShoppingcartItem.dvd_copy_id, dvd_info_id, copy_type_id, serialnumber, note, in_stock, startdate, enddate " +
+            /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
+            SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_copy_id, DvdInfo.dvd_info_id, DvdCopy.copy_type_id, "+
+            "DvdInfo.name, serialnumber, note, in_stock, startdate, enddate, DvdCopyType.name as typeName " +
             "FROM ShoppingcartItem " +
             "INNER JOIN DvdCopy " +
             "ON ShoppingcartItem.dvd_copy_id = DvdCopy.dvd_copy_id " +
+            "INNER JOIN DvdInfo "+
+            "ON DvdCopy.dvd_info_id = DvdInfo.dvd_info_id "+
+            "INNER JOIN DvdCopyType "+
+            "ON DvdCopy.copy_type_id = DvdCopyType.copy_type_id " +
             "WHERE customer_id = " + id, cnn);
 
             try
@@ -38,7 +38,7 @@ namespace LayeredBusinessModel.DAO
 
                 while (reader.Read())
                 {
-                    dvdCopiesInCart.Add(createDvdCopy(reader));
+                    cartItems.Add(createShoppingcartItem(reader));
                 }
 
                 reader.Close();
@@ -46,13 +46,13 @@ namespace LayeredBusinessModel.DAO
             }
             catch (Exception ex)
             {
-                int test = 0;
+
             }
             finally
             {
                 cnn.Close();
             }
-            return dvdCopiesInCart;
+            return cartItems;
         }
 
         public Boolean addItemToCart(int customerID, int dvdCopyID)
@@ -144,19 +144,36 @@ namespace LayeredBusinessModel.DAO
             return 0;
         }
 
-        private DvdCopy createDvdCopy(SqlDataReader reader)
+        private ShoppingcartItem createShoppingcartItem(SqlDataReader reader)
         {
-            DvdCopy dvdCopy = new DvdCopy
+            //minvalue omdat een null niet toegelaten is, andere klassen zullen dus op mindate moeten controleren
+            DateTime startdate = DateTime.MinValue;
+            DateTime enddate = DateTime.MinValue;
+
+            if (reader["startdate"] != DBNull.Value)
             {
-                dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                copy_type_id = Convert.ToInt32(reader["copy_type_id"]),
-                serialnumber = Convert.ToString(reader["serialnumber"]),
-                note = Convert.ToString(reader["note"]),
-                in_stock = Convert.ToBoolean(reader["in_stock"])
+                startdate = Convert.ToDateTime(reader["startdate"]);
+            }
+            if (reader["enddate"] != DBNull.Value)
+            {
+                enddate = Convert.ToDateTime(reader["enddate"]);
+            }
+
+
+            //hier krijg ik een exception als ik "shoppingcart_item_id" gebruik, columnnummer (0) werkt wel zonder problemen
+            ShoppingcartItem cartItem = new ShoppingcartItem
+            {
+                shoppingcart_item_id = Convert.ToInt32(reader[0]),
+                customer_id = Convert.ToInt32(reader[1]),
+                dvd_copy_id = Convert.ToInt32(reader[2]),                
+                startdate = startdate,
+                enddate = enddate,
+                name = Convert.ToString(reader["name"]),
+                typeName = Convert.ToString(reader["typeName"])
             };
 
-            return dvdCopy;
+
+            return cartItem;
         }
 
     }

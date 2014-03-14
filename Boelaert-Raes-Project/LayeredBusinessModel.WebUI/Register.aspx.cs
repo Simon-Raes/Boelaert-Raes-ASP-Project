@@ -23,15 +23,20 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-            Customer customer = new Customer
-            {                
-                name = txtName.Text,
-                email = txtEmail.Text,
-                login = txtLogin.Text,
-                password = txtPassword.Text
-            };
-            customerService = new CustomerService();
-            customerService.addCustomer(customer);
+            //check if validators were properly executed
+            if(Page.IsValid)
+            {
+                Customer customer = new Customer
+                {
+                    name = txtName.Text,
+                    email = txtEmail.Text,
+                    login = txtLogin.Text,
+                    password = txtPassword.Text
+                };
+                customerService = new CustomerService();
+                customerService.addCustomer(customer);
+            }
+            
         }
     }
 }

@@ -4,9 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LayeredBusinessModel.DAO;
+using LayeredBusinessModel.Domain;
+
 namespace LayeredBusinessModel.BLL
 {
-    class OrderLineService
+    public class OrderLineService
     {
+        private OrderLineDAO orderLineDAO;
+
+        public List<OrderLine> getOrderLinesForOrder(int order_id)
+        {
+            orderLineDAO = new OrderLineDAO();
+            return orderLineDAO.getOrderLinesForOrder(order_id);
+        }
+
+        public void addOrderLine(OrderLine orderLine)
+        {
+            orderLineDAO = new OrderLineDAO();
+            orderLineDAO.addOrderLine(orderLine);
+        }
     }
 }

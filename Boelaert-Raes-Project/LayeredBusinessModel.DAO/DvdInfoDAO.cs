@@ -10,12 +10,8 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    public class DvdInfoDAO
+    public class DvdInfoDAO : DAO
     {
-        private string strSQL;
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
         public List<DvdInfo> getAllDvdInfos()
         {
             cnn = new SqlConnection(sDatabaseLocatie);

@@ -13,7 +13,7 @@ namespace LayeredBusinessModel.BLL
     {
         private ShoppingCartDAO shoppingCartDAO;
 
-        public List<DvdCopy> getCartContentForCustomer(int id){
+        public List<ShoppingcartItem> getCartContentForCustomer(int id){
             shoppingCartDAO = new ShoppingCartDAO();
             return shoppingCartDAO.getCartContentForCustomer(id);
         }

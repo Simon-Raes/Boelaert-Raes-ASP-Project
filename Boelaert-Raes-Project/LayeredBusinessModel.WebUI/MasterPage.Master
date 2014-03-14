@@ -13,13 +13,18 @@
         <div>
             <table>
                 <tr>
+                        <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
+
+                </tr>
+                <tr>
                     <td>
+
                         <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
                         <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2">
                         </asp:Menu>
                     </td>
                     <td>
-                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false"/>
+                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
                         <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
                     </td>
                 </tr>

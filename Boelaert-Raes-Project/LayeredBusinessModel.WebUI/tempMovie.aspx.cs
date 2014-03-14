@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!Page.IsPostBack)
+            if (!Page.IsPostBack)
             {
                 //only show rent/reserve options if a user is logged in
                 if (Session["user"] == null)
@@ -30,20 +30,40 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
+        /*Disables invalid days in the Rent calendar*/
         protected void calRentStartDate_DayRender(object sender, DayRenderEventArgs e)
         {
             //don't let the user select days in the past    
             if (e.Day.Date < DateTime.Today)
             {
                 e.Day.IsSelectable = false;
+                e.Cell.BackColor = System.Drawing.Color.LightGray;
+            } else
+            {
+                e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
 
+        /*Disables invalid days in the Reservations calendar*/
+        protected void calReservationStartDate_DayRender(object sender, DayRenderEventArgs e)
+        {
+            //movie can be reserved between today and 14 days from now   
+            if (e.Day.Date < DateTime.Today || e.Day.Date > DateTime.Today.AddDays(14))
+            {
+                e.Day.IsSelectable = false;
+                e.Cell.BackColor = System.Drawing.Color.LightGray;
+            } else
+            {
+                e.Cell.BackColor = System.Drawing.Color.LightGreen;
+            }
+        }
+
+        /*Adds rent copy to shopping cart*/
         protected void btnRent_Click(object sender, EventArgs e)
         {
             //only execute for valid dates
             //todo: check for max date (14 days in advance?)
-            if(calRentStartDate.SelectedDate>=DateTime.Today)
+            if (calRentStartDate.SelectedDate >= DateTime.Today)
             {
                 //add rent item to cart            
                 DateTime startdate = calRentStartDate.SelectedDate;
@@ -68,26 +88,33 @@ namespace LayeredBusinessModel.WebUI
                 }
                 else
                 {
-                    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+                    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals greyed out knop, "out of stock" tekst...)
                     //todo: show date when the dvd will be back in stock + option to reserve
 
                     string script = "alert(\"Item niet meer in stock! (temp)\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                } 
+                }
             }
             else
             {
                 string script = "alert(\"Select a startdate first. (temp)\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            } 
+            }
         }
 
         protected void btnReserve_Click(object sender, EventArgs e)
         {
             //todo: add reservation (to cart or straight to order(line)?)
+            //wat is een reservatie? wat gebeurt er op die dag? hetzelfde als verhuur op voorhand aanvragen?
+
+            //NYI
+            string script = "alert(\"Not yet implemented.\");";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
         }
 
 
-        
+
+
+
     }
 }

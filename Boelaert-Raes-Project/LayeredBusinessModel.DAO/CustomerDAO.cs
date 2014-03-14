@@ -10,13 +10,8 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    public class CustomerDAO
+    public class CustomerDAO : DAO
     {
-        private string strSQL;
-        //ga naar web.config . haal de connectionstring "ProjectConnection" .  
-        private string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
-        private SqlConnection cnn;
-
         public List<Customer> getAllCustomers()
         {
             cnn = new SqlConnection(sDatabaseLocatie);

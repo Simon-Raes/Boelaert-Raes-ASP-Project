@@ -136,8 +136,49 @@ namespace LayeredBusinessModel.DAO
             return status;
         }
 
+        /*Delete all items from this user's shoppingcart*/
+        public void clearCustomerCart(int customer_id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            //todo: paramaters (of ander beter systeem) gebruiken!
+
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = " + customer_id, cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
+
+        /*Delete ALL data from this table*/
+        public void clearTable()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem", cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
 
 
+        /*todo, COUNT items in cart*/
         public int getCartContentCountForCustomer(int id)
         {
             //stub
@@ -146,7 +187,7 @@ namespace LayeredBusinessModel.DAO
 
         private ShoppingcartItem createShoppingcartItem(SqlDataReader reader)
         {
-            //minvalue omdat een null niet toegelaten is, andere klassen zullen dus op mindate moeten controleren
+            //date.minvalue omdat een null niet toegelaten is bij datetime, andere klassen zullen dus op mindate moeten controleren
             DateTime startdate = DateTime.MinValue;
             DateTime enddate = DateTime.MinValue;
 

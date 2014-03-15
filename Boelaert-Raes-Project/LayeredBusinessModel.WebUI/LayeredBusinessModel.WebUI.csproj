@@ -61,6 +61,7 @@
     <Content Include="Cart.aspx" />
     <Content Include="Catalog.aspx" />
     <Content Include="Customers.aspx" />
+    <Content Include="dev.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="images\banner1.gif" />
@@ -103,6 +104,13 @@
     </Compile>
     <Compile Include="Customers.aspx.designer.cs">
       <DependentUpon>Customers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="dev.aspx.cs">
+      <DependentUpon>dev.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="dev.aspx.designer.cs">
+      <DependentUpon>dev.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

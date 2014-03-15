@@ -33,13 +33,18 @@ namespace LayeredBusinessModel.WebUI
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
                 btnCart.Text = "Cart: " + cartContent.Count;
 
-                //set personalised banners
-                if (user.numberOfVisits>5)
+                //don't change banner on every postback
+                if(!Page.IsPostBack)
                 {
-                    //todo: 
-                    //favoriete genre van user opzoeken (op basis van ordergeschiedenis), enkel banners van dat genre weergeven
-                    arBanner.KeywordFilter = "scifi"; //temp vastgezet op scifi
+                    //set personalised banners
+                    if (user.numberOfVisits > 5)
+                    {
+                        //todo: 
+                        //favoriete genre van user opzoeken (op basis van ordergeschiedenis), enkel banners van dat genre weergeven
+                        arBanner.KeywordFilter = "scifi"; //temp vastgezet op scifi
+                    }
                 }
+                
                
             }
         }
@@ -60,6 +65,11 @@ namespace LayeredBusinessModel.WebUI
         protected void btnCart_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/Cart.aspx");
+        }
+
+        protected void btnDev_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/dev.aspx");
         }
     }
 }

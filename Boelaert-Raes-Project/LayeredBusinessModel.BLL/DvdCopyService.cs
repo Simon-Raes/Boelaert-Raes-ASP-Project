@@ -43,5 +43,11 @@ namespace LayeredBusinessModel.BLL
             dvdCopyDAO.updateDvdCopyInStockStatus(dvdCopyID,in_stock);
         }
 
+        public void resetAllCopies()
+        {
+            dvdCopyDAO = new DvdCopyDAO();
+            dvdCopyDAO.resetAllCopies();
+        }
+
     }
 }

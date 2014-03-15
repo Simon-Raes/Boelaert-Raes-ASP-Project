@@ -50,8 +50,8 @@ namespace LayeredBusinessModel.DAO
             //todo: paramaters (of ander beter systeem) gebruiken!
 
             SqlCommand command = new SqlCommand("INSERT INTO OrderLine" +
-            "(orderline_id, order_id, order_line_type_id, dvd_copy_id, startdate, enddate)" +
-            "VALUES('" + orderline.orderline_id + "','" + orderline.order_id + "','" + orderline.order_line_type_id + "','" + orderline.dvd_copy_id + "','" + orderline.startdate + "','" + orderline.enddate + "')", cnn);
+            "(order_id, order_line_type_id, dvd_copy_id, startdate, enddate)" +
+            "VALUES('" + orderline.order_id + "','" + orderline.order_line_type_id + "','" + orderline.dvd_copy_id + "', " + "convert(datetime,'" + orderline.startdate + "',103), convert(datetime,'" + orderline.enddate + "',103))", cnn);
             try
             {
                 cnn.Open();
@@ -67,6 +67,26 @@ namespace LayeredBusinessModel.DAO
                 cnn.Close();
             }
             return status;
+        }
+
+
+        /*Delete ALL data from this table*/
+        public void clearTable()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            SqlCommand command = new SqlCommand("DELETE FROM OrderLine", cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
         }
 
         private OrderLine createOrderLine(SqlDataReader reader)

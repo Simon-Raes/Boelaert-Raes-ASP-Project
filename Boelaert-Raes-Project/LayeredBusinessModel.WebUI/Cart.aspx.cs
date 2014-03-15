@@ -15,6 +15,7 @@ namespace LayeredBusinessModel.WebUI
     {
         private ShoppingCartService shoppingCartService;
 
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -55,35 +56,44 @@ namespace LayeredBusinessModel.WebUI
 
         /*Move cart-content to a new order*/
         protected void btnCheckout_Click(object sender, EventArgs e)
-        {            
-            //NYI
-            string script = "alert(\"Not yet implemented.\");";
-            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-
-
-            if(false) //tijdelijk afgezet tot ik een betere oplossing vind
+        {    
+            
+            if (Session["user"] != null)
             {
-                if (Session["user"] != null)
+                Customer user = (Customer)Session["user"];
+
+                //get all items currently in cart
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+
+                //create new order for this user
+                OrderService orderService = new OrderService();
+                int orderID = orderService.addOrderForCustomer(user.customer_id);
+
+                //add cart content to newly created order
+                OrderLineService orderLineService = new OrderLineService();
+                foreach(ShoppingcartItem item in cartContent)
                 {
-                    Customer user = (Customer)Session["user"];
+                    OrderLine orderline = new OrderLine
+                    {
+                        order_id = orderID,
+                        dvd_copy_id = item.dvd_copy_id,
+                        startdate = item.startdate,
+                        enddate = item.enddate,
+                        //order_line_type_id is verhuur/verkoop, kunnen we eigenlijk via join ophalen via dvd_copy_id
+                        order_line_type_id = 1
+                    };
+                    orderLineService.addOrderLine(orderline);
+                }
 
-                    //get all items currently in cart
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                //clear cart
+                shoppingCartService.clearCustomerCart(user.customer_id);
 
-                    //create new order for this user
-                    OrderService orderService = new OrderService();
-                    orderService.addOrderForCustomer(user.customer_id);
-
-                    //add cart content to newly created order
-                    OrderLineService orderLineService = new OrderLineService();
-                    //... order Id onbekend, cart bevat niet alle nodige info, etc...
-                }   
+                //clear cart display
+                gvCart.DataSource = null;
+                gvCart.DataBind();
+                
             }
-                      
-
         }
-
-        
     }
 }

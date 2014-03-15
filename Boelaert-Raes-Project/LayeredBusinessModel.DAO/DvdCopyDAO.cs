@@ -160,6 +160,26 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*Sets all copies back to in_stock = true*/
+        public void resetAllCopies()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            SqlCommand command = new SqlCommand("UPDATE DvdCopy SET in_stock = 1;", cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
+
         private DvdCopy createDvdCopy(SqlDataReader reader)
         {
             DvdCopy dvdCopy = new DvdCopy

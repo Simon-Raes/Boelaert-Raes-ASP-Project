@@ -12,10 +12,8 @@
     <form id="form1" runat="server">
         <div>
             <table>
-                <tr>
                         <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
 
-                </tr>
                 <tr>
                     <td>
 
@@ -26,6 +24,7 @@
                     <td>
                         <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
                         <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
+                        <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
                     </td>
                 </tr>
             </table>

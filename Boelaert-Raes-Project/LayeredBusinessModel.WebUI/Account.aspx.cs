@@ -22,6 +22,7 @@ namespace LayeredBusinessModel.WebUI
                 Customer user = (Customer) Session["user"];
                 if (user != null)
                 {
+                    //settings page
                     txtName.Text = user.name;
                     txtEmail.Text = user.email;
                     //textfield wil geen tekst tonen als ik dit instel via properties, op deze manier werkt het wel
@@ -29,6 +30,11 @@ namespace LayeredBusinessModel.WebUI
                     txtPasswordAgain.Attributes["type"] = "password";
                     txtPassword.Text = user.password;
                     txtPasswordAgain.Text = user.password;
+
+                    //orders page
+                    OrderService orderService = new OrderService();
+                    gvOrders.DataSource = orderService.getOrdersForCustomer(user.customer_id);
+                    gvOrders.DataBind();
                 }
             }
         }

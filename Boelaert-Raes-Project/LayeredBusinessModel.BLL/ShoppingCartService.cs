@@ -37,6 +37,16 @@ namespace LayeredBusinessModel.BLL
             return shoppingCartDAO.removeItemFromCart(dvdCopyID);
         }
 
-        
+        public void clearCustomerCart(int customerID)
+        {
+            shoppingCartDAO = new ShoppingCartDAO();
+            shoppingCartDAO.clearCustomerCart(customerID);
+        }
+
+        public void clearTable()
+        {
+            shoppingCartDAO = new ShoppingCartDAO();
+            shoppingCartDAO.clearTable();
+        }
     }
 }

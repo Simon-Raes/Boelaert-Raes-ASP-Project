@@ -24,5 +24,11 @@ namespace LayeredBusinessModel.BLL
             orderLineDAO = new OrderLineDAO();
             orderLineDAO.addOrderLine(orderLine);
         }
+
+        public void clearTable()
+        {
+            orderLineDAO = new OrderLineDAO();
+            orderLineDAO.clearTable();
+        }
     }
 }

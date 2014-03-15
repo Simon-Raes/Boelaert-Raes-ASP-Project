@@ -25,10 +25,16 @@ namespace LayeredBusinessModel.BLL
             return orderDAO.getOrdersForCustomer(customer_id);
         }
 
-        public Boolean addOrderForCustomer(int customer_id)
+        public int addOrderForCustomer(int customer_id)
         {
             orderDAO = new OrderDAO();
             return orderDAO.addOrderForCustomer(customer_id);
+        }
+
+        public void clearTable()
+        {
+            orderDAO = new OrderDAO();
+            orderDAO.clearTable();
         }
     }
 }

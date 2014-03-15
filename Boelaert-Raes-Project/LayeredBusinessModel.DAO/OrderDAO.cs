@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<Order> orderList = new List<Order>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Order", cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
             try
             {
                 cnn.Open();
@@ -47,7 +47,7 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<Order> orderList = new List<Order>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Order WHERE customer_id = "+customer_id, cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE customer_id = "+customer_id, cnn);
             try
             {
                 cnn.Open();
@@ -72,33 +72,55 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
-
-        public Boolean addOrderForCustomer(int customer_id)
+        /*Inserts new order for customer and returns the order_id*/
+        public int addOrderForCustomer(int customer_id)
         {
-            Boolean status = false;
+            int orderID = -1;
             cnn = new SqlConnection(sDatabaseLocatie);
 
             //todo: paramaters (of ander beter systeem) gebruiken!
 
-            SqlCommand command = new SqlCommand("INSERT INTO Order" +
-            "(orderstatus_id, customer_id)" +
-            //add new order with status 0 (= new?)
-            "VALUES('" + 0 + "','" + customer_id + "')", cnn);
+            SqlCommand command = new SqlCommand("INSERT INTO Orders" +
+            "(orderstatus_id, customer_id, date) " +
+            "OUTPUT INSERTED.order_id "+
+            //add new order with status 1 (= new) and date of today
+            "VALUES('" + 1 + "','" + customer_id + "'," + "convert(datetime,'" + DateTime.Today + "',103)"+")", cnn);
+
+             
             try
             {
                 cnn.Open();
-                command.ExecuteNonQuery();
-                status = true;
+                orderID = (int)command.ExecuteScalar();
             }
             catch (Exception ex)
             {
-                status = false;
+                //return -1 on error
+                orderID = -1;
             }
             finally
             {
                 cnn.Close();
             }
-            return status;
+            return orderID;
+        }
+
+        /*Delete ALL data from this table*/
+        public void clearTable()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            SqlCommand command = new SqlCommand("DELETE FROM Orders", cnn);
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
         }
 
         private Order createOrder(SqlDataReader reader)
@@ -107,7 +129,8 @@ namespace LayeredBusinessModel.DAO
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
                 orderstatus_id = Convert.ToInt32(reader["orderstatus_id"]),
-                customer_id = Convert.ToInt32(reader["customer_id"])
+                customer_id = Convert.ToInt32(reader["customer_id"]),
+                date = Convert.ToDateTime(reader["date"])
             };
             return order;
         }

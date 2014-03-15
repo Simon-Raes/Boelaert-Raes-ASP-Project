@@ -28,8 +28,12 @@
                     <asp:View ID="viewOverview" runat="server">
                         overview of user info comes here
                     </asp:View>
-                    <asp:View ID="viewOrders" runat="server">Orders mockup:<br />
-                        &nbsp;<asp:Image ID="Image1" runat="server" ImageUrl="~/images/orders_mockup.png" />
+                    <asp:View ID="viewOrders" runat="server">
+                        <asp:GridView ID="gvOrders" runat="server">
+                        </asp:GridView>
+                        <br />
+                        <br />
+                        Orders mockup:<br /> Geplande verhuurcopies misschien in een aparte lijst zetten, moeten tot 2 dagen voor verhuur geannuleerd kunnen worden.<br />&nbsp;&nbsp;<asp:Image ID="Image1" runat="server" ImageUrl="~/images/orders_mockup.png" />
                     </asp:View>
                     <asp:View ID="viewSettings" runat="server">
 

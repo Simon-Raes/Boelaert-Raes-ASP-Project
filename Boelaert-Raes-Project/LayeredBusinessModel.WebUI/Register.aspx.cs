@@ -35,6 +35,10 @@ namespace LayeredBusinessModel.WebUI
                 };
                 customerService = new CustomerService();
                 customerService.addCustomer(customer);
+
+                //put user in session and redirect to index
+                Session["user"] = customer;
+                Response.Redirect("~/Index.aspx");
             }
             
         }

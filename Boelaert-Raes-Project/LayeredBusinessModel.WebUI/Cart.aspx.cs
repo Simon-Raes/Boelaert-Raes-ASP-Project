@@ -29,14 +29,14 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        /*Delete item from cart*/
+        /**Deletes item from cart*/
         protected void gvCart_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int index = Convert.ToInt32(e.RowIndex);
 
             //systeem hier is zeer onhandig, Cells[nummer] moet aangepast worden elke keer de layout gridview veranderd wordt
             
-            //remove copy from all shoppingcarts (can    only be in one)
+            //remove copy from all shoppingcarts (can only be in one)
             ShoppingCartService shoppingCartService = new ShoppingCartService();
             shoppingCartService.removeItemFromCart(gvCart.Rows[index].Cells[3].Text);
             
@@ -54,7 +54,7 @@ namespace LayeredBusinessModel.WebUI
             
         }
 
-        /*Move cart-content to a new order*/
+        /**Creates a new order and moves the cart content to that order*/
         protected void btnCheckout_Click(object sender, EventArgs e)
         {    
             

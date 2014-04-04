@@ -23,7 +23,7 @@ namespace LayeredBusinessModel.WebUI
                 dvdInfoService = new DvdInfoService();
                 gvDvdInfo.DataSource = dvdInfoService.getAll();
                 gvDvdInfo.DataBind();
-                //set column invisible here so value can still be accessed
+                //set column invisible here (value can still be accessed)
                 gvDvdInfo.Columns[0].Visible = false;
 
                 //only show buy/rent buttons if a user is logged in
@@ -51,15 +51,13 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
+
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             dvdInfoService = new DvdInfoService();
             String searchtext = txtSearch.Text;
             String categoryID = ddlCategory.SelectedValue;
-            String genreID = ddlGenre.SelectedValue;
-            
-            //todo: postback probleem oplossen
-            //ddlGenre gaat altijd terug naar selectedIndex 1 (niet eens 0) voordat deze methode uitgevoerd wordt, ddlCategory geeft geen problemen
+            String genreID = ddlGenre.SelectedValue;  
 
             if(genreID!="-1") //genre can only belong to one category, so no need to filter on both
             {
@@ -75,14 +73,12 @@ namespace LayeredBusinessModel.WebUI
             {
                 //do search on only text
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithText(txtSearch.Text);
-
-            }
-            
+            }            
 
             gvDvdInfo.DataBind();
         }
 
-        //handle buy button in gridview
+        /**Handles click-event for the buy button in the gridview.*/
         protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             List<DvdCopy> availabeCopies = null;
@@ -114,15 +110,12 @@ namespace LayeredBusinessModel.WebUI
                 //todo: show date when the dvd will be back in stock + option to reserve
                 string script = "alert(\"Item niet meer in stock!\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            }
-
-                
-            
+            }            
         }
 
+
         protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
+        {            
                 genreService = new GenreService();
                 List<Genre> genres = genreService.getGenresForCategory(Convert.ToInt32(ddlCategory.SelectedValue));
 
@@ -131,14 +124,8 @@ namespace LayeredBusinessModel.WebUI
                 foreach (Genre c in genres)
                 {
                     ddlGenre.Items.Add(new ListItem(c.name, Convert.ToString(c.genre_id)));
-
                 }
                 ddlGenre.DataBind();
-            
-            
         }
-
-       
-       
     }
 }

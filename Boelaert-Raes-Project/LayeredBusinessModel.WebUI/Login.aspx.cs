@@ -37,7 +37,7 @@ namespace LayeredBusinessModel.WebUI
 
                     //put user in session and redirect to index (better would be to redirect to last active page)
                     Session["user"] = customer;                    
-                    Response.Redirect("~/Home.aspx");
+                    Response.Redirect("~/Index.aspx");
                 }
                 else
                 {
@@ -48,7 +48,7 @@ namespace LayeredBusinessModel.WebUI
             else
             {
                 //no such user 
-                lblStatus.Text = "Incorrect login name.";
+                lblStatus.Text = "Unknown user.";
 
             }
 

@@ -28,20 +28,20 @@ namespace LayeredBusinessModel.WebUI
 
                 //only show buy/rent buttons if a user is logged in
                 //todo: only show buy / rent button if item is available (in_stock)
-                if(Session["user"] == null)
+                if (Session["user"] == null)
                 {
                     //niet echt handig met die hardcoded column nummers
                     gvDvdInfo.Columns[6].Visible = false;
-                }      
-          
+                }
+
                 //Fill category dropdown list
                 categoryService = new CategoryService();
                 List<Category> categories = categoryService.getAll();
                 ddlCategory.Items.Clear();
-                ddlCategory.Items.Add(new ListItem("select category","-1"));
-                foreach(Category c in categories)
+                ddlCategory.Items.Add(new ListItem("select category", "-1"));
+                foreach (Category c in categories)
                 {
-                    ddlCategory.Items.Add(new ListItem(c.name,Convert.ToString(c.category_id)));
+                    ddlCategory.Items.Add(new ListItem(c.name, Convert.ToString(c.category_id)));
                 }
                 ddlCategory.DataBind();
 
@@ -57,14 +57,14 @@ namespace LayeredBusinessModel.WebUI
             dvdInfoService = new DvdInfoService();
             String searchtext = txtSearch.Text;
             String categoryID = ddlCategory.SelectedValue;
-            String genreID = ddlGenre.SelectedValue;  
+            String genreID = ddlGenre.SelectedValue;
 
-            if(genreID!="-1") //genre can only belong to one category, so no need to filter on both
+            if (genreID != "-1") //genre can only belong to one category, so no need to filter on both
             {
                 //do search on text + genre
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre(txtSearch.Text, genreID);
-            } 
-            else if(categoryID!="-1")
+            }
+            else if (categoryID != "-1")
             {
                 //do search on text + category
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory(txtSearch.Text, categoryID);
@@ -73,7 +73,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 //do search on only text
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithText(txtSearch.Text);
-            }            
+            }
 
             gvDvdInfo.DataBind();
         }
@@ -82,7 +82,7 @@ namespace LayeredBusinessModel.WebUI
         protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             List<DvdCopy> availabeCopies = null;
-            
+
             int index = Convert.ToInt32(e.CommandArgument.ToString());
 
             //get all available copies of this movie + type (buy/rent)
@@ -90,42 +90,37 @@ namespace LayeredBusinessModel.WebUI
             if (e.CommandName == "Buy")
             {
                 availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
-            }           
-
-            //only allow purchase if a copy is available
-            if(availabeCopies.Count>0)
-            {
-                //pick the first available copy and assign it to this user
-                DvdCopy chosenCopy = availabeCopies[0];
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, chosenCopy.dvd_copy_id);
-
-                //mark copy as NOT in_stock
-                chosenCopy.in_stock = false;
-                dvdCopyService.updateCopy(chosenCopy);
+                
+                //only allow purchase if at least one copy is available
+                //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
+                if (availabeCopies.Count > 0)
+                {
+                    ShoppingCartService shoppingCartService = new ShoppingCartService();
+                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(gvDvdInfo.Rows[index].Cells[0].Text)); //2 = verkoop
+                }
+                else
+                {
+                    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+                    //todo: show date when the dvd will be back in stock + option to reserve
+                    string script = "alert(\"Item niet meer in stock!\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                }
             }
-            else
-            {
-                //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-                //todo: show date when the dvd will be back in stock + option to reserve
-                string script = "alert(\"Item niet meer in stock!\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            }            
         }
 
 
         protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
-        {            
-                genreService = new GenreService();
-                List<Genre> genres = genreService.getGenresForCategory(Convert.ToInt32(ddlCategory.SelectedValue));
+        {
+            genreService = new GenreService();
+            List<Genre> genres = genreService.getGenresForCategory(Convert.ToInt32(ddlCategory.SelectedValue));
 
-                ddlGenre.Items.Clear();
-                ddlGenre.Items.Add(new ListItem("select genre", "-1"));
-                foreach (Genre c in genres)
-                {
-                    ddlGenre.Items.Add(new ListItem(c.name, Convert.ToString(c.genre_id)));
-                }
-                ddlGenre.DataBind();
+            ddlGenre.Items.Clear();
+            ddlGenre.Items.Add(new ListItem("select genre", "-1"));
+            foreach (Genre c in genres)
+            {
+                ddlGenre.Items.Add(new ListItem(c.name, Convert.ToString(c.genre_id)));
+            }
+            ddlGenre.DataBind();
         }
     }
 }

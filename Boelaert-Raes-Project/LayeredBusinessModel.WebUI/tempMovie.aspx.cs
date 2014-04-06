@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 
+
 namespace LayeredBusinessModel.WebUI
 {
     public partial class tempMovie : System.Web.UI.Page
@@ -75,13 +76,12 @@ namespace LayeredBusinessModel.WebUI
                     //add rent item to cart            
                     DateTime startdate = calRentStartDate.SelectedDate;
                     DateTime enddate = startdate.AddDays(Convert.ToInt32(ddlRentDuration.SelectedValue));
-
-
+                    
                     //HERE: hardcoded to shawshank redemption, must get dvdInfoID from generated page
                     dvdCopyService = new DvdCopyService();
                     List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo("1");
-
-
+                    
+                    //check the number of rent items in the user's cart (a user can only rent 5 items at one time)
                     //todo: also needs to check currently rented items from orders (not only from cart)
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
                     List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
@@ -96,34 +96,24 @@ namespace LayeredBusinessModel.WebUI
 
                     if(rentItemsInCart<5)
                     {
-                        //only allow purchase if a copy is available
+                        //only allow rent purchase if a copy is available
                         if (availabeCopies.Count > 0)
-                        {
-                            //pick the first available copy and assign it to this user
-                            DvdCopy chosenCopy = availabeCopies[0];
-
-                            shoppingCartService.addItemToCart(user.customer_id, chosenCopy.dvd_copy_id, startdate, enddate);
-
-                            //mark copy as NOT in_stock
-                            chosenCopy.in_stock = false;
-                            dvdCopyService.updateCopy(chosenCopy);
+                        {                            
+                            shoppingCartService.addItemToCart(user.customer_id, 1, startdate, enddate); //1 = hardcode to shawshank redemption for now
                         }
                         else
                         {
                             //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals greyed out knop, "out of stock" tekst...)
                             //todo: show date when the dvd will be back in stock + option to reserve
-
                             string script = "alert(\"Item niet meer in stock! (todo: overzicht van wanneer er terug een copy beschikbaar is)\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         } 
                     }
                     else
                     {
-                        string script = "alert(\"Uw winkelwagen bevat reeds het maximum aantal verhuur dvd's (5)\");";
+                        string script = "alert(\"Uw winkelwagen bevat reeds het maximum aantal verhuur dvd's (5).\");";
                         ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                    }
-                    
-
+                    }       
                 }
                 else
                 {

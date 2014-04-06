@@ -41,6 +41,36 @@ namespace LayeredBusinessModel.DAO
             return dvdCopies;
         }
 
+        public DvdCopy getCopyWithId(int copy_id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            DvdCopy dvdCopy = new DvdCopy();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_copy_id = " + copy_id, cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdCopy = createDvdCopy(reader);
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdCopy;
+        }
+
         public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(String info_id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

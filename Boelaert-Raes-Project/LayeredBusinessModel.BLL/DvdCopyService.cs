@@ -19,6 +19,12 @@ namespace LayeredBusinessModel.BLL
             return dvdCopyDAO.getAllCopiesForDvdInfo(info_id);
         }
 
+        public DvdCopy getDvdCopyWithId(int copy_id)
+        {
+            dvdCopyDAO = new DvdCopyDAO();
+            return dvdCopyDAO.getCopyWithId(copy_id);
+        }
+
         public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(String info_id)
         {
             dvdCopyDAO = new DvdCopyDAO();

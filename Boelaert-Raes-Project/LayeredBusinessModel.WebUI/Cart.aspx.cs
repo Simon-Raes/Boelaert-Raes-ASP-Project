@@ -83,7 +83,7 @@ namespace LayeredBusinessModel.WebUI
                     DvdCopy copy = null;
 
                     //get all available copies
-                    //get this list again for every item so you add a new, available copy to the order (todo: way to do this without going to the database for every item)
+                    //get this list again for every item so you can add a new, available copy to the order (todo: way to do this without going to the database for every item)
                     if (item.copy_type_id == 1) //rent copy
                     {
                         availableCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Convert.ToString(item.dvd_info_id));
@@ -117,14 +117,12 @@ namespace LayeredBusinessModel.WebUI
                     else
                     {
                         //not in stock, display error for this item
-                    }
-
-
-
+                    }                    
                 }
 
                 //clear cart
                 shoppingCartService.clearCustomerCart(user.customer_id);
+                //this also clears items that were not added to the order!
 
                 //clear cart display
                 gvCart.DataSource = null;

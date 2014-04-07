@@ -5,16 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    
+
     <link href="css/style.css" rel="stylesheet" />
     <link href="semantic/css/semantic.css" rel="stylesheet" />
-    
+
 
     <script src="jquery/jquery.min.js"></script>
     <script src="semantic/javascript/semantic.min.js"></script>
 
     <script>
-        $("document").ready(function() {
+        $("document").ready(function () {
 
             $('.ui.dropdown')
                 .dropdown()
@@ -31,29 +31,29 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <p class="welcome">Welcome to the best online dvd shop in the world!</p>                        
+                        <p class="welcome">Welcome to the best online dvd shop in the world!</p>
                         <div class="header-button">
-                            
+
                             <div class="header-button currency-list">
                                 <div class="ui pointing dropdown link item">
                                     <i class="euro icon"></i><i class="dropdown icon"></i>
-                                        <div class="menu">        
-                                            <a class="item"><i class="euro icon"></i>Euro </a>
-                                            <a class="item"><i class="dollar icon"></i>Dollar </a>
-                                        </div>
-                                  </div>
+                                    <div class="menu">
+                                        <a class="item"><i class="euro icon"></i>Euro </a>
+                                        <a class="item"><i class="dollar icon"></i>Dollar </a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="header-button language-list">
                                 <div class="ui pointing dropdown link item">
                                     NL<i class="dropdown icon"></i>
-                                        <div class="menu">        
-                                            <a class="item">Nederlands </a>
-                                            <a class="item">English </a>
-                                        </div>
-                                  </div>
+                                    <div class="menu">
+                                        <a class="item">Nederlands </a>
+                                        <a class="item">English </a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="header-phone">
-                               <i class="phone icon"></i>  +32477073716
+                                <i class="phone icon"></i>+32477073716
                             </div>
 
                         </div>
@@ -61,7 +61,7 @@
 
 
                 </div>
-            </div> 
+            </div>
         </div>
 
         <header>
@@ -86,20 +86,21 @@
                             <div class="main-search">
                                 <div class="ui fluid icon input">
                                     <input type="text" name="q" placeholder="Search..." />
-                                        <i class="inverted search icon"></i>
+                                    <i class="inverted search icon"></i>
                                 </div>
+
                             </div>
 
                             <nav class="main-nav">
                                 <ul class="links">
-<<<<<<< HEAD
                                     <li>Home</li>
-=======
                                     <li><a href="index.aspx">Home</a></li>
->>>>>>> bd0fcdfd99a80edb45d269901e8b8956b100b8fa
                                     <li><a href="Catalog.aspx">Catalogus</a></li>
                                     <li>About</li>
                                     <li>...</li>
+                                    <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
+                                    <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
+                                    <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
                                 </ul>
                             </nav>
                         </div>
@@ -107,7 +108,7 @@
                 </div>
             </div>
 
-          
+
         </header>
 
         <div class="main-container">
@@ -123,7 +124,8 @@
                             <div class="row">
 
                                 <div class="col-main">
-                                    main content
+                                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                    </asp:ContentPlaceHolder>
                                 </div>
 
                                 <div class="col-sidebar">
@@ -136,7 +138,7 @@
                                         <div class="block-content-cat">
                                             <ul class="sf-menu">
                                                 <li>
-                                                    <a href="#" ><span>Romance</span></a></li>
+                                                    <a href="#"><span>Romance</span></a></li>
                                                 <li>
                                                     <a href="#"><span>Comedy</span></a></li>
                                                 <li>
@@ -157,7 +159,7 @@
                                         <div class="block-content-cat">
                                             <ul class="sf-menu">
                                                 <li>
-                                                    <a href="#" ><span>Game Boy</span></a></li>
+                                                    <a href="#"><span>Game Boy</span></a></li>
                                                 <li>
                                                     <a href="#"><span>PC General</span></a></li>
                                                 <li>
@@ -166,14 +168,14 @@
 
                                         </div>
 
-                                         <div class="block-title-cat">
+                                        <div class="block-title-cat">
                                             <strong><span>Music</span></strong>
 
                                         </div>
                                         <div class="block-content-cat">
                                             <ul class="sf-menu">
                                                 <li>
-                                                    <a href="#" ><span>Compilations</span></a></li>
+                                                    <a href="#"><span>Compilations</span></a></li>
                                                 <li>
                                                     <a href="#"><span>Dance, Hip Hop & Rapjazz</span></a></li>
                                                 <li>
@@ -211,31 +213,24 @@
 
 
 
-        
+
         <!--
         <div>
-            <table>
-                        <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
-
+            <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
+            <table>                
                 <tr>
                     <td>
-
                         <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
-                        <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2">
-                        </asp:Menu>
+                        <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2"></asp:Menu>
                     </td>
-                    <td>
-                        <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
-                        <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
-                        <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
+                    <td>                       
                     </td>
                 </tr>
             </table>
 
-        </div>
-        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-        </asp:ContentPlaceHolder>
-       -->
+        </div>-->
+
+
     </form>
 </body>
 </html>

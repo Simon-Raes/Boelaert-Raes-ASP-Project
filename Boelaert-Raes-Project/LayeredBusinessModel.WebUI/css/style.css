@@ -50,6 +50,7 @@ color: #000;
 }
 
 .col {
+    padding-top:3px;
     height:25px;
     position: relative;
     display:block;

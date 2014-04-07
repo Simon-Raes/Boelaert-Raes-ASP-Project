@@ -63,6 +63,7 @@
                 </div>
             </div> 
         </div>
+
         <header>
             <div class="container">
                 <div class="row">
@@ -92,7 +93,7 @@
                             <nav class="main-nav">
                                 <ul class="links">
                                     <li>Home</li>
-                                    <li>Catalogus</li>
+                                    <li><a href="Catalog.aspx" />Catalogus</li>
                                     <li>About</li>
                                     <li>...</li>
                                 </ul>
@@ -102,85 +103,17 @@
                 </div>
             </div>
 
-            <!--
-            <div class="container">
-                <div class="half">                    
-                    <div class="logo">
-                        <a href="Index.aspx"><img src="images/logo.png" /></a>
-                    </div>
-                </div>
-                <div class="half">
-                    <div class="row" id="headernav">
-                        <nav>
-                            <ul id="shopnav">
-                                <li><a href="#">Registration</a></li>
-                                <li><a href="#">Login</a></li>
-                                <li><a href="#">Wishlist</a></li>
-                                <li><a href="#">My account</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="row">    
-
-                        
-
-                        
-                        <div class="pull-right">
-                            <div class="ui teal buttons">
-                                <div class="ui button">Cart</div>
-                                <div class="ui teal floating dropdown icon button">
-                                    <i class="cart icon"></i>
-                                    <div class="menu">
-                                        <div class="item"><i class="info icon"></i>There are no items in your cart</div>     
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="pull-right">
-                            <div class="ui action input">
-                                <input type="text" placeholder="Search..." />
-                                <div class="ui icon button">
-                                    <i class="search icon"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <nav>
-                   <ul class="sf-menu">
-                       <li>HOME</li>
-                       <li>Catalogus</li>
-                       <li>Random</li>
-                   </ul>
-                </nav>
-                
-            </div> 
-            -->
+          
         </header>
 
 
+
+
+
+
+
+
         
-        <div id="main" role="main">
-
-        </div>
-
-
-
-
-
-
-        <footer>
-
-        </footer>
-
-
-
-
-
-
-        <!--
 
         <div>
             <table>
@@ -204,7 +137,7 @@
         </div>
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
-        -->
+       
     </form>
 </body>
 </html>

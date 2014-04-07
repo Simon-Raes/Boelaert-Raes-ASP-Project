@@ -46,21 +46,20 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
-        /**Adds an orderline to the database*/
+        /**Adds a new orderline to the database*/
         public Boolean addOrderLine(OrderLine orderline)
         {
-            Boolean status = false;
+            Boolean didComplete = false;
             cnn = new SqlConnection(sDatabaseLocatie);
 
-            //todo: paramaters (of ander beter systeem) gebruiken!
-
             SqlCommand command = new SqlCommand("INSERT INTO OrderLine" +
-            "(order_id, order_line_type_id, dvd_copy_id, startdate, enddate)" +
-            "VALUES(@order_id, @order_line_type_id, @dvd_copy_id, @startdate, @enddate)", cnn);
+            "(order_id, order_line_type_id, dvd_info_id, dvd_copy_id, startdate, enddate)" +
+            "VALUES(@order_id, @order_line_type_id, @dvd_info_id, null, @startdate, @enddate)", cnn);
             
             command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id));
             command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
-            command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvd_copy_id));
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvd_info_id));
+            //command.Parameters.Add(new SqlParameter("@dvd_copy_id", null)); //a copy is not yet assigned here, will only be added after a customer pays
 
             //TODO: betere oplossing voor dates
             if(orderline.startdate==DateTime.MinValue)
@@ -78,21 +77,70 @@ namespace LayeredBusinessModel.DAO
             {
                 cnn.Open();
                 command.ExecuteNonQuery();
-                status = true;
+                didComplete = true;
             }
             catch (Exception ex)
             {
-                status = false;
+                didComplete = false;
             }
             finally
             {
                 cnn.Close();
             }
-            return status;
+            return didComplete;
+        }
+
+        /**Updates an existing orderline*/
+        public Boolean updateOrderLine(OrderLine orderline)
+        {
+            Boolean didComplete = false;
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            SqlCommand command = new SqlCommand("UPDATE OrderLine " +            
+            "SET order_line_type_id = @order_line_type_id, "+
+            "dvd_info_id = @dvd_info_id, "+
+            "dvd_copy_id = @dvd_copy_id, "+
+            "startdate = @startdate, "+
+            "enddate = @enddate" + 
+            "WHERE order_id = @order_id", cnn);
+
+            command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id));
+            command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvd_info_id));
+            command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvd_copy_id));
+            command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id)); 
+
+            //TODO: betere oplossing voor dates
+            if (orderline.startdate == DateTime.MinValue)
+            {
+                orderline.startdate = (DateTime)SqlDateTime.Null;
+            }
+            if (orderline.enddate == DateTime.MinValue)
+            {
+                orderline.enddate = (DateTime)SqlDateTime.Null;
+            }
+            command.Parameters.Add(new SqlParameter("@startdate", orderline.startdate));
+            command.Parameters.Add(new SqlParameter("@enddate", orderline.enddate));
+
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+                didComplete = true;
+            }
+            catch (Exception ex)
+            {
+                didComplete = false;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return didComplete;
         }
 
 
-        /*Delete ALL data from this table*/
+        /*Delete ALL data from this table (for dev use)*/
         public void clearTable()
         {
             cnn = new SqlConnection(sDatabaseLocatie);

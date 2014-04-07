@@ -72,52 +72,28 @@ namespace LayeredBusinessModel.WebUI
                 OrderService orderService = new OrderService();
                 int orderID = orderService.addOrderForCustomer(user.customer_id);
 
-                
+
                 OrderLineService orderLineService = new OrderLineService();
                 dvdCopyService = new DvdCopyService();
 
                 //add cart items to newly created order
                 foreach (ShoppingcartItem item in cartContent)
-                {       
-                    List<DvdCopy> availableCopies = null;
-                    DvdCopy copy = null;
+                {
 
-                    //get all available copies
-                    //get this list again for every item so you can add a new, available copy to the order (todo: way to do this without going to the database for every item)
-                    if (item.copy_type_id == 1) //rent copy
+                    OrderLine orderline = new OrderLine
                     {
-                        availableCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Convert.ToString(item.dvd_info_id));
-                    }
-                    else if (item.copy_type_id == 2) //sale copy
-                    {
-                        availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(Convert.ToString(item.dvd_info_id));
-                    }
+                        order_id = orderID,
+                        dvd_info_id = item.dvd_info_id,
+                        //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
+                        startdate = item.startdate,
+                        enddate = item.enddate,
+                        //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
+                        order_line_type_id = item.copy_type_id
+                    };
 
-                    //check if there is a copy available
-                    if (availableCopies.Count > 0)
-                    {
-                        //get the first available copy
-                        copy = availableCopies[0];
+                    orderLineService.addOrderLine(orderline);
 
-                        OrderLine orderline = new OrderLine
-                        {
-                            order_id = orderID,
-                            dvd_copy_id = copy.dvd_copy_id,
-                            startdate = item.startdate,
-                            enddate = item.enddate,
-                            //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                            order_line_type_id = item.copy_type_id
-                        };
-                        orderLineService.addOrderLine(orderline);
 
-                        //mark copy as NOT in_stock
-                        copy.in_stock = false;
-                        dvdCopyService.updateCopy(copy);
-                    }
-                    else
-                    {
-                        //not in stock, display error for this item
-                    }                    
                 }
 
                 //clear cart

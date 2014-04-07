@@ -92,8 +92,8 @@
 
                             <nav class="main-nav">
                                 <ul class="links">
-                                    <li>Home</li>
-                                    <li><a href="Catalog.aspx" />Catalogus</li>
+                                    <li><a href="index.aspx">Home</a></li>
+                                    <li><a href="Catalog.aspx">Catalogus</a></li>
                                     <li>About</li>
                                     <li>...</li>
                                 </ul>
@@ -106,7 +106,101 @@
           
         </header>
 
+        <div class="main-container">
 
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col">
+
+                        <div class="main">
+
+                            <div class="row">
+
+                                <div class="col-main">
+                                    main content
+                                </div>
+
+                                <div class="col-sidebar">
+
+                                    <div class="block-side-nav">
+                                        <div class="block-title-cat">
+                                            <strong><span>Movies</span></strong>
+
+                                        </div>
+                                        <div class="block-content-cat">
+                                            <ul class="sf-menu">
+                                                <li>
+                                                    <a href="#" ><span>Romance</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Comedy</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Thriller</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>War</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Horror</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Family</span></a></li>
+                                            </ul>
+
+                                        </div>
+                                        <div class="block-title-cat">
+                                            <strong><span>Multimedia</span></strong>
+
+                                        </div>
+                                        <div class="block-content-cat">
+                                            <ul class="sf-menu">
+                                                <li>
+                                                    <a href="#" ><span>Game Boy</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>PC General</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>PC Games</span></a></li>
+                                            </ul>
+
+                                        </div>
+
+                                         <div class="block-title-cat">
+                                            <strong><span>Music</span></strong>
+
+                                        </div>
+                                        <div class="block-content-cat">
+                                            <ul class="sf-menu">
+                                                <li>
+                                                    <a href="#" ><span>Compilations</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Dance, Hip Hop & Rapjazz</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Blues, Country & Folk</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Pop</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>R&B & Soul</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Rock</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Worldmusic</span></a></li>
+                                                <li>
+                                                    <a href="#"><span>Musical</span></a></li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
 
@@ -114,7 +208,7 @@
 
 
         
-
+        <!--
         <div>
             <table>
                         <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
@@ -137,7 +231,7 @@
         </div>
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
-       
+       -->
     </form>
 </body>
 </html>

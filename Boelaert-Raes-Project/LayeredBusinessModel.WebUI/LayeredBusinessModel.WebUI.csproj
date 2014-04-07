@@ -64,6 +64,7 @@
     <Content Include="Customers.aspx" />
     <Content Include="dev.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="images\h2-bg.gif" />
     <Content Include="images\icon_cart.gif" />
     <Content Include="images\logo.png" />
     <Content Include="images\select_arr.gif" />

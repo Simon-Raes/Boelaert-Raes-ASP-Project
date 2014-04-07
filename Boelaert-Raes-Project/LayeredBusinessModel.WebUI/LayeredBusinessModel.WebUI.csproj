@@ -61,9 +61,13 @@
     <Content Include="Admin.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Catalog.aspx" />
+    <Content Include="css\style.css" />
     <Content Include="Customers.aspx" />
     <Content Include="dev.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="images\icon_cart.gif" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\select_arr.gif" />
     <Content Include="Index.aspx" />
     <Content Include="images\banner1.gif" />
     <Content Include="images\banner2.gif" />
@@ -71,7 +75,22 @@
     <Content Include="images\banner4.gif" />
     <Content Include="images\banner5.gif" />
     <Content Include="images\orders_mockup.png" />
+    <Content Include="jquery\jquery.min.js" />
     <Content Include="Login.aspx" />
+    <Content Include="semantic\css\semantic.css" />
+    <Content Include="semantic\css\semantic.min.css" />
+    <Content Include="semantic\fonts\basic.icons.svg" />
+    <Content Include="semantic\fonts\icons.svg" />
+    <Content Include="semantic\images\loader-large-inverted.gif" />
+    <Content Include="semantic\images\loader-large.gif" />
+    <Content Include="semantic\images\loader-medium-inverted.gif" />
+    <Content Include="semantic\images\loader-medium.gif" />
+    <Content Include="semantic\images\loader-mini-inverted.gif" />
+    <Content Include="semantic\images\loader-mini.gif" />
+    <Content Include="semantic\images\loader-small-inverted.gif" />
+    <Content Include="semantic\images\loader-small.gif" />
+    <Content Include="semantic\javascript\semantic.js" />
+    <Content Include="semantic\javascript\semantic.min.js" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
     <Content Include="Web.config">
@@ -164,6 +183,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.Master" />
+    <Content Include="semantic\fonts\basic.icons.eot" />
+    <Content Include="semantic\fonts\basic.icons.ttf" />
+    <Content Include="semantic\fonts\basic.icons.woff" />
+    <Content Include="semantic\fonts\icons.eot" />
+    <Content Include="semantic\fonts\icons.otf" />
+    <Content Include="semantic\fonts\icons.ttf" />
+    <Content Include="semantic\fonts\icons.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -184,6 +210,7 @@
       <Name>LayeredBusinessModel.Domain</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

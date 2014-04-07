@@ -73,7 +73,9 @@
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="banners.xml" />
   </ItemGroup>
   <ItemGroup>

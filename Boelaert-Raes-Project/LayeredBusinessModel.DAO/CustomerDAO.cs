@@ -105,11 +105,11 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
 
             SqlCommand command = new SqlCommand("UPDATE Customers " +
-            "SET name=@name, " +
-            "email=@email, " +
-            "password=@password, " +
-            "number_of_visits=@number_of_visits " +
-            "WHERE login=@login" + customer.login + "';", cnn);
+            "SET name = @name, " +
+            "email = @email, " +
+            "password = @password, " +
+            "number_of_visits = @number_of_visits " +
+            "WHERE login = @login", cnn);
 
             command.Parameters.Add(new SqlParameter("@name", customer.name));
             command.Parameters.Add(new SqlParameter("@email", customer.email));

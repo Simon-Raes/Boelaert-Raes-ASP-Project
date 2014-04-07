@@ -29,11 +29,26 @@
                         overview of user info comes here
                     </asp:View>
                     <asp:View ID="viewOrders" runat="server">
-                        <asp:GridView ID="gvOrders" runat="server">
+                        <asp:GridView ID="gvOrders" runat="server" OnRowCommand="gvOrders_RowCommand">
+                            <Columns>
+                                <asp:ButtonField CommandName="Details" HeaderText="Details" Text="Details" />
+                            </Columns>
                         </asp:GridView>
+                        <asp:Panel ID="pnlOrderDetails" runat="server" Visible="False">
+                            <br />
+                            Order number:
+                            <asp:Label ID="lblOrderID" runat="server" Text="Label"></asp:Label>
+                            <br />
+                            Order status:
+                            <asp:Label ID="lblOrderStatus" runat="server" Text="Label"></asp:Label>
+                            &nbsp;(1 = new, 2 = paid, 3 = shipped) //todo: text instead of numbers<br />
+                            <br />
+                            Click here to pay for this order:<asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Pay" />
+                            &nbsp;//TODO: payment page<br /> Your order will be processed and shipped as soon as the payment has been received.<asp:GridView ID="gvOrderDetails" runat="server">
+                            </asp:GridView>
+                        </asp:Panel>
                         <br />
-                        <br />
-                        Orders mockup:<br /> Geplande verhuurcopies misschien in een aparte lijst zetten, moeten tot 2 dagen voor verhuur geannuleerd kunnen worden.<br />&nbsp;&nbsp;<asp:Image ID="Image1" runat="server" ImageUrl="~/images/orders_mockup.png" />
+                        Geplande verhuurcopies misschien in een aparte lijst zetten, moeten tot 2 dagen voor verhuur geannuleerd kunnen worden.<br />&nbsp;&nbsp;
                     </asp:View>
                     <asp:View ID="viewSettings" runat="server">
 

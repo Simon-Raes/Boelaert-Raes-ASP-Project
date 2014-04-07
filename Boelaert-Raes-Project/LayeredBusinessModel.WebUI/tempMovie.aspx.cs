@@ -69,11 +69,11 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        /*Disables invalid days in the Rent calendar*/
+        /**Disables invalid days in the Rent calendar*/
         protected void calRentStartDate_DayRender(object sender, DayRenderEventArgs e)
         {
             //don't let the user select days in the past    
-            if (e.Day.Date < DateTime.Today)
+            if (e.Day.Date < DateTime.Today || e.Day.Date > DateTime.Today.AddDays(14))
             {
                 e.Day.IsSelectable = false;
                 e.Cell.BackColor = System.Drawing.Color.LightGray;
@@ -84,7 +84,7 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        /*Disables invalid days in the Reservations calendar*/
+        /**Disables invalid days in the Reservations calendar*/
         protected void calReservationStartDate_DayRender(object sender, DayRenderEventArgs e)
         {
             //movie can be reserved between today and 14 days from now   

@@ -42,12 +42,78 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
+        public Order getOrder(String id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            Order order = null;
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE order_id = @order_id", cnn);
+            command.Parameters.Add(new SqlParameter("@order_id", id));
+
+            try
+            {
+                cnn.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                order = createOrder(reader);
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return order;
+        }
+
+        public void updateOrder(Order order)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            SqlCommand command = new SqlCommand("UPDATE Orders " +
+            "SET customer_id = @customer_id, " +
+            "orderstatus_id = @orderstatus_id, " +
+            "date = @date " +
+            "WHERE order_id=@order_id" , cnn);
+
+            command.Parameters.Add(new SqlParameter("@customer_id", order.customer_id));
+            command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus_id));
+            command.Parameters.Add(new SqlParameter("@date", order.date));
+            command.Parameters.Add(new SqlParameter("@order_id", order.order_id));
+
+            try
+            {
+                cnn.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
+
         public List<Order> getOrdersForCustomer(int customer_id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             List<Order> orderList = new List<Order>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE customer_id = "+customer_id, cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE customer_id = @customer_id", cnn);
+            command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+
             try
             {
                 cnn.Open();
@@ -82,11 +148,11 @@ namespace LayeredBusinessModel.DAO
 
             SqlCommand command = new SqlCommand("INSERT INTO Orders" +
             "(orderstatus_id, customer_id, date) " +
-            "OUTPUT INSERTED.order_id "+
-            //add new order with status 1 (= new) and date of today
-            "VALUES('" + 1 + "','" + customer_id + "'," + "convert(datetime,'" + DateTime.Today + "',103)"+")", cnn);
+            "OUTPUT INSERTED.order_id " +
+                //add new order with status 1 (= new) and date of today
+            "VALUES('" + 1 + "','" + customer_id + "'," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
 
-             
+
             try
             {
                 cnn.Open();

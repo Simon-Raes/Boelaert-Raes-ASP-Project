@@ -101,15 +101,13 @@ namespace LayeredBusinessModel.DAO
             "dvd_info_id = @dvd_info_id, "+
             "dvd_copy_id = @dvd_copy_id, "+
             "startdate = @startdate, "+
-            "enddate = @enddate" + 
-            "WHERE order_id = @order_id", cnn);
+            "enddate = @enddate " + 
+            "WHERE orderline_id = @orderline_id", cnn);
 
-            command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id));
             command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
             command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvd_info_id));
             command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvd_copy_id));
-            command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id)); 
-
+             
             //TODO: betere oplossing voor dates
             if (orderline.startdate == DateTime.MinValue)
             {
@@ -119,8 +117,10 @@ namespace LayeredBusinessModel.DAO
             {
                 orderline.enddate = (DateTime)SqlDateTime.Null;
             }
+
             command.Parameters.Add(new SqlParameter("@startdate", orderline.startdate));
             command.Parameters.Add(new SqlParameter("@enddate", orderline.enddate));
+            command.Parameters.Add(new SqlParameter("@orderline_id", orderline.orderline_id));
 
             try
             {
@@ -161,15 +161,35 @@ namespace LayeredBusinessModel.DAO
 
         private OrderLine createOrderLine(SqlDataReader reader)
         {
-            OrderLine order = new OrderLine
+            OrderLine order;
+
+            if(reader["dvd_copy_id"]==DBNull.Value)
             {
-                orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                order_id = Convert.ToInt32(reader["order_id"]),
-                order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
-                dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                startdate = Convert.ToDateTime(reader["startdate"]),
-                enddate = Convert.ToDateTime(reader["enddate"])
-            };
+                order = new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order_id = Convert.ToInt32(reader["order_id"]),
+                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
+
+                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+            else
+            {
+                order = new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order_id = Convert.ToInt32(reader["order_id"]),
+                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
+                    dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
+                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };  
+            }
+            
             return order;
         }
     }

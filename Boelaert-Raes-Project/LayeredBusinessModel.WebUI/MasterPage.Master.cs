@@ -14,9 +14,6 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
-
             //set login/user-button text
             if (Session["user"] == null)
             {

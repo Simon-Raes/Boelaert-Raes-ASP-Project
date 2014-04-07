@@ -19,6 +19,18 @@ namespace LayeredBusinessModel.BLL
             return orderDAO.getAll();
         }
 
+        public Order getOrder(String id)
+        {
+            orderDAO = new OrderDAO();
+            return orderDAO.getOrder(id);
+        }
+
+        public void updateOrder(Order order)
+        {
+            orderDAO = new OrderDAO();
+            orderDAO.updateOrder(order);
+        }
+
         public List<Order> getOrdersForCustomer(int customer_id)
         {
             orderDAO = new OrderDAO();

@@ -93,7 +93,7 @@
                             <nav class="main-nav">
                                 <ul class="links">
                                     <li>Home</li>
-                                    <li><a href="Catalog.aspx" />Catalogus</li>
+                                    <li><a href="Catalog.aspx">Catalogus</a></li>
                                     <li>About</li>
                                     <li>...</li>
                                 </ul>

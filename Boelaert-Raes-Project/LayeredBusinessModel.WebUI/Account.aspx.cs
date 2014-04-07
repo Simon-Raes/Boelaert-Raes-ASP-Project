@@ -12,14 +12,16 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class Account : System.Web.UI.Page
     {
+        private List<Order> customerOrders;
+
         protected void Page_Load(object sender, EventArgs e)
-        {            
-            if(!Page.IsPostBack)
+        {
+            if (!Page.IsPostBack)
             {
                 mvAccount.ActiveViewIndex = 0;
 
                 //todo: only update(create?) textfields when user accesses the settings page
-                Customer user = (Customer) Session["user"];
+                Customer user = (Customer)Session["user"];
                 if (user != null)
                 {
                     //settings page
@@ -33,7 +35,8 @@ namespace LayeredBusinessModel.WebUI
 
                     //orders page
                     OrderService orderService = new OrderService();
-                    gvOrders.DataSource = orderService.getOrdersForCustomer(user.customer_id);
+                    customerOrders = orderService.getOrdersForCustomer(user.customer_id);
+                    gvOrders.DataSource = customerOrders;
                     gvOrders.DataBind();
                 }
             }
@@ -48,12 +51,12 @@ namespace LayeredBusinessModel.WebUI
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
             //only update if validators were passed
-            if(Page.IsValid)
+            if (Page.IsValid)
             {
-                Customer user = (Customer) Session["user"];
+                Customer user = (Customer)Session["user"];
 
                 //only update if user is currently logged in
-                if(user!=null)
+                if (user != null)
                 {
                     //create customer object based on logged-in-user info and info from textfields
                     Customer customer = new Customer
@@ -80,9 +83,97 @@ namespace LayeredBusinessModel.WebUI
                     ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     //redirect to login
                 }
-                
+
             }
-            
+
+        }
+
+        protected void gvOrders_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument.ToString());
+            String orderID = gvOrders.Rows[index].Cells[1].Text;
+
+            if (e.CommandName == "Details")
+            {
+                //show details
+                pnlOrderDetails.Visible = true;
+
+                //get the order info
+                OrderService orderService = new OrderService();
+                Order selectedOrder = orderService.getOrder(orderID);
+                lblOrderStatus.Text = selectedOrder.orderstatus_id.ToString(); //1 = new, 2 = paid, 3 = shipped
+                lblOrderID.Text = selectedOrder.order_id.ToString();
+
+                //hide pay button if the order has already been paid
+                if (selectedOrder.orderstatus_id != 1)
+                {
+                    btnPay.Visible = false;
+                }
+                else
+                {
+                    btnPay.Visible = true;
+                }
+
+                //get all articles in the order and display them
+                OrderLineService orderLineService = new OrderLineService();
+                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
+                gvOrderDetails.DataSource = orderLines;
+                gvOrderDetails.DataBind();
+            }
+        }
+
+        protected void btnPay_Click(object sender, EventArgs e)
+        {
+            //get the order
+            String orderID = lblOrderID.Text;
+            OrderService orderService = new OrderService();
+            Order selectedOrder = orderService.getOrder(orderID);
+
+            //set the order status to PAID
+            selectedOrder.orderstatus_id = 2;
+            orderService.updateOrder(selectedOrder);
+
+            //assign copies to the orderlines
+            OrderLineService orderLineService = new OrderLineService();
+            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
+
+            DvdCopyService dvdCopyService = new DvdCopyService();
+            List<DvdCopy> availableCopies = null;
+            DvdCopy copy = null;
+
+            foreach (OrderLine orderLine in orderLines)
+            {
+                //get all available copies
+                //get this list again for every item so you can add a new, available copy to the order (todo: do this without going to the database for every item)
+                if (orderLine.order_line_type_id == 1) //rent copy
+                {
+                    availableCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Convert.ToString(orderLine.dvd_info_id));
+                }
+                else if (orderLine.order_line_type_id == 2) //sale copy
+                {
+                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(Convert.ToString(orderLine.dvd_info_id));
+                }
+
+                //check if there is a copy available
+                if (availableCopies.Count > 0)
+                {
+                    //get the first available copy
+                    copy = availableCopies[0];
+
+                    //set the found copy as the copy for this orderline
+                    orderLine.dvd_copy_id = copy.dvd_copy_id;
+                    orderLineService.updateOrderLine(orderLine);
+
+                    //mark the found copy as NOT in_stock
+                    copy.in_stock = false;
+                    dvdCopyService.updateCopy(copy);
+                }
+                else
+                {
+                    //not in stock, will not be assigned a copy!!
+                    //todo: handle this error some way, display error for this item or let the user know this item is currently out of stock
+                }
+            }
         }
     }
 }

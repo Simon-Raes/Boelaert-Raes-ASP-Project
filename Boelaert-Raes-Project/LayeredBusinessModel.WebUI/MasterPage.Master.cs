@@ -19,8 +19,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 btnLogin.Text = "Login";
                 //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
-                btnCart.Visible = false;
-                               
+                btnCart.Visible = false;                              
                 
             }
             else
@@ -41,11 +40,9 @@ namespace LayeredBusinessModel.WebUI
                     {
                         //todo: 
                         //favoriete genre van user opzoeken (op basis van ordergeschiedenis), enkel banners van dat genre weergeven
-                        arBanner.KeywordFilter = "scifi"; //temp vastgezet op scifi
+                        arBanner.KeywordFilter = "scifi"; //tijdelijk vastgezet op scifi
                     }
                 }
-                
-               
             }
         }
 

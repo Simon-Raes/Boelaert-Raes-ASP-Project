@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 mvAccount.ActiveViewIndex = 0;
 
-                //todo: only update textfields when user accesses the settings page
+                //todo: only update(create?) textfields when user accesses the settings page
                 Customer user = (Customer) Session["user"];
                 if (user != null)
                 {
@@ -66,16 +66,19 @@ namespace LayeredBusinessModel.WebUI
                         password = txtPassword.Text,
 
                     };
+
                     //update user's database data
                     CustomerService customerService = new CustomerService();
                     customerService.updateCustomer(customer);
+
                     //also update his info in the session
                     Session["user"] = customer;
                 }
                 else
                 {
-                    string script = "alert(\"You have been logged out due to inactivity. Please log in to change your information.\");";
+                    string script = "alert(\"You have been logged out due to inactivity. Please log in to change your details.\");";
                     ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                    //redirect to login
                 }
                 
             }

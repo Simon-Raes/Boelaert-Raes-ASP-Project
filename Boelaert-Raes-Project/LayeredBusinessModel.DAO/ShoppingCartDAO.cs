@@ -18,17 +18,14 @@ namespace LayeredBusinessModel.DAO
             List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
 
 
-
             /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
-            SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_copy_id, DvdInfo.dvd_info_id, DvdCopy.copy_type_id, "+
-            "DvdInfo.name, serialnumber, note, in_stock, startdate, enddate, DvdCopyType.name as typeName " +
-            "FROM ShoppingcartItem " +
-            "INNER JOIN DvdCopy " +
-            "ON ShoppingcartItem.dvd_copy_id = DvdCopy.dvd_copy_id " +
+            SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
+            "DvdInfo.name, startdate, enddate, DvdCopyType.name as typeName " +
+            "FROM ShoppingcartItem " +            
             "INNER JOIN DvdInfo "+
-            "ON DvdCopy.dvd_info_id = DvdInfo.dvd_info_id "+
+            "ON ShoppingcartItem.dvd_info_id = DvdInfo.dvd_info_id "+
             "INNER JOIN DvdCopyType "+
-            "ON DvdCopy.copy_type_id = DvdCopyType.copy_type_id " +
+            "ON ShoppingcartItem.copy_type_id = DvdCopyType.copy_type_id " +
             "WHERE customer_id = " + id, cnn);
 
             try
@@ -55,7 +52,7 @@ namespace LayeredBusinessModel.DAO
             return cartItems;
         }
 
-        public Boolean addItemToCart(int customerID, int dvdCopyID)
+        public Boolean addItemToCart(int customerID, int dvdInfoID)
         {
             Boolean status = false;
             cnn = new SqlConnection(sDatabaseLocatie);
@@ -63,8 +60,11 @@ namespace LayeredBusinessModel.DAO
             //todo: paramaters (of ander beter systeem) gebruiken!
 
             SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
-            "(customer_id,dvd_copy_id)" +
-            "VALUES(" + customerID + "," + dvdCopyID + ")", cnn);
+            "(customer_id, dvd_info_id, copy_type_id)" +
+            "VALUES(@customer_id, @dvd_info_id, 2)", cnn);
+            command.Parameters.Add(new SqlParameter("@customer_id", customerID));
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+
             try
             {
                 cnn.Open();
@@ -82,17 +82,20 @@ namespace LayeredBusinessModel.DAO
             return status;
         }
 
-        //overloaded method for adding rent items with dates
-        public Boolean addItemToCart(int customerID, int dvdCopyID, DateTime startdate, DateTime enddate)
+        //overloaded method for adding RENT items with dates
+        public Boolean addItemToCart(int customerID, int dvdInfoID, DateTime startdate, DateTime enddate)
         {
             Boolean status = false;
             cnn = new SqlConnection(sDatabaseLocatie);
 
-            //todo: paramaters (of ander beter systeem) gebruiken!
-
             SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
-            "(customer_id,dvd_copy_id, startdate, enddate)" +
-            "VALUES(" + customerID + "," + dvdCopyID + ",convert(datetime,'" + startdate + "',103),convert(datetime,'" + enddate + "',103))", cnn);
+            "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
+            "VALUES(@customer_id, @dvd_info_id, convert(datetime,'" + startdate + "',103), convert(datetime,'" + enddate + "',103), 1)", cnn);
+            command.Parameters.Add(new SqlParameter("@customer_id", customerID));
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+           // command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
+          //  command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
+
             try
             {
                 cnn.Open();
@@ -111,14 +114,16 @@ namespace LayeredBusinessModel.DAO
         }
 
 
-        public Boolean removeItemFromCart(String dvdCopyID)
+        public Boolean removeItemFromCart(String cartItemID)
         {
             Boolean status = false;
             cnn = new SqlConnection(sDatabaseLocatie);
 
-            //todo: paramaters (of ander beter systeem) gebruiken!
 
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE dvd_copy_id = " + dvdCopyID, cnn);
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
+            command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
+            
+
             try
             {
                 cnn.Open();
@@ -141,9 +146,10 @@ namespace LayeredBusinessModel.DAO
         {
             cnn = new SqlConnection(sDatabaseLocatie);
 
-            //todo: paramaters (of ander beter systeem) gebruiken!
 
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = " + customer_id, cnn);
+            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
+            command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+
             try
             {
                 cnn.Open();
@@ -206,7 +212,8 @@ namespace LayeredBusinessModel.DAO
             {
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
                 customer_id = Convert.ToInt32(reader[1]),
-                dvd_copy_id = Convert.ToInt32(reader[2]),                
+                dvd_info_id = Convert.ToInt32(reader[2]),   
+                copy_type_id = Convert.ToInt32(reader[3]),
                 startdate = startdate,
                 enddate = enddate,
                 name = Convert.ToString(reader["name"]),

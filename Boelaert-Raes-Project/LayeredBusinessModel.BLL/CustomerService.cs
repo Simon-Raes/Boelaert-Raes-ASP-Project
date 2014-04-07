@@ -19,7 +19,7 @@ namespace LayeredBusinessModel.BLL
             List<Customer> customerList = new List<Customer>();
             customerDAO = new CustomerDAO();
             customerList = customerDAO.getAllCustomers();
-            return customerList;
+            return customerList;  
         }
 
         public Customer getCustomerWithLogin(String login)

@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.WebUI
 
         }
 
-        /*Reset database to start data*/
+        /**Reset database to start state*/
         protected void btnResetCopies_Click(object sender, EventArgs e)
         {
             //Delete all shoppingcarts

@@ -63,7 +63,7 @@
     <Content Include="Customers.aspx" />
     <Content Include="dev.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Home.aspx" />
+    <Content Include="Index.aspx" />
     <Content Include="images\banner1.gif" />
     <Content Include="images\banner2.gif" />
     <Content Include="images\banner3.gif" />
@@ -117,12 +117,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -162,7 +162,9 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="Web.sitemap" />
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LayeredBusinessModel.BLL\LayeredBusinessModel.BLL.csproj">

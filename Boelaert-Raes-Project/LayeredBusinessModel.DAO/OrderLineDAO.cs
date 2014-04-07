@@ -8,6 +8,8 @@ using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
 
+using System.Data.SqlTypes;
+
 namespace LayeredBusinessModel.DAO
 {
     public class OrderLineDAO : DAO
@@ -17,7 +19,9 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<OrderLine> orderList = new List<OrderLine>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = "+order_id, cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
+            command.Parameters.Add(new SqlParameter("@order_id", order_id));
+
             try
             {
                 cnn.Open();
@@ -42,6 +46,7 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
+        /**Adds an orderline to the database*/
         public Boolean addOrderLine(OrderLine orderline)
         {
             Boolean status = false;
@@ -51,7 +56,24 @@ namespace LayeredBusinessModel.DAO
 
             SqlCommand command = new SqlCommand("INSERT INTO OrderLine" +
             "(order_id, order_line_type_id, dvd_copy_id, startdate, enddate)" +
-            "VALUES('" + orderline.order_id + "','" + orderline.order_line_type_id + "','" + orderline.dvd_copy_id + "', " + "convert(datetime,'" + orderline.startdate + "',103), convert(datetime,'" + orderline.enddate + "',103))", cnn);
+            "VALUES(@order_id, @order_line_type_id, @dvd_copy_id, @startdate, @enddate)", cnn);
+            
+            command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id));
+            command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
+            command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvd_copy_id));
+
+            //TODO: betere oplossing voor dates
+            if(orderline.startdate==DateTime.MinValue)
+            {
+                orderline.startdate = (DateTime)SqlDateTime.Null;
+            }
+            if (orderline.enddate == DateTime.MinValue)
+            {
+                orderline.enddate = (DateTime)SqlDateTime.Null;
+            }
+            command.Parameters.Add(new SqlParameter("@startdate", orderline.startdate));
+            command.Parameters.Add(new SqlParameter("@enddate", orderline.enddate));
+
             try
             {
                 cnn.Open();

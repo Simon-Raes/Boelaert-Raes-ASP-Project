@@ -49,6 +49,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator valReqEmail;
         
         /// <summary>
+        /// valCustEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator valCustEmail;
+        
+        /// <summary>
         /// valRegEmail control.
         /// </summary>
         /// <remarks>
@@ -74,6 +83,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator valReqLogin;
+        
+        /// <summary>
+        /// valCustLogin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator valCustLogin;
         
         /// <summary>
         /// txtPassword control.

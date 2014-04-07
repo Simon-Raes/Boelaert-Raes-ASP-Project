@@ -31,6 +31,7 @@
             </td>
             <td>
                 <asp:RequiredFieldValidator ID="valReqEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="Field can't be empty."></asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="valCustEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="An account with that address already exists." OnServerValidate="valCustEmail_ServerValidate"></asp:CustomValidator>
                 <asp:RegularExpressionValidator ID="valRegEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="Not a valid e-mail address." ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"></asp:RegularExpressionValidator>
             </td>
 
@@ -42,6 +43,7 @@
             </td>
             <td class="auto-style1">
                 <asp:RequiredFieldValidator ID="valReqLogin" runat="server" ControlToValidate="txtLogin" ErrorMessage="Field can't be empty."></asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="valCustLogin" runat="server" ControlToValidate="txtLogin" ErrorMessage="That name is already taken." OnServerValidate="valCustLogin_ServerValidate" ValidateEmptyText="True"></asp:CustomValidator>
             </td>
 
         </tr>

@@ -29,7 +29,7 @@ namespace LayeredBusinessModel.DAO
                 }
 
                 reader.Close();
-                
+
             }
             catch (Exception ex)
             {
@@ -47,23 +47,46 @@ namespace LayeredBusinessModel.DAO
         public Customer getCustomerWithLogin(string login)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
-            Customer customer = new Customer();
-            
-            //todo: werken met parameter en/of controle op login-string
+            Customer customer = null;
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE login='"+login+"'", cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE login = @login", cnn);
+            command.Parameters.Add(new SqlParameter("@login", login));
             try
             {
                 cnn.Open();
                 SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    customer = createCustomer(reader);
-                }
-
+                reader.Read();
+                customer = createCustomer(reader);
                 reader.Close();
+            }
+            catch (Exception ex)
+            {
+                customer = null;
+            }
+            finally
+            {
+                cnn.Close();
+            }
 
+            return customer;
+        }
+
+        public Customer getCustomerWithEmail(string email)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            Customer customer = null;
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
+            command.Parameters.Add(new SqlParameter("@email", email));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+
+                customer = createCustomer(reader);
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -80,28 +103,30 @@ namespace LayeredBusinessModel.DAO
         public void updateCustomer(Customer customer)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
-            
-            SqlCommand command = new SqlCommand("UPDATE Customers" +
-            " SET name='" + customer.name + 
-            "', email='" + customer.email + 
-            "', password='" + customer.password + 
-            "', number_of_visits=" + customer.numberOfVisits +
-            " WHERE login='"+customer.login+"';", cnn);
+
+            SqlCommand command = new SqlCommand("UPDATE Customers " +
+            "SET name=@name, " +
+            "email=@email, " +
+            "password=@password, " +
+            "number_of_visits=@number_of_visits " +
+            "WHERE login=@login" + customer.login + "';", cnn);
+
+            command.Parameters.Add(new SqlParameter("@name", customer.name));
+            command.Parameters.Add(new SqlParameter("@email", customer.email));
+            command.Parameters.Add(new SqlParameter("@password", customer.password));
+            command.Parameters.Add(new SqlParameter("@number_of_visits", customer.numberOfVisits));
+            command.Parameters.Add(new SqlParameter("@login", customer.login));
+
             try
             {
                 cnn.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                /*
-                while (reader.Read())
-                {
-                    customer = createCustomer(reader);
-                }*/
 
                 reader.Close();
 
             }
             catch (Exception ex)
-            {                
+            {
             }
             finally
             {
@@ -117,8 +142,8 @@ namespace LayeredBusinessModel.DAO
             //todo: paramaters (of ander beter systeem) gebruiken!
 
             SqlCommand command = new SqlCommand("INSERT INTO Customers" +
-            "(name,email,login,password,number_of_visits)"+
-            "VALUES('"+customer.name+"','"+customer.email+"','"+customer.login+"','"+customer.password+"',"+"0)",cnn);
+            "(name,email,login,password,number_of_visits)" +
+            "VALUES('" + customer.name + "','" + customer.email + "','" + customer.login + "','" + customer.password + "'," + "0)", cnn);
             try
             {
                 cnn.Open();
@@ -131,7 +156,7 @@ namespace LayeredBusinessModel.DAO
             }
             finally
             {
-                cnn.Close();                
+                cnn.Close();
             }
             return status;
         }
@@ -151,9 +176,9 @@ namespace LayeredBusinessModel.DAO
             return customer;
         }
 
-        
 
-        
+
+
     }
 
 

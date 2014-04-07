@@ -28,6 +28,12 @@ namespace LayeredBusinessModel.BLL
             return customerDAO.getCustomerWithLogin(login);
         }
 
+        public Customer getCustomerWithEmail(String email)
+        {
+            customerDAO = new CustomerDAO();
+            return customerDAO.getCustomerWithEmail(email);
+        }
+
         public void updateCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();

@@ -96,7 +96,7 @@ namespace LayeredBusinessModel.WebUI
                 if (availabeCopies.Count > 0)
                 {
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(gvDvdInfo.Rows[index].Cells[0].Text)); //2 = verkoop
+                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(gvDvdInfo.Rows[index].Cells[0].Text)); 
                 }
                 else
                 {

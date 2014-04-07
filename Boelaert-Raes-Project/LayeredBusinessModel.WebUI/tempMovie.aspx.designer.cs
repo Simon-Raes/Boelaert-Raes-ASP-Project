@@ -22,6 +22,24 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Panel pnlActions;
         
         /// <summary>
+        /// btnBuy control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnBuy;
+        
+        /// <summary>
+        /// lblBuyAvailability control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblBuyAvailability;
+        
+        /// <summary>
         /// calRentStartDate control.
         /// </summary>
         /// <remarks>
@@ -47,6 +65,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnRent;
+        
+        /// <summary>
+        /// lblRentAvailability control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRentAvailability;
         
         /// <summary>
         /// calReservationStartDate control.

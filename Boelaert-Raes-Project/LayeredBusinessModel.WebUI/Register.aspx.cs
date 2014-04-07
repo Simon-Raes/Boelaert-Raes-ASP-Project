@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
+using System.Net.Mail;
+
+using LayeredBusinessModel.BLL;
 
 
 namespace LayeredBusinessModel.WebUI
@@ -24,7 +27,8 @@ namespace LayeredBusinessModel.WebUI
         protected void btnRegister_Click(object sender, EventArgs e)
         {
             //check if validators were properly executed
-            if(Page.IsValid)
+            Page.Validate();
+            if (Page.IsValid)
             {
                 Customer customer = new Customer
                 {
@@ -36,11 +40,66 @@ namespace LayeredBusinessModel.WebUI
                 customerService = new CustomerService();
                 customerService.addCustomer(customer);
 
-                //put user in session and redirect to index
+                sendRegisterMail(txtEmail.Text);
+
+                //put user in session and redirect to index - todo: redirect to page telling user to click the confirmation link in the email
                 Session["user"] = customer;
                 Response.Redirect("~/Index.aspx");
             }
-            
+        }
+
+        private void sendRegisterMail(String address)
+        {
+
+            //todo: email sturen wanneer nieuwe klant zich registreert, eventueel met verplichte confirmation link
+            //werkt (nog) niet
+
+
+            //SmtpClient smtpClient = new SmtpClient("smtp.telenet.be", 587);
+
+            //smtpClient.Credentials = new System.Net.NetworkCredential("xxxxxxxxx", "xxxxxxx");
+            //smtpClient.UseDefaultCredentials = false;
+            //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //smtpClient.EnableSsl = true;
+            //MailMessage mail = new MailMessage();
+
+            ////Setting From, To
+            //mail.From = new MailAddress("noreply@dvdshop.be", "DVDShop");
+            //mail.To.Add(new MailAddress(address));
+
+            //smtpClient.Send(mail);
+        }
+
+        protected void valCustLogin_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            CustomerService customerService = new CustomerService();
+            Customer cust = customerService.getCustomerWithLogin(txtLogin.Text);
+            if (cust == null)
+            {
+                //login name still available
+                args.IsValid = true;
+            } 
+            else
+            {
+                //login name already taken
+                args.IsValid = false;
+            }            
+        }
+
+        protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            CustomerService customerService = new CustomerService();
+            Customer cust = customerService.getCustomerWithEmail(txtEmail.Text);
+            if (cust == null)
+            {
+                //email still available
+                args.IsValid = true;
+            }
+            else
+            {
+                //email already taken
+                args.IsValid = false;
+            }
         }
     }
 }

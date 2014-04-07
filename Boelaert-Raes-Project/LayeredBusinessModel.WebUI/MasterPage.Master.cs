@@ -14,18 +14,21 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+
+
+
             //set login/user-button text
             if (Session["user"] == null)
             {
                 btnLogin.Text = "Login";
                 //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
-                btnCart.Visible = false;                              
-                
+                btnCart.Visible = false;
+
             }
             else
             {
                 //set buttons
-                Customer user = (Customer) Session["user"];
+                Customer user = (Customer)Session["user"];
                 btnLogin.Text = user.name;
                 btnCart.Visible = true;
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
@@ -33,7 +36,7 @@ namespace LayeredBusinessModel.WebUI
                 btnCart.Text = "Cart: " + cartContent.Count;
 
                 //don't change banner on every postback
-                if(!Page.IsPostBack)
+                if (!Page.IsPostBack)
                 {
                     //set personalised banners
                     if (user.numberOfVisits > 5)
@@ -43,13 +46,14 @@ namespace LayeredBusinessModel.WebUI
                         arBanner.KeywordFilter = "scifi"; //tijdelijk vastgezet op scifi
                     }
                 }
+
             }
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             if (Session["user"] == null)
-            {                
+            {
                 Response.Redirect("~/Login.aspx");
             }
             else

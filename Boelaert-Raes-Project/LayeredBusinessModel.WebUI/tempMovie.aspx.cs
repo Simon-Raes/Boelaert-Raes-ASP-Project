@@ -28,6 +28,44 @@ namespace LayeredBusinessModel.WebUI
                 {
                     pnlActions.Visible = true;
                 }
+
+                dvdCopyService = new DvdCopyService();
+                //set availability label for BUY copies
+                List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo("1"); //1 = hardcoded op shawshank                 
+                if(availabeCopies.Count>5)
+                {
+                    lblBuyAvailability.Text = "High";
+                    lblBuyAvailability.ForeColor = System.Drawing.Color.Green;
+                } 
+                else if(availabeCopies.Count>0)
+                {
+                    lblBuyAvailability.Text = "Low";
+                    lblBuyAvailability.ForeColor = System.Drawing.Color.Orange;
+                } 
+                else
+                {
+                    lblBuyAvailability.Text = "Out of stock";
+                    lblBuyAvailability.ForeColor = System.Drawing.Color.Red;
+                }
+
+                //set availability label for RENT copies
+                List<DvdCopy> availabeRentCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo("1"); //1 = hardcoded op shawshank                 
+                if (availabeRentCopies.Count > 5)
+                {
+                    lblRentAvailability.Text = "High";
+                    lblRentAvailability.ForeColor = System.Drawing.Color.Green;
+                }
+                else if (availabeRentCopies.Count > 0)
+                {
+                    lblRentAvailability.Text = "Low";
+                    lblRentAvailability.ForeColor = System.Drawing.Color.Orange;
+                }
+                else
+                {
+                    lblRentAvailability.Text = "Out of stock";
+                    lblRentAvailability.ForeColor = System.Drawing.Color.Red;
+                }
+
             }
         }
 
@@ -65,7 +103,7 @@ namespace LayeredBusinessModel.WebUI
         protected void btnRent_Click(object sender, EventArgs e)
         {
             //only excecute if a user is logged in
-            if(Session["user"]!=null)
+            if (Session["user"] != null)
             {
                 Customer user = ((Customer)Session["user"]);
 
@@ -76,29 +114,29 @@ namespace LayeredBusinessModel.WebUI
                     //add rent item to cart            
                     DateTime startdate = calRentStartDate.SelectedDate;
                     DateTime enddate = startdate.AddDays(Convert.ToInt32(ddlRentDuration.SelectedValue));
-                    
+
                     //HERE: hardcoded to shawshank redemption, must get dvdInfoID from generated page
                     dvdCopyService = new DvdCopyService();
                     List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo("1");
-                    
+
                     //check the number of rent items in the user's cart (a user can only rent 5 items at one time)
                     //todo: also needs to check currently rented items from orders (not only from cart)
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
                     List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
                     int rentItemsInCart = 0;
-                    foreach(ShoppingcartItem item in cartContent)
+                    foreach (ShoppingcartItem item in cartContent)
                     {
-                        if(item.typeName.Equals("Verhuur"))
+                        if (item.typeName.Equals("Verhuur"))
                         {
                             rentItemsInCart++;
                         }
                     }
 
-                    if(rentItemsInCart<5)
+                    if (rentItemsInCart < 5)
                     {
                         //only allow rent purchase if a copy is available
                         if (availabeCopies.Count > 0)
-                        {                            
+                        {
                             shoppingCartService.addItemToCart(user.customer_id, 1, startdate, enddate); //1 = hardcode to shawshank redemption for now
                         }
                         else
@@ -107,13 +145,13 @@ namespace LayeredBusinessModel.WebUI
                             //todo: show date when the dvd will be back in stock + option to reserve
                             string script = "alert(\"Item niet meer in stock! (todo: overzicht van wanneer er terug een copy beschikbaar is)\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                        } 
+                        }
                     }
                     else
                     {
                         string script = "alert(\"Uw winkelwagen bevat reeds het maximum aantal verhuur dvd's (5).\");";
                         ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                    }       
+                    }
                 }
                 else
                 {
@@ -124,8 +162,8 @@ namespace LayeredBusinessModel.WebUI
             else
             {
                 string script = "alert(\"You have been logged out due to inactivity.\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);            
-                
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+
             }
         }
 
@@ -137,6 +175,33 @@ namespace LayeredBusinessModel.WebUI
             //NYI
             string script = "alert(\"Not yet implemented.\");";
             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+        }
+
+        protected void btnBuy_Click(object sender, EventArgs e)
+        {
+            List<DvdCopy> availabeCopies = null;
+
+
+            //get all available copies of this movie + type (buy/rent)
+            DvdCopyService dvdCopyService = new DvdCopyService();
+
+            availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo("1"); //1 = hardcoded op shawshank 
+
+            //only allow purchase if at least one copy is available
+            //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
+            if (availabeCopies.Count > 0)
+            {
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32("1"));
+            }
+            else
+            {
+                //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+                //todo: show date when the dvd will be back in stock + option to reserve
+                string script = "alert(\"Item niet meer in stock!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            }
+
         }
 
 

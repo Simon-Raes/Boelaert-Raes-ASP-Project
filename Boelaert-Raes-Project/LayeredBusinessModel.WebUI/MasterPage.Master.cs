@@ -21,11 +21,14 @@ namespace LayeredBusinessModel.WebUI
             {
                 HtmlGenericControl titlediv = new HtmlGenericControl("div");
                 titlediv.Attributes["class"]="block-title-cat";
+                HtmlAnchor a = new HtmlAnchor();
+                a.HRef = "catalog.aspx?cat=" + c.category_id;
+                titlediv.Controls.Add(a);
                 HtmlGenericControl strong = new HtmlGenericControl("strong");
-                titlediv.Controls.Add(strong);
+                a.Controls.Add(strong);
                 HtmlGenericControl span = new HtmlGenericControl("span");
-                strong.Controls.Add(span);
-                span.InnerText = c.name;
+                a.Controls.Add(span);
+                a.InnerText = c.name;
                 dvMenu.Controls.Add(titlediv);
 
                 List<Genre> genres = new GenreService().getGenresForCategory(c.category_id);
@@ -41,12 +44,12 @@ namespace LayeredBusinessModel.WebUI
                     HtmlGenericControl li = new HtmlGenericControl("li");
                     ul.Controls.Add(li);
 
-                    HtmlAnchor a = new HtmlAnchor();
-                    a.HRef = "catalog.aspx?genre=" + g.genre_id;
-                    li.Controls.Add(a);
+                    HtmlAnchor a2 = new HtmlAnchor();
+                    a2.HRef = "catalog.aspx?genre=" + g.genre_id;
+                    li.Controls.Add(a2);
 
                     HtmlGenericControl strong2 = new HtmlGenericControl("strong");
-                    a.Controls.Add(strong2);
+                    a2.Controls.Add(strong2);
                     HtmlGenericControl span2 = new HtmlGenericControl("span");
                     strong2.Controls.Add(span2);
                     span2.InnerText = g.name;

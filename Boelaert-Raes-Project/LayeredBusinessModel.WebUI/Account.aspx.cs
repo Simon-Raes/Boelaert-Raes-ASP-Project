@@ -83,9 +83,7 @@ namespace LayeredBusinessModel.WebUI
                     ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     //redirect to login
                 }
-
             }
-
         }
 
         protected void gvOrders_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -119,6 +117,33 @@ namespace LayeredBusinessModel.WebUI
                 List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
                 gvOrderDetails.DataSource = orderLines;
                 gvOrderDetails.DataBind();
+
+
+                //check if all items have been assigned a copy
+                Boolean allInStock = true;
+
+                //user has already paid, check status of copies in cart
+                if(selectedOrder.orderstatus_id>1)
+                {
+                    foreach (OrderLine orderLine in orderLines)
+                    {
+                        if (orderLine.dvd_copy_id <= 0)
+                        {
+                            allInStock = false;
+                        }
+                    }
+                    if (!allInStock)
+                    {
+                        lblOrderStatusDetails.Text = "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.";
+                    }
+                }
+                //user hasn't paid yet, check status of copies in store
+                else
+                {
+                    
+                }
+                
+
             }
         }
 
@@ -140,6 +165,8 @@ namespace LayeredBusinessModel.WebUI
             DvdCopyService dvdCopyService = new DvdCopyService();
             List<DvdCopy> availableCopies = null;
             DvdCopy copy = null;
+
+            Boolean allInStock = true;
 
             foreach (OrderLine orderLine in orderLines)
             {
@@ -170,9 +197,15 @@ namespace LayeredBusinessModel.WebUI
                 }
                 else
                 {
+                    allInStock = false;
                     //not in stock, will not be assigned a copy!!
                     //todo: handle this error some way, display error for this item or let the user know this item is currently out of stock
                 }
+            }
+
+            if (!allInStock)
+            {
+                lblOrderStatusDetails.Text = "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.";
             }
         }
     }

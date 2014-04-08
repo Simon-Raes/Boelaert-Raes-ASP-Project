@@ -27,10 +27,12 @@ namespace LayeredBusinessModel.WebUI
                 if (genre != null)
                 {
                     gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre("", genre);
+                    lblHeader.Text = "[genrename] movies";
                 }
                 else if (cat != null)
                 {
                     gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory("", cat);
+                    lblHeader.Text = "[categoriename] movies";
                 }
                 else
                 {
@@ -49,7 +51,7 @@ namespace LayeredBusinessModel.WebUI
                     //niet echt handig met die hardcoded column nummers
                     gvDvdInfo.Columns[6].Visible = false;
                 }
-               
+
             }
         }
 
@@ -65,16 +67,22 @@ namespace LayeredBusinessModel.WebUI
             if (genre != null)
             {
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre);
+                lblHeader.Text = "[genrename] DVDs matching '" + searchtext + "'";
+
             }
             else if (cat != null)
             {
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory(searchtext, cat);
+                lblHeader.Text = "[categoryname] DVDs matching '" + searchtext + "'";
+
             }
             else
             {
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithText(searchtext);
+                lblHeader.Text = "DVDs matching '" + searchtext + "'";
+
             }
-            gvDvdInfo.DataBind();           
+            gvDvdInfo.DataBind();
         }
 
         /**Handles click-event for the buy button in the gridview.*/
@@ -108,6 +116,6 @@ namespace LayeredBusinessModel.WebUI
         }
 
 
-       
+
     }
 }

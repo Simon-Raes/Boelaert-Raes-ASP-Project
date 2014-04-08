@@ -85,7 +85,7 @@ namespace LayeredBusinessModel.DAO
             //todo: fix bug
             //haalt een record op voor elk genre van een dvdInfo (bv dvdInfo met 3 genres zal 3 keer in de resultset zitten, film met 1 genre 1 keer, etc...)
 
-            SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image " +
+            SqlCommand command = new SqlCommand("SELECT * " + //"SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image "
             "FROM DvdInfo " +
             "INNER JOIN DvdGenre " +
             "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
@@ -125,7 +125,7 @@ namespace LayeredBusinessModel.DAO
 
             //todo: parameters    
 
-            SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image " +
+            SqlCommand command = new SqlCommand("SELECT * " + //SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image 
             "FROM DvdInfo " +
             "INNER JOIN DvdGenre " +
             "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +

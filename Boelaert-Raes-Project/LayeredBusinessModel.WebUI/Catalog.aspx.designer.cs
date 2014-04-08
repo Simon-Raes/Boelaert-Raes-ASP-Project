@@ -13,6 +13,15 @@ namespace LayeredBusinessModel.WebUI {
     public partial class Catalog {
         
         /// <summary>
+        /// lblHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHeader;
+        
+        /// <summary>
         /// txtSearch control.
         /// </summary>
         /// <remarks>

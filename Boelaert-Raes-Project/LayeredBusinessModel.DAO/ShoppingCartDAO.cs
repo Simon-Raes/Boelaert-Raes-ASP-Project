@@ -52,6 +52,7 @@ namespace LayeredBusinessModel.DAO
             return cartItems;
         }
 
+        /**Adds BUY dvd to cart*/
         public Boolean addItemToCart(int customerID, int dvdInfoID)
         {
             Boolean status = false;
@@ -82,7 +83,7 @@ namespace LayeredBusinessModel.DAO
             return status;
         }
 
-        //overloaded method for adding RENT items with dates
+        /**Adds RENT dvd to cart*/
         public Boolean addItemToCart(int customerID, int dvdInfoID, DateTime startdate, DateTime enddate)
         {
             Boolean status = false;
@@ -93,8 +94,8 @@ namespace LayeredBusinessModel.DAO
             "VALUES(@customer_id, @dvd_info_id, convert(datetime,'" + startdate + "',103), convert(datetime,'" + enddate + "',103), 1)", cnn);
             command.Parameters.Add(new SqlParameter("@customer_id", customerID));
             command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
-           // command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
-          //  command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
+            //command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
+            //command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
 
             try
             {

@@ -2,10 +2,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-
     
-                                    <div class="padding-s">
+                                    <div class="padding-s" id="new-releases">
 
                                         <div class="page-title category-title">
                                             <h1>New Movies</h1>

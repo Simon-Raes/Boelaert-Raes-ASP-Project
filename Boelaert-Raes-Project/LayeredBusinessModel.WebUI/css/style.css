@@ -246,10 +246,14 @@ float: left;
 -moz-box-sizing: border-box;
 -webkit-box-sizing: border-box;
 box-sizing: border-box;
+border: 1px solid #e8e8e8;
+padding:10px;
+
 }
 
 li.item img {
-    width:250px;
+    
+    width:270px;
     height:auto;
 }
 

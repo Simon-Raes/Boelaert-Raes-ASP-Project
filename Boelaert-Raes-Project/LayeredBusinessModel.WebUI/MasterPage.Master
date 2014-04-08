@@ -93,7 +93,6 @@
 
                             <nav class="main-nav">
                                 <ul class="links">
-                                    <li>Home</li>
                                     <li><a href="index.aspx">Home</a></li>
                                     <li><a href="Catalog.aspx">Catalogus</a></li>
                                     <li>About</li>
@@ -130,10 +129,10 @@
 
                                 <div class="col-sidebar">
 
-                                    <div class="block-side-nav">
+                                    <div class="block-side-nav"  id="dvMenu" runat="server">
+                                        <!--
                                         <div class="block-title-cat">
                                             <strong><span>Movies</span></strong>
-
                                         </div>
                                         <div class="block-content-cat">
                                             <ul class="sf-menu">
@@ -193,6 +192,7 @@
                                             </ul>
 
                                         </div>
+                                        -->
                                     </div>
 
                                 </div>

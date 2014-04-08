@@ -123,78 +123,44 @@
                             <div class="row">
 
                                 <div class="col-main">
+
+                                    <div class="padding-s">
+
+                                        <div class="page-title category-title">
+                                            <h1>New Movies</h1>
+                                        </div>
+
+                                        <ul class="products-grid row">
+                                            <li class="item col-3">
+                                                <iframe src="//www.youtube.com/embed/iszwuX1AK6A" frameborder="0" allowfullscreen></iframe>
+                                                <div class="product-shop">
+                                                    <h3 class="product-name">
+                                                        <a href="#" title="The Wolf Of Wallstreet">The Wolf Of Wallstreet</a>
+                                                    </h3>
+                                                    <div class="product-author">Martin Scorsese</div>
+                                                    <div class="price-box">
+                                                        <span class="regular-price">
+                                                            <span class="price">€36.86</span>
+                                                        </span>
+                                                   </div>
+                                                    <div class="actions">
+                                                        
+                                                        <a href="#" class="button btn-cart">Add to cart</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+
                                     <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                                     </asp:ContentPlaceHolder>
                                 </div>
 
                                 <div class="col-sidebar">
-
                                     <div class="block-side-nav"  id="dvMenu" runat="server">
-                                        <!--
-                                        <div class="block-title-cat">
-                                            <strong><span>Movies</span></strong>
-                                        </div>
-                                        <div class="block-content-cat">
-                                            <ul class="sf-menu">
-                                                <li>
-                                                    <a href="#"><span>Romance</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Comedy</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Thriller</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>War</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Horror</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Family</span></a></li>
-                                            </ul>
-
-                                        </div>
-                                        <div class="block-title-cat">
-                                            <strong><span>Multimedia</span></strong>
-
-                                        </div>
-                                        <div class="block-content-cat">
-                                            <ul class="sf-menu">
-                                                <li>
-                                                    <a href="#"><span>Game Boy</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>PC General</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>PC Games</span></a></li>
-                                            </ul>
-
-                                        </div>
-
-                                        <div class="block-title-cat">
-                                            <strong><span>Music</span></strong>
-
-                                        </div>
-                                        <div class="block-content-cat">
-                                            <ul class="sf-menu">
-                                                <li>
-                                                    <a href="#"><span>Compilations</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Dance, Hip Hop & Rapjazz</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Blues, Country & Folk</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Pop</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>R&B & Soul</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Rock</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Worldmusic</span></a></li>
-                                                <li>
-                                                    <a href="#"><span>Musical</span></a></li>
-                                            </ul>
-
-                                        </div>
-                                        -->
+                                        <!-- deze div wordt opgevuld met gegevens uit de database om het menu op te stellen -->
                                     </div>
-
                                 </div>
                             </div>
 

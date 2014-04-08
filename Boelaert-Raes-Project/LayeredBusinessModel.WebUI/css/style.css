@@ -201,7 +201,7 @@ text-transform: uppercase;
 line-height: normal;
 border-bottom: solid 1px #eaeaea;
 padding: 8px 0 24px 0;
-margin: 0 0 34px 0;
+margin: 0 20px 34px 0;
 font-size: 12px;
 color: #949494;
 }
@@ -218,8 +218,101 @@ font-weight: normal;
 text-transform: uppercase;
 }
 
+.category-title {
+    display: block;
+}
+
+.page-title, .category-title {
+    margin: 0 0 22px;
+}
+
+.page-title h1, .page-title h2 {
+    font-size: 20px;
+    line-height: normal;
+    color: #3a3a3a;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.products-grid {
+position: relative;
+margin-bottom: 32px;
+}
+
+.products-grid li.item {
+float: left;
+-moz-box-sizing: border-box;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+.col-3 {
+    width: 33.3333333%
+}
+
+.product-shop {
+position: relative;
+}
+
+.product-author{
+    font-size: 12px;
+    color: #979797;
+    margin-bottom: 17px;
+}
+
+.products-grid .price-box {
+overflow: hidden;
+margin: 9px 0 0 0;
+float: left;
+}
+
+.regular-price {
+display: block;
+}
+
+.products-grid .price-box .price {
+font-size: 24px;
+font-weight: normal;
+color: #3a3a3a;
+}
+
+.products-grid .actions {
+float: right;
+margin: 0;
+position: relative;
+}
+
+a.button {
+background: transparent;
+border: 0;
+overflow: visible;
+cursor: pointer;
+padding: 10px 20px 10px 20px ;
+margin: 0;
+width: auto;
+background: #f93749;
+color: #fff;
+text-transform: uppercase;
+font-size: 10px;
+line-height: 30px;
+height: 30px;
+}
 
 
+.products-grid .actions button.button span span {
+padding: 0 20px;
+}
+
+button.button > span, .page-sitemap .links a {
+background: #f93749;
+color: #fff;
+text-transform: uppercase;
+font-size: 10px;
+line-height: 30px;
+height: 30px;
+}
 
 
 

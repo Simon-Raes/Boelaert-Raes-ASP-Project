@@ -13,6 +13,15 @@ namespace LayeredBusinessModel.WebUI {
     public partial class tempMovie {
         
         /// <summary>
+        /// pnlLogin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlLogin;
+        
+        /// <summary>
         /// pnlActions control.
         /// </summary>
         /// <remarks>
@@ -74,6 +83,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRentAvailability;
+        
+        /// <summary>
+        /// pnlReserve control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlReserve;
         
         /// <summary>
         /// calReservationStartDate control.

@@ -18,5 +18,6 @@ namespace LayeredBusinessModel.Domain
         public float rent_price { get; set; }
         public float buy_price { get; set; }
         public DateTime date_added { get; set; }
+        public int amount_sold { get; set; }
     }
 }

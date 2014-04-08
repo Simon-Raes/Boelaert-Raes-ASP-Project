@@ -22,11 +22,16 @@ namespace LayeredBusinessModel.WebUI
                 //only show rent/reserve options if a user is logged in
                 if (Session["user"] == null)
                 {
+                    pnlLogin.Visible = true;
                     pnlActions.Visible = false;
+                    pnlReserve.Visible = false;
                 }
                 else
                 {
+                    pnlLogin.Visible = false;
                     pnlActions.Visible = true;
+                    pnlReserve.Visible = false;
+
                 }
 
                 dvdCopyService = new DvdCopyService();
@@ -63,6 +68,7 @@ namespace LayeredBusinessModel.WebUI
                 else
                 {
                     lblRentAvailability.Text = "Out of stock";
+                    pnlReserve.Visible = true;
                     lblRentAvailability.ForeColor = System.Drawing.Color.Red;
                 }
 
@@ -73,7 +79,7 @@ namespace LayeredBusinessModel.WebUI
         protected void calRentStartDate_DayRender(object sender, DayRenderEventArgs e)
         {
             //don't let the user select days in the past    
-            if (e.Day.Date < DateTime.Today || e.Day.Date > DateTime.Today.AddDays(14))
+            if (e.Day.Date < DateTime.Today || e.Day.Date > DateTime.Today)
             {
                 e.Day.IsSelectable = false;
                 e.Cell.BackColor = System.Drawing.Color.LightGray;
@@ -120,7 +126,7 @@ namespace LayeredBusinessModel.WebUI
                     List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo("1");
 
                     //check the number of rent items in the user's cart (a user can only rent 5 items at one time)
-                    //todo: also needs to check currently rented items from orders (not only from cart)
+                    //todo: also needs to check currently rented items from orderlines (not only from cart)
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
                     List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
                     int rentItemsInCart = 0;

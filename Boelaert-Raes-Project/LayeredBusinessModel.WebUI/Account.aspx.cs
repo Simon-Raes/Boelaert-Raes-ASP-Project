@@ -190,6 +190,12 @@ namespace LayeredBusinessModel.WebUI
                     orderLine.dvd_copy_id = copy.dvd_copy_id;
                     orderLineService.updateOrderLine(orderLine);
 
+                    //update the amount_sold field of the dvdInfo record
+                    DvdInfoService dvdInfoService = new DvdInfoService();
+                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(copy.dvd_info_id.ToString());
+                    dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
+                    dvdInfoService.updateDvdInfo(dvdInfo);
+
                     //mark the found copy as NOT in_stock
                     copy.in_stock = false;
                     dvdCopyService.updateCopy(copy);
@@ -209,6 +215,7 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!allInStock)
             {
+                //user has paid, but not all orderlines could be assigned an available copy
                 lblOrderStatusDetails.Text = "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.";
                 lblOrderStatusDetails.ForeColor = System.Drawing.Color.Orange;
             }

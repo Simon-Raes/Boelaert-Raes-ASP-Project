@@ -46,6 +46,39 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
+        /**Gets all rent copies that will be back in stock in the next 2 weeks*/
+        public List<OrderLine> getOrderLinesForReservation(String order_id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<OrderLine> orderList = new List<OrderLine>();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
+            command.Parameters.Add(new SqlParameter("@order_id", order_id));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orderList.Add(createOrderLine(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return orderList;
+        }
+
         /**Adds a new orderline to the database*/
         public Boolean addOrderLine(OrderLine orderline)
         {

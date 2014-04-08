@@ -42,6 +42,86 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+
+        public DvdInfo getDvdInfoWithId(String id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            DvdInfo dvd = null;
+
+            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE dvd_info_id = "+id, cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvd = createDvdInfo(reader);
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvd;
+        }
+
+
+        //todo
+        public void updateDvdInfo(DvdInfo dvd)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            SqlCommand command = new SqlCommand("UPDATE DvdInfo " +
+            "SET name = @name, " +
+            "year = @year, " +
+            "barcode = @barcode, " +
+            "author = @author, " +
+            "image = @image, " +
+            "description = @description, " +
+            "rent_price = @rent_price, " +
+            "buy_price = @buy_price, " +
+           // "date_added = @date_added, " +
+            "amount_sold = @amount_sold " +
+            "WHERE dvd_info_id = @dvd_info_id", cnn);
+
+            command.Parameters.Add(new SqlParameter("@name", dvd.name));
+            command.Parameters.Add(new SqlParameter("@year", dvd.year));
+            command.Parameters.Add(new SqlParameter("@barcode", dvd.barcode));
+            command.Parameters.Add(new SqlParameter("@author", dvd.author));
+            command.Parameters.Add(new SqlParameter("@image", dvd.image));
+            command.Parameters.Add(new SqlParameter("@description", dvd.descripion));
+            command.Parameters.Add(new SqlParameter("@rent_price", dvd.rent_price));
+            command.Parameters.Add(new SqlParameter("@buy_price", dvd.buy_price));
+          //  command.Parameters.Add(new SqlParameter("@date_added", dvd.date_added));
+            command.Parameters.Add(new SqlParameter("@amount_sold", dvd.amount_sold));
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                cnn.Close();
+            }
+        }
+
+
         public List<DvdInfo> searchDvdWithText(String searchText)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
@@ -92,7 +172,7 @@ namespace LayeredBusinessModel.DAO
             "INNER JOIN Genres " +
             "ON DvdGenre.genre_id = Genres.genre_id " +
             "WHERE Genres.category_id = " + categoryID +
-            "AND (DvdInfo.name LIKE '%" + searchText + "%' OR DvdInfo.barcode LIKE '%" + searchText + "%' OR DvdInfo.author LIKE '%" + searchText + "%')" , cnn);
+            "AND (DvdInfo.name LIKE '%" + searchText + "%' OR DvdInfo.barcode LIKE '%" + searchText + "%' OR DvdInfo.author LIKE '%" + searchText + "%')", cnn);
 
             try
             {
@@ -161,13 +241,42 @@ namespace LayeredBusinessModel.DAO
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             List<DvdInfo> dvdlist = new List<DvdInfo>();
-            SqlCommand sql = new SqlCommand("select top " + amount + " * from DvdInfo", cnn);
+            SqlCommand sql = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY date_added DESC", cnn);
 
             try
             {
-               
+
                 cnn.Open();
                 SqlDataReader reader = sql.ExecuteReader();
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+            return dvdlist;
+        }
+
+        public List<DvdInfo> getMostPopularDvds(int amount)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+            SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY amount_sold DESC", cnn);
+            command.Parameters.Add(new SqlParameter("@amount", amount));
+
+            try
+            {
+
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     dvdlist.Add(createDvdInfo(reader));
@@ -200,7 +309,8 @@ namespace LayeredBusinessModel.DAO
                 descripion = Convert.ToString(reader["description"]),
                 rent_price = float.Parse(reader["rent_price"].ToString()),
                 buy_price = float.Parse(reader["buy_price"].ToString()),
-                date_added = Convert.ToDateTime(reader["date_added"])
+                date_added = Convert.ToDateTime(reader["date_added"]),
+                amount_sold = Convert.ToInt32(reader["amount_sold"])
             };
             return dvd;
         }

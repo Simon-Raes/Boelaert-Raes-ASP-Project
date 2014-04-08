@@ -85,35 +85,35 @@ namespace LayeredBusinessModel.WebUI
             gvDvdInfo.DataBind();
         }
 
-        /**Handles click-event for the buy button in the gridview.*/
-        protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            List<DvdCopy> availabeCopies = null;
+        ///**Handles click-event for the buy button in the gridview.*/
+        //protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)
+        //{
+        //    List<DvdCopy> availabeCopies = null;
 
-            int index = Convert.ToInt32(e.CommandArgument.ToString());
+        //    int index = Convert.ToInt32(e.CommandArgument.ToString());
 
-            //get all available copies of this movie + type (buy/rent)
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            if (e.CommandName == "Buy")
-            {
-                availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
+        //    //get all available copies of this movie + type (buy/rent)
+        //    DvdCopyService dvdCopyService = new DvdCopyService();
+        //    if (e.CommandName == "Buy")
+        //    {
+        //        availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(gvDvdInfo.Rows[index].Cells[0].Text);
 
-                //only allow purchase if at least one copy is available
-                //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
-                if (availabeCopies.Count > 0)
-                {
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(gvDvdInfo.Rows[index].Cells[0].Text));
-                }
-                else
-                {
-                    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-                    //todo: show date when the dvd will be back in stock + option to reserve
-                    string script = "alert(\"Item niet meer in stock!\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                }
-            }
-        }
+        //        //only allow purchase if at least one copy is available
+        //        //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
+        //        if (availabeCopies.Count > 0)
+        //        {
+        //            ShoppingCartService shoppingCartService = new ShoppingCartService();
+        //            shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(gvDvdInfo.Rows[index].Cells[0].Text));
+        //        }
+        //        else
+        //        {
+        //            //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+        //            //todo: show date when the dvd will be back in stock + option to reserve
+        //            string script = "alert(\"Item niet meer in stock!\");";
+        //            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+        //        }
+        //    }
+        //}
 
 
 

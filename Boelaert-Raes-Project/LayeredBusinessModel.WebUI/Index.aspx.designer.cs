@@ -13,21 +13,39 @@ namespace LayeredBusinessModel.WebUI {
     public partial class Home {
         
         /// <summary>
-        /// row_1 control.
+        /// row_new_1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_new_1;
         
         /// <summary>
-        /// row_2 control.
+        /// row_new_2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_2;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_new_2;
+        
+        /// <summary>
+        /// row_popular_1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_popular_1;
+        
+        /// <summary>
+        /// row_popular_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_popular_2;
     }
 }

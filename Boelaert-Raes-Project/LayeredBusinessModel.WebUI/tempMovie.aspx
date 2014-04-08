@@ -8,7 +8,8 @@
     </p>
     <p>
         <h1>The Shawshank Redemption</h1>
-        log in to access all features
+        <asp:Panel ID="pnlLogin" runat="server">log in to access all features</asp:Panel>
+
     </p>
 
     <asp:Panel ID="pnlActions" runat="server">
@@ -20,8 +21,8 @@
             <tr>
                 <td>
                     <asp:Button ID="btnBuy" runat="server" Text="Buy" OnClick="btnBuy_Click" />
-                
-                </td>                
+
+                </td>
                 <td>Availability: 
                     <asp:Label ID="lblBuyAvailability" runat="server" Text="Label"></asp:Label>
                 </td>
@@ -54,26 +55,27 @@
                 </td>
             </tr>
         </table>
+        <asp:Panel ID="pnlReserve" runat="server">
+            The DVD is currently unavailable for renting, but will be back in stock on DATUMHIER.
+            You can reserve the dvd below, your renting period will start on ZELFDEDATUMHIER<br />
+            <strong>Reserve dvd (for renting only):</strong>
+            <table>
+                <tr>
+                    <td>start<asp:Calendar ID="calReservationStartDate" runat="server" OnDayRender="calReservationStartDate_DayRender"></asp:Calendar>
+                    </td>
+                    <td>
+                        <asp:Button ID="btnReserve" runat="server" Text="Reserve" OnClick="btnReserve_Click" />
+
+                    </td>
+                    <td>Not yet implemented.
+                    </td>
+                </tr>
+            </table>
+
+        </asp:Panel>
 
 
 
-        <br />
-        Is reserveren niet hetzelfde als huren vanaf een bepaalde datum?<br />
-        <br />
-        <strong>Reserve dvd (for renting only):</strong>
-        <table>
-            <tr>
-                <td>start<asp:Calendar ID="calReservationStartDate" runat="server" OnDayRender="calReservationStartDate_DayRender"></asp:Calendar>
-                </td>
-                <td>
-                    <asp:Button ID="btnReserve" runat="server" Text="Reserve" OnClick="btnReserve_Click" />
-
-                </td>
-                <td>Not yet implemented.
-                </td>
-            </tr>
-        </table>
-        </p>
     </asp:Panel>
 
 </asp:Content>

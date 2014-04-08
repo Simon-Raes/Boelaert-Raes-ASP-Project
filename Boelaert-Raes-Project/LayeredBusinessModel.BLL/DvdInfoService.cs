@@ -19,6 +19,18 @@ namespace LayeredBusinessModel.BLL
             return dvdInfoDAO.getAllDvdInfos();
         }
 
+        public DvdInfo getDvdInfoWithID(String id)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.getDvdInfoWithId(id);
+        }
+
+        public void updateDvdInfo(DvdInfo dvd)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            dvdInfoDAO.updateDvdInfo(dvd); 
+        }
+
         public List<DvdInfo> searchDvdWithText(String title)
         {
             dvdInfoDAO = new DvdInfoDAO();
@@ -37,10 +49,16 @@ namespace LayeredBusinessModel.BLL
             return dvdInfoDAO.searchDvdWithTextAndGenre(title, genreID);
         }
 
-        public List<DvdInfo> getLatestDvds()
+        public List<DvdInfo> getLatestDvds(int amount)
         {
             dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getLatestDvds(6);
+            return dvdInfoDAO.getLatestDvds(amount);
+        }
+
+        public List<DvdInfo> getMostPopularDvds(int amount)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.getMostPopularDvds(amount);
         }
     }
 }

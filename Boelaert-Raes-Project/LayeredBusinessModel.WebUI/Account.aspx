@@ -45,7 +45,7 @@
                             <asp:Label ID="lblOrderStatusDetails" runat="server" Text=""></asp:Label>
                             
                             <br />
-                            <asp:Label ID="lblPay" runat="server" Text="Click here to pay for this order: //TODO: payment page"></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Pay" />
+                            <asp:Label ID="lblPay" runat="server" Text="Click here to pay for this order:"></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Go to payment page" />
                             <br />
                             <asp:GridView ID="gvOrderDetails" runat="server">
 

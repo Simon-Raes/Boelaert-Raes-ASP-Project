@@ -67,43 +67,50 @@ namespace LayeredBusinessModel.WebUI
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
 
-                //create new order for this user
-                //problem here: an order will still be created if all cart items are out of stock (=not added to order)
-                OrderService orderService = new OrderService();
-                int orderID = orderService.addOrderForCustomer(user.customer_id);
-
-
-                OrderLineService orderLineService = new OrderLineService();
-                dvdCopyService = new DvdCopyService();
-
-                //add cart items to newly created order
-                foreach (ShoppingcartItem item in cartContent)
+                //only do a checkout if the cart actually contains items
+                if (cartContent.Count > 0)
                 {
+                    //create new order for this user
+                    //problem here: an order will still be created if all cart items are out of stock (=not added to order)
+                    OrderService orderService = new OrderService();
+                    int orderID = orderService.addOrderForCustomer(user.customer_id);
 
-                    OrderLine orderline = new OrderLine
+
+                    OrderLineService orderLineService = new OrderLineService();
+                    dvdCopyService = new DvdCopyService();
+
+                    //add cart items to newly created order
+                    foreach (ShoppingcartItem item in cartContent)
                     {
-                        order_id = orderID,
-                        dvd_info_id = item.dvd_info_id,
-                        //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
-                        startdate = item.startdate,
-                        enddate = item.enddate,
-                        //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                        order_line_type_id = item.copy_type_id
-                    };
 
-                    orderLineService.addOrderLine(orderline);
+                        OrderLine orderline = new OrderLine
+                        {
+                            order_id = orderID,
+                            dvd_info_id = item.dvd_info_id,
+                            //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
+                            startdate = item.startdate,
+                            enddate = item.enddate,
+                            //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
+                            order_line_type_id = item.copy_type_id
+                        };
 
+                        orderLineService.addOrderLine(orderline);
+
+
+                    }
+
+                    //clear cart
+                    shoppingCartService.clearCustomerCart(user.customer_id);
+                    //this also clears items that were not added to the order!
+
+                    //clear cart display
+                    gvCart.DataSource = null;
+                    gvCart.DataBind();
+
+                    //redirect to payment page, with query string to connect to the order
+                    Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
 
                 }
-
-                //clear cart
-                shoppingCartService.clearCustomerCart(user.customer_id);
-                //this also clears items that were not added to the order!
-
-                //clear cart display
-                gvCart.DataSource = null;
-                gvCart.DataBind();
-
             }
         }
     }

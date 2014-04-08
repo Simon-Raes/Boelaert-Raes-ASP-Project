@@ -41,13 +41,13 @@
                             <asp:Label ID="lblOrderID" runat="server" Text="Label"></asp:Label>
                             <br />
                             Order status:
-                            <asp:Label ID="lblOrderStatus" runat="server" Text="Label"></asp:Label>(1 = new, 2 = paid, 3 = shipped) //todo: text instead of numbers<br />
-                            <asp:Label ID="lblOrderStatusDetails" runat="server" Text=""></asp:Label><br />
+                            <asp:Label ID="lblOrderStatus" runat="server" Text="Label"></asp:Label> (1 = new, 2 = paid, 3 = shipped)<br />
+                            <asp:Label ID="lblOrderStatusDetails" runat="server" Text=""></asp:Label>
                             
                             <br />
-                            Click here to pay for this order:<asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Pay" />
-                            &nbsp;//TODO: payment page<br />
-                            Your order will be processed and shipped as soon as the payment has been received.<asp:GridView ID="gvOrderDetails" runat="server">
+                            <asp:Label ID="lblPay" runat="server" Text="Click here to pay for this order: //TODO: payment page"></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Pay" />
+                            <br />
+                            <asp:GridView ID="gvOrderDetails" runat="server">
 
                                 
                             </asp:GridView>

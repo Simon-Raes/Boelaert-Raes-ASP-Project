@@ -105,10 +105,12 @@ namespace LayeredBusinessModel.WebUI
                 //hide pay button if the order has already been paid
                 if (selectedOrder.orderstatus_id != 1)
                 {
+                    lblPay.Visible = false;
                     btnPay.Visible = false;
                 }
                 else
                 {
+                    lblPay.Visible = true;
                     btnPay.Visible = true;
                 }
 
@@ -132,10 +134,7 @@ namespace LayeredBusinessModel.WebUI
                             allInStock = false;
                         }
                     }
-                    if (!allInStock)
-                    {
-                        lblOrderStatusDetails.Text = "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.";
-                    }
+                    updateOrderStatusDetails(allInStock);                    
                 }
                 //user hasn't paid yet, check status of copies in store
                 else
@@ -203,10 +202,20 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
 
+            updateOrderStatusDetails(allInStock);
+        }
+
+        private void updateOrderStatusDetails(Boolean allInStock)
+        {
             if (!allInStock)
             {
                 lblOrderStatusDetails.Text = "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.";
+                lblOrderStatusDetails.ForeColor = System.Drawing.Color.Orange;
             }
+            else
+            {
+                lblOrderStatusDetails.Text = "";
+            } 
         }
     }
 }

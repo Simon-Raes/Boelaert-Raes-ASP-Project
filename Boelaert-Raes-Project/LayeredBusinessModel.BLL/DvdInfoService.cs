@@ -36,5 +36,11 @@ namespace LayeredBusinessModel.BLL
             dvdInfoDAO = new DvdInfoDAO();
             return dvdInfoDAO.searchDvdWithTextAndGenre(title, genreID);
         }
+
+        public List<DvdInfo> getLatestDvds()
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.getLatestDvds(6);
+        }
     }
 }

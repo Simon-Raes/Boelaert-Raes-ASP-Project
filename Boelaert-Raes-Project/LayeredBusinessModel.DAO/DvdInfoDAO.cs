@@ -157,6 +157,34 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+        public List<DvdInfo> getLatestDvds(int amount)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+            SqlCommand sql = new SqlCommand("select top " + amount + " * from DvdInfo", cnn);
+
+            try
+            {
+               
+                cnn.Open();
+                SqlDataReader reader = sql.ExecuteReader();
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+            return dvdlist;
+        }
+
 
         private DvdInfo createDvdInfo(SqlDataReader reader)
         {
@@ -168,7 +196,11 @@ namespace LayeredBusinessModel.DAO
                 year = Convert.ToString(reader["year"]),
                 barcode = Convert.ToString(reader["barcode"]),
                 author = Convert.ToString(reader["author"]),
-                image = Convert.ToString(reader["image"])
+                image = Convert.ToString(reader["image"]),
+                descripion = Convert.ToString(reader["description"]),
+                rent_price = float.Parse(reader["rent_price"].ToString()),
+                buy_price = float.Parse(reader["buy_price"].ToString()),
+                date_added = Convert.ToDateTime(reader["date_added"])
             };
             return dvd;
         }

@@ -9,12 +9,14 @@ using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Web.UI.HtmlControls;
 
+
 namespace LayeredBusinessModel.WebUI
 {
     public partial class MasterPage : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
-        {         
+        {
+
             //Menu opvullen met alle categoriën en genres
             List<Category> categories = new CategoryService().getAll();
             foreach (Category c in categories)

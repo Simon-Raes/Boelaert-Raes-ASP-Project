@@ -14,5 +14,9 @@ namespace LayeredBusinessModel.Domain
         public String barcode { get; set; }
         public String author { get; set; }
         public String image { get; set; }
+        public String descripion { get; set; }
+        public float rent_price { get; set; }
+        public float buy_price { get; set; }
+        public DateTime date_added { get; set; }
     }
 }

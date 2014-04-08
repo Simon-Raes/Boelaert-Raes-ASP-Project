@@ -7,12 +7,15 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace LayeredBusinessModel.WebUI
 {
     public partial class Login : System.Web.UI.Page
     {
         CustomerService customerService;
+        const string passphrase = "Password@123";  //consant string Pass key
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,7 +32,7 @@ namespace LayeredBusinessModel.WebUI
             //een null customer object geeft hier nog altijd true, daarom controle op password veld
             if (customer.password != null)
             {
-                if (customer.password.Equals(txtPassword.Text))
+                if (decryptPassword(customer.password).Equals(txtPassword.Text))
                 {
                     //update user's number_of_visits
                     customer.numberOfVisits++;
@@ -60,5 +63,36 @@ namespace LayeredBusinessModel.WebUI
             Response.Redirect("~/Register.aspx");
 
         }
+
+        public string decryptPassword(string message)
+        {
+            byte[] results;
+            UTF8Encoding utf8 = new UTF8Encoding();
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+
+            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase));
+
+            TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
+            encryptionProvider.Key = encryptionKey;
+            encryptionProvider.Mode = CipherMode.ECB;
+            encryptionProvider.Padding = PaddingMode.PKCS7;
+
+            byte[] decrypt_data = Convert.FromBase64String(message);
+
+            try
+            {
+                ICryptoTransform decryptor = encryptionProvider.CreateDecryptor();
+                results = decryptor.TransformFinalBlock(decrypt_data, 0, decrypt_data.Length);
+            }
+            finally
+            {
+                encryptionProvider.Clear();
+                md5.Clear();
+            }
+
+            return utf8.GetString(results);
+        }
+
+
     }
 }

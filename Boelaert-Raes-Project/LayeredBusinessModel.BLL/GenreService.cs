@@ -18,5 +18,11 @@ namespace LayeredBusinessModel.BLL
             genreDAO = new GenreDAO();
             return genreDAO.getGenresForCategory(categoryID);
         }
+
+        public Genre getGenre(int id)
+        {
+            genreDAO = new GenreDAO();
+            return genreDAO.getGenre(id);
+        }
     }
 }

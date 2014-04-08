@@ -18,6 +18,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 setupNewReleases();
                 setupMostPopular();
+                setupMostPopularEx();
             }
             
         }
@@ -104,6 +105,7 @@ namespace LayeredBusinessModel.WebUI
 
                 HtmlGenericControl li = new HtmlGenericControl("li");
                 li.Attributes["class"] = "item col-3";
+
                 Image img = new Image();
                 img.ImageUrl = d.image;
                 li.Controls.Add(img);
@@ -115,7 +117,6 @@ namespace LayeredBusinessModel.WebUI
 
                 HtmlGenericControl h3 = new HtmlGenericControl("h3");
                 h3.Attributes["class"] = "product-name";
-
                 div.Controls.Add(h3);
 
                 HtmlAnchor a = new HtmlAnchor();
@@ -144,14 +145,12 @@ namespace LayeredBusinessModel.WebUI
 
                 HtmlGenericControl actions = new HtmlGenericControl("div");
                 actions.Attributes["class"] = "actions";
-
                 div.Controls.Add(actions);
 
                 HtmlAnchor cartlink = new HtmlAnchor();
                 cartlink.Attributes["class"] = "button btn-cart";
                 cartlink.HRef = "#";
                 cartlink.InnerText = "Add to Cart";
-
                 actions.Controls.Add(cartlink);
 
                 if (counter < 4)
@@ -163,6 +162,29 @@ namespace LayeredBusinessModel.WebUI
                     row_popular_2.Controls.Add(li);
                 }
             }  
+        }
+
+
+        private void setupMostPopularEx()
+        {
+            List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(5);
+
+            foreach (DvdInfo d in dvdList)
+            {
+                HtmlGenericControl div = new HtmlGenericControl("div");
+                div.Attributes["class"] = "column";
+
+                HtmlGenericControl divSegment = new HtmlGenericControl("div");
+                divSegment.Attributes["class"] = "ui segment";
+                div.Controls.Add(divSegment);
+
+                Image img = new Image();
+                img.ImageUrl = d.image;
+                img.Width = 120;
+                divSegment.Controls.Add(img);
+
+                divPopular.Controls.Add(div);
+            }
         }
     }
 }

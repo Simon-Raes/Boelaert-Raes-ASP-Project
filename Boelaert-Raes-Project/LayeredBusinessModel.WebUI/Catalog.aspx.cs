@@ -27,12 +27,14 @@ namespace LayeredBusinessModel.WebUI
                 if (genre != null)
                 {
                     gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre("", genre);
-                    lblHeader.Text = "[genrename] movies";
+                    genreService = new GenreService();                    
+                    lblHeader.Text = genreService.getGenre(Convert.ToInt32(genre)).name+" DVDs";
                 }
                 else if (cat != null)
                 {
                     gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory("", cat);
-                    lblHeader.Text = "[categoriename] movies";
+                    categoryService = new CategoryService();
+                    lblHeader.Text = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs";
                 }
                 else
                 {
@@ -44,13 +46,7 @@ namespace LayeredBusinessModel.WebUI
                 //set column invisible here (value can still be accessed)
                 gvDvdInfo.Columns[0].Visible = false;
 
-                //only show buy/rent buttons if a user is logged in
-                //todo: only show buy / rent button if item is available (in_stock)
-                if (Session["user"] == null)
-                {
-                    //niet echt handig met die hardcoded column nummers
-                    gvDvdInfo.Columns[6].Visible = false;
-                }
+                
 
             }
         }
@@ -67,13 +63,15 @@ namespace LayeredBusinessModel.WebUI
             if (genre != null)
             {
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre);
-                lblHeader.Text = "[genrename] DVDs matching '" + searchtext + "'";
+                genreService = new GenreService();
+                lblHeader.Text = genreService.getGenre(Convert.ToInt32(genre)).name + " DVDs matching '" + searchtext + "'";
 
             }
             else if (cat != null)
             {
                 gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory(searchtext, cat);
-                lblHeader.Text = "[categoryname] DVDs matching '" + searchtext + "'";
+                categoryService = new CategoryService();
+                lblHeader.Text = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs matching '" + searchtext + "'";
 
             }
             else

@@ -42,6 +42,33 @@ namespace LayeredBusinessModel.DAO
             return categoryList;
         }
 
+        public Category getCategory(int categoryID)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            Category category = null;
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Categories WHERE category_id = " + categoryID, cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                category = createCategory(reader);
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return category;
+        }
+
         private Category createCategory(SqlDataReader reader)
         {
             Category category = new Category

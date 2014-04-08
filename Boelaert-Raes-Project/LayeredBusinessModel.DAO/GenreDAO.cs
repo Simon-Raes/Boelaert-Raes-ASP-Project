@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<Genre> genrelist = new List<Genre>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM genres WHERE category_id = "+categoryID, cnn);
+            SqlCommand command = new SqlCommand("SELECT * FROM genres WHERE category_id = " + categoryID, cnn);
             try
             {
                 cnn.Open();
@@ -42,6 +42,33 @@ namespace LayeredBusinessModel.DAO
             return genrelist;
         }
 
+        public Genre getGenre(int genreID)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            Genre genre = null;
+
+            SqlCommand command = new SqlCommand("SELECT * FROM genres WHERE genre_id = " + genreID, cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                genre = createGenre(reader);
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return genre;
+        }
+
         private Genre createGenre(SqlDataReader reader)
         {
             Genre genre = new Genre
@@ -54,5 +81,5 @@ namespace LayeredBusinessModel.DAO
         }
     }
 
-    
+
 }

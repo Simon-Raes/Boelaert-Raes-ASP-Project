@@ -10,12 +10,16 @@ using LayeredBusinessModel.BLL;
 using System.Net.Mail;
 
 using LayeredBusinessModel.BLL;
+using System.Text;
+using System.Security.Cryptography;
 
 
 namespace LayeredBusinessModel.WebUI
 {
     public partial class Register : System.Web.UI.Page
     {
+        const string passphrase = "Password@123";  //todo: op centrale locatie opslaan
+
         CustomerService customerService;
 
 
@@ -35,7 +39,7 @@ namespace LayeredBusinessModel.WebUI
                     name = txtName.Text,
                     email = txtEmail.Text,
                     login = txtLogin.Text,
-                    password = txtPassword.Text
+                    password = encryptPassword(txtPassword.Text)
                 };
                 customerService = new CustomerService();
                 customerService.addCustomer(customer);
@@ -52,7 +56,10 @@ namespace LayeredBusinessModel.WebUI
         {
 
             //todo: email sturen wanneer nieuwe klant zich registreert, eventueel met verplichte confirmation link
+
             //werkt (nog) niet
+
+
 
 
             //SmtpClient smtpClient = new SmtpClient("smtp.telenet.be", 587);
@@ -100,6 +107,37 @@ namespace LayeredBusinessModel.WebUI
                 //email already taken
                 args.IsValid = false;
             }
+        }
+
+
+        public string encryptPassword(string message)
+        {
+            byte[] results;
+            UTF8Encoding utf8 = new UTF8Encoding();            
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+
+            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase)); 
+          
+            TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
+            encryptionProvider.Key = encryptionKey;
+            encryptionProvider.Mode = CipherMode.ECB;
+            encryptionProvider.Padding = PaddingMode.PKCS7;
+
+            byte[] encrypt_data = utf8.GetBytes(message);
+
+            try
+            {
+                ICryptoTransform encryptor = encryptionProvider.CreateEncryptor();
+                results = encryptor.TransformFinalBlock(encrypt_data, 0, encrypt_data.Length);
+            }
+            finally
+            {
+                encryptionProvider.Clear();
+                md5.Clear();
+            }
+
+            //convert array back to a string
+            return Convert.ToBase64String(results);
         }
     }
 }

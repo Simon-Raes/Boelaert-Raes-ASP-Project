@@ -134,9 +134,9 @@ color: #000;
 }
 
 header {
-    height:185px;
-    padding: 48px 0 0 0;
-    border-bottom: solid 1px #eaeaea;
+    /*height:185px;*/
+    padding: 10px 10px 10px 10px;
+    /*border-bottom: solid 1px #eaeaea;*/
 }
 
 .header {

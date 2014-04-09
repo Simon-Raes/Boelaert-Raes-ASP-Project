@@ -70,9 +70,6 @@ namespace LayeredBusinessModel.WebUI
             OrderLineService orderLineService = new OrderLineService();
             List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
 
-
-
-
             DvdCopyService dvdCopyService = new DvdCopyService();
             List<DvdCopy> availableCopies = null;
             DvdCopy copy = null;
@@ -119,6 +116,9 @@ namespace LayeredBusinessModel.WebUI
                     //todo: handle this error some way, display error for this item or let the user know this item is currently out of stock
                 }
             }
+
+            //redirect away from the payment page - todo: go to thank you/info page
+            Response.Redirect("~/Index.aspx");
         }
 
         private String getOrderInfo(String orderID)

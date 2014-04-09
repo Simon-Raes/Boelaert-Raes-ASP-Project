@@ -1,4 +1,4 @@
-﻿body {
+﻿/*body {
 background: #fff;
 font-family: 'Ubuntu', sans-serif;
 font-size: 13px;
@@ -54,10 +54,10 @@ input, select, textarea, button {
 font: 12px Arial, Helvetica, sans-serif;
 vertical-align: middle;
 color: #000;
-}
+}*/
 
 
-.top-container {    
+/*.top-container {    
     background: #282828;
     margin: 0;
     padding: 0;
@@ -70,13 +70,13 @@ color: #000;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-}
+}*/
 
 /*.row {
     display:block;
 }*/
 
-.col {
+/*.col {
     padding-top:3px;
     height:25px;
     position: relative;
@@ -112,9 +112,9 @@ color: #000;
     float: right;
     position: relative;
     margin-left: 22px;
-}
+}*/
 
-.header-button.currency-list > a, .header-button.lang-list > a {
+/*.header-button.currency-list > a, .header-button.lang-list > a {
     font-size: 11px;
     line-height: 14px;
     text-transform: uppercase;
@@ -131,15 +131,15 @@ color: #000;
     font-size: 14px;
     font-weight: normal;
     color: #989898;
-}
+}*/
 
-header {
-    /*height:185px;*/
+/*header {
+    height:185px;
     padding: 10px 10px 10px 10px;
-    /*border-bottom: solid 1px #eaeaea;*/
+    border-bottom: solid 1px #eaeaea;
 }
 
-.header {
+/*.header {
     padding: 0;
     position: relative;
 }
@@ -149,9 +149,9 @@ float: left;
 margin: 0 0 28px;
 display: block;
 width:100%;
-}
+}*/
 
-.block-cart-header {
+/*.block-cart-header {
     float: right;
     background: url(/images/icon_cart.gif) no-repeat 0 0;
     padding: 10px 0 10px 63px;
@@ -233,7 +233,7 @@ text-transform: uppercase;
     font-weight: normal;
     text-transform: uppercase;
     margin: 0;
-}
+}*/
 
 .products-grid {
 position: relative;

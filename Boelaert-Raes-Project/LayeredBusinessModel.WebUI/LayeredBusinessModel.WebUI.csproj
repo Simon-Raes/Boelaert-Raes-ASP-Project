@@ -82,20 +82,6 @@
     <Content Include="js\bootstrap.min.js" />
     <Content Include="Login.aspx" />
     <Content Include="OrderPayment.aspx" />
-    <Content Include="semantic\css\semantic.css" />
-    <Content Include="semantic\css\semantic.min.css" />
-    <Content Include="semantic\fonts\basic.icons.svg" />
-    <Content Include="semantic\fonts\icons.svg" />
-    <Content Include="semantic\images\loader-large-inverted.gif" />
-    <Content Include="semantic\images\loader-large.gif" />
-    <Content Include="semantic\images\loader-medium-inverted.gif" />
-    <Content Include="semantic\images\loader-medium.gif" />
-    <Content Include="semantic\images\loader-mini-inverted.gif" />
-    <Content Include="semantic\images\loader-mini.gif" />
-    <Content Include="semantic\images\loader-small-inverted.gif" />
-    <Content Include="semantic\images\loader-small.gif" />
-    <Content Include="semantic\javascript\semantic.js" />
-    <Content Include="semantic\javascript\semantic.min.js" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
     <Content Include="Web.config">
@@ -202,13 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.Master" />
-    <Content Include="semantic\fonts\basic.icons.eot" />
-    <Content Include="semantic\fonts\basic.icons.ttf" />
-    <Content Include="semantic\fonts\basic.icons.woff" />
-    <Content Include="semantic\fonts\icons.eot" />
-    <Content Include="semantic\fonts\icons.otf" />
-    <Content Include="semantic\fonts\icons.ttf" />
-    <Content Include="semantic\fonts\icons.woff" />
     <Content Include="Copy of MasterPage.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

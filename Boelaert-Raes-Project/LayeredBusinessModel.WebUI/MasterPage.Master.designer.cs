@@ -31,22 +31,21 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+<<<<<<< HEAD
         /// btnMainSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMainSearch;
-        
-        /// <summary>
+=======
         /// btnLogin control.
+>>>>>>> 8d62b611d6dfcbf10c8d5de8ab52fd25f1d4d348
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+<<<<<<< HEAD
+        protected global::System.Web.UI.WebControls.Button btnMainSearch;
+=======
         protected global::System.Web.UI.WebControls.Button btnLogin;
+>>>>>>> 8d62b611d6dfcbf10c8d5de8ab52fd25f1d4d348
         
         /// <summary>
         /// btnCart control.
@@ -65,6 +64,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnDev;
+        
+        /// <summary>
+        /// Button1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
         /// ContentPlaceHolder1 control.

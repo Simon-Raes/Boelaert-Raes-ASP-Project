@@ -7,7 +7,7 @@
     <div class="padding-s">
 
         <div class="page-title category-title">
-            <h1>New Movies</h1>
+            <h1>New Movies</h1> <span class="label label-danger">Bootstrap werkt ook in contentPages als enkel de masterpage de files import</span>
         </div>
 
         <ul class="products-grid row" id="row_new_1" runat="server">
@@ -17,6 +17,8 @@
 
     </div>
     <br />
+
+
     <div class="padding-s">
         <br />
         <div class="page-title category-title">

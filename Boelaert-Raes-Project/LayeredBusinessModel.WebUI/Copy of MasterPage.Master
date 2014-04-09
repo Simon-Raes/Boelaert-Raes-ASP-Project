@@ -1,0 +1,207 @@
+﻿<%--<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="LayeredBusinessModel.WebUI.MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="semantic/css/semantic.css" rel="stylesheet" />
+
+
+    <script src="jquery/jquery.min.js"></script>
+    <script src="semantic/javascript/semantic.min.js"></script>
+
+    <script>
+        $("document").ready(function () {
+
+            $('.ui.dropdown')
+                .dropdown()
+            ;
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <div class="top-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p class="welcome">Welcome to the best online dvd shop in the world!</p>
+                        <div class="header-button">
+
+                            <div class="header-button currency-list">
+                                <div class="ui pointing dropdown link item">
+                                    <i class="euro icon"></i><i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <a class="item"><i class="euro icon"></i>Euro </a>
+                                        <a class="item"><i class="dollar icon"></i>Dollar </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="header-button language-list">
+                                <div class="ui pointing dropdown link item">
+                                    NL<i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <a class="item">Nederlands </a>
+                                        <a class="item">English </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="header-phone">
+                                <i class="phone icon"></i>+32477073716
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <header>
+            <div class="container">
+                <%--<div class="row">
+                    <div class="col">
+                        <div class="header">
+                            <h1 class="logo">
+                                <strong>ONLINE DVD SHOP</strong>
+                                <a href="Index.aspx" title="ONLINE DVD SHOP">
+                                    <img src="#" alt="ONLINE DVD SHOP" />
+                                </a>
+                            </h1>                           
+
+
+                            <nav class="main-nav">  
+                                <div class="ui menu">
+                                    <a class="active item" href="index.aspx">
+                                        <i class="home icon"></i>Home
+                                    </a>
+                                    <a class="item" href="Catalog.aspx">
+                                        <i class="browser icon"></i>Catalogus
+                                    </a>
+                                    <a class="item" href="About.aspx">
+                                        <i class="info icon"></i>About
+                                    </a>
+                                    <div class="right menu">
+                                        <a class="item">
+                                            <i class="user icon"></i>
+                                            <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
+
+                                        </a>
+                                        <a class="item">
+                                            <i class="cart icon"></i>
+                                            <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
+                                        </a>
+                                        <a class="item">
+                                            <i class="code icon"></i>
+                                            <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
+                                        </a>
+
+                                        <div class="item">
+                                            <div class="ui icon input">
+
+                                                <asp:TextBox ID="txtMainSearch" runat="server"></asp:TextBox>
+
+                                                <asp:Button ID="btnMainSearch" runat="server" Text="Search" CssClass="inverted search icon" OnClick="btnMainSearch_Click1"/>
+                                                
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </header>
+
+        <div class="main-container">
+
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col">
+
+                        <div class="main">
+
+                            <div class="row">
+
+                                <div class="col-main">
+
+                                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                    </asp:ContentPlaceHolder>
+                                </div>
+
+                                <div class="col-sidebar">
+
+                                   
+
+
+
+                                    <div class="ui vertical menu" id="divSideBar" runat="server">
+                                        <div class="item">
+                                            <div class="ui input">
+                                                <asp:TextBox ID="txtSearch" runat="server"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <!-- Categories and genres added here from code-->
+                                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+        <!--
+        <div>
+            <asp:AdRotator ID="arBanner" runat="server" AdvertisementFile="~/banners.xml" />
+            <table>                
+                <tr>
+                    <td>
+                        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
+                        <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1" Orientation="Horizontal" StaticDisplayLevels="2"></asp:Menu>
+                    </td>
+                    <td>                       
+                    </td>
+                </tr>
+            </table>
+
+        </div>-->
+
+
+    </form>
+</body>
+</html>--%>

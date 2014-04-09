@@ -20,33 +20,42 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!Page.IsPostBack)
             {
-                String genre = Request.QueryString["genre"];
-                String cat = Request.QueryString["cat"];
-                dvdInfoService = new DvdInfoService();
-
-                if (genre != null)
+                //als er een searchrequest van het grote zoekveld binnenkomt
+                if (Request.QueryString["search"] != null)
                 {
-                    gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre("", genre);
-                    genreService = new GenreService();                    
-                    lblHeader.Text = genreService.getGenre(Convert.ToInt32(genre)).name+" DVDs";
-                }
-                else if (cat != null)
-                {
-                    gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory("", cat);
-                    categoryService = new CategoryService();
-                    lblHeader.Text = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs";
+                    doSearch(Request.QueryString["search"]);
                 }
                 else
                 {
-                    gvDvdInfo.DataSource = dvdInfoService.getAll();
+
+
+                    String genre = Request.QueryString["genre"];
+                    String cat = Request.QueryString["cat"];
+                    dvdInfoService = new DvdInfoService();
+
+                    if (genre != null)
+                    {
+                        gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndGenre("", genre);
+                        genreService = new GenreService();
+                        lblHeader.Text = genreService.getGenre(Convert.ToInt32(genre)).name + " DVDs";
+                    }
+                    else if (cat != null)
+                    {
+                        gvDvdInfo.DataSource = dvdInfoService.searchDvdWithTextAndCategory("", cat);
+                        categoryService = new CategoryService();
+                        lblHeader.Text = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs";
+                    }
+                    else
+                    {
+                        gvDvdInfo.DataSource = dvdInfoService.getAll();
+                    }
+                    gvDvdInfo.DataBind();
+
+
+                    //set column invisible here (value can still be accessed)
+                    gvDvdInfo.Columns[0].Visible = false;
+
                 }
-                gvDvdInfo.DataBind();
-
-
-                //set column invisible here (value can still be accessed)
-                gvDvdInfo.Columns[0].Visible = false;
-
-                
 
             }
         }
@@ -82,6 +91,15 @@ namespace LayeredBusinessModel.WebUI
             }
             gvDvdInfo.DataBind();
         }
+
+        private void doSearch(String searchText)
+        {
+            lblHeader.Text = "Results for '" + searchText + "'";
+
+
+
+        }
+
 
         ///**Handles click-event for the buy button in the gridview.*/
         //protected void gvDvdInfo_RowCommand(object sender, GridViewCommandEventArgs e)

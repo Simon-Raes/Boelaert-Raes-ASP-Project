@@ -156,9 +156,10 @@ namespace LayeredBusinessModel.WebUI
          * This method is fired when a user presses the Search button at the top of the page.
          * It will search on the title, author, barcode, description and categorie. 
         **/
-        protected void btnMainSearch_Click(object sender, EventArgs e)
+        protected void btnMainSearch_Click1(object sender, EventArgs e)
         {
-            String searchText = txtSearch.Text;
+            String searchText = txtMainSearch.Text;
+            Response.Redirect("Catalog.aspx?search=" + searchText);
         }
     }
 }

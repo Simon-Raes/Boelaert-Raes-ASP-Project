@@ -137,8 +137,9 @@
 
                                         <div class="item">
                                             <div class="ui icon input">
-                                                <input placeholder="Search..." type="text" />
-                                                <asp:Button ID="Button1" runat="server" Text="Button" CssClass="inverted search icon"/>
+                                                <asp:TextBox ID="txtMainSearch" runat="server"></asp:TextBox>
+
+                                                <asp:Button ID="btnMainSearch" runat="server" Text="Search" CssClass="inverted search icon" OnClick="btnMainSearch_Click1"/>
                                                 
                                             </div>
                                         </div>

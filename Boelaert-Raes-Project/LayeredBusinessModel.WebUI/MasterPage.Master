@@ -175,7 +175,7 @@
                             <div class="row">
 
 
-
+                                <!-- Sidebar -->
                                 <div class="col-md-2">
 
                                     <%--<div class="ui vertical menu" id="divSideBar" runat="server">
@@ -188,16 +188,19 @@
                                     </div>--%>
 
 
-                                    <div class="list-group" id="divSideBar" runat="server">
+                                    <div id="divSideBar" runat="server">
+
+
                                     </div>
+
+                                    
 
 
 
                                 </div>
 
-
+                                <!-- Content -->
                                 <div class="col-md-10">
-
                                     <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                                     </asp:ContentPlaceHolder>
                                 </div>

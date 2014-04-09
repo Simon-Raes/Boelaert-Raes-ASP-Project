@@ -16,34 +16,38 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {        
-
             //Menu opvullen met alle categoriën en genres
             List<Category> categories = new CategoryService().getAll();
             foreach (Category c in categories)
             {       
-                //category title
-                HtmlGenericControl headerDiv = new HtmlGenericControl("div");
-                headerDiv.Attributes["class"] = "item";
-                headerDiv.InnerHtml = c.name;
+                //create category list
+                HtmlGenericControl categoryDiv = new HtmlGenericControl("div");
+                categoryDiv.Attributes["class"] = "list-group";
 
-                HtmlGenericControl divMenu = new HtmlGenericControl("div");
-                divMenu.Attributes["class"] = "menu";
+                //create category title item
+                HtmlAnchor categoryHeader = new HtmlAnchor();
+                categoryHeader.Attributes["class"] = "list-group-item active";
+                categoryHeader.HRef = "catalog.aspx?cat=" + c.category_id;
+                categoryHeader.InnerHtml = c.name;
 
-                headerDiv.Controls.Add(divMenu);
-                divSideBar.Controls.Add(headerDiv);
+                //add title to list
+                categoryDiv.Controls.Add(categoryHeader);
+
+                //add list to sidebar
+                divSideBar.Controls.Add(categoryDiv);
 
 
                 List<Genre> genres = new GenreService().getGenresForCategory(c.category_id);
                 foreach (Genre g in genres)
-                {                   
+                {
+                    //create sidebar genre item
+                    HtmlAnchor genreItem = new HtmlAnchor();
+                    genreItem.Attributes["class"] = "list-group-item";
+                    genreItem.HRef = "catalog.aspx?genre=" + g.genre_id;
+                    genreItem.InnerHtml = g.name;
 
-                    HtmlAnchor itemGenre = new HtmlAnchor();
-                    itemGenre.Attributes["class"] = "item";
-                    itemGenre.InnerHtml = g.name+"<br />";
-                    itemGenre.HRef = "catalog.aspx?genre=" + g.genre_id;
-                    divMenu.Controls.Add(itemGenre);
-
-                    divMenu.Controls.Add(itemGenre);
+                    //add it to the category list
+                    categoryDiv.Controls.Add(genreItem);
                 }
             }
 

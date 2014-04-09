@@ -64,6 +64,12 @@
             </div>
         </div>
 
+
+
+
+
+
+
         <header>
             <div class="container">
                 <div class="row">
@@ -77,22 +83,22 @@
                                 </a>
                             </h1>
 
-                            <div class="block-cart-header">
+                            <%--<div class="block-cart-header">
                                 <div class="block-content">
                                     <div>0 item(s) - <span class="price">€0.00</span></div>
                                 </div>
-                            </div>
+                            </div>--%>
 
-                            <div class="main-search">
+                            <%--<div class="main-search">
                                 <div class="ui fluid icon input">
                                     <input type="text" name="q" placeholder="Search..." />
                                     <i class="inverted search icon"></i>
+                                    <asp:Button ID="Button1" runat="server" Text="Button" CssClass="inverted search icon" />
                                 </div>
-
-                            </div>
+                            </div>--%>
 
                             <nav class="main-nav">
-                                <ul class="links">
+                                <%-- <ul class="links">
                                     <li><a href="index.aspx">Home</a></li>
                                     <li><a href="Catalog.aspx">Catalogus</a></li>
                                     <li>About</li>
@@ -100,7 +106,48 @@
                                     <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
                                     <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
                                     <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
-                                </ul>
+                                </ul>--%>
+
+
+
+
+                                <div class="ui menu">
+                                    <a class="active item" href="index.aspx">
+                                        <i class="home icon"></i>Home
+                                    </a>
+                                    <a class="item" href="Catalog.aspx">
+                                        <i class="browser icon"></i>Catalogus
+                                    </a>
+                                    <div class="right menu">
+                                        <a class="item">
+                                            <i class="user icon"></i>
+                                            <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
+
+                                        </a>
+                                        <a class="item">
+                                            <i class="cart icon"></i>
+                                            <asp:Button ID="btnCart" runat="server" OnClick="btnCart_Click" Text="Cart" Visible="False" />
+                                        </a>
+                                        <a class="item">
+                                            <i class="code icon"></i>
+                                            <asp:Button ID="btnDev" runat="server" OnClick="btnDev_Click" Text="dev opties" />
+                                        </a>
+
+
+
+
+                                        <div class="item">
+                                            <div class="ui icon input">
+                                                <input placeholder="Search..." type="text" />
+                                                <i class="search link icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
                             </nav>
                         </div>
                     </div>

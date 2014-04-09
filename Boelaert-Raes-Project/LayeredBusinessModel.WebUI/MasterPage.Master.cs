@@ -151,5 +151,14 @@ namespace LayeredBusinessModel.WebUI
         {
             Response.Redirect("~/dev.aspx");
         }
+
+        /**
+         * This method is fired when a user presses the Search button at the top of the page.
+         * It will search on the title, author, barcode, description and categorie. 
+        **/
+        protected void btnMainSearch_Click(object sender, EventArgs e)
+        {
+            String searchText = txtSearch.Text;
+        }
     }
 }

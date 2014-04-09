@@ -86,7 +86,7 @@
                             <div class="main-search">
                                 <div class="ui fluid icon input">
                                     <input type="text" name="q" placeholder="Search..." />
-                                    <asp:Button ID="Button1" runat="server" Text="Button" CssClass="inverted search icon"/>
+                                    <asp:Button ID="btnMainSearch" runat="server" Text="Search" CssClass="inverted search icon" OnClick="btnMainSearch_Click"/>
                                 </div>
 
                             </div>

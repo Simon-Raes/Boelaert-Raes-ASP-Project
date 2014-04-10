@@ -31,49 +31,49 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// btnLogin control.
+        /// liCart control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLogin;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor liCart;
         
         /// <summary>
-        /// btnCart control.
+        /// txtSearchNew control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCart;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtSearchNew;
         
         /// <summary>
-        /// btnDever control.
+        /// btnSearchNew control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnDever;
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnSearchNew;
         
         /// <summary>
-        /// txtMainSearch control.
+        /// liSignup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMainSearch;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liSignup;
         
         /// <summary>
-        /// btnMainSearch control.
+        /// liLogin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnMainSearch;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liLogin;
         
         /// <summary>
         /// txtEmail control.
@@ -101,6 +101,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnSubmitLogin;
+        
+        /// <summary>
+        /// liAccount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liAccount;
         
         /// <summary>
         /// divSideBar control.

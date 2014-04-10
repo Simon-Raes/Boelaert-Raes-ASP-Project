@@ -14,11 +14,9 @@
 
         </div>
     </div>
-    <br />
 
 
     <div class="padding-s">
-        <br />
         <div class="page-title category-title">
             <h1>Most Popular</h1>
         </div>

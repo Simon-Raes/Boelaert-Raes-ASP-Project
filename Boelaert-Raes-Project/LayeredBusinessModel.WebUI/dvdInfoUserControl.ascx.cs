@@ -9,6 +9,7 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class dvdInfoUserControl : System.Web.UI.UserControl
     {
+        public int id { get; set; }
         public String imageUrl { get; set; }
         public String title { get; set; }
         public float buy_price { get; set; }
@@ -17,7 +18,8 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
+            dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
             imgDvdCover.ImageUrl = imageUrl;
             lblTitle.Text = title;
             btnBuy.Text = "Buy € " + buy_price;

@@ -49,15 +49,6 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Button btnCart;
         
         /// <summary>
-        /// btnDever control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnDever;
-        
-        /// <summary>
         /// txtMainSearch control.
         /// </summary>
         /// <remarks>

@@ -22,6 +22,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Panel pnlDvdInfo;
         
         /// <summary>
+        /// dvdInfoLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink dvdInfoLink;
+        
+        /// <summary>
         /// imgDvdCover control.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgDvdCover;
+        
+        /// <summary>
+        /// dvdInfoLink2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink dvdInfoLink2;
         
         /// <summary>
         /// lblTitle control.

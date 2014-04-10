@@ -42,6 +42,39 @@ namespace LayeredBusinessModel.DAO
             return genrelist;
         }
 
+        public List<Genre> getGenresForDvd(int dvd_id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<Genre> genrelist = new List<Genre>();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Genres "+
+                "JOIN DvdGenre "+
+                "ON DvdGenre.genre_id = Genres.genre_id "+
+                "WHERE DvdGenre.dvd_info_id = " + dvd_id, cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    genrelist.Add(createGenre(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return genrelist;
+        }
+
         public Genre getGenre(int genreID)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

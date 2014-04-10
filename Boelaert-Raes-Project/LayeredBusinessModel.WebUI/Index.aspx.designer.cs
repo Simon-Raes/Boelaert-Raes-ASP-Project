@@ -13,6 +13,24 @@ namespace LayeredBusinessModel.WebUI {
     public partial class Home {
         
         /// <summary>
+        /// divRecommended control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRecommended;
+        
+        /// <summary>
+        /// recommened control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl recommened;
+        
+        /// <summary>
         /// newReleases control.
         /// </summary>
         /// <remarks>

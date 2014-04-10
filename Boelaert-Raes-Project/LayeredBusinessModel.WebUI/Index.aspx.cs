@@ -26,7 +26,7 @@ namespace LayeredBusinessModel.WebUI
         private void setupNewReleases()
         {
             int counter = 0;
-            List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(6);
+            List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);
 
             
             foreach (DvdInfo d in dvdList)

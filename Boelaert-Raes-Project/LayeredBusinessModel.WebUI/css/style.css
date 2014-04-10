@@ -250,7 +250,7 @@ border: 1px solid #e8e8e8;
 padding:10px;
 
 }
-
+/*
 .item img {
     
     width:270px;
@@ -263,7 +263,7 @@ padding:10px;
     padding:0;
    
 }
-
+*/
 .product-shop {
 position: relative;
 }
@@ -274,43 +274,14 @@ position: relative;
     margin-bottom: 17px;
 }
 
-.products-grid .price-box {
-overflow: hidden;
-margin: 9px 0 0 0;
-float: left;
-}
+
 
 .regular-price {
 display: block;
 }
 
-.products-grid .price-box .price {
-font-size: 24px;
-font-weight: normal;
-color: #3a3a3a;
-}
 
-.products-grid .actions {
-float: right;
-margin: 0;
-position: relative;
-}
 
-a.button {
-background: transparent;
-border: 0;
-overflow: visible;
-cursor: pointer;
-padding: 10px 20px 10px 20px ;
-margin: 0;
-width: auto;
-background: #f93749;
-color: #fff;
-text-transform: uppercase;
-font-size: 10px;
-line-height: 30px;
-height: 30px;
-}
 
 
 .products-grid .actions button.button span span {
@@ -330,34 +301,35 @@ height: 30px;
 
 
 
+.col-md-3 {
+    padding-right: 0;
+    margin-bottom:15px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.col-md-3 .borderbox {
+    padding:5px;
+    border: 1px solid #e8e8e8;
+    padding-bottom:5px;
+    }
 
 .col-md-3 img{
-    width:200px;
+    width:100%;
     height:300px;
+}
+
+.price-box {
+    background: transparent;
+    border: 0;
+    overflow: visible;
+    cursor: pointer;
+    margin: 0;
+    width: 49%;
+    background: #f93749;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 10px;
+    line-height: 30px;
+    height: 30px;
 }
 
 

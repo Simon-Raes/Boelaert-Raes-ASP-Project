@@ -6,9 +6,10 @@
 <head runat="server">
     <title>DVD Site</title>
 
-    <link href="css/style.css" rel="stylesheet" />
+    
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
     <<script src="jquery/jquery.min.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">

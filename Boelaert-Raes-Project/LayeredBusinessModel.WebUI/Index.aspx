@@ -10,18 +10,9 @@
             <h1>New Movies</h1>
         </div>
 
-        <div class="row" id="dvdrow" runat="server">
-            
+        <div class="row" id="newReleases" runat="server">           
 
         </div>
-
-        <ul class="products-grid row" id="row_new_1" runat="server">
-
-
-        </ul>
-        <ul class="products-grid row" id="row_new_2" runat="server">
-        </ul>
-
     </div>
     <br />
 
@@ -32,16 +23,13 @@
             <h1>Most Popular</h1>
         </div>
 
-        <ul class="products-grid row" id="row_popular_1" runat="server">
-        </ul>
-        <ul class="products-grid row" id="row_popular_2" runat="server">
-        </ul>
+        <div class="row" id="mostPopular" runat="server">           
+
+        </div>
 
     </div>
        
-    <h1>Most popular (layout experiment)</h1>
-    <div class="ui five column grid" id="divPopular" runat="server">        
-    </div>
+    
     
 
 </asp:Content>

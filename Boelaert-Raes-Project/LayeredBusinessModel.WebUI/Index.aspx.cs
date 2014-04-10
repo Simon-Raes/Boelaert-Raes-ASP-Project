@@ -18,21 +18,16 @@ namespace LayeredBusinessModel.WebUI
             {
                 setupNewReleases();
                 setupMostPopular();
-                setupMostPopularEx();
             }
             
         }
 
         private void setupNewReleases()
         {
-            int counter = 0;
             List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);
-
             
             foreach (DvdInfo d in dvdList)
             {
-                counter++;
-
                 dvdInfoUserControl dvdInfo = (dvdInfoUserControl) Page.LoadControl("dvdInfoUserControl.ascx");
 
                 dvdInfo.imageUrl = d.image;
@@ -40,159 +35,28 @@ namespace LayeredBusinessModel.WebUI
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 
-                /*
-                HtmlGenericControl li = new HtmlGenericControl("li");
-                li.Attributes["class"] = "item col-3";
-                Image img = new Image();
-                img.ImageUrl = d.image;
-                li.Controls.Add(img);
-
-                HtmlGenericControl div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "product-shop";
-
-                li.Controls.Add(div);
-
-                HtmlGenericControl h3 = new HtmlGenericControl("h3");
-                h3.Attributes["class"] = "product-name";
-
-                div.Controls.Add(h3);
-
-                HtmlAnchor a = new HtmlAnchor();
-                a.HRef = "catalog.aspx?dvdinfo=" + d.dvd_info_id;
-                a.InnerText = d.name;
-                h3.Controls.Add(a);
-
-                HtmlGenericControl author = new HtmlGenericControl("div");
-                author.Attributes["class"] = "product-author";
-                author.InnerText = d.author;
-                div.Controls.Add(author);
-
-
-                HtmlGenericControl price = new HtmlGenericControl("div");
-                price.Attributes["class"] = "price-box";
-                div.Controls.Add(price);
-
-
-                HtmlGenericControl span1 = new HtmlGenericControl("span");
-                span1.Attributes["class"] = "regular-price";
-                price.Controls.Add(span1);
-                HtmlGenericControl span2 = new HtmlGenericControl("span");
-                span2.Attributes["class"] = "price";
-                span1.Controls.Add(span2);
-                span2.InnerText = "€ " + d.buy_price;
-
-                HtmlGenericControl actions = new HtmlGenericControl("div");
-                actions.Attributes["class"] = "actions";
-
-                div.Controls.Add(actions);
-
-                HtmlAnchor cartlink = new HtmlAnchor();
-                cartlink.Attributes["class"] = "button btn-cart";
-                cartlink.HRef = "#";
-                cartlink.InnerText = "Add to Cart";
-
-                actions.Controls.Add(cartlink);
-                */
-                if(counter < 4) {
-                    dvdrow.Controls.Add(dvdInfo);
-                } else {
-                    dvdrow.Controls.Add(dvdInfo);
-                }                
+                newReleases.Controls.Add(dvdInfo);                            
             }            
         }
 
         private void setupMostPopular()
         {
-            int counter = 0;
-            List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(6);
-
+            List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(4);
 
             foreach (DvdInfo d in dvdList)
             {
-                counter++;
+                dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
 
-                HtmlGenericControl li = new HtmlGenericControl("li");
-                li.Attributes["class"] = "item col-3";
+                dvdInfo.imageUrl = d.image;
+                dvdInfo.title = d.name;
+                dvdInfo.buy_price = d.buy_price;
+                dvdInfo.rent_price = d.rent_price;
 
-                Image img = new Image();
-                img.ImageUrl = d.image;
-                li.Controls.Add(img);
-
-                HtmlGenericControl div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "product-shop";
-
-                li.Controls.Add(div);
-
-                HtmlGenericControl h3 = new HtmlGenericControl("h3");
-                h3.Attributes["class"] = "product-name";
-                div.Controls.Add(h3);
-
-                HtmlAnchor a = new HtmlAnchor();
-                a.HRef = "catalog.aspx?dvdinfo=" + d.dvd_info_id;
-                a.InnerText = d.name;
-                h3.Controls.Add(a);
-
-                HtmlGenericControl author = new HtmlGenericControl("div");
-                author.Attributes["class"] = "product-author";
-                author.InnerText = d.author;
-                div.Controls.Add(author);
-
-
-                HtmlGenericControl price = new HtmlGenericControl("div");
-                price.Attributes["class"] = "price-box";
-                div.Controls.Add(price);
-
-
-                HtmlGenericControl span1 = new HtmlGenericControl("span");
-                span1.Attributes["class"] = "regular-price";
-                price.Controls.Add(span1);
-                HtmlGenericControl span2 = new HtmlGenericControl("span");
-                span2.Attributes["class"] = "price";
-                span1.Controls.Add(span2);
-                span2.InnerText = "€ " + d.buy_price;
-
-                HtmlGenericControl actions = new HtmlGenericControl("div");
-                actions.Attributes["class"] = "actions";
-                div.Controls.Add(actions);
-
-                HtmlAnchor cartlink = new HtmlAnchor();
-                cartlink.Attributes["class"] = "button btn-cart";
-                cartlink.HRef = "#";
-                cartlink.InnerText = "Add to Cart";
-                actions.Controls.Add(cartlink);
-
-                if (counter < 4)
-                {
-                    row_popular_1.Controls.Add(li);
-                }
-                else
-                {
-                    row_popular_2.Controls.Add(li);
-                }
+                mostPopular.Controls.Add(dvdInfo);  
             }  
         }
 
 
-        private void setupMostPopularEx()
-        {
-            List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(5);
-
-            foreach (DvdInfo d in dvdList)
-            {
-                HtmlGenericControl div = new HtmlGenericControl("div");
-                div.Attributes["class"] = "column";
-
-                HtmlGenericControl divSegment = new HtmlGenericControl("div");
-                divSegment.Attributes["class"] = "ui segment";
-                div.Controls.Add(divSegment);
-
-                Image img = new Image();
-                img.ImageUrl = d.image;
-                img.Width = 120;
-                divSegment.Controls.Add(img);
-
-                divPopular.Controls.Add(div);
-            }
-        }
+       
     }
 }

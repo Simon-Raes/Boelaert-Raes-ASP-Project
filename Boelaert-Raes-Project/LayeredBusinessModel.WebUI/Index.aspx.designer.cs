@@ -13,57 +13,21 @@ namespace LayeredBusinessModel.WebUI {
     public partial class Home {
         
         /// <summary>
-        /// dvdrow control.
+        /// newReleases control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvdrow;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl newReleases;
         
         /// <summary>
-        /// row_new_1 control.
+        /// mostPopular control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_new_1;
-        
-        /// <summary>
-        /// row_new_2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_new_2;
-        
-        /// <summary>
-        /// row_popular_1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_popular_1;
-        
-        /// <summary>
-        /// row_popular_2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl row_popular_2;
-        
-        /// <summary>
-        /// divPopular control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPopular;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl mostPopular;
     }
 }

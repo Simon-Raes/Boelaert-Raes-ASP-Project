@@ -57,7 +57,7 @@ namespace LayeredBusinessModel.WebUI
                 //don't change banner on every postback
                 if (!Page.IsPostBack)
                 {
-                    //set personalised banners
+                    //set personalised cards (on indexpage)
                     if (user.numberOfVisits > 5)
                     {
                         //todo: 
@@ -70,21 +70,9 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            //if (Session["user"] == null)
-            //{
-            //    Response.Redirect("~/Login.aspx");
-            //}
-            //else
-            //{
-            //    //redirect to account page (purchase history, account settings,...)
-            //    Response.Redirect("~/Account.aspx");
-            //}
-
-
             CustomerService customerService = new CustomerService();
             Customer customer = customerService.getCustomerWithLogin(txtEmail.Value);
 
-            //todo: validators
 
             if (customer != null)
             {
@@ -105,6 +93,8 @@ namespace LayeredBusinessModel.WebUI
                     else
                     {
                         //incorrect password
+                        Response.Redirect("~/Register.aspx?status=wronglogin");
+
                         //lblStatus.Text = "Incorrect login/password combination";
                     }
                 }

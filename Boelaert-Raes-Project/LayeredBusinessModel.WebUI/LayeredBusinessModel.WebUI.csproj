@@ -71,6 +71,7 @@
     <Content Include="css\style.css" />
     <Content Include="Customers.aspx" />
     <Content Include="dev.aspx" />
+    <Content Include="dvdInfoUserControl.ascx" />
     <Content Include="Global.asax" />
     <Content Include="images\h2-bg.gif" />
     <Content Include="images\icon_cart.gif" />
@@ -92,6 +93,7 @@
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
+    <Content Include="usercontroltestpage.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -147,6 +149,13 @@
     <Compile Include="dev.aspx.designer.cs">
       <DependentUpon>dev.aspx</DependentUpon>
     </Compile>
+    <Compile Include="dvdInfoUserControl.ascx.cs">
+      <DependentUpon>dvdInfoUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="dvdInfoUserControl.ascx.designer.cs">
+      <DependentUpon>dvdInfoUserControl.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -192,6 +201,13 @@
     </Compile>
     <Compile Include="tempMovie.aspx.designer.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontroltestpage.aspx.cs">
+      <DependentUpon>usercontroltestpage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontroltestpage.aspx.designer.cs">
+      <DependentUpon>usercontroltestpage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

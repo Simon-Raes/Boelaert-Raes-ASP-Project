@@ -236,8 +236,8 @@ text-transform: uppercase;
 }*/
 
 .products-grid {
-position: relative;
-margin-bottom: 32px;
+    position: relative;
+    margin-bottom: 32px;
 }
 
 .products-grid li.item {
@@ -251,14 +251,17 @@ padding:10px;
 
 }
 
-li.item img {
+.item img {
     
     width:270px;
     height:420px;
 }
 
 .col-3 {
-    width: 33.3333333%
+    width: 33.3333333%;
+    margin:0;
+    padding:0;
+   
 }
 
 .product-shop {
@@ -322,6 +325,45 @@ font-size: 10px;
 line-height: 30px;
 height: 30px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.col-md-3 img{
+    width:200px;
+    height:300px;
+}
+
+
+
+
+
 
 
 

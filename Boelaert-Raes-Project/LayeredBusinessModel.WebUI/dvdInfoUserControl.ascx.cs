@@ -17,6 +17,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             imgDvdCover.ImageUrl = imageUrl;
             lblTitle.Text = title;
             btnBuy.Text = "Buy € " + buy_price;

@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="dvdInfoUserControl.ascx.cs" Inherits="LayeredBusinessModel.WebUI.dvdInfoUserControl" %>
-<asp:Panel ID="pnlDvdInfo" runat="server">
+<asp:Panel ID="pnlDvdInfo" runat="server" CssClass="col-md-3">
     <asp:Image ID="imgDvdCover" runat="server" />
 
 

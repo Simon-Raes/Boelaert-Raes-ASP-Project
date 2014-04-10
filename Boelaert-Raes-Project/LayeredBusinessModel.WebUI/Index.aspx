@@ -10,7 +10,14 @@
             <h1>New Movies</h1>
         </div>
 
+        <div class="row" id="dvdrow" runat="server">
+            
+
+        </div>
+
         <ul class="products-grid row" id="row_new_1" runat="server">
+
+
         </ul>
         <ul class="products-grid row" id="row_new_2" runat="server">
         </ul>

@@ -33,6 +33,14 @@ namespace LayeredBusinessModel.WebUI
             {
                 counter++;
 
+                dvdInfoUserControl dvdInfo = (dvdInfoUserControl) Page.LoadControl("dvdInfoUserControl.ascx");
+
+                dvdInfo.imageUrl = d.image;
+                dvdInfo.title = d.name;
+                dvdInfo.buy_price = d.buy_price;
+                dvdInfo.rent_price = d.rent_price;
+
+                /*
                 HtmlGenericControl li = new HtmlGenericControl("li");
                 li.Attributes["class"] = "item col-3";
                 Image img = new Image();
@@ -84,11 +92,11 @@ namespace LayeredBusinessModel.WebUI
                 cartlink.InnerText = "Add to Cart";
 
                 actions.Controls.Add(cartlink);
-
+                */
                 if(counter < 4) {
-                    row_new_1.Controls.Add(li);
+                    dvdrow.Controls.Add(dvdInfo);
                 } else {
-                    row_new_2.Controls.Add(li);
+                    dvdrow.Controls.Add(dvdInfo);
                 }                
             }            
         }

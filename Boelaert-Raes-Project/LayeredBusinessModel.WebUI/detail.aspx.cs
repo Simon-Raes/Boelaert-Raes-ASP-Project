@@ -14,8 +14,7 @@ namespace LayeredBusinessModel.WebUI
             if (!IsPostBack)
             {
                 int id;
-                if(int.TryParse(Request.QueryString["id"], out id)) {
-                   
+                if(int.TryParse(Request.QueryString["id"], out id)) {                  
                     
                     lblID.Text = id.ToString();
                 }

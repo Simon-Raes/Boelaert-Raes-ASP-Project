@@ -22,6 +22,6 @@ namespace LayeredBusinessModel.Domain
         public int amount_sold { get; set; }
 
 
-        public Dictionary<int, String> media { get; set; }
+        public List<KeyValuePair<int, string>> media { get; set; }
     }
 }

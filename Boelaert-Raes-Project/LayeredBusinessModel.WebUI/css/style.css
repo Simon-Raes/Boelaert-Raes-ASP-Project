@@ -334,6 +334,10 @@ height: 30px;
     height:430px;
 }
 
+.tumbnail img{
+    height:78px;
+}
+
 .price-box {
     background: transparent;
     border: 0;

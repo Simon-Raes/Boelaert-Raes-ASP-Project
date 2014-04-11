@@ -22,7 +22,30 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfoService dvdbll = new DvdInfoService();
                     DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
 
-                    imgDvdCover.ImageUrl = dvdInfo.image;
+                    foreach (KeyValuePair<int, String> k in dvdInfo.media)
+                    {
+                        if (k.Key == 1)
+                        {
+                            imgDvdCoverFocus.ImageUrl = k.Value;
+                        }
+                        else if (k.Key == 2)
+                        {
+                            if (imgDvdCover1.ImageUrl == "")
+                            {
+                                imgDvdCover1.ImageUrl = k.Value;
+                            }
+                            else if (imgDvdCover2.ImageUrl == "")
+                            {
+                                imgDvdCover2.ImageUrl = k.Value;
+                            }
+                            else if (imgDvdCover3.ImageUrl == "")
+                            {
+                                imgDvdCover3.ImageUrl = k.Value;
+                            }
+                        }
+                    }
+
+                    int i = 0;
 
 
                 }

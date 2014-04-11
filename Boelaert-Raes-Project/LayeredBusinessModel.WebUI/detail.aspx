@@ -6,13 +6,13 @@
         <div class="col-md-4">
             <asp:Image ID="imgDvdCoverFocus" runat="server" />
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 tumbnail">
                     <asp:Image ID="imgDvdCover1" runat="server" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 tumbnail">
                     <asp:Image ID="imgDvdCover2" runat="server" />
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 tumbnail">
                     <asp:Image ID="imgDvdCover3" runat="server" />
                 </div>
 

@@ -312,6 +312,38 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+        private List<KeyValuePair<int, String>> getMedia(int id)
+        {
+            List<KeyValuePair<int, string>> media = new List<KeyValuePair<int, string>>();
+
+            cnn = new SqlConnection(sDatabaseLocatie);
+            SqlCommand sql = new SqlCommand("Select * from Media where dvd_info_id = " + id, cnn);
+            sql.Parameters.Add(new SqlParameter("@id", id));
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = sql.ExecuteReader();
+                while (reader.Read())
+                {
+                    KeyValuePair<int, String> mediaObject = new KeyValuePair<int,string>(Convert.ToInt32(reader["media_type_id"]),reader["url"].ToString());
+                    media.Add(mediaObject);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+
+
+            return media;
+        }
+
 
         private DvdInfo createDvdInfo(SqlDataReader reader)
         {
@@ -328,7 +360,8 @@ namespace LayeredBusinessModel.DAO
                 rent_price = float.Parse(reader["rent_price"].ToString()),
                 buy_price = float.Parse(reader["buy_price"].ToString()),
                 date_added = Convert.ToDateTime(reader["date_added"]),
-                amount_sold = Convert.ToInt32(reader["amount_sold"])
+                amount_sold = Convert.ToInt32(reader["amount_sold"]),
+                media = getMedia(Convert.ToInt32(reader["dvd_info_id"]))
             };
             return dvd;
         }

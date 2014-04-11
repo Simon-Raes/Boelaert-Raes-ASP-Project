@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
-    class MediaType
+    public class MediaType
     {
         public int media_id { get; set; }
         public String mediaType { get; set; }

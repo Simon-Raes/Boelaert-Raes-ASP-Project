@@ -235,7 +235,18 @@ text-transform: uppercase;
     margin: 0;
 }*/
 
+
+
+
+/*Pagina een lichtgrijze background color geven?*/
+
+/*body { background: #DBDBDB; }*/
+
+
+
+
 .products-grid {
+    color:white;
     position: relative;
     margin-bottom: 32px;
 }
@@ -307,6 +318,7 @@ height: 30px;
 }
 
 .col-md-3 .borderbox {
+   
     padding:5px;
     border: 1px solid #e8e8e8;
     padding-bottom:5px;

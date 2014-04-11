@@ -3,20 +3,25 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
+
+
     <asp:Label ID="lblHeader" runat="server" Text="Label" Font-Size="20"></asp:Label>
 
-    
-    <br />
-    Search:
-    <asp:TextBox ID="txtSearch" runat="server"></asp:TextBox><asp:Button ID="Button1" runat="server" Text="Search" CausesValidation="False" OnClick="Button1_Click1" />
-    Deze button is kapot en ik weet niet waarom.
+    <div class="col-lg-3 pull-right">
+        <div class="input-group">
+            <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
+            <span class="input-group-btn">
+                <button id="btnHtml" runat="server" onserverclick="btnSearch_Click2" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
+    </div>
 
-    <br />
-    
+    <hr />
+
 
     <div class="row" id="catalogContent" runat="server">
-
     </div>
-    
+
 </asp:Content>

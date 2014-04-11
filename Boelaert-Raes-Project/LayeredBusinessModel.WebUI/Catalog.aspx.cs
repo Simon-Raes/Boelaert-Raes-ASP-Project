@@ -30,14 +30,14 @@ namespace LayeredBusinessModel.WebUI
             List<DvdInfo> dvdContent = null;
 
             //hier nog wat geknoei omdat er 2 searchboxes zijn
-            String searchtext = txtSearch.Text;
+            String searchtext;
             if (Request.QueryString["search"] != null)
             {
                 searchtext = Request.QueryString["search"];
             } 
             else
             {
-                searchtext = txtSearch.Text;
+                searchtext = txtSearchNew.Value;
             }
             
             String labelText="";
@@ -102,9 +102,11 @@ namespace LayeredBusinessModel.WebUI
                 dvdInfo.rent_price = d.rent_price;
 
                 catalogContent.Controls.Add(dvdInfo);
+
+                
             }
         }
-
+        
 
         /*DOESN'T WORK!*/
         protected void btnSearch_Click2(object sender, EventArgs e)

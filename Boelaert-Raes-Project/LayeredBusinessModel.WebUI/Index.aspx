@@ -20,6 +20,7 @@
     </div>
 
     <div class="row" id="newReleases" runat="server">
+
     </div>
 
     <div class="page-title category-title">
@@ -28,6 +29,7 @@
     </div>
 
     <div class="row" id="mostPopular" runat="server">
+
     </div>
 
 

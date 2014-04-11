@@ -73,6 +73,7 @@
     <Content Include="detail.aspx" />
     <Content Include="dev.aspx" />
     <Content Include="dvdInfoUserControl.ascx" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\h2-bg.gif" />
     <Content Include="images\icon_cart.gif" />
@@ -213,6 +214,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.Master" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

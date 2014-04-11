@@ -4,7 +4,13 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    
+    <asp:Label ID="Label4" runat="server" Text="Spotlight" Font-Size="20"></asp:Label>
+    <hr />
+    <img class="img-responsive" src="http://cdn.wegotthiscovered.com/wp-content/uploads/Expendables-Banner-Poster.jpg" />
+        
+    <hr />
+
+
     <div id="divRecommended" runat="server">
         <asp:Label ID="Label1" runat="server" Text="Recommended for you" Font-Size="20"></asp:Label>
         <a href="Catalog.aspx?type=recommended" class="pull-right btn btn-primary">See more</a>

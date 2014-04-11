@@ -7,8 +7,8 @@
 
     <asp:Label ID="lblHeader" runat="server" Text="Label" Font-Size="20"></asp:Label>
 
-    <div class="col-lg-3 pull-right">
-        <div class="input-group">
+    <div class="col-lg-4 pull-right">        
+        <div class="input-group">            
             <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
             <span class="input-group-btn">
                 <button id="btnHtml" runat="server" onserverclick="btnSearch_Click2" class="btn btn-default">

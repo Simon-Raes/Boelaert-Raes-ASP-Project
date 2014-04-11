@@ -13,6 +13,42 @@ namespace LayeredBusinessModel.WebUI {
     public partial class detail {
         
         /// <summary>
+        /// imgDvdCoverFocus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgDvdCoverFocus;
+        
+        /// <summary>
+        /// imgDvdCover1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgDvdCover1;
+        
+        /// <summary>
+        /// imgDvdCover2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgDvdCover2;
+        
+        /// <summary>
+        /// imgDvdCover3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgDvdCover3;
+        
+        /// <summary>
         /// lblID control.
         /// </summary>
         /// <remarks>

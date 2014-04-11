@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,6 +19,12 @@ namespace LayeredBusinessModel.WebUI
                 if(int.TryParse(Request.QueryString["id"], out id)) {                  
                     
                     lblID.Text = id.ToString();
+                    DvdInfoService dvdbll = new DvdInfoService();
+                    DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
+
+                    imgDvdCover.ImageUrl = dvdInfo.image;
+
+
                 }
                 
 

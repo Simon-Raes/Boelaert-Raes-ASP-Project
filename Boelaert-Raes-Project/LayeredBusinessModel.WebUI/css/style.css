@@ -329,6 +329,11 @@ height: 30px;
     height:300px;
 }
 
+.col-md-4 img {
+    width:100%;
+    height:430px;
+}
+
 .price-box {
     background: transparent;
     border: 0;

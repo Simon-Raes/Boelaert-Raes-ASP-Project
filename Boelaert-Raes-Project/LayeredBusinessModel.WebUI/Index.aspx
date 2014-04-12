@@ -4,41 +4,52 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <asp:Label ID="Label4" runat="server" Text="Spotlight" Font-Size="20"></asp:Label>
-    <hr />
-    <img class="img-responsive" src="http://cdn.wegotthiscovered.com/wp-content/uploads/Expendables-Banner-Poster.jpg" />
-        
-    <hr />
-
-
-    <div id="divRecommended" runat="server">
-        <asp:Label ID="Label1" runat="server" Text="Recommended for you" Font-Size="20"></asp:Label>
-        <a href="Catalog.aspx?type=recommended" class="pull-right btn btn-primary">See more</a>
-        <hr />
-        <div class="row" id="recommened" runat="server">
-            <!-- DVD cards inserted here-->
+    <!-- Spotlight -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <asp:Label ID="Label4" runat="server" Text="Spotlight" Font-Size="20"></asp:Label>
+            <hr />
+            <img class="img-responsive" src="http://cdn.wegotthiscovered.com/wp-content/uploads/Expendables-Banner-Poster.jpg" />
         </div>
-        <hr />
-    </div>
-        
-    
-
-    <asp:Label ID="Label2" runat="server" Text="Recent releases" Font-Size="20"></asp:Label>
-    <a href="Catalog.aspx?type=recent" class="pull-right btn btn-primary">See more</a>
-    <hr />
-    <div class="row" id="newReleases" runat="server">
-        <!-- DVD cards inserted here-->
     </div>
 
-    <hr />
-
-    <asp:Label ID="Label3" runat="server" Text="Most popular" Font-Size="20"></asp:Label>
-    <a href="Catalog.aspx?type=popular" class="pull-right btn btn-primary">See more</a>
-    <hr />
-    <div class="row" id="mostPopular" runat="server">
-        <!-- DVD cards inserted here-->
+    <!-- Recommendations -->
+    <div id="divRecommended" runat="server">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <asp:Label ID="Label1" runat="server" Text="Recommended for you" Font-Size="20"></asp:Label>
+                <a href="Catalog.aspx?type=recommended" class="pull-right btn btn-primary">See more</a>
+                <hr />
+                <div class="row" id="recommened" runat="server">
+                    <!-- DVD cards inserted here-->
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- Recent releases -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <asp:Label ID="Label2" runat="server" Text="Recent releases" Font-Size="20"></asp:Label>
+            <a href="Catalog.aspx?type=recent" class="pull-right btn btn-primary">See more</a>
+            <hr />
+            <div class="row" id="newReleases" runat="server">
+                <!-- DVD cards inserted here-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Most popular -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <asp:Label ID="Label3" runat="server" Text="Most popular" Font-Size="20"></asp:Label>
+            <a href="Catalog.aspx?type=popular" class="pull-right btn btn-primary">See more</a>
+            <hr />
+            <div class="row" id="mostPopular" runat="server">
+                <!-- DVD cards inserted here-->
+            </div>
+        </div>
+    </div>
 
 
 

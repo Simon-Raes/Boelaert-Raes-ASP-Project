@@ -26,7 +26,6 @@ namespace LayeredBusinessModel.WebUI
 
 
         private void setDvdTiles()
-
         {
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;

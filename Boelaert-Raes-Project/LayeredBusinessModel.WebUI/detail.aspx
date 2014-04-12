@@ -16,8 +16,22 @@
                 <span class="glyphicon glyphicon-time"></span> <asp:Label ID="lblDuration" runat="server"></asp:Label> | <asp:PlaceHolder ID="genreLinks" runat="server"></asp:PlaceHolder>
                 <hr />
 
-                <asp:Label ID="lblPlot" runat="server"></asp:Label>
+                <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                 <hr />
+                <div class="col-md-6">
+                    <div class="row">
+                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" CssClass="price-box"/> 
+                    </div>
+                    <div class="row">
+                       <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="price-box"/>
+                    </div>
+                    <div class="row">
+                     <asp:Button ID="btnRent3" runat="server" Text="Add to cart" CssClass="price-box"/>
+                    </div>
+                    <div class="row">
+                       <asp:Button ID="btnRent7" runat="server" Text="Add to cart" CssClass="price-box"/>
+                    </div>
+                </div>
             </div>
             
 

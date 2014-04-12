@@ -73,7 +73,10 @@ namespace LayeredBusinessModel.WebUI
             genreLinks.Controls.RemoveAt(j - 1);
 
             lblPlot.Text = dvdInfo.descripion;
-
+            btnBuy.Text = "Buy € " + dvdInfo.buy_price.ToString();
+            btnRent1.Text = "Rent 1 day € " + dvdInfo.rent_price.ToString();
+            btnRent3.Text = "Rent 3 days € " + (dvdInfo.rent_price * 3).ToString();
+            btnRent7.Text = "Rent 7 days € " + (dvdInfo.rent_price * 7).ToString();
 
             foreach (KeyValuePair<int, String> k in dvdInfo.media)
             {

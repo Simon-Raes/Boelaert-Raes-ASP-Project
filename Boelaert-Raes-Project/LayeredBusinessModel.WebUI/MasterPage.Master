@@ -74,7 +74,7 @@
 
                                 <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
                                 <li><a href="dev.aspx">(Dev opties)</a></li>
-
+                                <li><a href="Admin.aspx">Admin</a></li>
                                 <li class="navbar-form navbar-left" role="search">
                                     <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
                                     <button id="btnSearchNew" runat="server" onserverclick="btnMainSearch_Click1" class="btn btn-default">Submit</button>

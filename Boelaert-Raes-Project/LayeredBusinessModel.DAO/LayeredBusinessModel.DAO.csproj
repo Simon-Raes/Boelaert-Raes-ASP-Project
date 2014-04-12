@@ -44,6 +44,7 @@
     <Compile Include="CustomerDAO.cs" />
     <Compile Include="DAO.cs" />
     <Compile Include="DvdCopyDAO.cs" />
+    <Compile Include="DvdGenreDAO.cs" />
     <Compile Include="DvdInfoDAO.cs" />
     <Compile Include="GenreDAO.cs" />
     <Compile Include="OrderDAO.cs" />

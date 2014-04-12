@@ -12,6 +12,56 @@ namespace LayeredBusinessModel.DAO
 {
     public class DvdInfoDAO : DAO
     {
+
+        public int addDvdInfo(DvdInfo dvdInfo)
+        {
+            int dvdInfoId = -1;
+            cnn = new SqlConnection(sDatabaseLocatie);
+            
+            SqlCommand command = new SqlCommand("INSERT INTO DvdInfo" +
+            "(name, year, barcode, author, description, rent_price, buy_price, date_added, amount_sold, actors, duration) " +
+            "OUTPUT INSERTED.dvd_info_id " +
+            "VALUES (@name, @year, @barcode, @author, @description, @rent_price, @buy_price, @date_added, @amount_sold, @actors, @duration)", cnn);
+            command.Parameters.Add(new SqlParameter("@name", dvdInfo.name));
+            command.Parameters.Add(new SqlParameter("@year", dvdInfo.year));
+            command.Parameters.Add(new SqlParameter("@barcode", dvdInfo.barcode));
+            command.Parameters.Add(new SqlParameter("@author", dvdInfo.author));
+            command.Parameters.Add(new SqlParameter("@description", dvdInfo.descripion));
+            command.Parameters.Add(new SqlParameter("@rent_price", dvdInfo.rent_price));
+            command.Parameters.Add(new SqlParameter("@buy_price", dvdInfo.buy_price));
+            command.Parameters.Add(new SqlParameter("@date_added", dvdInfo.date_added));
+            command.Parameters.Add(new SqlParameter("@amount_sold", dvdInfo.amount_sold));
+
+            String actorsString = "";
+            for(int i=0;i<dvdInfo.actors.Length;i++)
+            {
+                actorsString += dvdInfo.actors[i];
+                if(i<dvdInfo.actors.Length-1)
+                {
+                    //more actors to follow, add comma
+                    actorsString += ",";
+                }
+            }
+            command.Parameters.Add(new SqlParameter("@actors", actorsString));
+            command.Parameters.Add(new SqlParameter("@duration", dvdInfo.duration));
+
+            try
+            {
+                cnn.Open();
+                dvdInfoId = (int)command.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                //return -1 on error
+                dvdInfoId = -1;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdInfoId;
+        }
+
         public List<DvdInfo> getAllDvdInfos()
         {
             cnn = new SqlConnection(sDatabaseLocatie);

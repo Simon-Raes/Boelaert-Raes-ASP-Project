@@ -61,6 +61,7 @@
     <Content Include="AccountOverview.aspx" />
     <Content Include="AccountOrders.aspx" />
     <Content Include="AccountSettings.aspx" />
+    <Content Include="Admin.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Catalog.aspx" />
     <Content Include="css\bootstrap.css" />
@@ -131,6 +132,13 @@
     </Compile>
     <Compile Include="AccountSettings.aspx.designer.cs">
       <DependentUpon>AccountSettings.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin.aspx.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin.aspx.designer.cs">
+      <DependentUpon>Admin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Cart.aspx.cs">
       <DependentUpon>Cart.aspx</DependentUpon>

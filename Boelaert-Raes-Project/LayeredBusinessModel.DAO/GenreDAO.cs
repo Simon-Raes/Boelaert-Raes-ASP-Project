@@ -12,6 +12,37 @@ namespace LayeredBusinessModel.DAO
 {
     public class GenreDAO : DAO
     {
+        public List<Genre> getGenres()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<Genre> genrelist = new List<Genre>();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM genres", cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    genrelist.Add(createGenre(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return genrelist;
+        }
+
+
         public List<Genre> getGenresForCategory(int categoryID)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

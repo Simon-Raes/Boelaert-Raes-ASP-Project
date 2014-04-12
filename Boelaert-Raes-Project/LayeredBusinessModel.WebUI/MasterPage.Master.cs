@@ -46,24 +46,10 @@ namespace LayeredBusinessModel.WebUI
 
                 //set buttons
                 Customer user = (Customer)Session["user"];
-                //btnLogin.Text = user.name;
-                liAccount.InnerHtml = "<a href='AccountOverview.aspx'>"+user.name+"</a>";
-                //btnCart.Visible = true;
-                
+                liAccount.InnerHtml = "<a href='AccountOverview.aspx'>"+user.name+"</a>";                
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
-                //btnCart.Text = "Cart: " + cartContent.Count;
-                liCart.InnerText = "Cart: " + cartContent.Count;
-                //don't change banner on every postback
-                if (!Page.IsPostBack)
-                {
-                    //set personalised cards (on indexpage)
-                    if (user.numberOfVisits > 5)
-                    {
-                        //todo: 
-                        //favoriete genre van user opzoeken (op basis van ordergeschiedenis), enkel banners van dat genre weergeven
-                    }
-                }
+                liCart.InnerText = "Cart: " + cartContent.Count;               
 
             }
         }

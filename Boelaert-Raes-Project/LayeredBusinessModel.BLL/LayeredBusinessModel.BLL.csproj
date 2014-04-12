@@ -42,6 +42,7 @@
     <Compile Include="CategoryService.cs" />
     <Compile Include="CustomerService.cs" />
     <Compile Include="DvdCopyService.cs" />
+    <Compile Include="DvdGenreService.cs" />
     <Compile Include="DvdInfoService.cs" />
     <Compile Include="GenreService.cs" />
     <Compile Include="OrderLineService.cs" />

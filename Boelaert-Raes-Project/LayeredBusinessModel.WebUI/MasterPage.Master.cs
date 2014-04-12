@@ -86,9 +86,9 @@ namespace LayeredBusinessModel.WebUI
                         customer.numberOfVisits++;
                         customerService.updateCustomer(customer);
 
-                        //put user in session and redirect to index (better would be to redirect to last active page)
+                        //put user in session and reload the page to update the navbar
                         Session["user"] = customer;
-                        Response.Redirect("~/Index.aspx");
+                        Response.Redirect(Request.RawUrl);
                     }
                     else
                     {

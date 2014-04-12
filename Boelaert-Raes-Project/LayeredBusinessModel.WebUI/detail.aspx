@@ -20,16 +20,16 @@
                 <hr />
                 <div class="col-md-6">
                     <div class="row">
-                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" CssClass="price-box"/> 
+                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" CssClass="price-box detail"/> 
                     </div>
                     <div class="row">
-                       <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="price-box"/>
+                       <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="price-box detail"/>
                     </div>
                     <div class="row">
-                     <asp:Button ID="btnRent3" runat="server" Text="Add to cart" CssClass="price-box"/>
+                     <asp:Button ID="btnRent3" runat="server" Text="Add to cart" CssClass="price-box detail"/>
                     </div>
                     <div class="row">
-                       <asp:Button ID="btnRent7" runat="server" Text="Add to cart" CssClass="price-box"/>
+                       <asp:Button ID="btnRent7" runat="server" Text="Add to cart" CssClass="price-box detail"/>
                     </div>
                 </div>
             </div>

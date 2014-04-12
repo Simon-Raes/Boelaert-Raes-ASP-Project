@@ -47,6 +47,7 @@ namespace LayeredBusinessModel.WebUI
             String cat = Request.QueryString["cat"];
             String type = Request.QueryString["type"];
             String year = Request.QueryString["year"];
+            String director = Request.QueryString["director"];
 
             if(type!=null)
             {
@@ -86,6 +87,11 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdContent = dvdInfoService.searchDvdFromYear(year);
                 labelText = "Dvd's from " + year;
+            }
+            else if (director != null)
+            {
+                dvdContent = dvdInfoService.searchDvdFromDirector(director);
+                labelText = "Dvd's from " + director;
             }
             else
             {

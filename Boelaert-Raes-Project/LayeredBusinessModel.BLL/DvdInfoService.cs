@@ -59,6 +59,13 @@ namespace LayeredBusinessModel.BLL
             return dvdInfoDAO.searchDvdFromYear(year);
         }
 
+        public List<DvdInfo> searchDvdFromDirector(String director)
+        {
+
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.searchDvdFromDirector(director);
+        }
+
 
         public List<DvdInfo> getLatestDvds(int amount)
         {

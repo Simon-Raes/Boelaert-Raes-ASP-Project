@@ -6,11 +6,11 @@
 <head runat="server">
     <title>DVD Site</title>
 
-    
+
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
-    <<script src="jquery/jquery.min.js"></script>
+    <script src="jquery/jquery.min.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
@@ -18,15 +18,12 @@
 <body>
     <form id="form1" runat="server">
 
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-inverse">
             <div class="container">
                 <%--                <ul class="container-fluid">--%>
-
-                <ul class="nav navbar-nav navbar-left">
-                    <li class="text-muted">Welcome to the best online dvd shop in the world! DEZE BALK MOET SMALLER WORDEN</li>
-                    <li class="text-muted">(phone icon)+32477073716</li>
-
-                </ul>
+                
+                    Welcome to the best online dvd shop in the world! DEZE BALK MOET SMALLER WORDEN
+                    (phone icon)+32477073716
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language <b class="caret"></b></a>
@@ -45,10 +42,9 @@
                     </li>
                 </ul>
 
-
                 <%--</ul>--%>
             </div>
-        </nav>
+        </div>
 
 
         <header>
@@ -70,19 +66,19 @@
                             </ul>
 
 
-                            
+
                             <ul class="nav navbar-nav navbar-right">
                                 <%--<li>
                                     <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
-                                </li> --%>                                
-                                  
+                                </li> --%>
+
                                 <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
                                 <li><a href="dev.aspx">Dev opties</a></li>
 
                                 <li class="navbar-form navbar-left" role="search">
                                     <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
                                     <button id="btnSearchNew" runat="server" onserverclick="btnMainSearch_Click1" class="btn btn-default">Submit</button>
-                                   
+
                                 </li>
 
 
@@ -143,6 +139,14 @@
             </div>
         </div>
 
+
+        <div class="navbar-inverse">
+            <div class="container">
+                <p class="text-primary">Footer (sitemap, contact, legal info, ...)</p>
+            </div>
+        </div>
+
+
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -151,6 +155,6 @@
         $('.dropdown-menu input, .dropdown-menu label').click(function (e) {
             e.stopPropagation();
         });
-</script>
+    </script>
 </body>
 </html>

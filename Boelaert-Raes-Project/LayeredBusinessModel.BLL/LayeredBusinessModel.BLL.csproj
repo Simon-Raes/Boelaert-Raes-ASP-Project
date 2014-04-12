@@ -49,6 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchService.cs" />
     <Compile Include="ShoppingCartService.cs" />
+    <Compile Include="UserRecommendations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LayeredBusinessModel.DAO\LayeredBusinessModel.DAO.csproj">

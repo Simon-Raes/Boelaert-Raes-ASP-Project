@@ -21,7 +21,15 @@ namespace LayeredBusinessModel.WebUI
             dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
             dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
             imgDvdCover.ImageUrl = imageUrl;
-            lblTitle.Text = title;
+            if(title.Length<=30)
+            {
+                lblTitle.Text = title;
+            }
+            else
+            {
+                lblTitle.Text = title.Substring(0, 28) + "...";
+            }
+            
             btnBuy.Text = "Buy € " + buy_price;
             btnRent.Text = "Rent € " + rent_price;
         }

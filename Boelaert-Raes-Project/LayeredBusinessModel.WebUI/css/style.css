@@ -306,6 +306,7 @@ text-transform: uppercase;
 font-size: 10px;
 line-height: 30px;
 height: 30px;
+
 }
 
 
@@ -337,6 +338,8 @@ height: 30px;
 .tumbnail img{
     height:78px;
 }
+
+
 
 .price-box {
     background: transparent;

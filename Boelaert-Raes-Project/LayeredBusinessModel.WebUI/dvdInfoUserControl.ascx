@@ -6,7 +6,7 @@
         </asp:HyperLink>
 
 
-        <h4><asp:HyperLink ID="dvdInfoLink2" runat="server"><asp:Label ID="lblTitle" runat="server" Text="Title"></asp:Label></asp:HyperLink></h4>
+        <h4><asp:HyperLink ID="dvdInfoLink2" runat="server"><asp:Label ID="lblTitle" runat="server" Text="Title" Font-Size="Medium"></asp:Label></asp:HyperLink></h4>
         <asp:Button ID="btnBuy" runat="server" Text="Buy" CssClass="price-box"/> 
         <asp:Button ID="btnRent" runat="server" Text="Rent" CssClass="price-box"/>
     </div>

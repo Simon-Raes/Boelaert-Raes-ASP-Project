@@ -365,6 +365,43 @@ height: 30px;
     height: 30px;
 }
 
+/*
+    
+  scrollview mediaobjecten gekoppeld aan dvd  
+    */
+
+.mediaList
+{
+    overflow-x:scroll;
+    overflow-y:hidden;
+    height:200px;
+    margin-bottom:5px;
+    white-space: nowrap;
+    position: relative;
+    
+}
+
+.scrollrow{
+    width: 500%;
+}
+
+.DocumentItem
+{
+    border:1px solid black;
+    padding:0;
+    height:200px;
+    width: auto;
+    max-width:300px;
+}
+
+.DocumentItem img {
+        height:186px;
+}
+
+.DocumentItem object {
+        height:186px;
+        width:auto;
+}
 
 
 

@@ -76,12 +76,21 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.PlaceHolder genreLinks;
         
         /// <summary>
-        /// lblID control.
+        /// lblPlot control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblID;
+        protected global::System.Web.UI.WebControls.Label lblPlot;
+        
+        /// <summary>
+        /// scrollrow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl scrollrow;
     }
 }

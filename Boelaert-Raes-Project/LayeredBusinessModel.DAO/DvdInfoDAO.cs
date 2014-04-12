@@ -317,7 +317,7 @@ namespace LayeredBusinessModel.DAO
             List<KeyValuePair<int, string>> media = new List<KeyValuePair<int, string>>();
 
             cnn = new SqlConnection(sDatabaseLocatie);
-            SqlCommand sql = new SqlCommand("Select * from Media where dvd_info_id = " + id, cnn);
+            SqlCommand sql = new SqlCommand("Select * from Media where dvd_info_id = " + id + " order by media_type_id DESC", cnn);
             sql.Parameters.Add(new SqlParameter("@id", id));
             try
             {

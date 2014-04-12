@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LayeredBusinessModel.WebUI
@@ -28,7 +29,6 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupDvdInfo(int id)
         {
-            lblID.Text = id.ToString();
             DvdInfoService dvdbll = new DvdInfoService();
             DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
 
@@ -57,7 +57,7 @@ namespace LayeredBusinessModel.WebUI
             actorLinks.Controls.Add(new LiteralControl("<br />"));
             lblDuration.Text = dvdInfo.duration + " min";
 
-            
+
             foreach (Genre g in dvdInfo.genres)
             {
                 HyperLink genre = new HyperLink();
@@ -71,8 +71,9 @@ namespace LayeredBusinessModel.WebUI
             }
             int j = genreLinks.Controls.Count;
             genreLinks.Controls.RemoveAt(j - 1);
-            genreLinks.Controls.Add(new LiteralControl("<br />"));
-            
+
+            lblPlot.Text = dvdInfo.descripion;
+
 
             foreach (KeyValuePair<int, String> k in dvdInfo.media)
             {
@@ -80,27 +81,47 @@ namespace LayeredBusinessModel.WebUI
                 {
                     imgDvdCoverFocus.ImageUrl = k.Value;
                 }
-                /*
-            else if (k.Key == 2)
-            {
-                if (imgDvdCover1.ImageUrl == "")
-                {
-                    imgDvdCover1.ImageUrl = k.Value;
-                }
-                else if (imgDvdCover2.ImageUrl == "")
-                {
-                    imgDvdCover2.ImageUrl = k.Value;
-                }
-                else if (imgDvdCover3.ImageUrl == "")
-                {
-                    imgDvdCover3.ImageUrl = k.Value;
-                }
-            } */
-            }
 
-          
+
+
+                else if (k.Key == 2)
+                {
+                    HtmlGenericControl div = new HtmlGenericControl("div");
+                    div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
+
+                    Image img = new Image();
+                    img.ImageUrl = k.Value;
+                    div.Controls.Add(img);
+
+                    scrollrow.Controls.Add(div);
+                }
+                else if (k.Key == 3)
+                {
+                    HtmlGenericControl div = new HtmlGenericControl("div");
+                    div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
+                    Literal youtube = new Literal();
+                    youtube.Text = GetYouTubeScript(k.Value);
+                    div.Controls.Add(youtube);
+                    scrollrow.Controls.Add(div);
+                }
+
+
+
+            }
         }
 
+        protected string GetYouTubeScript(string id)
+        {
+            string scr = @"<object height='186'> ";
+            scr = scr + @"<param name='movie' value='http://www.youtube.com/v/" + id + "'></param> ";
+            scr = scr + @"<param name='allowFullScreen' value='true'></param> ";
+            scr = scr + @"<param name='allowscriptaccess' value='always'></param> ";
+            scr = scr + @"<embed src='http://www.youtube.com/v/" + id + "' ";
+            scr = scr + @"type='application/x-shockwave-flash' allowscriptaccess='always' ";
+            scr = scr + @"allowfullscreen='true' width='auto' height='186px'> ";
+            scr = scr + @"</embed></object>";
+            return scr;
+        }
 
     }
 }

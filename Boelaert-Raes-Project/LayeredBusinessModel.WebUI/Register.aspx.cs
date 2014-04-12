@@ -9,19 +9,12 @@ using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Net.Mail;
 
-using LayeredBusinessModel.BLL;
-using System.Text;
-using System.Security.Cryptography;
-
 
 namespace LayeredBusinessModel.WebUI
 {
     public partial class Register : System.Web.UI.Page
     {
-        const string passphrase = "Password@123";  //todo: op centrale locatie opslaan
-
         CustomerService customerService;
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,21 +29,32 @@ namespace LayeredBusinessModel.WebUI
             {
                 Customer customer = new Customer
                 {
-                    name = txtName.Text,
-                    email = txtEmail.Text,
-                    login = txtLogin.Text,
-                    password = encryptPassword(txtPassword.Text)
+                    name = inputName.Value,
+                    email = inputEmail.Value,
+                    login = inputLogin.Value,
+                    password = PasswordCrypto.encryptPassword(inputPassword.Value)
                 };
                 customerService = new CustomerService();
                 customerService.addCustomer(customer);
 
-                sendRegisterMail(txtEmail.Text);
+                sendRegisterMail(inputEmail.Value);
 
                 //put user in session and redirect to index - todo: redirect to page telling user to click the confirmation link in the email
                 Session["user"] = customer;
                 Response.Redirect("~/Index.aspx");
             }
         }
+
+        //werkt (nog) niet
+        protected void btnReset_Click(object sender, EventArgs e)
+        {
+            inputName.Value = "";
+            inputEmail.Value = "";
+            inputLogin.Value = "";
+            inputPassword.Value = "";
+            inputPasswordAgain.Value = "";
+        }
+
 
         private void sendRegisterMail(String address)
         {
@@ -80,23 +84,23 @@ namespace LayeredBusinessModel.WebUI
         protected void valCustLogin_ServerValidate(object source, ServerValidateEventArgs args)
         {
             CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithLogin(txtLogin.Text);
+            Customer cust = customerService.getCustomerWithLogin(inputLogin.Value);
             if (cust == null)
             {
                 //login name still available
                 args.IsValid = true;
-            } 
+            }
             else
             {
                 //login name already taken
                 args.IsValid = false;
-            }            
+            }
         }
 
         protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
         {
             CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithEmail(txtEmail.Text);
+            Customer cust = customerService.getCustomerWithEmail(inputEmail.Value);
             if (cust == null)
             {
                 //email still available
@@ -108,36 +112,6 @@ namespace LayeredBusinessModel.WebUI
                 args.IsValid = false;
             }
         }
-
-
-        public string encryptPassword(string message)
-        {
-            byte[] results;
-            UTF8Encoding utf8 = new UTF8Encoding();            
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-
-            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase)); 
-          
-            TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
-            encryptionProvider.Key = encryptionKey;
-            encryptionProvider.Mode = CipherMode.ECB;
-            encryptionProvider.Padding = PaddingMode.PKCS7;
-
-            byte[] encrypt_data = utf8.GetBytes(message);
-
-            try
-            {
-                ICryptoTransform encryptor = encryptionProvider.CreateEncryptor();
-                results = encryptor.TransformFinalBlock(encrypt_data, 0, encrypt_data.Length);
-            }
-            finally
-            {
-                encryptionProvider.Clear();
-                md5.Clear();
-            }
-
-            //convert array back to a string
-            return Convert.ToBase64String(results);
-        }
+       
     }
 }

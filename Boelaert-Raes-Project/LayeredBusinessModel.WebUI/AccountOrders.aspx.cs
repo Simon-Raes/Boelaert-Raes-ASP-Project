@@ -10,79 +10,19 @@ using LayeredBusinessModel.Domain;
 
 namespace LayeredBusinessModel.WebUI
 {
-    public partial class Account : System.Web.UI.Page
+    public partial class AccountOrders : System.Web.UI.Page
     {
         private List<Order> customerOrders;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
+            Customer user = (Customer)Session["user"];
+            if (user != null)
             {
-                mvAccount.ActiveViewIndex = 0;
-
-                //todo: only update(create?) textfields when user accesses the settings page
-                Customer user = (Customer)Session["user"];
-                if (user != null)
-                {
-                    //settings page
-                    txtName.Text = user.name;
-                    txtEmail.Text = user.email;
-                    //textfield wil geen tekst tonen als ik dit instel via properties, op deze manier werkt het wel
-                    txtPassword.Attributes["type"] = "password";
-                    txtPasswordAgain.Attributes["type"] = "password";
-                    txtPassword.Text = user.password;
-                    txtPasswordAgain.Text = user.password;
-
-                    //orders page
-                    OrderService orderService = new OrderService();
-                    customerOrders = orderService.getOrdersForCustomer(user.customer_id);
-                    gvOrders.DataSource = customerOrders;
-                    gvOrders.DataBind();
-                }
-            }
-        }
-
-        protected void menuAccount_MenuItemClick(object sender, MenuEventArgs e)
-        {
-            int selection = Convert.ToInt16(menuAccount.SelectedValue);
-            mvAccount.SetActiveView(mvAccount.Views[selection]);
-        }
-
-        protected void btnUpdate_Click(object sender, EventArgs e)
-        {
-            //only update if validators were passed
-            if (Page.IsValid)
-            {
-                Customer user = (Customer)Session["user"];
-
-                //only update if user is currently logged in
-                if (user != null)
-                {
-                    //create customer object based on logged-in-user info and info from textfields
-                    Customer customer = new Customer
-                    {
-                        customer_id = user.customer_id,
-                        email = txtEmail.Text,
-                        login = user.login,
-                        name = txtName.Text,
-                        numberOfVisits = user.numberOfVisits,
-                        password = txtPassword.Text,
-
-                    };
-
-                    //update user's database data
-                    CustomerService customerService = new CustomerService();
-                    customerService.updateCustomer(customer);
-
-                    //also update his info in the session
-                    Session["user"] = customer;
-                }
-                else
-                {
-                    string script = "alert(\"You have been logged out due to inactivity. Please log in to change your details.\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                    //redirect to login
-                }
+                OrderService orderService = new OrderService();
+                customerOrders = orderService.getOrdersForCustomer(user.customer_id);
+                gvOrders.DataSource = customerOrders;
+                gvOrders.DataBind();
             }
         }
 
@@ -125,7 +65,7 @@ namespace LayeredBusinessModel.WebUI
                 Boolean allInStock = true;
 
                 //user has already paid, check status of copies in cart
-                if(selectedOrder.orderstatus_id>1)
+                if (selectedOrder.orderstatus_id > 1)
                 {
                     foreach (OrderLine orderLine in orderLines)
                     {
@@ -134,12 +74,12 @@ namespace LayeredBusinessModel.WebUI
                             allInStock = false;
                         }
                     }
-                    updateOrderStatusDetails(allInStock);                    
+                    updateOrderStatusDetails(allInStock);
                 }
                 else
                 {
                     //user hasn't paid yet, check status of copies in store: (todo)
-                } 
+                }
             }
         }
 
@@ -149,7 +89,7 @@ namespace LayeredBusinessModel.WebUI
             String orderID = lblOrderID.Text;
 
             //redirect to payment page, with query string to connect to the order
-            Response.Redirect("~/OrderPayment.aspx?order=" + orderID);            
+            Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
         }
 
         private void updateOrderStatusDetails(Boolean allInStock)
@@ -163,7 +103,7 @@ namespace LayeredBusinessModel.WebUI
             else
             {
                 lblOrderStatusDetails.Text = "";
-            } 
+            }
         }
     }
 }

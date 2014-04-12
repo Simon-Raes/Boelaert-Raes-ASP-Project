@@ -58,7 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="Account.aspx" />
+    <Content Include="AccountOverview.aspx" />
+    <Content Include="AccountOrders.aspx" />
+    <Content Include="AccountSettings.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Catalog.aspx" />
     <Content Include="css\bootstrap.css" />
@@ -109,12 +111,26 @@
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Account.aspx.cs">
-      <DependentUpon>Account.aspx</DependentUpon>
+    <Compile Include="AccountOverview.aspx.cs">
+      <DependentUpon>AccountOverview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Account.aspx.designer.cs">
-      <DependentUpon>Account.aspx</DependentUpon>
+    <Compile Include="AccountOverview.aspx.designer.cs">
+      <DependentUpon>AccountOverview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AccountOrders.aspx.cs">
+      <DependentUpon>AccountOrders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AccountOrders.aspx.designer.cs">
+      <DependentUpon>AccountOrders.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AccountSettings.aspx.cs">
+      <DependentUpon>AccountSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AccountSettings.aspx.designer.cs">
+      <DependentUpon>AccountSettings.aspx</DependentUpon>
     </Compile>
     <Compile Include="Cart.aspx.cs">
       <DependentUpon>Cart.aspx</DependentUpon>

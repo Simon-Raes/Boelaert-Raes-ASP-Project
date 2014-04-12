@@ -46,6 +46,7 @@
     <Compile Include="GenreService.cs" />
     <Compile Include="OrderLineService.cs" />
     <Compile Include="OrderService.cs" />
+    <Compile Include="PasswordCrypto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchService.cs" />
     <Compile Include="ShoppingCartService.cs" />

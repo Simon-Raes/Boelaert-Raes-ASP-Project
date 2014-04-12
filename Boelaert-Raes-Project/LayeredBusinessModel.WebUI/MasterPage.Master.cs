@@ -47,7 +47,7 @@ namespace LayeredBusinessModel.WebUI
                 //set buttons
                 Customer user = (Customer)Session["user"];
                 //btnLogin.Text = user.name;
-                liAccount.InnerHtml = "<a href='Account.aspx'>"+user.name+"</a>";
+                liAccount.InnerHtml = "<a href='AccountOverview.aspx'>"+user.name+"</a>";
                 //btnCart.Visible = true;
                 
                 ShoppingCartService shoppingCartService = new ShoppingCartService();

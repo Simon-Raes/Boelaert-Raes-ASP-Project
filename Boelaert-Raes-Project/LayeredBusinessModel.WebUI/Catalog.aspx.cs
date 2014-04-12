@@ -46,6 +46,7 @@ namespace LayeredBusinessModel.WebUI
             String genre = Request.QueryString["genre"];
             String cat = Request.QueryString["cat"];
             String type = Request.QueryString["type"];
+            String year = Request.QueryString["year"];
 
             if(type!=null)
             {
@@ -80,6 +81,11 @@ namespace LayeredBusinessModel.WebUI
                 dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, cat);
                 categoryService = new CategoryService();
                 labelText = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs";
+            }
+            else if (year != null)
+            {
+                dvdContent = dvdInfoService.searchDvdFromYear(year);
+                labelText = "Dvd's from " + year;
             }
             else
             {

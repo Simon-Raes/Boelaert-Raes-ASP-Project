@@ -283,6 +283,38 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+        public List<DvdInfo> searchDvdFromYear(String year)
+        {
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+
+            cnn = new SqlConnection(sDatabaseLocatie);
+            
+            SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where year = " + year, cnn);
+            command.Parameters.Add(new SqlParameter("@year", year));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+            return dvdlist;
+
+        }
+
+
         public List<DvdInfo> getMostPopularDvds(int amount)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

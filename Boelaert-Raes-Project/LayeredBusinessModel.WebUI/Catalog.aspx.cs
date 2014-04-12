@@ -61,6 +61,16 @@ namespace LayeredBusinessModel.WebUI
         }
 
 
+        
+
+        private void doSearch(String searchText)
+        {
+            lblHeader.Text = "Results for '" + searchText + "'";
+
+
+
+        }
+
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             dvdInfoService = new DvdInfoService();
@@ -90,14 +100,6 @@ namespace LayeredBusinessModel.WebUI
 
             }
             gvDvdInfo.DataBind();
-        }
-
-        private void doSearch(String searchText)
-        {
-            lblHeader.Text = "Results for '" + searchText + "'";
-
-
-
         }
 
 

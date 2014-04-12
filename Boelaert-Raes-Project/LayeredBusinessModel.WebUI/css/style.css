@@ -238,9 +238,18 @@ text-transform: uppercase;
 
 
 
-/*Pagina een lichtgrijze background color geven?*/
+/* Yes, ziet er goed uit met een grijze achtergrond */
 
-/*body { background: #DBDBDB; }*/
+body { background: #DBDBDB; }
+
+
+/* css bootstrap overschrijven */
+h2 {
+    margin-top:0;
+}
+
+
+
 
 
 

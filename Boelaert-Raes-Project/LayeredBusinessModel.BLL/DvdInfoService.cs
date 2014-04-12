@@ -22,7 +22,11 @@ namespace LayeredBusinessModel.BLL
         public DvdInfo getDvdInfoWithID(String id)
         {
             dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getDvdInfoWithId(id);
+            DvdInfo dvd  = dvdInfoDAO.getDvdInfoWithId(id);
+            GenreService g = new GenreService();
+            dvd.genres = g.getGenresForDvd(Convert.ToInt32(id));
+
+            return dvd;
         }
 
         public void updateDvdInfo(DvdInfo dvd)

@@ -23,5 +23,8 @@ namespace LayeredBusinessModel.Domain
 
 
         public List<KeyValuePair<int, string>> media { get; set; }
+        public String[] actors { get; set; }
+        public String duration { get; set; }
+        public List<Genre> genres { get; set; }
     }
 }

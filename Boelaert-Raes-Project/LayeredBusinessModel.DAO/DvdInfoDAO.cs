@@ -361,7 +361,11 @@ namespace LayeredBusinessModel.DAO
                 buy_price = float.Parse(reader["buy_price"].ToString()),
                 date_added = Convert.ToDateTime(reader["date_added"]),
                 amount_sold = Convert.ToInt32(reader["amount_sold"]),
-                media = getMedia(Convert.ToInt32(reader["dvd_info_id"]))
+                media = getMedia(Convert.ToInt32(reader["dvd_info_id"])),
+
+                actors = Convert.ToString(reader["actors"]).Split(','),
+                
+                duration = Convert.ToString(reader["duration"])
             };
             return dvd;
         }

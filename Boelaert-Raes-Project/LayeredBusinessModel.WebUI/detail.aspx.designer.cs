@@ -22,31 +22,58 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Image imgDvdCoverFocus;
         
         /// <summary>
-        /// imgDvdCover1 control.
+        /// lblTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgDvdCover1;
+        protected global::System.Web.UI.WebControls.Label lblTitle;
         
         /// <summary>
-        /// imgDvdCover2 control.
+        /// linkYear control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgDvdCover2;
+        protected global::System.Web.UI.WebControls.HyperLink linkYear;
         
         /// <summary>
-        /// imgDvdCover3 control.
+        /// linkDirector control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgDvdCover3;
+        protected global::System.Web.UI.WebControls.HyperLink linkDirector;
+        
+        /// <summary>
+        /// actorLinks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder actorLinks;
+        
+        /// <summary>
+        /// lblDuration control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDuration;
+        
+        /// <summary>
+        /// genreLinks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder genreLinks;
         
         /// <summary>
         /// lblID control.

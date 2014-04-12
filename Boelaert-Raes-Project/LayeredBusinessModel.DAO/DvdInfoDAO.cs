@@ -345,6 +345,37 @@ namespace LayeredBusinessModel.DAO
 
         }
 
+        public List<DvdInfo> searchDvdWithActor(String actor)
+        {
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where actors like '%" + actor + "%'", cnn);
+            command.Parameters.Add(new SqlParameter("@director", actor));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+            return dvdlist;
+
+        }
+
 
         public List<DvdInfo> getMostPopularDvds(int amount)
         {

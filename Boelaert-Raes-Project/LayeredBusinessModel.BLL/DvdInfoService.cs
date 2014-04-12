@@ -61,9 +61,14 @@ namespace LayeredBusinessModel.BLL
 
         public List<DvdInfo> searchDvdFromDirector(String director)
         {
-
             dvdInfoDAO = new DvdInfoDAO();
             return dvdInfoDAO.searchDvdFromDirector(director);
+        }
+
+        public List<DvdInfo> searchDvdWithActor(String actor)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.searchDvdWithActor(actor);
         }
 
 

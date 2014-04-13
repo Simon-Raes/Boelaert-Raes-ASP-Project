@@ -119,8 +119,7 @@ namespace LayeredBusinessModel.DAO
         {
             Boolean status = false;
             cnn = new SqlConnection(sDatabaseLocatie);
-
-
+            
             SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
             command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
             

@@ -32,7 +32,10 @@
                 <br />
                 <asp:Label ID="lblPay" runat="server" Text="Click here to pay for this order:"></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Go to payment page" />
                 <br />
-                <asp:GridView ID="gvOrderDetails" runat="server">
+                <asp:GridView ID="gvOrderDetails" runat="server" OnRowCommand="gvOrderDetails_RowCommand">
+                    <Columns>
+                        <asp:ButtonField CommandName="CancelOrderLine" Text="Cancel" />
+                    </Columns>
                 </asp:GridView>
             </asp:Panel>
             <br />

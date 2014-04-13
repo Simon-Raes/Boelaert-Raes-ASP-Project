@@ -105,5 +105,49 @@ namespace LayeredBusinessModel.WebUI
                 lblOrderStatusDetails.Text = "";
             }
         }
+
+        protected void gvOrderDetails_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName.Equals("CancelOrderLine"))
+            {
+                //get the orderline
+                int index = Convert.ToInt32(e.CommandArgument.ToString());
+                String orderLineID = gvOrderDetails.Rows[index].Cells[1].Text;
+                OrderLineService orderLineService = new OrderLineService();
+                OrderLine orderLine = orderLineService.getOrderLine(orderLineID);
+
+                if (orderLine.order_line_type_id == 1) //only allow cancelling of rent-lines (type 1)
+                {
+                    if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
+                    {
+                        if(orderLineService.removeOrderLine(orderLine))
+                        {
+                            //succesfully removed
+                            string script = "alert(\"The item has been removed from your order. (Refresh to view changes (temp))\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            //todo: update gridview (reload content, re-bind?)
+                        }
+                        else
+                        {
+                            //something went wrong
+                            string script = "alert(\"An error occured while trying to removing this item from your order.\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                        }
+                    }
+                    else
+                    {
+                        //can't remove this copy anymore - too late
+                        string script = "alert(\"This item will ship within 2 days and can no longer be cancelled!\");";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                    }
+                }
+                else
+                {
+                    //can't remove a BUY copy
+                    string script = "alert(\"Only rent-copies can be cancelled.\");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                }
+            }
+        }
     }
 }

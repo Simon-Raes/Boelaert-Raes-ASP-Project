@@ -14,6 +14,62 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderLineDAO : DAO
     {
+        public OrderLine getOrderLine(String orderLineId)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            OrderLine orderLine = null;
+            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
+            command.Parameters.Add(new SqlParameter("@orderline_id", orderLineId));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orderLine = createOrderLine(reader);
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return orderLine;
+        }
+
+        public Boolean removeOrderLine(OrderLine orderLine)
+        {
+            Boolean status = false;
+            cnn = new SqlConnection(sDatabaseLocatie);
+
+            SqlCommand command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
+            command.Parameters.Add(new SqlParameter("@orderline_id", orderLine.orderline_id));
+
+            try
+            {
+                cnn.Open();
+                command.ExecuteNonQuery();
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                status = false;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return status;
+        }
+
         public List<OrderLine> getOrderLinesForOrder(int order_id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

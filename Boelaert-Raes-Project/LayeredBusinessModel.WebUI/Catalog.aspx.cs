@@ -116,7 +116,13 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
                 dvdInfo.id = d.dvd_info_id;
-                dvdInfo.imageUrl = d.image;
+                foreach (KeyValuePair<int, String> k in d.media)
+                {
+                    if (k.Key == 1)
+                    {
+                        dvdInfo.imageUrl = k.Value;
+                    }
+                }
                 dvdInfo.title = d.name;
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;

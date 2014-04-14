@@ -98,7 +98,6 @@
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
-    <Content Include="usercontroltestpage.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -227,13 +226,6 @@
     </Compile>
     <Compile Include="tempMovie.aspx.designer.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontroltestpage.aspx.cs">
-      <DependentUpon>usercontroltestpage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontroltestpage.aspx.designer.cs">
-      <DependentUpon>usercontroltestpage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

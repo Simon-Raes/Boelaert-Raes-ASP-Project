@@ -134,7 +134,6 @@ namespace LayeredBusinessModel.DAO
             "year = @year, " +
             "barcode = @barcode, " +
             "author = @author, " +
-            "image = @image, " +
             "description = @description, " +
             "rent_price = @rent_price, " +
             "buy_price = @buy_price, " +
@@ -146,7 +145,6 @@ namespace LayeredBusinessModel.DAO
             command.Parameters.Add(new SqlParameter("@year", dvd.year));
             command.Parameters.Add(new SqlParameter("@barcode", dvd.barcode));
             command.Parameters.Add(new SqlParameter("@author", dvd.author));
-            command.Parameters.Add(new SqlParameter("@image", dvd.image));
             command.Parameters.Add(new SqlParameter("@description", dvd.descripion));
             command.Parameters.Add(new SqlParameter("@rent_price", dvd.rent_price));
             command.Parameters.Add(new SqlParameter("@buy_price", dvd.buy_price));
@@ -498,7 +496,6 @@ namespace LayeredBusinessModel.DAO
                 year = Convert.ToString(reader["year"]),
                 barcode = Convert.ToString(reader["barcode"]),
                 author = Convert.ToString(reader["author"]),
-                image = Convert.ToString(reader["image"]),
                 descripion = Convert.ToString(reader["description"]),
                 rent_price = float.Parse(reader["rent_price"].ToString()),
                 buy_price = float.Parse(reader["buy_price"].ToString()),

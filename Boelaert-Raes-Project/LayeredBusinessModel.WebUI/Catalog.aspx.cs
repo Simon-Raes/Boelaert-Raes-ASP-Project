@@ -127,9 +127,12 @@ namespace LayeredBusinessModel.WebUI
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 
-                catalogContent.Controls.Add(dvdInfo);
+                catalogContent.Controls.Add(dvdInfo);                
+            }
 
-                
+            if(dvdContent.Count<1)
+            {
+                lblStatus.Text = "Could not find any results matching your criteria.";
             }
         }
         

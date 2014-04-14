@@ -19,6 +19,12 @@ namespace LayeredBusinessModel.BLL
             return dvdInfoDAO.getAllDvdInfos();
         }
 
+        public List<DvdInfo> getAllDvdInfosWithBanner()
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.getAllDvdInfosWithBanner();
+        }
+
         public int addDvdInfo(DvdInfo dvdInfo)
         {
             dvdInfoDAO = new DvdInfoDAO();

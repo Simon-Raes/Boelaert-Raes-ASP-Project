@@ -31,9 +31,30 @@ namespace LayeredBusinessModel.WebUI
                     divRecommended.Visible = false;
                 }
 
+                setupSpotlight();
                 setupNewReleases();
                 setupMostPopular();
             }
+
+        }
+
+        private void setupSpotlight()
+        {
+            DvdInfoService dvdInfoService = new DvdInfoService();
+            List<DvdInfo> dvdsWithBanner = dvdInfoService.getAllDvdInfosWithBanner();
+
+            Random rnd = new Random();
+            DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
+
+            anchorSpotlight.HRef = "Detail.aspx?id=" + spotlightDvd.dvd_info_id;
+            foreach (KeyValuePair<int, String> k in spotlightDvd.media)
+            {
+                if(k.Key == 4)
+                {
+                    imgSpotlight.Src = k.Value;
+                }
+            }
+            
 
         }
 

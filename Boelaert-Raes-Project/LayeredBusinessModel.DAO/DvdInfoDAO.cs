@@ -92,6 +92,40 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+        /**Returns all DvdInfo's that have a banner image*/
+        public List<DvdInfo> getAllDvdInfosWithBanner()
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdInfo> dvdlist = new List<DvdInfo>();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo "+
+            "JOIN Media "+
+            "ON Media.dvd_info_id = DvdInfo.dvd_info_id "+
+            "WHERE Media.media_type_id = 4", cnn);
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdlist.Add(createDvdInfo(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdlist;
+        }
+
 
         public DvdInfo getDvdInfoWithId(String id)
         {

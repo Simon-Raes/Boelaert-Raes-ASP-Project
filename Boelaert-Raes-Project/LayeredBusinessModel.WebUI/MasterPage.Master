@@ -67,10 +67,7 @@
 
 
 
-                            <ul class="nav navbar-nav navbar-right">
-                                <%--<li>
-                                    <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" UseSubmitBehavior="false" />
-                                </li> --%>
+                            <ul class="nav navbar-nav navbar-right">                               
 
                                 <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
                                 <li><a href="dev.aspx">(Dev opties)</a></li>

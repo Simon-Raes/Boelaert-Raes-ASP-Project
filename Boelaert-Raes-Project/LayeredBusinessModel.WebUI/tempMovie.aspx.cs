@@ -195,26 +195,13 @@ namespace LayeredBusinessModel.WebUI
         {
             List<DvdCopy> availabeCopies = null;
 
-
             //get all available copies of this movie + type (buy/rent)
             DvdCopyService dvdCopyService = new DvdCopyService();
 
-            availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo("1"); //1 = hardcoded op shawshank 
-
-            //only allow purchase if at least one copy is available
-            //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
-            //if (availabeCopies.Count > 0)
-            //{
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32("1"));
-            //}
-            //else
-            //{
-            //    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-            //    //todo: show date when the dvd will be back in stock + option to reserve
-            //    string script = "alert(\"Item niet meer in stock!\");";
-            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            //}
+            availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo("1"); //1 = hardcoded op shawshank             
+            ShoppingCartService shoppingCartService = new ShoppingCartService();
+            shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32("1"));
+            
 
         }
 

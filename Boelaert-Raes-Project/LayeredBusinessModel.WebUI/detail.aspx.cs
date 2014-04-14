@@ -126,31 +126,86 @@ namespace LayeredBusinessModel.WebUI
             return scr;
         }
 
+        /**Adds the dvd to the user's shopping cart*/
         protected void btnBuy_Click(object sender, EventArgs e)
         {
-            List<DvdCopy> availabeCopies = null;
-
-
-            //get all available copies of this movie + type (buy/rent)
-            DvdCopyService dvdCopyService = new DvdCopyService();
-
-            availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo("1"); //1 = hardcoded op shawshank 
-
-            //only allow purchase if at least one copy is available
-            //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
-            //if (availabeCopies.Count > 0)
-            //{
-            ShoppingCartService shoppingCartService = new ShoppingCartService();
-            shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32("1"));
-            //}
-            //else
-            //{
-            //    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-            //    //todo: show date when the dvd will be back in stock + option to reserve
-            //    string script = "alert(\"Item niet meer in stock!\");";
-            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            //}
+            if (Request.QueryString["id"] != null)
+            {
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(Request.QueryString["id"]));
+            }
         }
 
+        protected void btnRent1_Click(object sender, EventArgs e)
+        {
+            rentMovie(1);
+        }
+
+        protected void btnRent3_Click(object sender, EventArgs e)
+        {
+            rentMovie(3);
+        }
+
+        protected void btnRent7_Click(object sender, EventArgs e)
+        {
+            rentMovie(7);
+        }
+
+        private void rentMovie(int days)
+        {
+            //only excecute if a user is logged in
+            if (Session["user"] != null)
+            {
+                Customer user = ((Customer)Session["user"]);
+
+                //add rent item to cart       
+                //HERE: hardcoded to start from today (todo: calendar control?)
+                DateTime startdate = DateTime.Today;
+                DateTime enddate = startdate.AddDays(days);
+
+                //HERE: hardcoded to shawshank redemption, must get dvdInfoID from generated page
+                DvdCopyService dvdCopyService = new DvdCopyService();
+                List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Request.QueryString["id"]);
+
+                //check the number of rent items in the user's cart
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                int numberOfCurrentlyRentedItems = 0;
+                foreach (ShoppingcartItem item in cartContent)
+                {
+                    if (item.typeName.Equals("Verhuur"))
+                    {
+                        numberOfCurrentlyRentedItems++;
+                    }
+                }
+
+                //check the number of items currently being rented by the user
+                OrderLineService orderLineService = new OrderLineService();
+                List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user.customer_id);
+                foreach (OrderLine orderLine in orderLines)
+                {
+                    numberOfCurrentlyRentedItems++;
+                }
+
+                //check if the user can still rent additional items
+                if (numberOfCurrentlyRentedItems < 5)
+                {
+                    shoppingCartService.addItemToCart(user.customer_id, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate);
+
+                }
+                else
+                {
+                    string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                }
+
+            }
+            else
+            {
+                string script = "alert(\"You have been logged out due to inactivity.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+
+            }
+        }
     }
 }

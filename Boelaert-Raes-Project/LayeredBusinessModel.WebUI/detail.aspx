@@ -20,7 +20,7 @@
                 <hr />
                 <div class="col-md-6">
                     <div class="row">
-                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" CssClass="price-box detail"/> 
+                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" CssClass="price-box detail" OnClick="btnBuy_Click"/> 
                     </div>
                     <div class="row">
                        <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="price-box detail"/>

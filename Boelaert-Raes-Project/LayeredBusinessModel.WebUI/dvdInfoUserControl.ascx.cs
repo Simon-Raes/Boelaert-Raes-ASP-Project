@@ -21,7 +21,7 @@ namespace LayeredBusinessModel.WebUI
             dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
             dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
             imgDvdCover.ImageUrl = imageUrl;
-            if(title.Length<=30)
+            if(title.Length<=40)
             {
                 lblTitle.Text = title;
             }

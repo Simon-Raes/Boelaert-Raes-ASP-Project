@@ -77,6 +77,7 @@
     <Content Include="dev.aspx" />
     <Content Include="dvdInfoUserControl.ascx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="ForgotPassword.aspx" />
     <Content Include="Global.asax" />
     <Content Include="images\h2-bg.gif" />
     <Content Include="images\icon_cart.gif" />
@@ -180,6 +181,13 @@
     </Compile>
     <Compile Include="dvdInfoUserControl.ascx.designer.cs">
       <DependentUpon>dvdInfoUserControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

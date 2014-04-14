@@ -22,8 +22,8 @@
             <div class="container">
                 <%--                <ul class="container-fluid">--%>
                 
-                    Welcome to the best online dvd shop in the world! DEZE BALK MOET SMALLER WORDEN
-                    (phone icon)+32477073716
+                    Welcome to the best online dvd shop in the world! 
+                    <span class="glyphicon glyphicon-phone-alt"></span> +32477073716
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language <b class="caret"></b></a>
@@ -36,8 +36,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Currency <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Euro</a></li>
-                            <li><a href="#">Dolla</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-euro"></span> Euro</a></li>
+                            <li><a href="#"><span class="glyphicon glyphicon-usd"></span> Dollar</a></li>
                         </ul>
                     </li>
                 </ul>

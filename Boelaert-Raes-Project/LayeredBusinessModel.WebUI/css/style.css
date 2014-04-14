@@ -249,7 +249,21 @@ h2 {
 }
 
 
+.navbar-inverse {
+    height:26px;
+}
 
+.container {
+    color: #999;
+    padding-top:3px;
+    
+}
+
+.navbar-inverse .container ul li a{
+    padding-top:0;
+    padding-bottom:0;
+    height:23px;
+}
 
 
 

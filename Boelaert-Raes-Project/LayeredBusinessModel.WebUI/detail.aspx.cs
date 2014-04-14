@@ -42,20 +42,36 @@ namespace LayeredBusinessModel.WebUI
             linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
 
 
-            foreach (String a in dvdInfo.actors)
+            if(!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
             {
-                HyperLink actor = new HyperLink();
-                actor.Text = a;
-                actor.NavigateUrl = "~/Catalog.aspx?actor=" + a;
-                actorLinks.Controls.Add(actor);
-                Label l = new Label();
-                l.Text = ", ";
-                actorLinks.Controls.Add(l);
+                foreach (String a in dvdInfo.actors)
+                {
+                    HyperLink actor = new HyperLink();
+                    actor.Text = a;
+                    actor.NavigateUrl = "~/Catalog.aspx?actor=" + a;
+                    actorLinks.Controls.Add(actor);
+                    Label l = new Label();
+                    l.Text = ", ";
+                    actorLinks.Controls.Add(l);
+                }
+                int i = actorLinks.Controls.Count;
+                actorLinks.Controls.RemoveAt(i - 1);
+                actorLinks.Controls.Add(new LiteralControl("<br />"));
             }
-            int i = actorLinks.Controls.Count;
-            actorLinks.Controls.RemoveAt(i - 1);
-            actorLinks.Controls.Add(new LiteralControl("<br />"));
-            lblDuration.Text = dvdInfo.duration + " min";
+            else
+            {
+                lblActors.Visible = false;
+            }
+            
+
+            if(!dvdInfo.duration.Equals(""))
+            {
+                lblDuration.Text = dvdInfo.duration + " min";
+            } else
+            {
+                spanRuntime.Visible = false;
+            }
+            
 
 
             foreach (Genre g in dvdInfo.genres)
@@ -70,7 +86,11 @@ namespace LayeredBusinessModel.WebUI
                 genreLinks.Controls.Add(l);
             }
             int j = genreLinks.Controls.Count;
-            genreLinks.Controls.RemoveAt(j - 1);
+            if(j>0)
+            {
+                genreLinks.Controls.RemoveAt(j - 1); 
+            }
+            
 
             lblPlot.Text = dvdInfo.descripion;
             btnBuy.Text = "Buy € " + dvdInfo.buy_price.ToString();

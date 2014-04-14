@@ -62,7 +62,7 @@
                             <ul class="nav navbar-nav">
                                 <li><a href="Index.aspx">Index</a></li>
                                 <li><a href="Catalog.aspx">Catalog</a></li>
-                                <li><a href="About.aspx">Abouts</a></li>
+                                <li><a href="About.aspx">About</a></li>
                             </ul>
 
 

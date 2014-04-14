@@ -49,6 +49,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.HyperLink linkDirector;
         
         /// <summary>
+        /// lblActors control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblActors;
+        
+        /// <summary>
         /// actorLinks control.
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder actorLinks;
+        
+        /// <summary>
+        /// spanRuntime control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spanRuntime;
         
         /// <summary>
         /// lblDuration control.

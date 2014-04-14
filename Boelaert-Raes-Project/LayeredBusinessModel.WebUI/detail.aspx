@@ -18,28 +18,33 @@
                     <hr />
                     Director:
                         <asp:HyperLink ID="linkDirector" runat="server"></asp:HyperLink><br />
-                    Actors:  
-                        <asp:PlaceHolder ID="actorLinks" runat="server"></asp:PlaceHolder>
-                    <span class="glyphicon glyphicon-time"></span>
-                    <asp:Label ID="lblDuration" runat="server"></asp:Label>
-                    |
-                        <asp:PlaceHolder ID="genreLinks" runat="server"></asp:PlaceHolder>
+                    <asp:Label ID="lblActors" runat="server" Text="Actors: "></asp:Label>
+                    <asp:PlaceHolder ID="actorLinks" runat="server"></asp:PlaceHolder>
+
+                    <span id="spanRuntime" runat="server">
+                        <span class="glyphicon glyphicon-time"></span>
+                        <asp:Label ID="lblDuration" runat="server"></asp:Label>
+                        |
+                    </span>
+
+                    <asp:PlaceHolder ID="genreLinks" runat="server"></asp:PlaceHolder>
                     <hr />
 
                     <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                     <hr />
                     <div class="row">
-                        <div class="col-md-3"> 
-                            <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-danger form-control"   OnClick="btnBuy_Click" />
+                        <div class="col-md-3">
+                            <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnBuy_Click" />
                         </div>
                         <div class="col-md-3">
-                            <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-danger form-control"  OnClick="btnRent1_Click" />
+                            <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent1_Click" />
                         </div>
                         <div class="col-md-3">
                             <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent3_Click" />
                         </div>
                         <div class="col-md-3">
-                            <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-danger form-control"  OnClick="btnRent7_Click" /> <!-- CssClass="price-box detail" -->
+                            <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent7_Click" />
+                            <!-- CssClass="price-box detail" -->
                         </div>
                     </div>
                     <%--                    </div>--%>

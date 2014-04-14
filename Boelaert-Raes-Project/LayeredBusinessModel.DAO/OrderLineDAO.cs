@@ -137,6 +137,44 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
+        public List<OrderLine> getActiveRentOrderLinesForCustomer(int customer_id)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<OrderLine> orderList = new List<OrderLine>();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine "+                
+                "WHERE customer_id = @customer_id AND "+
+                "order_line_type_id = 1 AND "+
+                "enddate > getdate()", cnn);
+            command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orderList.Add(createOrderLine(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return orderList;
+        }
+
+        
+
+
         /**Gets all rent copies that will be back in stock in the next 2 weeks*/
         public List<OrderLine> getOrderLinesForReservation(String order_id)
         {

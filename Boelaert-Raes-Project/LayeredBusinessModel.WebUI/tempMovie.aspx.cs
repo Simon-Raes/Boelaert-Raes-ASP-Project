@@ -125,37 +125,45 @@ namespace LayeredBusinessModel.WebUI
                     dvdCopyService = new DvdCopyService();
                     List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo("1");
 
-                    //check the number of rent items in the user's cart (a user can only rent 5 items at one time)
-                    //todo: also needs to check currently rented items from orderlines (not only from cart)
+                    //check the number of rent items in the user's cart
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
                     List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
-                    int rentItemsInCart = 0;
+                    int numberOfCurrentlyRentedItems = 0;
                     foreach (ShoppingcartItem item in cartContent)
                     {
                         if (item.typeName.Equals("Verhuur"))
                         {
-                            rentItemsInCart++;
+                            numberOfCurrentlyRentedItems++;
                         }
                     }
 
-                    if (rentItemsInCart < 5)
+                    //check the number of items currently being rented by the user
+                    OrderLineService orderLineService = new OrderLineService();
+                    List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user.customer_id);
+                    foreach(OrderLine orderLine in orderLines)
                     {
-                        //only allow rent purchase if a copy is available
-                        if (availabeCopies.Count > 0)
-                        {
+                        numberOfCurrentlyRentedItems++;
+                    }
+
+                    //check if the user can still rent additional items
+                    if (numberOfCurrentlyRentedItems < 5)
+                    {
+                        ////only allow rent purchase if a copy is available
+                        //if (availabeCopies.Count > 0)
+                        //{
                             shoppingCartService.addItemToCart(user.customer_id, 1, startdate, enddate); //1 = hardcode to shawshank redemption for now
-                        }
-                        else
-                        {
-                            //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals greyed out knop, "out of stock" tekst...)
-                            //todo: show date when the dvd will be back in stock + option to reserve
-                            string script = "alert(\"Item niet meer in stock! (todo: overzicht van wanneer er terug een copy beschikbaar is)\");";
-                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals greyed out knop, "out of stock" tekst...)
+                        //    //todo: show date when the dvd will be back in stock + option to reserve
+                        //    string script = "alert(\"Item niet meer in stock! (todo: overzicht van wanneer er terug een copy beschikbaar is)\");";
+                        //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                        //}
                     }
                     else
                     {
-                        string script = "alert(\"Uw winkelwagen bevat reeds het maximum aantal verhuur dvd's (5).\");";
+                        string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
                         ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
                 }
@@ -195,18 +203,18 @@ namespace LayeredBusinessModel.WebUI
 
             //only allow purchase if at least one copy is available
             //a user can still add 100 copies to his cart as long as 1 is in stock, not sure if there's a better solution for this
-            if (availabeCopies.Count > 0)
-            {
+            //if (availabeCopies.Count > 0)
+            //{
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32("1"));
-            }
-            else
-            {
-                //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
-                //todo: show date when the dvd will be back in stock + option to reserve
-                string script = "alert(\"Item niet meer in stock!\");";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            }
+            //}
+            //else
+            //{
+            //    //tijdelijke messagebox in afwachting van een cleanere oplossing (zoals verbergen van buy/rent knop, greyed out knop, "out of stock" bericht...)
+            //    //todo: show date when the dvd will be back in stock + option to reserve
+            //    string script = "alert(\"Item niet meer in stock!\");";
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            //}
 
         }
 

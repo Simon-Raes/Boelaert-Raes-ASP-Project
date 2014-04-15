@@ -136,7 +136,7 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupRelatedDvds(int id)
         {
-            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id);
+            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id,4);
             if (list.Count == 0)
             {
                 pnlRelatedDvds.Visible = false;

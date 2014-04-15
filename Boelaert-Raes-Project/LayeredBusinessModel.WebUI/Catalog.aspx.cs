@@ -101,8 +101,8 @@ namespace LayeredBusinessModel.WebUI
             }
             else if (related != null)
             {
-                dvdContent = dvdInfoService.getRelatedDvds(Convert.ToInt32(related));
-                labelText = "Related dvds for" + dvdInfoService.getDvdInfoWithID(related).name;
+                dvdContent = dvdInfoService.getRelatedDvds(Convert.ToInt32(related),16);
+                labelText = "Related dvds for " + dvdInfoService.getDvdInfoWithID(related).name;
 
             }
             else

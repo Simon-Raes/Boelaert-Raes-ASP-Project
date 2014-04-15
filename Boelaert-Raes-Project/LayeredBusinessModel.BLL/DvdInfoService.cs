@@ -95,5 +95,17 @@ namespace LayeredBusinessModel.BLL
             dvdInfoDAO = new DvdInfoDAO();
             return dvdInfoDAO.getMostPopularDvds(amount);
         }
+
+        public List<DvdInfo> getRelatedDvds(int id)
+        {
+            List<DvdInfo> relatedDvds = new List<DvdInfo>();
+
+            foreach (int i in new DvdGenreDAO().findRelatedDvdsBasedOnGenre(id))
+            {
+                relatedDvds.Add(new DvdInfoDAO().getDvdInfoWithId(i.ToString()));
+            }
+
+            return relatedDvds;
+        }
     }
 }

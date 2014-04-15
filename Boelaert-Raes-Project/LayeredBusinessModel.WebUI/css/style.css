@@ -332,12 +332,12 @@ height: 30px;
 
 }
 
-
-
-
+.row {
+    margin:0;
+}
 
 .col-md-3 {
-    padding-right: 0;
+    padding: 0;
     margin-bottom:15px;
 }
 
@@ -433,6 +433,8 @@ height: 30px;
     white-space: nowrap;
 
 }
+
+
 
 
 

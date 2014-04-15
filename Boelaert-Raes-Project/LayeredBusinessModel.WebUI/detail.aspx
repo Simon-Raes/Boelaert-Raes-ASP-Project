@@ -61,6 +61,21 @@
                     </div>
                 </div>
             </div>
+
+            
+
         </div>
     </div>
+
+    <div class="panel panel-default" runat="server" id="pnlRelatedDvds">
+        <div class="panel-body">
+            <asp:Label ID="Label3" runat="server" Text="Related Dvd's" Font-Size="20"></asp:Label>
+            <asp:HyperLink ID="linkRelated" runat="server" CssClass="pull-right btn btn-primary">See more</asp:HyperLink>
+            <br /><br />
+            <div class="row" id="relatedDvds" runat="server">
+                <!-- DVD cards inserted here-->
+            </div>
+        </div>
+    </div>
+
 </asp:Content>

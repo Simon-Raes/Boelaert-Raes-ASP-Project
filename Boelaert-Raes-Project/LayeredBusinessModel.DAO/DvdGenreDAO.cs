@@ -36,5 +36,36 @@ namespace LayeredBusinessModel.DAO
                 cnn.Close();
             }
         }
+
+        public List<int> findRelatedDvdsBasedOnGenre(int dvdId)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<int> dvdIds = new List<int>();
+
+            SqlCommand sql = new SqlCommand("select top(4) dvd_info_id from dvdGenre where dvd_info_id != "+ dvdId + " and genre_id in (select genre_id from dvdgenre where dvd_info_id = " + dvdId + ") group by dvd_info_id having COUNT(dvd_info_id) > 1  ", cnn);
+
+            try
+            {
+                cnn.Open();
+
+                SqlDataReader reader = sql.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                }
+
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdIds;
+        }
     }
 }

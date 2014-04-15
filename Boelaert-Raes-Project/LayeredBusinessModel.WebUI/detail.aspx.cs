@@ -22,6 +22,7 @@ namespace LayeredBusinessModel.WebUI
                     if (int.TryParse(Request.QueryString["id"], out id))
                     {
                         setupDvdInfo(id);
+                        setupRelatedDvds(id);
                     }
                 }
             }
@@ -131,6 +132,37 @@ namespace LayeredBusinessModel.WebUI
 
 
             }
+        }
+
+        private void setupRelatedDvds(int id)
+        {
+            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id);
+            if (list.Count == 0)
+            {
+                pnlRelatedDvds.Visible = false;
+            }
+            else
+            {
+                foreach (DvdInfo d in list)
+                {
+                    dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                    dvdInfo.id = d.dvd_info_id;
+                    foreach (KeyValuePair<int, String> k in d.media)
+                    {
+                        if (k.Key == 1)
+                        {
+                            dvdInfo.imageUrl = k.Value;
+                        }
+                    }
+                    dvdInfo.title = d.name;
+                    dvdInfo.buy_price = d.buy_price;
+                    dvdInfo.rent_price = d.rent_price;
+
+                    relatedDvds.Controls.Add(dvdInfo);
+                }
+            }
+            
+
         }
 
         protected string GetYouTubeScript(string id)

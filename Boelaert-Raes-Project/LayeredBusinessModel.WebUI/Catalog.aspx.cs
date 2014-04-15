@@ -48,6 +48,7 @@ namespace LayeredBusinessModel.WebUI
             String year = Request.QueryString["year"];
             String director = Request.QueryString["director"];
             String actor = Request.QueryString["actor"];
+            String related = Request.QueryString["related"];
 
             if(type!=null)
             {
@@ -97,6 +98,12 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdContent = dvdInfoService.searchDvdWithActor(actor);
                 labelText = "Dvd's with " + actor;
+            }
+            else if (related != null)
+            {
+                dvdContent = dvdInfoService.getRelatedDvds(Convert.ToInt32(related));
+                labelText = "Related dvds for" + dvdInfoService.getDvdInfoWithID(related).name;
+
             }
             else
             {

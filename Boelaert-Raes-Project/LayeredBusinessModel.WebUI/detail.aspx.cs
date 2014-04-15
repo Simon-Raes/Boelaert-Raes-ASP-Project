@@ -143,6 +143,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
+                linkRelated.NavigateUrl = "~/Catalog.aspx?related=" + id;
                 foreach (DvdInfo d in list)
                 {
                     dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");

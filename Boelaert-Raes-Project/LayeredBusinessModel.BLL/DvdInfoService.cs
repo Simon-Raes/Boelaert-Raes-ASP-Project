@@ -107,5 +107,11 @@ namespace LayeredBusinessModel.BLL
 
             return relatedDvds;
         }
+
+        public List<int> getRecommendations(int[] values, int amount)
+        {
+            dvdInfoDAO = new DvdInfoDAO();
+            return dvdInfoDAO.getRecommendations(values, amount);
+        }
     }
 }

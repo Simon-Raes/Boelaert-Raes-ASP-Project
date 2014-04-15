@@ -42,6 +42,7 @@ namespace LayeredBusinessModel.WebUI
             DvdInfoService dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdsWithBanner = dvdInfoService.getAllDvdInfosWithBanner();
 
+            //selects a random dvd with a banner image to display as spotlight, could be set using an admin module
             Random rnd = new Random();
             DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
 

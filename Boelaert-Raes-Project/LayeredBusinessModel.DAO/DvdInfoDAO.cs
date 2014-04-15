@@ -487,6 +487,54 @@ namespace LayeredBusinessModel.DAO
             return dvdlist;
         }
 
+        public List<int> getRecommendations(int[] genres, int amount)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<int> dvdIds = new List<int>();
+
+            SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where genre_id in (" + genres[0] +","+ genres[1] +","+ genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+
+            sql.Parameters.Add(new SqlParameter("@amount",amount));
+
+            //create a string out of the received genres
+            //String values = "";
+            //for (int i = 1; i <= genres.Length; i++)
+            //{
+            //    values += genres[i - 1];
+            //    if (i < genres.Length)
+            //    {
+            //        values += ",";
+            //    }
+            //}
+            
+            //sql.Parameters.Add(new SqlParameter("@values", values));
+
+            try
+            {
+                cnn.Open();
+
+                SqlDataReader reader = sql.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                }
+
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return dvdIds;
+        }
+
+
+
         private List<KeyValuePair<int, String>> getMedia(int id)
         {
             List<KeyValuePair<int, string>> media = new List<KeyValuePair<int, string>>();

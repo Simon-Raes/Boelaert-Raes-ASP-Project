@@ -35,7 +35,6 @@ namespace LayeredBusinessModel.WebUI
                 setupNewReleases();
                 setupMostPopular();
             }
-
         }
 
         private void setupSpotlight()
@@ -53,65 +52,31 @@ namespace LayeredBusinessModel.WebUI
                 {
                     imgSpotlight.Src = k.Value;
                 }
-            }
-            
-
+            }  
         }
 
         private void setupRecommendations()
         {
-            List<DvdInfo> dvdList = UserRecommendations.getRecommendations(user.customer_id, 4); 
-            
-            //add dvd cards to page
-            foreach (DvdInfo d in dvdList)
-            {
-                dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
-                dvdInfo.id = d.dvd_info_id;
-
-                foreach (KeyValuePair<int, String> k in d.media)
-                {
-                    if (k.Key == 1)
-                    {
-                        dvdInfo.imageUrl = k.Value;
-                    }
-                }
-                
-                dvdInfo.title = d.name;
-                dvdInfo.buy_price = d.buy_price;
-                dvdInfo.rent_price = d.rent_price;
-
-                recommened.Controls.Add(dvdInfo);
-            }
+            List<DvdInfo> dvdList = UserRecommendations.getRecommendations(user.customer_id, 4);
+            addTilesToRow(dvdList, recommened);            
         }
 
         private void setupNewReleases()
         {
             List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);
-
-            foreach (DvdInfo d in dvdList)
-            {
-                dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
-                dvdInfo.id = d.dvd_info_id;
-                foreach (KeyValuePair<int, String> k in d.media)
-                {
-                    if (k.Key == 1)
-                    {
-                        dvdInfo.imageUrl = k.Value;
-                    }
-                }
-                dvdInfo.title = d.name;
-                dvdInfo.buy_price = d.buy_price;
-                dvdInfo.rent_price = d.rent_price;
-
-                newReleases.Controls.Add(dvdInfo);
-            }
+            addTilesToRow(dvdList, newReleases);            
         }
 
         private void setupMostPopular()
         {
             List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(4);
+            addTilesToRow(dvdList, mostPopular);            
+        }
 
-            foreach (DvdInfo d in dvdList)
+
+        private void addTilesToRow(List<DvdInfo> dvds, HtmlGenericControl row)
+        {
+            foreach (DvdInfo d in dvds)
             {
                 dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
                 dvdInfo.id = d.dvd_info_id;
@@ -126,11 +91,8 @@ namespace LayeredBusinessModel.WebUI
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 
-                mostPopular.Controls.Add(dvdInfo);
+                row.Controls.Add(dvdInfo);
             }
         }
-
-
-
     }
 }

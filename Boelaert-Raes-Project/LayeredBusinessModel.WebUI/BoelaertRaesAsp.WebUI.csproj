@@ -252,13 +252,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayeredBusinessModel.BLL\LayeredBusinessModel.BLL.csproj">
+    <ProjectReference Include="..\LayeredBusinessModel.BLL\BoelaertRaesAsp.BLL.csproj">
       <Project>{f288d196-3fdf-4571-a7cc-9300d59ccd77}</Project>
-      <Name>LayeredBusinessModel.BLL</Name>
+      <Name>BoelaertRaesAsp.BLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayeredBusinessModel.Domain\LayeredBusinessModel.Domain.csproj">
+    <ProjectReference Include="..\LayeredBusinessModel.Domain\BoelaertRaesAsp.Domain.csproj">
       <Project>{6ddaddc1-91ee-44c4-990c-c7f91292df88}</Project>
-      <Name>LayeredBusinessModel.Domain</Name>
+      <Name>BoelaertRaesAsp.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

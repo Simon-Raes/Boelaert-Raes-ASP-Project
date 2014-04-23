@@ -5,10 +5,16 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="panel panel-default">
         <div class="panel-body">
-            About: 
+            Deze website werd ontwikkeld door 
 
             Serafijn Boelaert 
-            Simon Raes
-        </div>
+            en Simon Raes in opdracht van dhr. Dewaele.
+            <br />
+            <br />
+            ASP.Net<br />
+            SQL server 2008<br />
+            Combell?<br />
+            <br />
+            2014</div>
     </div>
 </asp:Content>

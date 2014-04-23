@@ -53,9 +53,9 @@
     <Compile Include="ShoppingCartDAO.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayeredBusinessModel.Domain\LayeredBusinessModel.Domain.csproj">
+    <ProjectReference Include="..\LayeredBusinessModel.Domain\BoelaertRaesAsp.Domain.csproj">
       <Project>{6ddaddc1-91ee-44c4-990c-c7f91292df88}</Project>
-      <Name>LayeredBusinessModel.Domain</Name>
+      <Name>BoelaertRaesAsp.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class OrderHelper
     {
@@ -71,7 +71,7 @@ namespace LayeredBusinessModel.BLL.Model
             }
         }
 
-        public double getOrderCost(String orderID)
+        public String getOrderCost(String orderID)
         {
             double totalCost = 0;
 

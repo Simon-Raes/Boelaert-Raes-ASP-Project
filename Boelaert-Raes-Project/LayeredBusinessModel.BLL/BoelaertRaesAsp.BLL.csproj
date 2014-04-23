@@ -39,20 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\CategoryService.cs" />
-    <Compile Include="DB\CustomerService.cs" />
-    <Compile Include="DB\DvdCopyService.cs" />
-    <Compile Include="DB\DvdGenreService.cs" />
-    <Compile Include="DB\DvdInfoService.cs" />
-    <Compile Include="DB\GenreService.cs" />
-    <Compile Include="DB\OrderLineService.cs" />
-    <Compile Include="DB\OrderService.cs" />
-    <Compile Include="DB\OrderHelper.cs" />
-    <Compile Include="DB\PasswordCrypto.cs" />
+    <Compile Include="Database\CategoryService.cs" />
+    <Compile Include="Database\CustomerService.cs" />
+    <Compile Include="Database\DvdCopyService.cs" />
+    <Compile Include="Database\DvdGenreService.cs" />
+    <Compile Include="Database\DvdInfoService.cs" />
+    <Compile Include="Database\GenreService.cs" />
+    <Compile Include="Database\OrderLineService.cs" />
+    <Compile Include="Database\OrderService.cs" />
+    <Compile Include="Model\OrderHelper.cs" />
+    <Compile Include="Model\PasswordCrypto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DB\SearchService.cs" />
-    <Compile Include="DB\ShoppingCartService.cs" />
-    <Compile Include="DB\UserRecommendations.cs" />
+    <Compile Include="Database\SearchService.cs" />
+    <Compile Include="Database\ShoppingCartService.cs" />
+    <Compile Include="Model\UserRecommendations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LayeredBusinessModel.DAO\BoelaertRaesAsp.DAO.csproj">
@@ -64,9 +64,7 @@
       <Name>BoelaertRaesAsp.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -49,6 +49,7 @@
     <Compile Include="Database\OrderService.cs" />
     <Compile Include="Model\OrderHelper.cs" />
     <Compile Include="Model\PasswordCrypto.cs" />
+    <Compile Include="Model\RentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database\SearchService.cs" />
     <Compile Include="Database\ShoppingCartService.cs" />

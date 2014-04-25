@@ -1,4 +1,5 @@
 ﻿using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,14 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            DvdInfoService ds = new DvdInfoService();
+            DvdInfo i = ds.getDvdInfoWithID("" +1);
+
+            RentService rs = new RentService();
+            rs.getAllOrdersForDVD(i, DateTime.Now);
+
+
             if (!IsPostBack)
             {
                 user = (Customer)Session["user"];

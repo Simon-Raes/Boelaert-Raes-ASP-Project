@@ -355,5 +355,38 @@ namespace LayeredBusinessModel.DAO
             
             return order;
         }
+
+        public List<OrderLine> getAllOrderlinesForDvdFromStartdate(DvdInfo dvd, DateTime startdate)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<OrderLine> orderList = new List<OrderLine>();
+
+            SqlCommand command = new SqlCommand("select * from OrderLine where dvd_info_id = 1 and order_line_type_id = @dvd_info_id and (	(startdate < @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >  @startdate and startdate < DATEADD(dd,14,getdate()))	) order by dvd_copy_id, startdate, enddate", cnn);
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+            command.Parameters.Add(new SqlParameter("@startdate", startdate));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orderList.Add(createOrderLine(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return orderList;
+        }
     }
 }

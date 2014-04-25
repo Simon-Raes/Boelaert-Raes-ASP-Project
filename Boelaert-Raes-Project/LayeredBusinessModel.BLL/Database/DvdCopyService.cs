@@ -37,6 +37,13 @@ namespace LayeredBusinessModel.BLL
             return dvdCopyDAO.getAllInStockBuyCopiesForDvdInfo(info_id);
         }
 
+        /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/
+        public List<DvdCopy> getAllFullyAvailableCopies(DvdInfo dvd, DateTime startdate)
+        {
+            DvdCopyDAO dvdCopyDAO = new DvdCopyDAO();
+            return dvdCopyDAO.getAllFullyAvailableCopies(dvd, startdate);
+        }
+
         public void updateCopy(DvdCopy copy)
         {
             dvdCopyDAO = new DvdCopyDAO();

@@ -8,10 +8,15 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
+using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.BLL.Model;
+
 namespace LayeredBusinessModel.WebUI
 {
     public partial class detail : System.Web.UI.Page
     {
+        private DvdInfo thisDVD;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -21,8 +26,11 @@ namespace LayeredBusinessModel.WebUI
                     int id;
                     if (int.TryParse(Request.QueryString["id"], out id))
                     {
+                        DvdInfoService dvdbll = new DvdInfoService();
+                        thisDVD = dvdbll.getDvdInfoWithID(id.ToString());
                         setupDvdInfo(id);
                         setupRelatedDvds(id);
+
                     }
                 }
             }
@@ -30,8 +38,8 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupDvdInfo(int id)
         {
-            DvdInfoService dvdbll = new DvdInfoService();
-            DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
+            
+            DvdInfo dvdInfo = thisDVD;
 
 
             lblTitle.Text = dvdInfo.name + " ";
@@ -258,6 +266,23 @@ namespace LayeredBusinessModel.WebUI
                 string script = "alert(\"You have been logged out due to inactivity.\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
 
+            }
+        }
+
+        protected void calRent_DayRender(object sender, DayRenderEventArgs e)
+        {
+            RentService rentService = new RentService();
+            List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+
+            //movie can be reserved between today and 14 days from now   
+            if (dates.Contains(e.Day.Date))
+            {
+                e.Day.IsSelectable = false;
+                e.Cell.BackColor = System.Drawing.Color.LightGray;
+            }
+            else
+            {
+                e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
     }

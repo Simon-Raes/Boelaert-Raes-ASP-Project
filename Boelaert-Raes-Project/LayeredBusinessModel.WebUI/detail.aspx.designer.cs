@@ -139,6 +139,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Button btnRent7;
         
         /// <summary>
+        /// calRent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Calendar calRent;
+        
+        /// <summary>
         /// scrollrow control.
         /// </summary>
         /// <remarks>

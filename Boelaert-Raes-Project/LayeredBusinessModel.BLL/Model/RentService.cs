@@ -63,5 +63,29 @@ namespace LayeredBusinessModel.BLL.Model
 
             return result;
         }
+
+
+        public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startdate)
+        {
+            Dictionary<int, List<DateTime>> result = getAllOrdersForDVD(dvd, startdate);
+            List<DateTime> dates = new List<DateTime>();
+
+            foreach(List<DateTime> list in result.Values)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if(!dates.Contains(list[i]))
+                    {
+                        dates.Add(list[i]);
+                    }
+                }
+            }
+
+
+            return dates;
+
+        }
+
+
     }
 }

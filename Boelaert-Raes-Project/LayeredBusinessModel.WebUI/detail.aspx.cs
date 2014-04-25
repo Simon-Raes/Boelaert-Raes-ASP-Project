@@ -15,11 +15,14 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class detail : System.Web.UI.Page
     {
+        private List<DateTime> dates;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                
+
                 if (Request.QueryString["id"] != null)
                 {
                     int id;
@@ -273,13 +276,16 @@ namespace LayeredBusinessModel.WebUI
             //does a lot of database calls for every day in the calendar (30+ times)
             if (Request.QueryString["id"] != null)
             {
+                //only get dates once per calendar build-up
+                if(dates == null)
+                {
+                    RentService rentService = new RentService();
 
-                RentService rentService = new RentService();
+                    DvdInfoService dvdbll = new DvdInfoService();
+                    DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
 
-                DvdInfoService dvdbll = new DvdInfoService();
-                DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
-
-                List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+                    dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+                }                
 
                 //movie can be reserved between today and 14 days from now   
                 if (!dates.Contains(e.Day.Date))

@@ -52,6 +52,11 @@
 
 
             </div>
+
+
+            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender"></asp:Calendar>
+
+
             <div class="row">
                 <div class="col-lg-12">
                     <h4>Trailers and Pictures</h4>

@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.BLL.Model
                 {                    
                     for (int i = 0; i < 14; i++)
                     {
-                        DateTime tempDate = DateTime.Now.AddDays(i);
+                        DateTime tempDate = DateTime.Now.Date.AddDays(i);
                         if(tempDate >= order.startdate && tempDate <= order.enddate)
                         {
                             if(!beschikbaarheden[order.dvd_copy_id].Contains(tempDate)) {
@@ -51,10 +51,13 @@ namespace LayeredBusinessModel.BLL.Model
 
                 for (int j = 0; j < 14; j++)
                 {
-                    DateTime d = DateTime.Now.AddDays(j);
+                    DateTime d = DateTime.Now.Date.AddDays(j);
 
                     if (!bezet.Contains(d))
                     {
+
+                        
+
                         vrij.Add(d);
                     }
                 }

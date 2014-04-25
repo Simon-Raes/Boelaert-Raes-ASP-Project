@@ -275,7 +275,7 @@ namespace LayeredBusinessModel.WebUI
             List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
 
             //movie can be reserved between today and 14 days from now   
-            if (dates.Contains(e.Day.Date))
+            if (!dates.Contains(e.Day.Date))
             {
                 e.Day.IsSelectable = false;
                 e.Cell.BackColor = System.Drawing.Color.LightGray;

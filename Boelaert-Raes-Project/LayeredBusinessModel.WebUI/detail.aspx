@@ -36,27 +36,34 @@
                         <div class="col-md-3">
                             <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnBuy_Click" />
                         </div>
-                        <div class="col-md-3">
-                            <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent1_Click" />
-                        </div>
-                        <div class="col-md-3">
-                            <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent3_Click" />
-                        </div>
-                        <div class="col-md-3">
-                            <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent7_Click" />
-                            <!-- CssClass="price-box detail" -->
-                        </div>
+
                     </div>
-                    <%--                    </div>--%>
                 </div>
 
 
             </div>
 
-
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-3">
             <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged"></asp:Calendar>
+            </div>
+            <div class="col-md-3">
+                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent1_Click" />
+            </div>
+            <div class="col-md-3">
+                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent3_Click" />
+            </div>
+            <div class="col-md-3">
+                <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent7_Click" />
+            </div>
+        </div>
+    </div>
 
-
+    <div class="panel panel-default">
+        <div class="panel-body">
             <div class="row">
                 <div class="col-lg-12">
                     <h4>Trailers and Pictures</h4>
@@ -66,17 +73,18 @@
                     </div>
                 </div>
             </div>
-
-            
-
         </div>
     </div>
+
+
+
 
     <div class="panel panel-default" runat="server" id="pnlRelatedDvds">
         <div class="panel-body">
             <asp:Label ID="Label3" runat="server" Text="Related Dvd's" Font-Size="20"></asp:Label>
             <asp:HyperLink ID="linkRelated" runat="server" CssClass="pull-right btn btn-primary">See more</asp:HyperLink>
-            <br /><br />
+            <br />
+            <br />
             <div class="row" id="relatedDvds" runat="server">
                 <!-- DVD cards inserted here-->
             </div>

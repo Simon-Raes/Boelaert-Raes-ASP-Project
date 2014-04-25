@@ -19,10 +19,13 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //Hide rent buttons until the user selects a start date
+            btnRent1.Visible = false;
+            btnRent3.Visible = false;
+            btnRent7.Visible = false;
+
             if (!IsPostBack)
             {
-                
-
                 if (Request.QueryString["id"] != null)
                 {
                     int id;
@@ -30,9 +33,8 @@ namespace LayeredBusinessModel.WebUI
                     {
                         setupDvdInfo(id);
                         setupRelatedDvds(id);
-
                     }
-                }
+                }                
             }
         }
 
@@ -300,9 +302,36 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
+
+
         protected void calRent_SelectionChanged(object sender, EventArgs e)
         {
-            int i = 0;
+            if(Request.QueryString["id"]!=null)
+            {
+                DvdInfoService dvdbll = new DvdInfoService();
+                DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
+
+                //get all dvd copies that are available on that date:  
+                RentService rentService = new RentService();
+                int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
+
+                
+
+                if(daysAvailable>=1)
+                {
+                    btnRent1.Visible = true;
+                }
+                if(daysAvailable>=3)
+                {
+                    btnRent3.Visible = true;
+                }
+                if(daysAvailable>=7)
+                {
+                    btnRent7.Visible = true;
+                }
+            }
+            
+
         }
     }
 }

@@ -107,6 +107,64 @@ namespace LayeredBusinessModel.BLL.Model
 
         }
 
+        public int getDaysAvailableFromDate(DvdInfo dvd, DateTime startDate)
+        {
+            int days = -1;
+
+            //todo: first get all fully available copies
+            DvdCopyService orderLineService = new DvdCopyService();
+            //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
+            List<DvdCopy> dvdCopies = orderLineService.getAllFullyAvailableCopies(dvd, startDate);
+            if (dvdCopies.Count > 0)
+            {
+                //there is at least 1 copy that is available for the full 14 days, no more checks are needed and the max number of days can be returned
+                days = 14;
+            }
+            else
+            {
+                //all copies have some rent or reservations in the next 2 weeks, check their availability in detail
+
+                Dictionary<int, DateTime> unavailableDatesMap = new Dictionary<int, DateTime>();
+
+                //get all orderlines for copies that have some orderlines in the next 2 weeks
+                List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startDate);
+                                
+                foreach (OrderLine order in orders)
+                {                    
+                    if (!unavailableDatesMap.ContainsKey(order.dvd_copy_id))
+                    {                       
+                        //set the default availability at 2 weeks from now 
+                        unavailableDatesMap.Add(order.dvd_copy_id, order.startdate);
+                    }
+                    if (unavailableDatesMap.ContainsKey(order.dvd_copy_id))
+                    {
+                        //if the order for the copy is unavailable sooner, add that one to the dictionary
+                        if (order.startdate < unavailableDatesMap[order.dvd_copy_id] && order.startdate > DateTime.Today)
+                        {
+                            unavailableDatesMap[order.dvd_copy_id] = order.startdate;
+                        }
+                    }
+                }
+
+                //we now have a dictionary with the copies and the first date on which they'll be unavailable again
+
+                foreach (DateTime date in unavailableDatesMap.Values)
+                {
+                    //only allow orderLines that start after the supplied date
+                    if (date > startDate)
+                    {
+                        if ((date - startDate).Days > days)
+                        {
+                            days = (date - startDate).Days;
+                        }
+                    }
+                    
+                }
+            }
+
+            return days;
+        }
+
 
     }
 }

@@ -192,9 +192,11 @@ namespace LayeredBusinessModel.DAO
             SqlCommand command = new SqlCommand(
             "select * from DvdCopy  " +
             "where DvdCopy.dvd_info_id = @dvd_info_id and  " +
+            "DvdCopy.copy_type_id = 1 and "+
             "DvdCopy.dvd_copy_id not in " +
-            "( select dvd_copy_id from OrderLine where startdate >= GETDATE() or enddate >= GETDATE())", cnn);
+            "( select dvd_copy_id from OrderLine where startdate >= @startdate or enddate >= @startdate) ", cnn);
             command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+            command.Parameters.Add(new SqlParameter("@startdate", startdate));
 
             try
             {

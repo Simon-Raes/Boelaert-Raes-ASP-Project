@@ -43,6 +43,8 @@ namespace LayeredBusinessModel.BLL
             return orderLineDAO.getActiveRentOrderLinesForCustomer(customer_id);
         }
 
+       
+
         public void addOrderLine(OrderLine orderLine)
         {
             orderLineDAO = new OrderLineDAO();

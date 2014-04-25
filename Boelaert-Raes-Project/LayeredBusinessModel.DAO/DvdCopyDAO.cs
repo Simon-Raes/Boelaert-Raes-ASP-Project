@@ -148,13 +148,7 @@ namespace LayeredBusinessModel.DAO
             try
             {
                 cnn.Open();
-
-                //todo: moet waarschijnlijk niet met een reader gebeuren, maar het werkt voorlopig wel
-                //SqlDataReader reader = command.ExecuteReader();
-
-                command.ExecuteNonQuery();
-                
-                //reader.Close();
+                command.ExecuteNonQuery();                
             }
             catch (Exception ex)
             {
@@ -188,6 +182,42 @@ namespace LayeredBusinessModel.DAO
             {
                 cnn.Close();
             }
+        }
+
+        /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/
+        public List<DvdCopy> getAllFullyAvailableCopies(DvdInfo dvd, DateTime startdate)
+        {
+            cnn = new SqlConnection(sDatabaseLocatie);
+            List<DvdCopy> orderList = new List<DvdCopy>();
+            SqlCommand command = new SqlCommand(
+            "select * from DvdCopy  " +
+            "where DvdCopy.dvd_info_id = @dvd_info_id and  " +
+            "DvdCopy.dvd_copy_id not in " +
+            "( select dvd_copy_id from OrderLine where startdate >= GETDATE() or enddate >= GETDATE())", cnn);
+            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+
+            try
+            {
+                cnn.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orderList.Add(createDvdCopy(reader));
+                }
+
+                reader.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return orderList;
         }
 
         /*Sets all copies back to in_stock = true*/

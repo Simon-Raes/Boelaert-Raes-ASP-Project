@@ -15,19 +15,19 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class detail : System.Web.UI.Page
     {
-        private DvdInfo thisDVD;
+        private List<DateTime> dates;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                
+
                 if (Request.QueryString["id"] != null)
                 {
                     int id;
                     if (int.TryParse(Request.QueryString["id"], out id))
                     {
-                        DvdInfoService dvdbll = new DvdInfoService();
-                        thisDVD = dvdbll.getDvdInfoWithID(id.ToString());
                         setupDvdInfo(id);
                         setupRelatedDvds(id);
 
@@ -38,8 +38,9 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupDvdInfo(int id)
         {
-            
-            DvdInfo dvdInfo = thisDVD;
+            DvdInfoService dvdbll = new DvdInfoService();
+            DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
+           
 
 
             lblTitle.Text = dvdInfo.name + " ";
@@ -271,18 +272,31 @@ namespace LayeredBusinessModel.WebUI
 
         protected void calRent_DayRender(object sender, DayRenderEventArgs e)
         {
-            RentService rentService = new RentService();
-            List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+            //todo: fix this code
+            //does a lot of database calls for every day in the calendar (30+ times)
+            if (Request.QueryString["id"] != null)
+            {
+                //only get dates once per calendar build-up
+                if(dates == null)
+                {
+                    RentService rentService = new RentService();
 
-            //movie can be reserved between today and 14 days from now   
-            if (!dates.Contains(e.Day.Date))
-            {
-                e.Day.IsSelectable = false;
-                e.Cell.BackColor = System.Drawing.Color.LightGray;
-            }
-            else
-            {
-                e.Cell.BackColor = System.Drawing.Color.LightGreen;
+                    DvdInfoService dvdbll = new DvdInfoService();
+                    DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
+
+                    dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+                }                
+
+                //movie can be reserved between today and 14 days from now   
+                if (!dates.Contains(e.Day.Date))
+                {
+                    e.Day.IsSelectable = false;
+                    e.Cell.BackColor = System.Drawing.Color.LightGray;
+                }
+                else
+                {
+                    e.Cell.BackColor = System.Drawing.Color.LightGreen;
+                }
             }
         }
 

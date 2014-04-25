@@ -39,10 +39,7 @@ namespace LayeredBusinessModel.BLL.Model
                             }                            
                         }
                     }
-
-
                 }
-
             }
 
             foreach (int i in beschikbaarheden.Keys)
@@ -60,14 +57,11 @@ namespace LayeredBusinessModel.BLL.Model
                     {
                         vrij.Add(d);
                     }
-
                 }
                 result[i] = vrij;
             }
 
             return result;
         }
-
-
     }
 }

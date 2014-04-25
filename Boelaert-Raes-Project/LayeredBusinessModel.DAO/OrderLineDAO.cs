@@ -143,13 +143,9 @@ namespace LayeredBusinessModel.DAO
             List<OrderLine> orderList = new List<OrderLine>();
 
             SqlCommand command = new SqlCommand("SELECT * FROM OrderLine "+                
-                
-                "JOIN Orders "+
-                "ON Orders.order_id = OrderLine.order_id "+
                 "WHERE customer_id = @customer_id AND "+
-                "OrderLine.order_line_type_id = 1 AND "+
-                "enddate > getdate() "
-                , cnn);
+                "order_line_type_id = 1 AND "+
+                "enddate > getdate()", cnn);
             command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
 
             try

@@ -54,7 +54,7 @@
             </div>
 
 
-            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender"></asp:Calendar>
+            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged"></asp:Calendar>
 
 
             <div class="row">

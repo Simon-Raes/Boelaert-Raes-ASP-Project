@@ -285,5 +285,10 @@ namespace LayeredBusinessModel.WebUI
                 e.Cell.BackColor = System.Drawing.Color.LightGreen;
             }
         }
+
+        protected void calRent_SelectionChanged(object sender, EventArgs e)
+        {
+            int i = 0;
+        }
     }
 }

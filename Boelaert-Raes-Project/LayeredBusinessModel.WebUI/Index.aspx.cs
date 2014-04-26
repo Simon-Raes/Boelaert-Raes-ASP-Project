@@ -18,6 +18,12 @@ namespace LayeredBusinessModel.WebUI
         protected void Page_Load(object sender, EventArgs e)
         {
 
+
+
+            
+            
+            
+            
             DvdInfoService ds = new DvdInfoService();
             DvdInfo i = ds.getDvdInfoWithID("" +1);
 

@@ -24,6 +24,8 @@ namespace LayeredBusinessModel.WebUI
         {
             fillSideBar();
 
+            setupCurrencyLinks();
+
             //set login/user-button text
             if (Session["user"] == null)
             {
@@ -52,6 +54,27 @@ namespace LayeredBusinessModel.WebUI
                 liCart.InnerText = "Cart: " + cartContent.Count;               
 
             }
+        }
+
+        private void setupCurrencyLinks()
+        {
+            euroLink.HRef = Request.Url.AbsoluteUri + "&currency=euro";
+            dollerLink.HRef = Request.Url.AbsoluteUri + "&currency=usd";
+
+            if (CookieUtil.CookieExists("currency"))
+            {
+                currencySymbol.Attributes["class"] = "glyphicon glyphicon-" + CookieUtil.GetCookieValue("currency");
+            }
+
+            if (Request.QueryString["currency"] != null)
+            {
+                CookieUtil.CreateCookie("currency", Request.QueryString["currency"], 30);
+                currencySymbol.Attributes["class"] = "glyphicon glyphicon-" + Request.QueryString["currency"];
+            }
+
+
+            
+
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)

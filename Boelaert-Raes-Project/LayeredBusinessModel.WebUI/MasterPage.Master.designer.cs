@@ -31,6 +31,33 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// currencySymbol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl currencySymbol;
+        
+        /// <summary>
+        /// euroLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor euroLink;
+        
+        /// <summary>
+        /// dollerLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor dollerLink;
+        
+        /// <summary>
         /// liCart control.
         /// </summary>
         /// <remarks>
@@ -49,7 +76,6 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtSearchNew;
         
         /// <summary>
-
         /// btnSearchNew control.
         /// </summary>
         /// <remarks>
@@ -60,7 +86,6 @@ namespace LayeredBusinessModel.WebUI {
         
         /// <summary>
         /// liSignup control.
-
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

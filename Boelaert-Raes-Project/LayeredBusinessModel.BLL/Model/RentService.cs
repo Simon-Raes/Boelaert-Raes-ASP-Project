@@ -9,10 +9,69 @@ namespace LayeredBusinessModel.BLL.Model
 {
     public class RentService
     {
-        public Dictionary<int, List<DateTime>> getAllOrdersForDVD(DvdInfo dvd, DateTime startdate)
+        /**Returns a dictionary with dvd_copy_id, List of dates where the copy is available.*/
+        public Dictionary<int, List<DateTime>> getAllAvailableDaysPerCopyForDvdInfo(DvdInfo dvd, DateTime startdate)
         {
-            Dictionary<int, List<DateTime>> beschikbaarheden = new Dictionary<int, List<DateTime>>();
+            Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
             Dictionary<int, List<DateTime>> result = new Dictionary<int, List<DateTime>>();
+
+            ////alle bezettingen
+            //List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startdate);
+
+            ////bezettingen overlopen
+            //foreach (OrderLine order in orders)
+            //{
+            //    //kijken of copy_id al in de lijst zit
+            //    if (!dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
+            //    {
+            //        //zo niet, in de lijst steken
+            //        List<DateTime> bezettemomenten = new List<DateTime>();
+            //        dicCopyUnavailableDates.Add(order.dvd_copy_id, bezettemomenten);
+            //    }
+            //    if (dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
+            //    {
+            //        for (int i = 0; i < 14; i++)
+            //        {
+            //            DateTime tempDate = DateTime.Now.Date.AddDays(i);
+            //            if (tempDate >= order.startdate && tempDate <= order.enddate)
+            //            {
+            //                if (!dicCopyUnavailableDates[order.dvd_copy_id].Contains(tempDate))
+            //                {
+            //                    dicCopyUnavailableDates[order.dvd_copy_id].Add(tempDate);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+            dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);
+
+            foreach (int i in dicCopyUnavailableDates.Keys)
+            {
+                result.Add(i, null);
+                List<DateTime> bezet = dicCopyUnavailableDates[i];
+
+                List<DateTime> freeDates = new List<DateTime>();
+
+                for (int j = 0; j < 14; j++)
+                {
+                    DateTime d = DateTime.Now.Date.AddDays(j);
+
+                    if (!bezet.Contains(d))
+                    {
+                        freeDates.Add(d);
+                    }
+                }
+                result[i] = freeDates;
+            }
+
+            return result;
+        }
+
+        /**Returns a dictionary with dvd_copy_id, List of dates where the copy is NOT available.*/
+        public Dictionary<int, List<DateTime>> getAllUnavailableDaysPerCopyForDvdInfo(DvdInfo dvd, DateTime startdate)
+        {
+            Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
 
             //alle bezettingen
             List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startdate);
@@ -21,51 +80,33 @@ namespace LayeredBusinessModel.BLL.Model
             foreach (OrderLine order in orders)
             {
                 //kijken of copy_id al in de lijst zit
-                if (!beschikbaarheden.ContainsKey(order.dvd_copy_id))
+                if (!dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
                 {
                     //zo niet, in de lijst steken
                     List<DateTime> bezettemomenten = new List<DateTime>();
-                    beschikbaarheden.Add(order.dvd_copy_id, bezettemomenten);
+                    dicCopyUnavailableDates.Add(order.dvd_copy_id, bezettemomenten);
                 }
-                if (beschikbaarheden.ContainsKey(order.dvd_copy_id))
+                if (dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
                 {
                     for (int i = 0; i < 14; i++)
                     {
                         DateTime tempDate = DateTime.Now.Date.AddDays(i);
                         if (tempDate >= order.startdate && tempDate <= order.enddate)
                         {
-                            if (!beschikbaarheden[order.dvd_copy_id].Contains(tempDate))
+                            if (!dicCopyUnavailableDates[order.dvd_copy_id].Contains(tempDate))
                             {
-                                beschikbaarheden[order.dvd_copy_id].Add(tempDate);
+                                dicCopyUnavailableDates[order.dvd_copy_id].Add(tempDate);
                             }
                         }
                     }
                 }
             }
 
-            foreach (int i in beschikbaarheden.Keys)
-            {
-                result.Add(i, null);
-                List<DateTime> bezet = beschikbaarheden[i];
-
-                List<DateTime> vrij = new List<DateTime>();
-
-                for (int j = 0; j < 14; j++)
-                {
-                    DateTime d = DateTime.Now.Date.AddDays(j);
-
-                    if (!bezet.Contains(d))
-                    {
-                        vrij.Add(d);
-                    }
-                }
-                result[i] = vrij;
-            }
-
-            return result;
+            return dicCopyUnavailableDates;
         }
 
 
+        /**Returns a list of all days where at least 1 copy is available.*/
         public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startDate)
         {
             List<DateTime> dates = new List<DateTime>();
@@ -82,7 +123,7 @@ namespace LayeredBusinessModel.BLL.Model
             else
             {
                 //no copies are available for the full 2 weeks, get detailed information about all copies that have some availability in the next 2 weeks:
-                Dictionary<int, List<DateTime>> result = getAllOrdersForDVD(dvd, startDate);
+                Dictionary<int, List<DateTime>> result = getAllAvailableDaysPerCopyForDvdInfo(dvd, startDate);
 
 
                 foreach (List<DateTime> list in result.Values)
@@ -101,6 +142,7 @@ namespace LayeredBusinessModel.BLL.Model
 
         }
 
+        /**Returns the number of consecutive days the dvd_info is available, starting from the supplied date*/
         public int getDaysAvailableFromDate(DvdInfo dvd, DateTime startDate)
         {
             int days = -1;
@@ -156,12 +198,13 @@ namespace LayeredBusinessModel.BLL.Model
             return days;
         }
 
+        /**Returns true if at least one copy is available for the full 14 days (= no orders in the next 14 days)*/
         private Boolean fullCopiesAvailable(DvdInfo dvd, DateTime startDate)
         {
             //todo: first get all fully available copies
-            DvdCopyService orderLineService = new DvdCopyService();
+            DvdCopyService dvdCopyService = new DvdCopyService();
             //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
-            List<DvdCopy> dvdCopies = orderLineService.getAllFullyAvailableCopies(dvd, startDate);
+            List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(dvd, startDate);
             if(dvdCopies.Count>0)
             {
                 return true;

@@ -21,7 +21,7 @@ namespace LayeredBusinessModel.WebUI
             DvdInfo i = ds.getDvdInfoWithID("" +1);
 
             RentService rs = new RentService();
-            rs.getAllOrdersForDVD(i, DateTime.Now);
+            rs.getAllAvailableDaysPerCopyForDvdInfo(i, DateTime.Now);
 
 
             if (!IsPostBack)

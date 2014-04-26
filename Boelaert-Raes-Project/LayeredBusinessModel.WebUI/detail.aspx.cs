@@ -258,11 +258,9 @@ namespace LayeredBusinessModel.WebUI
                 Customer user = ((Customer)Session["user"]);
 
                 //add rent item to cart       
-                //HERE: hardcoded to start from today (todo: calendar control?)
-                DateTime startdate = DateTime.Today;
+                DateTime startdate = calRent.SelectedDate;
                 DateTime enddate = startdate.AddDays(days);
 
-                //HERE: hardcoded to shawshank redemption, must get dvdInfoID from generated page
                 DvdCopyService dvdCopyService = new DvdCopyService();
                 List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Request.QueryString["id"]);
 
@@ -349,7 +347,6 @@ namespace LayeredBusinessModel.WebUI
                 //get all dvd copies that are available on that date:  
                 RentService rentService = new RentService();
                 int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
-
                 
 
                 if(daysAvailable>=1)

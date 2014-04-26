@@ -313,7 +313,7 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<OrderLine> orderList = new List<OrderLine>();
 
-            SqlCommand command = new SqlCommand("select * from OrderLine where dvd_info_id = 1 and order_line_type_id = @dvd_info_id and (	(startdate < @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >  @startdate and startdate < DATEADD(dd,14,getdate()))	) order by dvd_copy_id, startdate, enddate", cnn);
+            SqlCommand command = new SqlCommand("select * from OrderLine where dvd_info_id = @dvd_info_id and order_line_type_id = 1 and (	(startdate <= @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >=  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >=  @startdate and startdate < DATEADD(dd,14,getdate()))	) AND dvd_copy_id IS NOT NULL order by dvd_copy_id, startdate, enddate", cnn);
             command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
             command.Parameters.Add(new SqlParameter("@startdate", startdate));
 

@@ -66,17 +66,11 @@ namespace LayeredBusinessModel.BLL.Model
         }
 
 
-        public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startdate)
+        public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startDate)
         {
             List<DateTime> dates = new List<DateTime>();
-
-
-            //todo: first get all fully available copies, only send back list of available dates if that first list is 0
-            DvdCopyService orderLineService = new DvdCopyService();
-
-            //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
-            List<DvdCopy> dvdCopies = orderLineService.getAllFullyAvailableCopies(dvd, startdate);
-            if (dvdCopies.Count > 0)
+            
+            if (fullCopiesAvailable(dvd, startDate))
             {
                 //at least 1 copy is fully available for the next 2 weeks, send back a full dates list
                 for (int j = 0; j < 14; j++)
@@ -88,7 +82,7 @@ namespace LayeredBusinessModel.BLL.Model
             else
             {
                 //no copies are available for the full 2 weeks, get detailed information about all copies that have some availability in the next 2 weeks:
-                Dictionary<int, List<DateTime>> result = getAllOrdersForDVD(dvd, startdate);
+                Dictionary<int, List<DateTime>> result = getAllOrdersForDVD(dvd, startDate);
 
 
                 foreach (List<DateTime> list in result.Values)
@@ -111,11 +105,8 @@ namespace LayeredBusinessModel.BLL.Model
         {
             int days = -1;
 
-            //todo: first get all fully available copies
-            DvdCopyService orderLineService = new DvdCopyService();
-            //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
-            List<DvdCopy> dvdCopies = orderLineService.getAllFullyAvailableCopies(dvd, startDate);
-            if (dvdCopies.Count > 0)
+            
+            if (fullCopiesAvailable(dvd, startDate))
             {
                 //there is at least 1 copy that is available for the full 14 days, no more checks are needed and the max number of days can be returned
                 days = 14;
@@ -146,7 +137,7 @@ namespace LayeredBusinessModel.BLL.Model
                     }
                 }
 
-                //we now have a dictionary with the copies and the first date on which they'll be unavailable again
+                //we now have a dictionary with the copies and the first date on which they'll be UNavailable again
 
                 foreach (DateTime date in unavailableDatesMap.Values)
                 {
@@ -163,6 +154,22 @@ namespace LayeredBusinessModel.BLL.Model
             }
 
             return days;
+        }
+
+        private Boolean fullCopiesAvailable(DvdInfo dvd, DateTime startDate)
+        {
+            //todo: first get all fully available copies
+            DvdCopyService orderLineService = new DvdCopyService();
+            //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
+            List<DvdCopy> dvdCopies = orderLineService.getAllFullyAvailableCopies(dvd, startDate);
+            if(dvdCopies.Count>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 

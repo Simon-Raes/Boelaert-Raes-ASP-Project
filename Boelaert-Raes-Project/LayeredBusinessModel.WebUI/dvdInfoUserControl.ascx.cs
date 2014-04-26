@@ -18,6 +18,11 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            String currency = "€";
+            wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
+
+
+
             dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
             dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
             imgDvdCover.ImageUrl = imageUrl;
@@ -37,9 +42,10 @@ namespace LayeredBusinessModel.WebUI
                 {
                     switch (CookieUtil.GetCookieValue("currency"))
                     {
-                        case "usd":                            
-                            buy_price = buy_price * (-1);
-                            rent_price = rent_price * (-1);
+                        case "usd":
+                            currency = "$";
+                            buy_price = currencyWebService.convert(buy_price,"usd");
+                            rent_price = currencyWebService.convert(rent_price, "usd");
                             break;
                     }
                 }
@@ -49,13 +55,14 @@ namespace LayeredBusinessModel.WebUI
                 switch (Request.QueryString["currency"])
                 {
                     case "usd":
-                        buy_price = buy_price * (-1);
-                        rent_price = rent_price * (-1);
+                        currency="$";
+                        buy_price = currencyWebService.convert(buy_price,"usd");
+                        rent_price = currencyWebService.convert(rent_price, "usd");
                         break;
                 }
             }
-            btnBuy.Text = "Buy € " + buy_price;
-            btnRent.Text = "Rent € " + rent_price;
+            btnBuy.Text = "Buy " + currency + " " + buy_price;
+            btnRent.Text = "Rent " + currency + " "+  rent_price;
         }
     }
 }

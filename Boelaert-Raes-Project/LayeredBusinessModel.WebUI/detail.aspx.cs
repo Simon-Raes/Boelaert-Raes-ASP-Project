@@ -40,6 +40,9 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupDvdInfo(int id)
         {
+            wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
+            String currency = "€";
+
             DvdInfoService dvdbll = new DvdInfoService();
             DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
            
@@ -114,8 +117,9 @@ namespace LayeredBusinessModel.WebUI
                     switch (CookieUtil.GetCookieValue("currency"))
                     {
                         case "usd":
-                            dvdInfo.buy_price = dvdInfo.buy_price * (-1);
-                            dvdInfo.rent_price = dvdInfo.rent_price * (-1);
+                            currency = "$";
+                            dvdInfo.buy_price = currencyWebService.convert(dvdInfo.buy_price,"usd");
+                            dvdInfo.rent_price = currencyWebService.convert(dvdInfo.rent_price, "usd");
                             break;
                     }
                 }
@@ -125,8 +129,9 @@ namespace LayeredBusinessModel.WebUI
                 switch (Request.QueryString["currency"])
                 {
                     case "usd":
-                        dvdInfo.buy_price = dvdInfo.buy_price * (-1);
-                        dvdInfo.rent_price = dvdInfo.rent_price * (-1);
+                        currency = "$";
+                        dvdInfo.buy_price = currencyWebService.convert(dvdInfo.buy_price,"usd");
+                        dvdInfo.rent_price = currencyWebService.convert(dvdInfo.rent_price, "usd");
                         break;
                 }
             }
@@ -135,10 +140,10 @@ namespace LayeredBusinessModel.WebUI
 
 
 
-            btnBuy.Text = "Buy € " + dvdInfo.buy_price.ToString();
-            btnRent1.Text = "Rent 1 day € " + dvdInfo.rent_price.ToString();
-            btnRent3.Text = "Rent 3 days € " + (dvdInfo.rent_price * 3).ToString();
-            btnRent7.Text = "Rent 7 days € " + (dvdInfo.rent_price * 7).ToString();
+            btnBuy.Text = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
+            btnRent1.Text = "Rent 1 day " + currency + " "  + dvdInfo.rent_price.ToString();
+            btnRent3.Text = "Rent 3 days " + currency + " "  + (dvdInfo.rent_price * 3).ToString();
+            btnRent7.Text = "Rent 7 days " + currency + " "  + (dvdInfo.rent_price * 7).ToString();
 
             foreach (KeyValuePair<int, String> k in dvdInfo.media)
             {

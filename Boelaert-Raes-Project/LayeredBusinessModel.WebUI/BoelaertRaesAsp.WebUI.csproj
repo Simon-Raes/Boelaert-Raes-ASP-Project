@@ -72,6 +72,7 @@
     <Content Include="css\icons-classic\resultset_previous.png" />
     <Content Include="css\iThing-min.css" />
     <Content Include="css\style.css" />
+    <Content Include="CurrencyWebService.asmx" />
     <Content Include="Customers.aspx" />
     <Content Include="detail.aspx" />
     <Content Include="dev.aspx" />
@@ -99,6 +100,11 @@
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="tempMovie.aspx" />
+    <Content Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\wsCurrencyWebService\CurrencyWebService.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -155,6 +161,10 @@
       <DependentUpon>Catalog.aspx</DependentUpon>
     </Compile>
     <Compile Include="CookieUtil.cs" />
+    <Compile Include="CurrencyWebService.asmx.cs">
+      <DependentUpon>CurrencyWebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Customers.aspx.cs">
       <DependentUpon>Customers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -222,6 +232,11 @@
       <DependentUpon>OrderPayment.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -236,12 +251,22 @@
     <Compile Include="tempMovie.aspx.designer.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Web References\wsCurrencyWebService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.Master" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Web References\wsCurrencyWebService\CurrencyWebService.wsdl" />
+    <Content Include="Web References\wsCurrencyWebService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -262,7 +287,25 @@
       <Name>BoelaertRaesAsp.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://localhost:49269/CurrencyWebService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\wsCurrencyWebService\</RelPath>
+      <UpdateFromURL>http://localhost:49269/CurrencyWebService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>LayeredBusinessModel_WebUI_wsCurrencyWebService_CurrencyWebService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -58,8 +58,17 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupCurrencyLinks()
         {
-            euroLink.HRef = Request.Url.AbsoluteUri + "&currency=euro";
-            dollerLink.HRef = Request.Url.AbsoluteUri + "&currency=usd";
+            if (Request.QueryString.Count == 0)
+            {
+                euroLink.HRef = Request.Url.AbsoluteUri + "?currency=euro";
+                dollerLink.HRef = Request.Url.AbsoluteUri + "?currency=usd";
+            }
+            else
+            {
+                euroLink.HRef = Request.Url.AbsoluteUri + "&currency=euro";
+                dollerLink.HRef = Request.Url.AbsoluteUri + "&currency=usd";
+            }
+            
 
             if (CookieUtil.CookieExists("currency"))
             {

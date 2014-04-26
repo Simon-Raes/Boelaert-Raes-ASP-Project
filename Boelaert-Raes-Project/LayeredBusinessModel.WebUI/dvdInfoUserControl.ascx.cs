@@ -29,7 +29,31 @@ namespace LayeredBusinessModel.WebUI
             {
                 lblTitle.Text = title.Substring(0, 28) + "...";
             }
-            
+
+
+            if (Request.QueryString["currency"] == null)
+            {
+                if (CookieUtil.CookieExists("currency"))
+                {
+                    switch (CookieUtil.GetCookieValue("currency"))
+                    {
+                        case "usd":                            
+                            buy_price = buy_price * (-1);
+                            rent_price = rent_price * (-1);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                switch (Request.QueryString["currency"])
+                {
+                    case "usd":
+                        buy_price = buy_price * (-1);
+                        rent_price = rent_price * (-1);
+                        break;
+                }
+            }
             btnBuy.Text = "Buy € " + buy_price;
             btnRent.Text = "Rent € " + rent_price;
         }

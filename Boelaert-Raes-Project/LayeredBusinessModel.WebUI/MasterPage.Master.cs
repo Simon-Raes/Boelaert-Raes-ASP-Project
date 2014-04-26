@@ -66,6 +66,7 @@ namespace LayeredBusinessModel.WebUI
                 euroLink.HRef = Request.Url.AbsoluteUri + "?currency=euro";
                 dollerLink.HRef = Request.Url.AbsoluteUri + "?currency=usd";
             }
+            //als de querystring al bestaat
             else
             {
                 string url = HttpContext.Current.Request.Url.AbsoluteUri;
@@ -75,27 +76,30 @@ namespace LayeredBusinessModel.WebUI
                 {                    
                     queryString.Remove("currency");
                 }
-              //als de querystring al bestaat, deze uitbreiden
+                //als de querystring al bestaat, deze uitbreiden
                 euroLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=euro";
                 dollerLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=usd";
-                
             }            
 
-            //kijken of de cookie bestaat
-            if (CookieUtil.CookieExists("currency"))
-            {
-                //currencysymbol aanpassen adhv de waarde in de cookie
-                currencySymbol.Attributes["class"] = "glyphicon glyphicon-" + CookieUtil.GetCookieValue("currency");
-            }
+            
             //als de querystring het attribut currency bevat (als de gebruiker op één van de twee currencylinks heeft geklikt)
             if (Request.QueryString["currency"] != null)
             {
                 //cookie aanmaken/updaten en currencysymbol updaten
                 CookieUtil.CreateCookie("currency", Request.QueryString["currency"], 30);
                 currencySymbol.Attributes["class"] = "glyphicon glyphicon-" + Request.QueryString["currency"];
-            }           
-
+            }
+            else
+            {
+                //kijken of de cookie bestaat
+                if (CookieUtil.CookieExists("currency"))
+                {
+                    //currencysymbol aanpassen adhv de waarde in de cookie
+                    currencySymbol.Attributes["class"] = "glyphicon glyphicon-" + CookieUtil.GetCookieValue("currency");
+                }
+            }
         }
+
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {

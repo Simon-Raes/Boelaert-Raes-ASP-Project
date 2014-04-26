@@ -16,14 +16,7 @@ namespace LayeredBusinessModel.WebUI
         Customer user;
 
         protected void Page_Load(object sender, EventArgs e)
-        {
-
-
-
-            
-            
-            
-            
+        {     
             DvdInfoService ds = new DvdInfoService();
             DvdInfo i = ds.getDvdInfoWithID("" +1);
 
@@ -104,6 +97,9 @@ namespace LayeredBusinessModel.WebUI
                     }
                 }
                 dvdInfo.title = d.name;
+
+               
+               
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 

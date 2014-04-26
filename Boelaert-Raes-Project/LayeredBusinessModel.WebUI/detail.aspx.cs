@@ -105,6 +105,36 @@ namespace LayeredBusinessModel.WebUI
             
 
             lblPlot.Text = dvdInfo.descripion;
+
+
+            if (Request.QueryString["currency"] == null)
+            {
+                if (CookieUtil.CookieExists("currency"))
+                {
+                    switch (CookieUtil.GetCookieValue("currency"))
+                    {
+                        case "usd":
+                            dvdInfo.buy_price = dvdInfo.buy_price * (-1);
+                            dvdInfo.rent_price = dvdInfo.rent_price * (-1);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                switch (Request.QueryString["currency"])
+                {
+                    case "usd":
+                        dvdInfo.buy_price = dvdInfo.buy_price * (-1);
+                        dvdInfo.rent_price = dvdInfo.rent_price * (-1);
+                        break;
+                }
+            }
+
+
+
+
+
             btnBuy.Text = "Buy € " + dvdInfo.buy_price.ToString();
             btnRent1.Text = "Rent 1 day € " + dvdInfo.rent_price.ToString();
             btnRent3.Text = "Rent 3 days € " + (dvdInfo.rent_price * 3).ToString();

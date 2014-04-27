@@ -52,7 +52,7 @@ namespace LayeredBusinessModel.BLL
                         int rentPeriodDays = (orderLine.enddate - orderLine.startdate).Days;
                         bool copyIsAvailable = true;
 
-                        for (int i = 0; i < rentPeriodDays; i++)
+                        for (int i = 0; i <= rentPeriodDays; i++)
                         {
                             //loop over the occupied days, check if the copy is available on all of the requested dates
                             if (entry.Value.Contains(orderLine.startdate.AddDays(i)))

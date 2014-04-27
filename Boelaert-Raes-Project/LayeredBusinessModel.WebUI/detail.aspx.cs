@@ -259,7 +259,7 @@ namespace LayeredBusinessModel.WebUI
 
                 //add rent item to cart       
                 DateTime startdate = calRent.SelectedDate;
-                DateTime enddate = startdate.AddDays(days);
+                DateTime enddate = startdate.AddDays(days-1);
 
                 DvdCopyService dvdCopyService = new DvdCopyService();
                 List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Request.QueryString["id"]);

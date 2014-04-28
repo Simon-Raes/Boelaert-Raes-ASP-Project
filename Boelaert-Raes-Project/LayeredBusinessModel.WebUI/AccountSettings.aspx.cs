@@ -58,7 +58,7 @@ namespace LayeredBusinessModel.WebUI
                 if (user != null)
                 {
                     //only update if the user entered the correct old password
-                    if (inputOldPassword.Value.Equals(PasswordCrypto.decryptPassword(user.password)))
+                    if (inputOldPassword.Value.Equals(CryptographyModel.decryptPassword(user.password)))
                     {
                         //create customer object based on logged-in-user info and info from textfields
                         Customer customer = new Customer
@@ -68,7 +68,7 @@ namespace LayeredBusinessModel.WebUI
                             login = user.login, //keep existing login
                             name = inputName.Value,
                             numberOfVisits = user.numberOfVisits, //keep existing numberOfVisits
-                            password = PasswordCrypto.encryptPassword(inputPassword.Value)
+                            password = CryptographyModel.encryptPassword(inputPassword.Value)
                         };
 
                         //update user's database data

@@ -20,7 +20,7 @@ namespace LayeredBusinessModel.WebUI
             DvdInfoService ds = new DvdInfoService();
             DvdInfo i = ds.getDvdInfoWithID("" +1);
 
-            RentService rs = new RentService();
+            RentModel rs = new RentModel();
             rs.getAllAvailableDaysPerCopyForDvdInfo(i, DateTime.Now);
 
 
@@ -30,15 +30,9 @@ namespace LayeredBusinessModel.WebUI
 
                 //only show recommendations for a logged in user
                 if (user != null)
-                {
-                    divRecommended.Visible = true;
+                {                    
                     setupRecommendations();
-                }
-                else
-                {
-                    divRecommended.Visible = false;
-                }
-
+                }        
                 setupSpotlight();
                 setupNewReleases();
                 setupMostPopular();
@@ -66,8 +60,19 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupRecommendations()
         {
-            List<DvdInfo> dvdList = UserRecommendations.getRecommendations(user.customer_id, 4);
-            addTilesToRow(dvdList, recommened);            
+            RecommendationsModel recModel = new RecommendationsModel();
+            List<DvdInfo> dvdList = recModel.getRecommendations(user, 4);
+            if (dvdList.Count > 0)
+            {
+                addTilesToRow(dvdList, recommened);
+                divRecommended.Visible = true;
+            }
+            else
+            {
+                //user has not visited any pages and has not ordered any items, HIDE the recommendations panel
+                divRecommended.Visible = false;
+            }
+                    
         }
 
         private void setupNewReleases()

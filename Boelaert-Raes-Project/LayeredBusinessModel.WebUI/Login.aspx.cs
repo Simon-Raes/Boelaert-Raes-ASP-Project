@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.WebUI
             //een null customer object geeft hier nog altijd true, daarom controle op password veld
             if (customer.password != null)
             {
-                if (PasswordCrypto.decryptPassword(customer.password).Equals(txtPassword.Text))
+                if (CryptographyModel.decryptPassword(customer.password).Equals(txtPassword.Text))
                 {
                     //update user's number_of_visits
                     customer.numberOfVisits++;

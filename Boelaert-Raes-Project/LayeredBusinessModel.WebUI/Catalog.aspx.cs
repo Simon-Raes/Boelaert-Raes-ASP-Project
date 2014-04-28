@@ -61,7 +61,8 @@ namespace LayeredBusinessModel.WebUI
                 {
                     if (Session["user"] != null)
                     {
-                        dvdContent = UserRecommendations.getRecommendations(((Customer)Session["user"]).customer_id, 16);
+                        RecommendationsModel recModel = new RecommendationsModel();
+                        dvdContent = recModel.getRecommendations(((Customer)Session["user"]), 16);
                         labelText = "Recommended for you";
                     }
                 }

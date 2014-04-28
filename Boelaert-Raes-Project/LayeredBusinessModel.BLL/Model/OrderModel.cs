@@ -9,7 +9,7 @@ using LayeredBusinessModel.BLL.Model;
 
 namespace LayeredBusinessModel.BLL
 {
-    public class OrderHelper
+    public class OrderModel
     {
         public void payOrder(String orderID)
         {
@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.BLL
 
                     //get all available dates starting from TODAY 
                     //(also needs to check dates between today and start of requested rent period to determine smallest open window)
-                    RentService rentService = new RentService();
+                    RentModel rentService = new RentModel();
                     Dictionary<int, List<DateTime>> dicCopyUnavailableDates = rentService.getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);
                     Dictionary<int, int> dicDaysFreeForCopy = new Dictionary<int, int>();
 

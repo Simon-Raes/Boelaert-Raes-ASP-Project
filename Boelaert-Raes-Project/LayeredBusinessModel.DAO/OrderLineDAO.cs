@@ -102,7 +102,7 @@ namespace LayeredBusinessModel.DAO
             return orderList;
         }
 
-        public List<OrderLine> getOrderLinesForCustomer(int customer_id)
+        public List<OrderLine> getOrderLinesForCustomer(Customer customer)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             List<OrderLine> orderList = new List<OrderLine>();
@@ -111,7 +111,7 @@ namespace LayeredBusinessModel.DAO
                 "INNER JOIN Orders " +
                 "ON OrderLine.order_id = Orders.order_id " +
                 "WHERE customer_id = @customer_id", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+            command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
             try
             {

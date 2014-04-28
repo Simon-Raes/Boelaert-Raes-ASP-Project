@@ -7,43 +7,14 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.BLL.Model
 {
-    public class RentService
+    public class RentModel
     {
         /**Returns a dictionary with dvd_copy_id, List of dates where the copy is available.*/
         public Dictionary<int, List<DateTime>> getAllAvailableDaysPerCopyForDvdInfo(DvdInfo dvd, DateTime startdate)
         {
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
             Dictionary<int, List<DateTime>> result = new Dictionary<int, List<DateTime>>();
-
-            ////alle bezettingen
-            //List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startdate);
-
-            ////bezettingen overlopen
-            //foreach (OrderLine order in orders)
-            //{
-            //    //kijken of copy_id al in de lijst zit
-            //    if (!dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
-            //    {
-            //        //zo niet, in de lijst steken
-            //        List<DateTime> bezettemomenten = new List<DateTime>();
-            //        dicCopyUnavailableDates.Add(order.dvd_copy_id, bezettemomenten);
-            //    }
-            //    if (dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
-            //    {
-            //        for (int i = 0; i < 14; i++)
-            //        {
-            //            DateTime tempDate = DateTime.Now.Date.AddDays(i);
-            //            if (tempDate >= order.startdate && tempDate <= order.enddate)
-            //            {
-            //                if (!dicCopyUnavailableDates[order.dvd_copy_id].Contains(tempDate))
-            //                {
-            //                    dicCopyUnavailableDates[order.dvd_copy_id].Add(tempDate);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-
+                       
             dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);
 
             foreach (int i in dicCopyUnavailableDates.Keys)

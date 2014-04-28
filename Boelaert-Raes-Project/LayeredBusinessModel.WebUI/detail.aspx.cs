@@ -34,6 +34,15 @@ namespace LayeredBusinessModel.WebUI
                         setupDvdInfo(id);
                         setupRelatedDvds(id);
                     }
+
+                    Customer user = (Customer)Session["user"];
+                    if (user != null)
+                    {
+                        PageVisitsModel pageVisitsModel = new PageVisitsModel();
+                        DvdInfoService dvdInfoService = new DvdInfoService();
+                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id.ToString());
+                        pageVisitsModel.incrementPageVisits(user, dvdInfo);
+                    }
                 }                
             }
         }
@@ -314,7 +323,7 @@ namespace LayeredBusinessModel.WebUI
                 //only get dates once per calendar build-up
                 if(dates == null)
                 {
-                    RentService rentService = new RentService();
+                    RentModel rentService = new RentModel();
 
                     DvdInfoService dvdbll = new DvdInfoService();
                     DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
@@ -345,7 +354,7 @@ namespace LayeredBusinessModel.WebUI
                 DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
 
                 //get all dvd copies that are available on that date:  
-                RentService rentService = new RentService();
+                RentModel rentService = new RentModel();
                 int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
                 
 

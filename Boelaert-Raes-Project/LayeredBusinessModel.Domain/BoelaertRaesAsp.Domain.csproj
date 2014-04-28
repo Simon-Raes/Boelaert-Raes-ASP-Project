@@ -47,6 +47,7 @@
     <Compile Include="MediaType.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderLine.cs" />
+    <Compile Include="PageVisits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShoppingcartItem.cs" />
   </ItemGroup>

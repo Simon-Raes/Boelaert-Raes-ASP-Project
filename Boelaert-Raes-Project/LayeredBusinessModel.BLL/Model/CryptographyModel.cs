@@ -9,9 +9,9 @@ using System.Security.Cryptography;
 
 namespace LayeredBusinessModel.BLL
 {
-    public class PasswordCrypto
+    public class CryptographyModel
     {
-        const string passphrase = "Password@123";  //todo: betere passphrase
+        const string passphrase = "Password@123";  //todo: better, more secure passphrase
 
         public static string encryptPassword(string message)
         {

@@ -28,7 +28,7 @@ namespace LayeredBusinessModel.WebUI
                         {
                             //all good
                             lblStatus.Text = orderID;
-                            OrderHelper helper = new OrderHelper();
+                            OrderModel helper = new OrderModel();
                             lblCost.Text = "Total cost: " + helper.getOrderCost(orderID);
                             OrderLineService orderLineService = new OrderLineService();
                             List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
@@ -69,7 +69,7 @@ namespace LayeredBusinessModel.WebUI
             String orderID = lblStatus.Text;
 
             //pay for the order
-            OrderHelper helper = new OrderHelper();
+            OrderModel helper = new OrderModel();
             helper.payOrder(orderID);
 
             //redirect away from the payment page - todo: go to thank you/info page

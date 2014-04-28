@@ -32,7 +32,7 @@ namespace LayeredBusinessModel.WebUI
                     name = inputName.Value,
                     email = inputEmail.Value,
                     login = inputLogin.Value,
-                    password = PasswordCrypto.encryptPassword(inputPassword.Value)
+                    password = CryptographyModel.encryptPassword(inputPassword.Value)
                 };
                 customerService = new CustomerService();
                 customerService.addCustomer(customer);

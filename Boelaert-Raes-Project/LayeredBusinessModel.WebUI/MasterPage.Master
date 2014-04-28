@@ -19,11 +19,8 @@
     <form id="form1" runat="server">
 
         <div class="navbar-inverse">
-            <div class="container">
-                <%--                <ul class="container-fluid">--%>
-                
-                    Welcome to the best online dvd shop in the world! 
-                    <span class="glyphicon glyphicon-phone-alt"></span> +32477073716
+            <div class="container">                
+                Support 24/7 available at <span class="glyphicon glyphicon-phone-alt"></span> +32477073716
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language <b class="caret"></b></a>
@@ -41,8 +38,6 @@
                         </ul>
                     </li>
                 </ul>
-
-                <%--</ul>--%>
             </div>
         </div>
 
@@ -65,10 +60,7 @@
                                 <li><a href="About.aspx">About</a></li>
                             </ul>
 
-
-
-                            <ul class="nav navbar-nav navbar-right">                               
-
+                            <ul class="nav navbar-nav navbar-right">           
                                 <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
                                 <li><a href="dev.aspx">(Dev opties)</a></li>
                                 <li><a href="Admin.aspx">Admin</a></li>
@@ -76,10 +68,8 @@
                                 <li class="navbar-form navbar-left" role="search">
                                     <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
                                     <button id="btnSearchNew" runat="server" onserverclick="btnMainSearch_Click1" class="btn btn-default">Submit</button>
-
                                 </li>
-
-
+                                
                                 <li id="liSignup" runat="server"><a href="Register.aspx">Sign Up</a></li>
                                 <li id="liLogin" runat="server" class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
@@ -87,7 +77,6 @@
                                         <li>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <%--                                                    <form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">--%>
                                                     <div class="form-group">
                                                         <label class="sr-only" for="exampleInputEmail2">Email address</label>
                                                         <input type="email" runat="server" class="form-control" id="txtEmail" placeholder="Email address" required="required" />
@@ -99,11 +88,10 @@
                                                     <div class="form-group">
                                                         <button id="btnSubmitLogin" runat="server" type="submit" onserverclick="btnLogin_Click" class="btn btn-success btn-block">Sign in</button>
                                                     </div>
-                                                    <%--                                                    </form>--%>
                                                 </div>
                                             </div>
                                         </li>
-                                        <a href="ForgotPassword.aspx">Forgot your password?</a>
+                                        <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
                                             <input class="btn btn-primary btn-block" type="button" id="sign-in-google" value="Sign In with e-ID" />

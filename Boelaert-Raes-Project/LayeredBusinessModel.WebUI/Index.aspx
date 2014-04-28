@@ -14,7 +14,7 @@
     </div>
 
     <!-- Recommendations -->
-    <div id="divRecommended" runat="server">
+    <div id="divRecommended" runat="server" visible="false">
         <div class="panel panel-default">
             <div class="panel-body">
                 <asp:Label ID="Label1" runat="server" Text="Recommended for you" Font-Size="20"></asp:Label>

@@ -12,7 +12,6 @@ namespace LayeredBusinessModel.DAO
 {
     public class DvdInfoDAO : DAO
     {
-
         public int addDvdInfo(DvdInfo dvdInfo)
         {
             int dvdInfoId = -1;
@@ -340,13 +339,13 @@ namespace LayeredBusinessModel.DAO
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             List<DvdInfo> dvdlist = new List<DvdInfo>();
-            SqlCommand sql = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY date_added DESC", cnn);
+            SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY date_added DESC", cnn);
 
             try
             {
 
                 cnn.Open();
-                SqlDataReader reader = sql.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     dvdlist.Add(createDvdInfo(reader));

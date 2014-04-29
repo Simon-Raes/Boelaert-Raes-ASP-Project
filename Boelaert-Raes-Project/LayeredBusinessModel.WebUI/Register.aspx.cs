@@ -27,6 +27,7 @@ namespace LayeredBusinessModel.WebUI
             Page.Validate();
             if (Page.IsValid)
             {
+                //todo: remove login field, make the email address the login name
                 Customer customer = new Customer
                 {
                     name = inputName.Value,
@@ -39,7 +40,7 @@ namespace LayeredBusinessModel.WebUI
 
                 sendRegisterMail(inputEmail.Value);
 
-                //put user in session and redirect to index - todo: redirect to page telling user to click the confirmation link in the email
+                //put user in session and redirect to index - todo: redirect to page telling user to click the confirmation link in the email, then handle that link
                 Session["user"] = customer;
                 Response.Redirect("~/Index.aspx");
             }

@@ -7,10 +7,9 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
-using System.Web.UI.HtmlControls;
+using LayeredBusinessModel.BLL.Model;
 
-using LayeredBusinessModel.BLL;
-using LayeredBusinessModel.Domain;
+using System.Web.UI.HtmlControls;
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections.Specialized;
@@ -19,8 +18,6 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class MasterPage : System.Web.UI.MasterPage
     {
-        const string passphrase = "Password@123";  //consant string Pass key TODO: more secure passphrase (but will break current users login)
-
         protected void Page_Load(object sender, EventArgs e)
         {
             fillSideBar();
@@ -109,11 +106,10 @@ namespace LayeredBusinessModel.WebUI
 
             if (customer != null)
             {
-
-                //een null customer object geeft hier nog altijd true, daarom controle op password veld
+                //een null customer object geeft hier soms nog altijd true, daarom controle op password veld
                 if (customer.password != null)
-                {
-                    if (decryptPassword(customer.password).Equals(txtPassword.Value))
+                {                    
+                    if (CryptographyModel.decryptPassword(customer.password).Equals(txtPassword.Value))
                     {
                         //update user's number_of_visits
                         customer.numberOfVisits++;
@@ -127,13 +123,14 @@ namespace LayeredBusinessModel.WebUI
                     {
                         //incorrect password
                         Response.Redirect("~/Register.aspx?status=wronglogin");
-
+                        //todo: display error message or catch querystring in register page
                         //lblStatus.Text = "Incorrect login/password combination";
                     }
                 }
                 else
                 {
                     //no such user 
+                    //todo: display feedback
                     //lblStatus.Text = "Unknown user.";
 
                 }
@@ -162,37 +159,7 @@ namespace LayeredBusinessModel.WebUI
             Response.Redirect("Catalog.aspx?search=" + searchText);
         }
 
-
-        public string decryptPassword(string message)
-        {
-            byte[] results;
-            UTF8Encoding utf8 = new UTF8Encoding();
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-
-            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase));
-
-            TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
-            encryptionProvider.Key = encryptionKey;
-            encryptionProvider.Mode = CipherMode.ECB;
-            encryptionProvider.Padding = PaddingMode.PKCS7;
-
-            byte[] decrypt_data = Convert.FromBase64String(message);
-
-            try
-            {
-                ICryptoTransform decryptor = encryptionProvider.CreateDecryptor();
-                results = decryptor.TransformFinalBlock(decrypt_data, 0, decrypt_data.Length);
-            }
-            finally
-            {
-                encryptionProvider.Clear();
-                md5.Clear();
-            }
-
-            return utf8.GetString(results);
-        }
-
-
+        /*Fills the sidebar category and genre menu with database data.*/
         private void fillSideBar()
         {
             //Menu opvullen met alle categoriën en genres

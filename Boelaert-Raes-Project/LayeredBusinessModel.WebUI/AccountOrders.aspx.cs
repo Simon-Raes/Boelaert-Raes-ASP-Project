@@ -22,7 +22,8 @@ namespace LayeredBusinessModel.WebUI
                 OrderService orderService = new OrderService();
                 customerOrders = orderService.getOrdersForCustomer(user.customer_id);
                 gvOrders.DataSource = customerOrders;
-                gvOrders.DataBind();
+                gvOrders.DataBind();                
+                
             }
         }
 

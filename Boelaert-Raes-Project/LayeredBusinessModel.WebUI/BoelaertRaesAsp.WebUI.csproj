@@ -66,11 +66,9 @@
     <Content Include="Catalog.aspx" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
-    <Content Include="css\classic-min.css" />
     <Content Include="css\icons-classic\label.png" />
     <Content Include="css\icons-classic\resultset_next.png" />
     <Content Include="css\icons-classic\resultset_previous.png" />
-    <Content Include="css\iThing-min.css" />
     <Content Include="css\style.css" />
     <Content Include="CurrencyWebService.asmx" />
     <Content Include="Customers.aspx" />
@@ -93,8 +91,6 @@
     <Content Include="images\orders_mockup.png" />
     <Content Include="jquery\jquery.min.js" />
     <Content Include="js\bootstrap.min.js" />
-    <Content Include="js\jQDateRangeSlider-min.js" />
-    <Content Include="js\jQDateRangeSlider-withRuler-min.js" />
     <Content Include="js\jquery-ui-1.10.4.custom.js" />
     <Content Include="Login.aspx" />
     <Content Include="OrderPayment.aspx" />

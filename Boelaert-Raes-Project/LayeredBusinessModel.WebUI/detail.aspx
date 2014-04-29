@@ -8,11 +8,9 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <asp:Image ID="imgDvdCoverFocus" runat="server" />
+                    <asp:Image ID="imgDvdCoverFocus" CssClass="imgDetailCover" runat="server" />
                 </div>
                 <div class="col-md-8">
-                    <%-- <div class="row">--%>
-
                     <h2>
                         <asp:Label ID="lblTitle" runat="server"></asp:Label><asp:HyperLink ID="linkYear" runat="server"></asp:HyperLink></h2>
                     <hr />
@@ -34,7 +32,7 @@
                     <hr />
                     <div class="row">
                         <div class="col-md-3">
-                            <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnBuy_Click" />
+                            <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnBuy_Click" />
                         </div>
 
                     </div>
@@ -47,18 +45,24 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
+            <h2>Rent DVD</h2>
             <div class="col-md-3">
-            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged"></asp:Calendar>
+            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
+                <NextPrevStyle ForeColor="White" />
+                <TitleStyle BackColor="#3399FF" ForeColor="White" />
+                </asp:Calendar>
             </div>
             <div class="col-md-3">
-                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent1_Click" />
+                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br /><br />
+                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br /><br />
+                <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent7_Click" />
+
+
+            </div>
+            <%--<div class="col-md-3">
             </div>
             <div class="col-md-3">
-                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent3_Click" />
-            </div>
-            <div class="col-md-3">
-                <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-danger form-control" OnClick="btnRent7_Click" />
-            </div>
+            </div>--%>
         </div>
     </div>
 

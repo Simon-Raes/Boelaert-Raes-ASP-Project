@@ -1,264 +1,26 @@
-﻿/*body {
-background: #fff;
-font-family: 'Ubuntu', sans-serif;
-font-size: 13px;
-line-height: 20px;
-color: #979797;
-min-width: 1200px;
-margin: 0;
-padding: 0;
-}
-
-h1 {
-    font-size: 20px;
-    font-weight: normal;
-    line-height: 1.15;
-    margin-bottom: 0px;
-}
-
-a             { color:#3a3a3a; 	text-decoration:none;}
-a:hover       { text-decoration:none; color:#f93749; }
-:focus        { outline:0; color: #000; text-decoration: none; }
-a:focus 	  {outline:0; text-decoration: none; color: #f93749;}
-
-
-h2:before {
-content: url("/images/h2-bg.gif");
-display: inline-block;
-left: 0;
-position: relative;
-top: -10px;
-margin-left: -100px;
-margin-right: 35px;
-}
-
-h2:after {
-    content:url("/images/h2-bg.gif");
-
-display: inline-block;
-left: 0;
-position: relative;
-top: -10px;
-margin-left: 35px;
-margin-right: -100px;
-}
-
-
-ul, ol {
-list-style: none;
-margin:0;
-padding:0;
-}
-
-input, select, textarea, button {
-font: 12px Arial, Helvetica, sans-serif;
-vertical-align: middle;
-color: #000;
-}*/
-
-
-/*.top-container {    
-    background: #282828;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    height:auto;
-    max-width: 1200px;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}*/
-
-/*.row {
-    display:block;
-}*/
-
-/*.col {
-    padding-top:3px;
-    height:25px;
-    position: relative;
-    display:block;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.col-sidebar {
-    float:right;
-    width: 25%;
-}
-
-.col-main {
-    float:right;
-    width:75%;
-}
-
-.welcome {
-    float: left;
-    margin: -1px 0 0 0;
-    font-weight: normal;
-    font-size: 11px;
-    color: #959494;
-}
-
-.header-buttons {
-    float: right;
-    padding: 3px 0 0 0;
-}
-
-.header-button {
-    float: right;
-    position: relative;
-    margin-left: 22px;
-}*/
-
-/*.header-button.currency-list > a, .header-button.lang-list > a {
-    font-size: 11px;
-    line-height: 14px;
-    text-transform: uppercase;
-    background: url(/images/select_arr.gif) no-repeat 100% 8px;
-    padding: 0 7px 0 0;
-    color: #989898;
-}
-
-.header-phone {
-    float: right;
-    position: relative;
-    margin: 0 34px 0 0;
-    padding: 0 0 0 18px;
-    font-size: 14px;
-    font-weight: normal;
-    color: #989898;
-}*/
-
-/*header {
-    height:185px;
-    padding: 10px 10px 10px 10px;
-    border-bottom: solid 1px #eaeaea;
-}
-
-/*.header {
-    padding: 0;
-    position: relative;
-}
-
-.header .logo {
-float: left; 
-margin: 0 0 28px;
-display: block;
-width:100%;
-}*/
-
-/*.block-cart-header {
-    float: right;
-    background: url(/images/icon_cart.gif) no-repeat 0 0;
-    padding: 10px 0 10px 63px;
-    position: relative;
-    margin: 14px 0 28px 0;
-}
-
-.main-search {
-    float: right;
-    position: relative;
-    width: 570px;
-    margin: 0 0 0 0;
-    clear: right;   
-    z-index: 5;
-}
-
-.links {
-    float: left;
-    margin-left:0;
-    padding: 11px 0 0 0;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-
-
-.main-nav li {
-    float: left;
-    padding: 0;
-    margin-right: 24px;
-}
-
-
-.main-container {
-    padding: 30px 0;
-    position: relative;
-    z-index: 1;
-    background: #fff;
-}
-
-.block-side-nav {
-    margin-bottom: 25px;
-}
-
-.block-side-nav .block-title-cat {
-text-transform: uppercase;
-line-height: normal;
-border-bottom: solid 1px #eaeaea;
-padding: 8px 0 24px 0;
-margin: 0 20px 34px 0;
-font-size: 12px;
-color: #949494;
-}
-
-.sf-menu {
-overflow: hidden;
-}
-
-.sf-menu li {
-position: relative;
-margin: 0 0 20px 0;
-font-size: 20px;
-font-weight: normal;
-text-transform: uppercase;
-}
-
-.category-title {
-    display: block;
-}
-
-.page-title, .category-title {
-    margin: 0 0 22px;
-}
-
-.page-title h1, .page-title h2 {
-    font-size: 20px;
-    line-height: normal;
-    color: #3a3a3a;
-    font-weight: normal;
-    text-transform: uppercase;
-    margin: 0;
-}*/
-
-
-
-
-/* Yes, ziet er goed uit met een grijze achtergrond */
-
+﻿/*Site background color*/
 body { background: #DBDBDB; }
 
 
-/* css bootstrap overschrijven */
+/* Overwrite Bootstrap */
+
+/*Remove padding above movie title on detail page*/
 h2 {
     margin-top:0;
 }
 
-
-.navbar-inverse {
-    height:26px;
+/*Reduce height of top and bottom info-bars*/
+.header {
+    height:26px;    
+    color:grey;
 }
-
-.container {
-    color: #999;
-    padding-top:3px;
-    
+.footer{
+    height:60px;
 }
-
+.navbar-inverse p{
+    height:26px;    
+    color:grey;
+}
 .navbar-inverse .container ul li a{
     padding-top:0;
     padding-bottom:0;
@@ -267,13 +29,12 @@ h2 {
 
 
 
-
-.products-grid {
+/*No longer used? Remove these if no problems are found.*/
+/*.products-grid {
     color:white;
     position: relative;
     margin-bottom: 32px;
 }
-
 .products-grid li.item {
 float: left;
 -moz-box-sizing: border-box;
@@ -282,46 +43,21 @@ float: left;
 box-sizing: border-box;
 border: 1px solid #e8e8e8;
 padding:10px;
-
 }
-/*
-.item img {
-    
-    width:270px;
-    height:420px;
-}
-
-.col-3 {
-    width: 33.3333333%;
-    margin:0;
-    padding:0;
-   
-}
-*/
 .product-shop {
 position: relative;
 }
-
 .product-author{
     font-size: 12px;
     color: #979797;
     margin-bottom: 17px;
 }
-
-
-
 .regular-price {
 display: block;
 }
-
-
-
-
-
 .products-grid .actions button.button span span {
 padding: 0 20px;
 }
-
 button.button > span, .page-sitemap .links a {
 background: #f93749;
 color: #fff;
@@ -329,59 +65,55 @@ text-transform: uppercase;
 font-size: 10px;
 line-height: 30px;
 height: 30px;
-
 }
-
-.row {
-    margin:0;
+.tumbnail img{
+    height:78px;
 }
+*/
 
-.col-md-3 {
-    padding: 0;
-    margin-bottom:15px;
-}
 
-.col-md-3 .borderbox {
-   
+
+
+
+
+
+.borderbox {   
     padding:5px;
     border: 1px solid #e8e8e8;
     padding-bottom:5px;
+    margin-bottom:10px;
     }
 
-.col-md-3 img{
+.borderbox img{
     width:100%;
     height:300px;
 }
 
-.col-md-4 img {
+/*Set cover image size on detail page.*/
+.imgDetailCover{
     width:100%;
     height:431px;
 }
 
-.tumbnail img{
-    height:78px;
-}
 
+/*Replaced with default bootstrap look*/
 .price-box {
-    background: transparent;
+    /*background: transparent;
     border: 0;
     overflow: visible;
     cursor: pointer;
-    margin: 0;
-    width: 49%;
-    background: #f93749;
+    margin: 0;*/
+    width: 48%;
+    /*background: #f93749;
     color: #fff;
     text-transform: uppercase;
     font-size: 10px;
     line-height: 30px;
-    height: 30px;
+    height: 30px;*/
 }
 
-/*
-    
-  scrollview mediaobjecten gekoppeld aan dvd  
-    */
 
+/*scrollview mediaobjects on detailpage*/
 .mediaList
 {
     overflow-x:scroll;
@@ -389,14 +121,11 @@ height: 30px;
     height:200px;
     margin-bottom:5px;
     white-space: nowrap;
-    position: relative;
-    
+    position: relative;    
 }
-
 .scrollrow{
     width: 500%;
 }
-
 .DocumentItem
 {
     border:1px solid black;
@@ -405,33 +134,26 @@ height: 30px;
     width: auto;
     max-width:300px;
 }
-
 .DocumentItem img {
         height:186px;
 }
-
 .DocumentItem object {
         height:186px;
         width:auto;
 }
-
 .detail {
     margin:5px;
     margin-left:0px;
     margin-top:0px;
 }
-
-
 .borderbox {
     background-color: #FFF;
 }
-
 .dvdtitle {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
 }
 
 

@@ -234,7 +234,7 @@ namespace LayeredBusinessModel.WebUI
             return scr;
         }
 
-        /**Adds the dvd to the user's shopping cart*/
+        /**Adds the buy dvd to the user's shopping cart*/
         protected void btnBuy_Click(object sender, EventArgs e)
         {
             if (Request.QueryString["id"] != null)
@@ -244,6 +244,7 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
+        //todo: put rent panel in Ajax element so whole page doesn't need to refresh
         protected void btnRent1_Click(object sender, EventArgs e)
         {
             rentMovie(1);
@@ -315,9 +316,7 @@ namespace LayeredBusinessModel.WebUI
         }
 
         protected void calRent_DayRender(object sender, DayRenderEventArgs e)
-        {
-            //todo: fix this code
-            //does a lot of database calls for every day in the calendar (30+ times)
+        {            
             if (Request.QueryString["id"] != null)
             {
                 //only get dates once per calendar build-up
@@ -332,18 +331,19 @@ namespace LayeredBusinessModel.WebUI
                 }                
 
                 //movie can be reserved between today and 14 days from now   
-                if (!dates.Contains(e.Day.Date))
+                if (dates.Contains(e.Day.Date))
                 {
-                    e.Day.IsSelectable = false;
-                    e.Cell.BackColor = System.Drawing.Color.LightGray;
+                    e.Day.IsSelectable = true;
+                    e.Cell.BackColor = System.Drawing.Color.LightGreen;
                 }
                 else
                 {
-                    e.Cell.BackColor = System.Drawing.Color.LightGreen;
+                    e.Day.IsSelectable = false;
+                    e.Cell.BackColor = System.Drawing.Color.LightGray;                    
                 }
             }
-        }
 
+        }
 
 
         protected void calRent_SelectionChanged(object sender, EventArgs e)
@@ -357,7 +357,6 @@ namespace LayeredBusinessModel.WebUI
                 RentModel rentService = new RentModel();
                 int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
                 
-
                 if(daysAvailable>=1)
                 {
                     btnRent1.Visible = true;
@@ -371,8 +370,6 @@ namespace LayeredBusinessModel.WebUI
                     btnRent7.Visible = true;
                 }
             }
-            
-
         }
     }
 }

@@ -12,7 +12,7 @@ namespace LayeredBusinessModel.BLL.Model
 {
     public class PageVisitsModel
     {
-        /**Increases the number of pagevisits for this user by one. Creates a new record if none currently exists.*/
+        /**Increases the number of pagevisits for this user and movie by one. Creates a new record if none currently exists.*/
         public void incrementPageVisits(Customer customer, DvdInfo dvdInfo)
         {
             PageVisitsService pageVisitsService = new PageVisitsService();

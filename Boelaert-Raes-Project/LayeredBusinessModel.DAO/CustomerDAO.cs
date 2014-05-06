@@ -51,6 +51,7 @@ namespace LayeredBusinessModel.DAO
 
             SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE login = @login", cnn);
             command.Parameters.Add(new SqlParameter("@login", login));
+
             try
             {
                 cnn.Open();

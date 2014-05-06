@@ -83,6 +83,7 @@
                 </fieldset>
             </div>
         </div>
+        TODO: gebruikersgegevens laden via eID
     </div>
     BUG: elke button activeert de validators (bv "Sign in" uitvoeren vanaf deze pagina)
 </asp:Content>

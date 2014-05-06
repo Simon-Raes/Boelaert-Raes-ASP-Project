@@ -24,8 +24,8 @@ namespace LayeredBusinessModel.WebUI
             btnRent3.Visible = false;
             btnRent7.Visible = false;
 
-            if (!IsPostBack)
-            {
+            //if (!IsPostBack)
+            //{
                 if (Request.QueryString["id"] != null)
                 {
                     int id;
@@ -44,7 +44,7 @@ namespace LayeredBusinessModel.WebUI
                         pageVisitsModel.incrementPageVisits(user, dvdInfo);
                     }
                 }                
-            }
+            //}
         }
 
         private void setupDvdInfo(int id)

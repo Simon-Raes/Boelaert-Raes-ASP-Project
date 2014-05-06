@@ -19,8 +19,8 @@
     <form id="form1" runat="server">
 
         <div class="navbar-inverse header">
-            <div class="container">                
-                Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span> +32477073716
+            <div class="container">
+                Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span>+32477073716
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language <b class="caret"></b></a>
@@ -33,8 +33,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="currencySymbol" runat="server" class="glyphicon glyphicon-euro"></span><b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" id="euroLink" runat="server"><span class="glyphicon glyphicon-euro"></span> Euro</a></li>
-                            <li><a href="#" id="dollerLink" runat="server"><span class="glyphicon glyphicon-usd"></span> Dollar</a></li>
+                            <li><a href="#" id="euroLink" runat="server"><span class="glyphicon glyphicon-euro"></span>Euro</a></li>
+                            <li><a href="#" id="dollerLink" runat="server"><span class="glyphicon glyphicon-usd"></span>Dollar</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -46,9 +46,8 @@
             <div class="container">
 
                 <div class="page-header">
-                    <h1>ONLINE DVD SHOP<br />
-                        <small>TODO: banner image</small></h1>
-<%--                    <img class="img-responsive" src="http://www.clipartbest.com/cliparts/RcA/AKL/RcAAKLpcL.jpeg" />--%>
+                    <h1>Taboelaert Raesa<br />
+                        <small>A clean slate for online dvd shops (todo: betere titel en/of tagline)</small></h1>
                 </div>
 
                 <nav class="main-nav">
@@ -61,7 +60,7 @@
                                 <li><a href="About.aspx">About</a></li>
                             </ul>
 
-                            <ul class="nav navbar-nav navbar-right">           
+                            <ul class="nav navbar-nav navbar-right">
                                 <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
                                 <li><a href="dev.aspx">(Dev opties)</a></li>
                                 <li><a href="Admin.aspx">Admin</a></li>
@@ -70,7 +69,7 @@
                                     <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
                                     <button id="btnSearchNew" runat="server" onserverclick="btnMainSearch_Click1" class="btn btn-default">Search</button>
                                 </li>
-                                
+
                                 <li id="liSignup" runat="server"><a href="Register.aspx">Sign Up</a></li>
                                 <li id="liLogin" runat="server" class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
@@ -92,10 +91,11 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="ForgotPassword.aspx"><span class="glyphicon glyphicon-question-sign"></span>  Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
-                                            <input class="btn btn-primary btn-block" type="button" id="sign-in-google" value="Sign In with e-ID" />
+                                            <input class="btn btn-primary btn-block" type="button" id="sign-in-google" value="Sign Up" />
                                         </li>
                                     </ul>
                                 </li>
@@ -130,7 +130,9 @@
 
         <div class="navbar-inverse">
             <div class="container footer">
-                <p>Footer ...sitemap<br />contact....legal info<br /> ...</p>
+                <p>Footer ...sitemap<br />
+                    contact....legal info<br />
+                    ...</p>
             </div>
         </div>
 

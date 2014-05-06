@@ -100,41 +100,24 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            CustomerService customerService = new CustomerService();
-            Customer customer = customerService.getCustomerWithLogin(txtEmail.Value);
+            
 
-
-            if (customer != null)
+            if (txtEmail.Value != null && txtEmail.Value != null)
             {
-                //een null customer object geeft hier soms nog altijd true, daarom controle op password veld
-                if (customer.password != null)
-                {                    
-                    if (CryptographyModel.decryptPassword(customer.password).Equals(txtPassword.Value))
-                    {
-                        //update user's number_of_visits
-                        customer.numberOfVisits++;
-                        customerService.updateCustomer(customer);
+                LoginModel loginModel = new LoginModel();
+                Customer customer = loginModel.signIn(txtEmail.Value, txtPassword.Value);
 
-                        //put user in session and reload the page to update the navbar
-                        Session["user"] = customer;
-                        Response.Redirect(Request.RawUrl);
-                    }
-                    else
-                    {
-                        //incorrect password
-                        Response.Redirect("~/Register.aspx?status=wronglogin");
-                        //todo: display error message or catch querystring in register page
-                        //lblStatus.Text = "Incorrect login/password combination";
-                    }
+                if (customer != null)
+                {
+                    Session["user"] = customer;
+                    Response.Redirect(Request.RawUrl);
                 }
                 else
                 {
-                    //no such user 
-                    //todo: display feedback
-                    //lblStatus.Text = "Unknown user.";
-
+                    //incorrect login and/or password
+                    Response.Redirect("~/Register.aspx?status=wronglogin");
                 }
-            }
+            }  
         }
 
         protected void btnCart_Click(object sender, EventArgs e)

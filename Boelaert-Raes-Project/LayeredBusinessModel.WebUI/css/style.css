@@ -27,6 +27,14 @@ h2 {
     height:23px;
 }
 
+/*Center the text in the columns on the about page*/
+.centeredRow .col-lg-3 {
+    text-align: center;
+}
+.centeredRow .col-lg-3 img{
+    width:120px;
+    height:auto;
+}
 
 
 /*No longer used? Remove these if no problems are found.*/

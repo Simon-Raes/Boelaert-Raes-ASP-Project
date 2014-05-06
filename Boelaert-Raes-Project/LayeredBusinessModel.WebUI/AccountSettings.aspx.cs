@@ -94,7 +94,13 @@ namespace LayeredBusinessModel.WebUI
                     //redirect to login
                     Response.Redirect("Index.aspx");
                 }
-            }
+            }            
+        }
+
+        public void btnLogOut_Click(object sender, EventArgs e)
+        {
+            Session["user"] = null;
+            Response.Redirect("~/Index.aspx");
         }
     }
 }

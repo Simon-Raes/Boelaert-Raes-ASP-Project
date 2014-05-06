@@ -48,6 +48,7 @@
     <Compile Include="Database\OrderLineService.cs" />
     <Compile Include="Database\OrderService.cs" />
     <Compile Include="Database\PageVisitsService.cs" />
+    <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\CryptographyModel.cs" />
     <Compile Include="Model\PageVisitsModel.cs" />

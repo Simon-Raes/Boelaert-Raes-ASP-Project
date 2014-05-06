@@ -9,6 +9,7 @@
                 <li><a href="AccountOverview.aspx">Overview</a></li>
                 <li><a href="AccountOrders.aspx">Orders</a></li>
                 <li class="active"><a href="AccountSettings.aspx">Settings</a></li>
+                <li class="pull-right"><button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
 
             </ul>
 

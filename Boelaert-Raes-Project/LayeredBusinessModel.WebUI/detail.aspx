@@ -31,7 +31,9 @@
                     <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                     <hr />
                     <div class="row">
-                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />
+<%--                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />--%>
+                        <button id="btnBuyB" runat="server" type="submit" onserverclick="btnBuy_Click"></button>
+
                         <asp:Label ID="lblBuyStatus" runat="server" Text=""></asp:Label>
 
                     </div>
@@ -42,6 +44,7 @@
 
         </div>
     </div>
+    <a id="rent"></a>
     <div class="panel panel-default">
         <div class="panel-body">
             <h2>Rent DVD</h2>

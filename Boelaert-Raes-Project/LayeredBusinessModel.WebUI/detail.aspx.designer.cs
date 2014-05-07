@@ -103,13 +103,13 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Label lblPlot;
         
         /// <summary>
-        /// btnBuy control.
+        /// btnBuyB control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnBuy;
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnBuyB;
         
         /// <summary>
         /// lblBuyStatus control.

@@ -19,10 +19,10 @@ namespace LayeredBusinessModel.BLL
         }
 
         /*adds buy copy to cart(no dates)*/
-        public Boolean addItemToCart(int customerID, int dvdCopyID)
+        public Boolean addItemToCart(int customerID, int dvd_info_id)
         {
             shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.addItemToCart(customerID, dvdCopyID);
+            return shoppingCartDAO.addItemToCart(customerID, dvd_info_id);
         }
 
         //overloaded method for adding rent items with dates

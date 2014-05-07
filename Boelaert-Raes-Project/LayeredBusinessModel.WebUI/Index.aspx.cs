@@ -24,8 +24,8 @@ namespace LayeredBusinessModel.WebUI
             rs.getAllAvailableDaysPerCopyForDvdInfo(i, DateTime.Now);
 
 
-            if (!IsPostBack)
-            {
+            //if (!IsPostBack)
+            //{
                 user = (Customer)Session["user"];
 
                 //only show recommendations for a logged in user
@@ -36,7 +36,7 @@ namespace LayeredBusinessModel.WebUI
                 setupSpotlight();
                 setupNewReleases();
                 setupMostPopular();
-            }
+            //}
         }
 
         private void setupSpotlight()
@@ -93,6 +93,8 @@ namespace LayeredBusinessModel.WebUI
             foreach (DvdInfo d in dvds)
             {
                 dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                dvdInfo.ChoiceComplete += new dvdInfoUserControl.delChoiceComplete(eventComplete);
+
                 dvdInfo.id = d.dvd_info_id;
                 foreach (KeyValuePair<int, String> k in d.media)
                 {
@@ -102,13 +104,30 @@ namespace LayeredBusinessModel.WebUI
                     }
                 }
                 dvdInfo.title = d.name;
-
-               
                
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 
                 row.Controls.Add(dvdInfo);
+            }
+        }
+
+        public void eventComplete(object sender, dvdInfoUserControl.CustomEvents e)
+        {
+            //add item to cart
+            int dvd_info_id = e.dvd_info_id;
+
+            if (Session["user"] != null)
+            {
+                if (dvd_info_id != null)
+                {
+                    ShoppingCartService shoppingCartService = new ShoppingCartService();
+                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, dvd_info_id);
+                }
+            }
+            else
+            {
+                //todo: please sign in!
             }
         }
     }

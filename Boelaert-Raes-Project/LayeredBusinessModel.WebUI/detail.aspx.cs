@@ -151,16 +151,16 @@ namespace LayeredBusinessModel.WebUI
             if(AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
             {
                 lblBuyStatus.Text = "";
-                btnBuy.Attributes.Add("Class", "class='btn btn-success form-control'");                
+                btnBuyB.Attributes.Add("Class", "btn btn-success");                
             }
             else
             {
                 lblBuyStatus.Text = "Item currently out of stock!";
-                btnBuy.Attributes.Add("Class", "class='btn btn-warning form-control'");
+                btnBuyB.Attributes.Add("Class", "btn btn-warning");
             }
 
 
-            btnBuy.Text = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
+            btnBuyB.InnerText = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
             btnRent1.Text = "Rent 1 day " + currency + " "  + dvdInfo.rent_price.ToString();
             btnRent3.Text = "Rent 3 days " + currency + " "  + (dvdInfo.rent_price * 3).ToString();
             btnRent7.Text = "Rent 7 days " + currency + " "  + (dvdInfo.rent_price * 7).ToString();
@@ -248,10 +248,17 @@ namespace LayeredBusinessModel.WebUI
         /**Adds the buy dvd to the user's shopping cart*/
         protected void btnBuy_Click(object sender, EventArgs e)
         {
-            if (Request.QueryString["id"] != null)
+            if(Session["user"]!=null)
             {
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(Request.QueryString["id"]));
+                if (Request.QueryString["id"] != null)
+                {
+                    ShoppingCartService shoppingCartService = new ShoppingCartService();
+                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(Request.QueryString["id"]));
+                }                
+            }
+            else
+            {
+                //todo: please sign in!
             }
         }
 

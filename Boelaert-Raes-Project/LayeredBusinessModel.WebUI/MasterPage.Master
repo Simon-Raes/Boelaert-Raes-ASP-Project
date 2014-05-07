@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>DVD Site</title>
-
+    
 
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
@@ -17,7 +17,6 @@
 </head>
 <body>
     <form id="form1" runat="server">
-
         <div class="navbar-inverse header">
             <div class="container">
                 Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span>+32477073716

@@ -6,11 +6,22 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL.Model;
+using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.Domain;
 
 namespace LayeredBusinessModel.WebUI
 {
     public partial class dvdInfoUserControl : System.Web.UI.UserControl
     {
+
+        public delegate void delChoiceComplete(object sender, CustomEvents e);
+        public event delChoiceComplete ChoiceComplete;
+
+        public class CustomEvents : EventArgs
+        {
+            public int dvd_info_id { get; set; }
+        }
+
         public int id { get; set; }
         public String imageUrl { get; set; }
         public String title { get; set; }
@@ -22,8 +33,6 @@ namespace LayeredBusinessModel.WebUI
         {
             String currency = "€";
             wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
-
-
 
             dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
             dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
@@ -63,17 +72,35 @@ namespace LayeredBusinessModel.WebUI
                         break;
                 }
             }
-            btnBuy.Text = "Buy " + currency + " " + buy_price;
-            btnRent.Text = "Rent " + currency + " "+  rent_price;
-
+            
+            //set buy button color and text
             if (AvailabilityModel.isAvailableForBuying(Convert.ToString(id)))
             {
-                btnBuy.Attributes.Add("Class", "class='btn btn-success form-control'");
+                btnBuyB.Attributes.Add("Class", "btn btn-success price-box");
             }
             else
             {
-                btnBuy.Attributes.Add("Class", "class='btn btn-warning form-control'");
+                btnBuyB.Attributes.Add("Class", "btn btn-warning price-box");
             }
+            btnBuyB.InnerText = "Buy " + currency + " " + buy_price;
+            //set rent button text
+            btnRent.Text = "Rent " + currency + " " + rent_price;
+
+        }
+
+        protected void btnBuy_Click(object sender, EventArgs e)
+        {
+            CustomEvents ce = new CustomEvents();
+            ce.dvd_info_id = id;
+            ChoiceComplete(this, ce);
+
+            
+
+        }
+
+        protected void btnRent_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/detail.aspx?id=" + id + "#rent");
         }
     }
 }

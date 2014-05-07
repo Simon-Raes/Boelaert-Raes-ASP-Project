@@ -5,14 +5,15 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="panel panel-default">
         <div class="panel-body">
-            This website was designed by Serafijn Boelaert and Simon Raes as an assignment for mr Dewaele.<br />
+            This website was designed by Serafijn Boelaert and Simon Raes as an assignment for mr. Dewaele.<br />
             <br />
             Development was done with the ASP.NET 4.5 Framework. The database uses Microsoft SQL Server 2008.
             <br />
             The site layout was designed with help from Twitter Bootstrap.<br />
             <br />
-            Hosting by Somee.
+            Hosting by Somee(?).
             <br /><br />
+            Link to digital manual here.
             2014
             
         </div>

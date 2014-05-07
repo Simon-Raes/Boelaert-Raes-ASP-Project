@@ -46,7 +46,7 @@ namespace LayeredBusinessModel.WebUI
 
                 //set buttons
                 Customer user = (Customer)Session["user"];
-                liAccount.InnerHtml = "<a href='AccountOverview.aspx'>"+user.name+"</a>";                
+                liAccount.InnerHtml = "<a href='Overview.aspx'>"+user.name+"</a>";                
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
                 liCart.InnerText = "Cart: " + cartContent.Count;               

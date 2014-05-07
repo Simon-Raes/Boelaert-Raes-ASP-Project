@@ -31,9 +31,8 @@
                     <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                     <hr />
                     <div class="row">
-                        <div class="col-md-3">
-                            <asp:Button ID="btnBuy" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnBuy_Click" />
-                        </div>
+                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />
+                        <asp:Label ID="lblBuyStatus" runat="server" Text=""></asp:Label>
 
                     </div>
                 </div>
@@ -47,14 +46,16 @@
         <div class="panel-body">
             <h2>Rent DVD</h2>
             <div class="col-md-3">
-            <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
-                <NextPrevStyle ForeColor="White" />
-                <TitleStyle BackColor="#3399FF" ForeColor="White" />
+                <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
+                    <NextPrevStyle ForeColor="White" />
+                    <TitleStyle BackColor="#3399FF" ForeColor="White" />
                 </asp:Calendar>
             </div>
             <div class="col-md-3">
-                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br /><br />
-                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br /><br />
+                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
+                <br />
+                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br />
+                <br />
                 <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent7_Click" />
 
 

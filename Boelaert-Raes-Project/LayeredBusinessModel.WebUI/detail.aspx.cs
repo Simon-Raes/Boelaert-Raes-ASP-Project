@@ -24,6 +24,8 @@ namespace LayeredBusinessModel.WebUI
             btnRent3.Visible = false;
             btnRent7.Visible = false;
 
+            //disabled to fix images not loading after postback,
+            //todo: ajax stuff
             //if (!IsPostBack)
             //{
                 if (Request.QueryString["id"] != null)
@@ -145,8 +147,17 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
 
-
-
+                        
+            if(AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
+            {
+                lblBuyStatus.Text = "";
+                btnBuy.Attributes.Add("Class", "class='btn btn-success form-control'");                
+            }
+            else
+            {
+                lblBuyStatus.Text = "Item currently out of stock!";
+                btnBuy.Attributes.Add("Class", "class='btn btn-warning form-control'");
+            }
 
 
             btnBuy.Text = "Buy " + currency + " " + dvdInfo.buy_price.ToString();

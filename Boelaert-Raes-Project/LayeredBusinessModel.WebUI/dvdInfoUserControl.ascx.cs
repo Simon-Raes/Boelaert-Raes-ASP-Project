@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using LayeredBusinessModel.BLL.Model;
+
 namespace LayeredBusinessModel.WebUI
 {
     public partial class dvdInfoUserControl : System.Web.UI.UserControl
@@ -63,6 +65,15 @@ namespace LayeredBusinessModel.WebUI
             }
             btnBuy.Text = "Buy " + currency + " " + buy_price;
             btnRent.Text = "Rent " + currency + " "+  rent_price;
+
+            if (AvailabilityModel.isAvailableForBuying(Convert.ToString(id)))
+            {
+                btnBuy.Attributes.Add("Class", "class='btn btn-success form-control'");
+            }
+            else
+            {
+                btnBuy.Attributes.Add("Class", "class='btn btn-warning form-control'");
+            }
         }
     }
 }

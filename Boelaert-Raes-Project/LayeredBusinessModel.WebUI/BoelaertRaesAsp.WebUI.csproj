@@ -58,9 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="AccountOverview.aspx" />
-    <Content Include="AccountOrders.aspx" />
-    <Content Include="AccountSettings.aspx" />
+    <Content Include="Overview.aspx" />
+    <Content Include="Orders.aspx" />
+    <Content Include="Settings.aspx" />
     <Content Include="Admin.aspx" />
     <Content Include="Cart.aspx" />
     <Content Include="Catalog.aspx" />
@@ -114,26 +114,26 @@
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AccountOverview.aspx.cs">
-      <DependentUpon>AccountOverview.aspx</DependentUpon>
+    <Compile Include="Overview.aspx.cs">
+      <DependentUpon>Overview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AccountOverview.aspx.designer.cs">
-      <DependentUpon>AccountOverview.aspx</DependentUpon>
+    <Compile Include="Overview.aspx.designer.cs">
+      <DependentUpon>Overview.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AccountOrders.aspx.cs">
-      <DependentUpon>AccountOrders.aspx</DependentUpon>
+    <Compile Include="Orders.aspx.cs">
+      <DependentUpon>Orders.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AccountOrders.aspx.designer.cs">
-      <DependentUpon>AccountOrders.aspx</DependentUpon>
+    <Compile Include="Orders.aspx.designer.cs">
+      <DependentUpon>Orders.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AccountSettings.aspx.cs">
-      <DependentUpon>AccountSettings.aspx</DependentUpon>
+    <Compile Include="Settings.aspx.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AccountSettings.aspx.designer.cs">
-      <DependentUpon>AccountSettings.aspx</DependentUpon>
+    <Compile Include="Settings.aspx.designer.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin.aspx.cs">
       <DependentUpon>Admin.aspx</DependentUpon>
@@ -301,6 +301,9 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>LayeredBusinessModel_WebUI_wsCurrencyWebService_CurrencyWebService</CachedSettingsPropName>
     </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Account\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

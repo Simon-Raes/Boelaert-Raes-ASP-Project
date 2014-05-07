@@ -112,6 +112,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Button btnBuy;
         
         /// <summary>
+        /// lblBuyStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblBuyStatus;
+        
+        /// <summary>
         /// calRent control.
         /// </summary>
         /// <remarks>

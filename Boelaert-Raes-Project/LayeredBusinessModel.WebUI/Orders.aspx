@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="AccountOrders.aspx.cs" Inherits="LayeredBusinessModel.WebUI.AccountOrders" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="LayeredBusinessModel.WebUI.AccountOrders" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -7,9 +7,9 @@
         <div class="panel-body">
 
             <ul id="myTab" class="nav nav-tabs">
-                <li><a href="AccountOverview.aspx">Overview</a></li>
-                <li class="active"><a href="AccountOrders.aspx">Orders</a></li>
-                <li><a href="AccountSettings.aspx">Settings</a></li>
+                <li><a href="Overview.aspx">Overview</a></li>
+                <li class="active"><a href="Orders.aspx">Orders</a></li>
+                <li><a href="Settings.aspx">Settings</a></li>
                 <li class="pull-right"><button runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
             </ul>
             

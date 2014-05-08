@@ -65,7 +65,7 @@ namespace LayeredBusinessModel.WebUI
                         {
                             customer_id = user.customer_id, //keep existing customer_id
                             email = inputEmail.Value,
-                            login = user.login, //keep existing login
+                            //login = user.login, //keep existing login
                             name = inputName.Value,
                             numberOfVisits = user.numberOfVisits, //keep existing numberOfVisits
                             password = CryptographyModel.encryptPassword(inputPassword.Value)

@@ -27,6 +27,12 @@ h2 {
     height:23px;
 }
 
+.alert {
+    padding: 6px 12px;
+    margin:0px;
+}
+
+
 /*Center the text in the columns on the about page*/
 .centeredRow .col-lg-3 {
     text-align: center;

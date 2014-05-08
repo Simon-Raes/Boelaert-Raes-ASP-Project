@@ -67,7 +67,7 @@ namespace LayeredBusinessModel.WebUI
                 {
                     name = txtName.Text,
                     email = inputEmail.Value,
-                    login = inputLogin.Value,
+                   // login = inputLogin.Value,
                     password = CryptographyModel.encryptPassword(inputPassword.Value)
                 };
                 customerService = new CustomerService();
@@ -120,7 +120,7 @@ namespace LayeredBusinessModel.WebUI
         protected void valCustLogin_ServerValidate(object source, ServerValidateEventArgs args)
         {
             CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithLogin(inputLogin.Value);
+            Customer cust = customerService.getCustomerWithEmail(inputLogin.Value);
             if (cust == null)
             {
                 //login name still available

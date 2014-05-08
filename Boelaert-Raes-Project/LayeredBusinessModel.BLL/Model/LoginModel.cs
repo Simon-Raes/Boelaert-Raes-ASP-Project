@@ -13,7 +13,7 @@ namespace LayeredBusinessModel.BLL.Model
         public Customer signIn(String loginName, String password)
         {
             CustomerService customerService = new CustomerService();
-            Customer customer = customerService.getCustomerWithLogin(loginName);
+            Customer customer = customerService.getCustomerWithEmail(loginName);
 
             if (customer != null)
             {

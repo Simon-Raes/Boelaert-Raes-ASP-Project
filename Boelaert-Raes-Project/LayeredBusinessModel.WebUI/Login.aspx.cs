@@ -24,7 +24,7 @@ namespace LayeredBusinessModel.WebUI
         protected void btnLogin_Click(object sender, EventArgs e)
         {
             customerService = new CustomerService();
-            Customer customer = customerService.getCustomerWithLogin(txtEmail.Text);
+            Customer customer = customerService.getCustomerWithEmail(txtEmail.Text);
             
             //todo: validators
 

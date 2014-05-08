@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.DAO
     public class DAO
     {
         protected string strSQL;
-        protected string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["ProjectConnection"].ConnectionString;
+        protected string sDatabaseLocatie = ConfigurationManager.ConnectionStrings["local"].ConnectionString;
         protected SqlConnection cnn;
     }
 }

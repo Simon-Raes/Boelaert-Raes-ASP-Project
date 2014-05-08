@@ -23,7 +23,7 @@ namespace LayeredBusinessModel.WebUI
             Customer user = customerService.getCustomerWithEmail(txtPassword.Value);
             if (user == null)
             {
-                user = customerService.getCustomerWithLogin(txtPassword.Value);
+                user = customerService.getCustomerWithEmail(txtPassword.Value);
             }
 
             if(user!=null)

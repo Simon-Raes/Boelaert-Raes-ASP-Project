@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<publishData>
+  <publishProfile
+    publishUrl="https://simonraes-001-site1.smarterasp.net:8172/msdeploy.axd"
+    msdeploySite="simonraes-001-site1"
+    destinationAppUrl="http://simonraes-001-site1.smarterasp.net/"
+    profileName="Default Settings"
+    publishMethod="MSDeploy"
+    userName="ifc\simonraes-001" />
+</publishData>

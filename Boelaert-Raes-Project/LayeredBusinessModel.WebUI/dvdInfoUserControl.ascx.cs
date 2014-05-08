@@ -83,11 +83,37 @@ namespace LayeredBusinessModel.WebUI
                 btnBuyB.Attributes.Add("Class", "btn btn-warning price-box");
             }
             btnBuyB.InnerText = "Buy " + currency + " " + buy_price;
-            //set rent button text
-            btnRent.Text = "Rent " + currency + " " + rent_price;
+
+            //set rent button text           
+            RentModel rentService = new RentModel();
+            DvdInfoService dvdbll = new DvdInfoService();
+            DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Convert.ToString(id));
+            List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+
+            if(dates.Count>=14)
+            {
+                //fully available, green button
+                btnRentB.Attributes.Add("Class", "btn btn-success price-box");
+            }
+            else if(dates.Count>0)
+            {
+                //available on some days, orange button
+                btnRentB.Attributes.Add("Class", "btn btn-warning price-box");
+            }
+            else
+            {
+                //not available at all, red button
+                btnRentB.Attributes.Add("Class", "btn btn-danger price-box");
+            }
+
+            btnRentB.InnerText = "Rent " + currency + " " + rent_price;
 
         }
 
+        //todo: fix postback bug
+        //site uses ID of movie that will take up the place of the selected movie
+        //click on godfather, page refreshes, pulp fiction takes up that place now, pulp fiction gets added to cart
+        //^fix that! querystring (addToCart?id=xxx) if no other solution works
         protected void btnBuy_Click(object sender, EventArgs e)
         {
             CustomEvents ce = new CustomEvents();

@@ -21,7 +21,8 @@
                     </h4>
                 </div>
                 <button id="btnBuyB" runat="server" type="submit" onserverclick="btnBuy_Click"></button>
-                <asp:Button ID="btnRent" runat="server" Text="Rent" class="btn btn-success price-box" OnClick="btnRent_Click" />
+                <button id="btnRentB" runat="server" type="submit" onserverclick="btnRent_Click"></button>
+                <%--<asp:Button ID="btnRent" runat="server" Text="Rent" class="btn btn-success price-box" OnClick="btnRent_Click" />--%>
     </div>
 </asp:Panel>
 

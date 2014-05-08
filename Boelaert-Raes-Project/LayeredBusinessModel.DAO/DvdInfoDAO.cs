@@ -15,384 +15,404 @@ namespace LayeredBusinessModel.DAO
         public int addDvdInfo(DvdInfo dvdInfo)
         {
             int dvdInfoId = -1;
-            cnn = new SqlConnection(sDatabaseLocatie);
-            
-            SqlCommand command = new SqlCommand("INSERT INTO DvdInfo" +
-            "(name, year, barcode, author, description, rent_price, buy_price, date_added, amount_sold, actors, duration) " +
-            "OUTPUT INSERTED.dvd_info_id " +
-            "VALUES (@name, @year, @barcode, @author, @description, @rent_price, @buy_price, @date_added, @amount_sold, @actors, @duration)", cnn);
-            command.Parameters.Add(new SqlParameter("@name", dvdInfo.name));
-            command.Parameters.Add(new SqlParameter("@year", dvdInfo.year));
-            command.Parameters.Add(new SqlParameter("@barcode", dvdInfo.barcode));
-            command.Parameters.Add(new SqlParameter("@author", dvdInfo.author));
-            command.Parameters.Add(new SqlParameter("@description", dvdInfo.descripion));
-            command.Parameters.Add(new SqlParameter("@rent_price", dvdInfo.rent_price));
-            command.Parameters.Add(new SqlParameter("@buy_price", dvdInfo.buy_price));
-            command.Parameters.Add(new SqlParameter("@date_added", dvdInfo.date_added));
-            command.Parameters.Add(new SqlParameter("@amount_sold", dvdInfo.amount_sold));
-
-            String actorsString = "";
-            for(int i=0;i<dvdInfo.actors.Length;i++)
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                actorsString += dvdInfo.actors[i];
-                if(i<dvdInfo.actors.Length-1)
+
+                SqlCommand command = new SqlCommand("INSERT INTO DvdInfo" +
+                "(name, year, barcode, author, description, rent_price, buy_price, date_added, amount_sold, actors, duration) " +
+                "OUTPUT INSERTED.dvd_info_id " +
+                "VALUES (@name, @year, @barcode, @author, @description, @rent_price, @buy_price, @date_added, @amount_sold, @actors, @duration)", cnn);
+                command.Parameters.Add(new SqlParameter("@name", dvdInfo.name));
+                command.Parameters.Add(new SqlParameter("@year", dvdInfo.year));
+                command.Parameters.Add(new SqlParameter("@barcode", dvdInfo.barcode));
+                command.Parameters.Add(new SqlParameter("@author", dvdInfo.author));
+                command.Parameters.Add(new SqlParameter("@description", dvdInfo.descripion));
+                command.Parameters.Add(new SqlParameter("@rent_price", dvdInfo.rent_price));
+                command.Parameters.Add(new SqlParameter("@buy_price", dvdInfo.buy_price));
+                command.Parameters.Add(new SqlParameter("@date_added", dvdInfo.date_added));
+                command.Parameters.Add(new SqlParameter("@amount_sold", dvdInfo.amount_sold));
+
+                String actorsString = "";
+                for (int i = 0; i < dvdInfo.actors.Length; i++)
                 {
-                    //more actors to follow, add comma
-                    actorsString += ",";
+                    actorsString += dvdInfo.actors[i];
+                    if (i < dvdInfo.actors.Length - 1)
+                    {
+                        //more actors to follow, add comma
+                        actorsString += ",";
+                    }
                 }
-            }
-            command.Parameters.Add(new SqlParameter("@actors", actorsString));
-            command.Parameters.Add(new SqlParameter("@duration", dvdInfo.duration));
+                command.Parameters.Add(new SqlParameter("@actors", actorsString));
+                command.Parameters.Add(new SqlParameter("@duration", dvdInfo.duration));
 
-            try
-            {
-                cnn.Open();
-                dvdInfoId = (int)command.ExecuteScalar();
+                try
+                {
+                    cnn.Open();
+                    dvdInfoId = (int)command.ExecuteScalar();
+                }
+                catch (Exception ex)
+                {
+                    //return -1 on error
+                    dvdInfoId = -1;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdInfoId;
             }
-            catch (Exception ex)
-            {
-                //return -1 on error
-                dvdInfoId = -1;
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdInfoId;
         }
 
         public List<DvdInfo> getAllDvdInfos()
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-
-            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo", cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo", cnn);
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdlist;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdlist;
         }
 
         /**Returns all DvdInfo's that have a banner image*/
         public List<DvdInfo> getAllDvdInfosWithBanner()
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-
-            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo "+
-            "JOIN Media "+
-            "ON Media.dvd_info_id = DvdInfo.dvd_info_id "+
-            "WHERE Media.media_type_id = 4", cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo " +
+                "JOIN Media " +
+                "ON Media.dvd_info_id = DvdInfo.dvd_info_id " +
+                "WHERE Media.media_type_id = 4", cnn);
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdlist;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdlist;
         }
 
 
         public DvdInfo getDvdInfoWithId(String id)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            DvdInfo dvd = null;
-
-            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE dvd_info_id = "+id, cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                DvdInfo dvd = null;
 
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE dvd_info_id = " + id, cnn);
+                try
                 {
-                    dvd = createDvdInfo(reader);
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvd = createDvdInfo(reader);
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvd;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvd;
         }
 
 
         //todo
         public void updateDvdInfo(DvdInfo dvd)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-
-            SqlCommand command = new SqlCommand("UPDATE DvdInfo " +
-            "SET name = @name, " +
-            "year = @year, " +
-            "barcode = @barcode, " +
-            "author = @author, " +
-            "description = @description, " +
-            "rent_price = @rent_price, " +
-            "buy_price = @buy_price, " +
-           // "date_added = @date_added, " +
-            "amount_sold = @amount_sold " +
-            "WHERE dvd_info_id = @dvd_info_id", cnn);
-
-            command.Parameters.Add(new SqlParameter("@name", dvd.name));
-            command.Parameters.Add(new SqlParameter("@year", dvd.year));
-            command.Parameters.Add(new SqlParameter("@barcode", dvd.barcode));
-            command.Parameters.Add(new SqlParameter("@author", dvd.author));
-            command.Parameters.Add(new SqlParameter("@description", dvd.descripion));
-            command.Parameters.Add(new SqlParameter("@rent_price", dvd.rent_price));
-            command.Parameters.Add(new SqlParameter("@buy_price", dvd.buy_price));
-          //  command.Parameters.Add(new SqlParameter("@date_added", dvd.date_added));
-            command.Parameters.Add(new SqlParameter("@amount_sold", dvd.amount_sold));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
 
-                reader.Close();
+                SqlCommand command = new SqlCommand("UPDATE DvdInfo " +
+                "SET name = @name, " +
+                "year = @year, " +
+                "barcode = @barcode, " +
+                "author = @author, " +
+                "description = @description, " +
+                "rent_price = @rent_price, " +
+                "buy_price = @buy_price, " +
+                    // "date_added = @date_added, " +
+                "amount_sold = @amount_sold " +
+                "WHERE dvd_info_id = @dvd_info_id", cnn);
 
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                cnn.Close();
+                command.Parameters.Add(new SqlParameter("@name", dvd.name));
+                command.Parameters.Add(new SqlParameter("@year", dvd.year));
+                command.Parameters.Add(new SqlParameter("@barcode", dvd.barcode));
+                command.Parameters.Add(new SqlParameter("@author", dvd.author));
+                command.Parameters.Add(new SqlParameter("@description", dvd.descripion));
+                command.Parameters.Add(new SqlParameter("@rent_price", dvd.rent_price));
+                command.Parameters.Add(new SqlParameter("@buy_price", dvd.buy_price));
+                //  command.Parameters.Add(new SqlParameter("@date_added", dvd.date_added));
+                command.Parameters.Add(new SqlParameter("@amount_sold", dvd.amount_sold));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+
+                try
+                {
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    reader.Close();
+
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
             }
         }
 
 
         public List<DvdInfo> searchDvdWithText(String searchText)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-
-            //todo: parameters
-            //beter met CONTAINS dan wildcards+LIKE?
-            SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%';", cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-                while (reader.Read())
+                //todo: parameters
+                //beter met CONTAINS dan wildcards+LIKE?
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%';", cnn);
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdlist;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdlist;
         }
 
         public List<DvdInfo> searchDvdWithTextAndCategory(String searchText, String categoryID)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-
-            //todo: parameters
-            //beter met CONTAINS dan wildcards+LIKE?    
-
-            
-            SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " + //"SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image "
-            "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration " +
-            "FROM DvdInfo " +
-            "INNER JOIN DvdGenre " +
-            "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
-            "INNER JOIN Genres " +
-            "ON DvdGenre.genre_id = Genres.genre_id " +
-            "WHERE Genres.category_id = " + categoryID +
-            "AND (DvdInfo.name LIKE '%" + searchText + "%' OR DvdInfo.barcode LIKE '%" + searchText + "%' OR DvdInfo.author LIKE '%" + searchText + "%') " +
-            "GROUP BY DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, "+
-            "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
-
-
-            /**
-            dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                name = Convert.ToString(reader["name"]),
-                year = Convert.ToString(reader["year"]),
-                barcode = Convert.ToString(reader["barcode"]),
-                author = Convert.ToString(reader["author"]),
-                image = Convert.ToString(reader["image"]),
-                descripion = Convert.ToString(reader["description"]),
-                rent_price = float.Parse(reader["rent_price"].ToString()),
-                buy_price = float.Parse(reader["buy_price"].ToString()),
-                date_added = Convert.ToDateTime(reader["date_added"]),
-                amount_sold = Convert.ToInt32(reader["amount_sold"])
-                    */
-
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-                while (reader.Read())
+                //todo: parameters
+                //beter met CONTAINS dan wildcards+LIKE?    
+
+
+                SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " + //"SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image "
+                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration " +
+                "FROM DvdInfo " +
+                "INNER JOIN DvdGenre " +
+                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+                "INNER JOIN Genres " +
+                "ON DvdGenre.genre_id = Genres.genre_id " +
+                "WHERE Genres.category_id = " + categoryID +
+                "AND (DvdInfo.name LIKE '%" + searchText + "%' OR DvdInfo.barcode LIKE '%" + searchText + "%' OR DvdInfo.author LIKE '%" + searchText + "%') " +
+                "GROUP BY DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " +
+                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
+
+
+                /**
+                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    name = Convert.ToString(reader["name"]),
+                    year = Convert.ToString(reader["year"]),
+                    barcode = Convert.ToString(reader["barcode"]),
+                    author = Convert.ToString(reader["author"]),
+                    image = Convert.ToString(reader["image"]),
+                    descripion = Convert.ToString(reader["description"]),
+                    rent_price = float.Parse(reader["rent_price"].ToString()),
+                    buy_price = float.Parse(reader["buy_price"].ToString()),
+                    date_added = Convert.ToDateTime(reader["date_added"]),
+                    amount_sold = Convert.ToInt32(reader["amount_sold"])
+                        */
+
+
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdlist;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdlist;
         }
 
         public List<DvdInfo> searchDvdWithTextAndGenre(String searchText, String genreID)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-
-            //todo: parameters    
-
-            SqlCommand command = new SqlCommand("SELECT * " + //SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image 
-            "FROM DvdInfo " +
-            "INNER JOIN DvdGenre " +
-            "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
-            "WHERE DvdGenre.genre_id = " + genreID +
-            " AND (name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%')", cnn);
-
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-                while (reader.Read())
+                //todo: parameters    
+
+                SqlCommand command = new SqlCommand("SELECT * " + //SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image 
+                "FROM DvdInfo " +
+                "INNER JOIN DvdGenre " +
+                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+                "WHERE DvdGenre.genre_id = " + genreID +
+                " AND (name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%')", cnn);
+
+
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdlist;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdlist;
         }
 
         public List<DvdInfo> getLatestDvds(int amount)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-            SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY date_added DESC", cnn);
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
+                SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY date_added DESC", cnn);
 
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return dvdlist;
+                return dvdlist;
+            }
         }
 
         public List<DvdInfo> searchDvdFromYear(String year)
         {
             List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-            cnn = new SqlConnection(sDatabaseLocatie);
-            
-            SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where year = " + year, cnn);
-            command.Parameters.Add(new SqlParameter("@year", year));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+
+                SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where year = " + year, cnn);
+                command.Parameters.Add(new SqlParameter("@year", year));
+
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return dvdlist;
+                return dvdlist;
+            }
 
         }
 
@@ -400,31 +420,33 @@ namespace LayeredBusinessModel.DAO
         {
             List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-            cnn = new SqlConnection(sDatabaseLocatie);
-
-            SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where author like '%" + director + "%'", cnn);
-            command.Parameters.Add(new SqlParameter("@director", director));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+
+                SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where author like '%" + director + "%'", cnn);
+                command.Parameters.Add(new SqlParameter("@director", director));
+
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return dvdlist;
+                return dvdlist;
+            }
 
         }
 
@@ -432,109 +454,115 @@ namespace LayeredBusinessModel.DAO
         {
             List<DvdInfo> dvdlist = new List<DvdInfo>();
 
-            cnn = new SqlConnection(sDatabaseLocatie);
-
-            SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where actors like '%" + actor + "%'", cnn);
-            command.Parameters.Add(new SqlParameter("@director", actor));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+
+                SqlCommand command = new SqlCommand("SELECT  * FROM DvdInfo where actors like '%" + actor + "%'", cnn);
+                command.Parameters.Add(new SqlParameter("@director", actor));
+
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return dvdlist;
+                return dvdlist;
+            }
 
         }
 
 
         public List<DvdInfo> getMostPopularDvds(int amount)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<DvdInfo> dvdlist = new List<DvdInfo>();
-            SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY amount_sold DESC", cnn);
-            command.Parameters.Add(new SqlParameter("@amount", amount));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
+                List<DvdInfo> dvdlist = new List<DvdInfo>();
+                SqlCommand command = new SqlCommand("SELECT top " + amount + " * FROM DvdInfo ORDER BY amount_sold DESC", cnn);
+                command.Parameters.Add(new SqlParameter("@amount", amount));
 
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    dvdlist.Add(createDvdInfo(reader));
+
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        dvdlist.Add(createDvdInfo(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return dvdlist;
+                return dvdlist;
+            }
         }
 
         public List<int> getRecommendations(int[] genres, int amount)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<int> dvdIds = new List<int>();
-
-            SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where genre_id in (" + genres[0] +","+ genres[1] +","+ genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
-
-            sql.Parameters.Add(new SqlParameter("@amount",amount));
-
-            //create a string out of the received genres
-            //String values = "";
-            //for (int i = 1; i <= genres.Length; i++)
-            //{
-            //    values += genres[i - 1];
-            //    if (i < genres.Length)
-            //    {
-            //        values += ",";
-            //    }
-            //}
-            
-            //sql.Parameters.Add(new SqlParameter("@values", values));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
+                List<int> dvdIds = new List<int>();
 
-                SqlDataReader reader = sql.ExecuteReader();
+                SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
 
-                while (reader.Read())
+                sql.Parameters.Add(new SqlParameter("@amount", amount));
+
+                //create a string out of the received genres
+                //String values = "";
+                //for (int i = 1; i <= genres.Length; i++)
+                //{
+                //    values += genres[i - 1];
+                //    if (i < genres.Length)
+                //    {
+                //        values += ",";
+                //    }
+                //}
+
+                //sql.Parameters.Add(new SqlParameter("@values", values));
+
+                try
                 {
-                    dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                    cnn.Open();
+
+                    SqlDataReader reader = sql.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                    }
+
+                    reader.Close();
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdIds;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdIds;
         }
 
 
@@ -543,33 +571,35 @@ namespace LayeredBusinessModel.DAO
         {
             List<KeyValuePair<int, string>> media = new List<KeyValuePair<int, string>>();
 
-            cnn = new SqlConnection(sDatabaseLocatie);
-            SqlCommand sql = new SqlCommand("Select * from Media where dvd_info_id = " + id + " order by media_type_id DESC", cnn);
-            sql.Parameters.Add(new SqlParameter("@id", id));
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = sql.ExecuteReader();
-                while (reader.Read())
+                SqlCommand sql = new SqlCommand("Select * from Media where dvd_info_id = " + id + " order by media_type_id DESC", cnn);
+                sql.Parameters.Add(new SqlParameter("@id", id));
+                try
                 {
-                    KeyValuePair<int, String> mediaObject = new KeyValuePair<int,string>(Convert.ToInt32(reader["media_type_id"]),reader["url"].ToString());
-                    media.Add(mediaObject);
+                    cnn.Open();
+                    SqlDataReader reader = sql.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        KeyValuePair<int, String> mediaObject = new KeyValuePair<int, string>(Convert.ToInt32(reader["media_type_id"]), reader["url"].ToString());
+                        media.Add(mediaObject);
+                    }
+                    reader.Close();
+
                 }
-                reader.Close();
+                catch (Exception ex)
+                {
 
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+
+
+
+                return media;
             }
-            catch (Exception ex)
-            {
-                
-            }
-            finally
-            {
-                cnn.Close();
-            }
-
-
-
-            return media;
         }
 
 

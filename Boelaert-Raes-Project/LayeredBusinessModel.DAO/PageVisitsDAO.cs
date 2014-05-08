@@ -14,112 +14,120 @@ namespace LayeredBusinessModel.DAO
     {
         public PageVisits getPageVisits(Customer customer, DvdInfo dvdInfo)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            PageVisits pageVisits = null;
-
-            SqlCommand command = new SqlCommand("SELECT * FROM PageVisits WHERE customer_id = @customer_id AND dvd_info_id = @dvd_info_id", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                pageVisits = createPageVisits(reader);
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                pageVisits = null;
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                PageVisits pageVisits = null;
 
-            return pageVisits;
+                SqlCommand command = new SqlCommand("SELECT * FROM PageVisits WHERE customer_id = @customer_id AND dvd_info_id = @dvd_info_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
+
+                try
+                {
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    pageVisits = createPageVisits(reader);
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    pageVisits = null;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+
+                return pageVisits;
+            }
         }
 
         public List<PageVisits> getTopPageVisitsForCustomer(Customer customer, int number_of_results)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<PageVisits> pageVisits = new List<PageVisits>();
-
-            SqlCommand command = new SqlCommand("SELECT top "+number_of_results+" * FROM PageVisits WHERE customer_id = @customer_id ORDER BY number_of_visits DESC", cnn);
-            command.Parameters.Add(new SqlParameter("@amount", number_of_results));
-            command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-            
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                List<PageVisits> pageVisits = new List<PageVisits>();
+
+                SqlCommand command = new SqlCommand("SELECT top " + number_of_results + " * FROM PageVisits WHERE customer_id = @customer_id ORDER BY number_of_visits DESC", cnn);
+                command.Parameters.Add(new SqlParameter("@amount", number_of_results));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+
+
+                try
                 {
-                    pageVisits.Add(createPageVisits(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        pageVisits.Add(createPageVisits(reader));
+                    }
+                    reader.Close();
                 }
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
 
-            return pageVisits;
+                return pageVisits;
+            }
         }
 
         public void addPageVisits(PageVisits pageVisits)
-        {             
-            cnn = new SqlConnection(sDatabaseLocatie);
-
-            SqlCommand command = new SqlCommand("INSERT INTO PageVisits " +
-            "(customer_id, dvd_info_id, number_of_visits) " +            
-            "VALUES(@customer_id, @dvd_info_id, @number_of_visits)", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));
-            command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
-
-            try
-            {                
-                cnn.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {                
-            }
-            finally
+        {
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Close();
-            }        
+
+                SqlCommand command = new SqlCommand("INSERT INTO PageVisits " +
+                "(customer_id, dvd_info_id, number_of_visits) " +
+                "VALUES(@customer_id, @dvd_info_id, @number_of_visits)", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
+
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+            }
         }
 
         public void updatePageVisits(PageVisits pageVisits)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
 
-            SqlCommand command = new SqlCommand("UPDATE PageVisits " +
-            "SET number_of_visits = @number_of_visits " +            
-            "WHERE customer_id = @customer_id "+
-            "AND dvd_info_id = @dvd_info_id", cnn);
-            command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
-            command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));            
+                SqlCommand command = new SqlCommand("UPDATE PageVisits " +
+                "SET number_of_visits = @number_of_visits " +
+                "WHERE customer_id = @customer_id " +
+                "AND dvd_info_id = @dvd_info_id", cnn);
+                command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
+                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));
 
-            try
-            {
-                cnn.Open();
-                command.ExecuteNonQuery();                
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                cnn.Close();
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
             }
         }        
 

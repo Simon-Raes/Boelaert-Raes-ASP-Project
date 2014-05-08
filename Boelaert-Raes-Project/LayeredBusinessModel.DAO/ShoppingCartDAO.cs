@@ -14,172 +14,184 @@ namespace LayeredBusinessModel.DAO
     {
         public List<ShoppingcartItem> getCartContentForCustomer(int id)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
-
-
-            /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
-            SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
-            "DvdInfo.name, startdate, enddate, DvdCopyType.name as typeName " +
-            "FROM ShoppingcartItem " +            
-            "INNER JOIN DvdInfo "+
-            "ON ShoppingcartItem.dvd_info_id = DvdInfo.dvd_info_id "+
-            "INNER JOIN DvdCopyType "+
-            "ON ShoppingcartItem.copy_type_id = DvdCopyType.copy_type_id " +
-            "WHERE customer_id = " + id, cnn);
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
 
-                while (reader.Read())
+
+                /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
+                SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
+                "DvdInfo.name, startdate, enddate, DvdCopyType.name as typeName " +
+                "FROM ShoppingcartItem " +
+                "INNER JOIN DvdInfo " +
+                "ON ShoppingcartItem.dvd_info_id = DvdInfo.dvd_info_id " +
+                "INNER JOIN DvdCopyType " +
+                "ON ShoppingcartItem.copy_type_id = DvdCopyType.copy_type_id " +
+                "WHERE customer_id = " + id, cnn);
+
+                try
                 {
-                    cartItems.Add(createShoppingcartItem(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        cartItems.Add(createShoppingcartItem(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return cartItems;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return cartItems;
         }
 
         /**Adds BUY dvd to cart*/
         public Boolean addItemToCart(int customerID, int dvdInfoID)
         {
             Boolean status = false;
-            cnn = new SqlConnection(sDatabaseLocatie);
-
-            //todo: paramaters (of ander beter systeem) gebruiken!
-
-            SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
-            "(customer_id, dvd_info_id, copy_type_id)" +
-            "VALUES(@customer_id, @dvd_info_id, 2)", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", customerID));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                command.ExecuteNonQuery();
-                status = true;
+
+                //todo: paramaters (of ander beter systeem) gebruiken!
+
+                SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
+                "(customer_id, dvd_info_id, copy_type_id)" +
+                "VALUES(@customer_id, @dvd_info_id, 2)", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customerID));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return status;
             }
-            catch (Exception ex)
-            {
-                status = false;
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return status;
         }
 
         /**Adds RENT dvd to cart*/
         public Boolean addItemToCart(int customerID, int dvdInfoID, DateTime startdate, DateTime enddate)
         {
             Boolean status = false;
-            cnn = new SqlConnection(sDatabaseLocatie);
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
 
-            SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
-            "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
-            "VALUES(@customer_id, @dvd_info_id, convert(datetime,'" + startdate + "',103), convert(datetime,'" + enddate + "',103), 1)", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", customerID));
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
-            //command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
-            //command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
+                SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
+                "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
+                "VALUES(@customer_id, @dvd_info_id, convert(datetime,'" + startdate + "',103), convert(datetime,'" + enddate + "',103), 1)", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customerID));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+                //command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
+                //command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
 
-            try
-            {
-                cnn.Open();
-                command.ExecuteNonQuery();
-                status = true;
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return status;
             }
-            catch (Exception ex)
-            {
-                status = false;
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return status;
         }
 
 
         public Boolean removeItemFromCart(String cartItemID)
         {
             Boolean status = false;
-            cnn = new SqlConnection(sDatabaseLocatie);
-            
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
-            command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
-            
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
 
-            try
-            {
-                cnn.Open();
-                command.ExecuteNonQuery();
-                status = true;
+                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
+                command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
+
+
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return status;
             }
-            catch (Exception ex)
-            {
-                status = false;
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return status;
         }
 
         /*Delete all items from this user's shoppingcart*/
         public void clearCustomerCart(int customer_id)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
 
 
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
-            command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
 
-            try
-            {
-                cnn.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                cnn.Close();
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
             }
         }
 
         /*Delete ALL data from this table*/
         public void clearTable()
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem", cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-            }
-            finally
-            {
-                cnn.Close();
+                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem", cnn);
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                }
+                finally
+                {
+                    cnn.Close();
+                }
             }
         }
 

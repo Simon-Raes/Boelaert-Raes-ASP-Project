@@ -11,62 +11,66 @@ using System.Configuration;
 namespace LayeredBusinessModel.DAO
 {
     public class CategoryDAO : DAO
-    {        
+    {
         public List<Category> getAll()
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
             List<Category> categoryList = new List<Category>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM categories", cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+                SqlCommand command = new SqlCommand("SELECT * FROM categories", cnn);
+                try
                 {
-                    categoryList.Add(createCategory(reader));
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        categoryList.Add(createCategory(reader));
+                    }
+
+                    reader.Close();
+
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return categoryList;
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return categoryList;
+            }            
         }
 
         public Category getCategory(int categoryID)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            Category category = null;
-
-            SqlCommand command = new SqlCommand("SELECT * FROM Categories WHERE category_id = " + categoryID, cnn);
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                Category category = null;
 
-                reader.Read();
-                category = createCategory(reader);
-                reader.Close();
+                SqlCommand command = new SqlCommand("SELECT * FROM Categories WHERE category_id = " + categoryID, cnn);
+                try
+                {
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
-            }
-            catch (Exception ex)
-            {
+                    reader.Read();
+                    category = createCategory(reader);
+                    reader.Close();
 
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return category;
             }
-            finally
-            {
-                cnn.Close();
-            }
-            return category;
         }
 
         private Category createCategory(SqlDataReader reader)

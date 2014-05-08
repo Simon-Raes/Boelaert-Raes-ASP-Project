@@ -14,58 +14,62 @@ namespace LayeredBusinessModel.DAO
     {
         public void addDvdGenre(int genre_id, int dvd_info_id)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            
-            SqlCommand command = new SqlCommand("INSERT INTO DvdGenre " +
-            "(dvd_info_id, genre_id) " +
-            "VALUES (@dvd_info_id, @genre_id)", cnn);
-            command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd_info_id));
-            command.Parameters.Add(new SqlParameter("@genre_id", genre_id));
-            
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                
-            }
-            finally
-            {
-                cnn.Close();
+
+                SqlCommand command = new SqlCommand("INSERT INTO DvdGenre " +
+                "(dvd_info_id, genre_id) " +
+                "VALUES (@dvd_info_id, @genre_id)", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@genre_id", genre_id));
+
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    cnn.Close();
+                }
             }
         }
 
         public List<int> findRelatedDvdsBasedOnGenre(int dvdId, int amount)
         {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<int> dvdIds = new List<int>();
-
-            SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != " + dvdId + " and genre_id in (select genre_id from dvdgenre where dvd_info_id = " + dvdId + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
-            sql.Parameters.Add(new SqlParameter("@amount",amount));
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
+                List<int> dvdIds = new List<int>();
 
-                SqlDataReader reader = sql.ExecuteReader();
-
-                while (reader.Read())
+                SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != " + dvdId + " and genre_id in (select genre_id from dvdgenre where dvd_info_id = " + dvdId + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+                sql.Parameters.Add(new SqlParameter("@amount", amount));
+                try
                 {
-                    dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                    cnn.Open();
+
+                    SqlDataReader reader = sql.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                    }
+
+                    reader.Close();
                 }
+                catch (Exception ex)
+                {
 
-                reader.Close();
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return dvdIds;
             }
-            catch (Exception ex)
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return dvdIds;
         }
     }
 }

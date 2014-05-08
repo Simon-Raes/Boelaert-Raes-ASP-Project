@@ -105,11 +105,6 @@ namespace LayeredBusinessModel.DAO
             }
             return genrelist;
         }
-
-
-        
-
-
         public Genre getGenre(int genreID)
         {
             cnn = new SqlConnection(sDatabaseLocatie);

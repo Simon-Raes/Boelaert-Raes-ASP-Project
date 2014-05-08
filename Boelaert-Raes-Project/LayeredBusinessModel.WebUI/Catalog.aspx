@@ -22,7 +22,6 @@
 
             <br /><br />
 
-
             <div class="row" id="catalogContent" runat="server">
             </div>
             <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label>

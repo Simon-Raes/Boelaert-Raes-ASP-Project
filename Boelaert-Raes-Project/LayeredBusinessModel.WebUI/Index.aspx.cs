@@ -16,15 +16,10 @@ namespace LayeredBusinessModel.WebUI
         Customer user;
 
         protected void Page_Load(object sender, EventArgs e)
-        {     
-            DvdInfoService ds = new DvdInfoService();
-            DvdInfo i = ds.getDvdInfoWithID("" +1);
+        {
+            //disabled for now so tiles reload after clicking the buy button on a movie tile
 
-            RentModel rs = new RentModel();
-            rs.getAllAvailableDaysPerCopyForDvdInfo(i, DateTime.Now);
-
-
-            //if (!IsPostBack)
+            //if (!Page.IsPostBack)
             //{
                 user = (Customer)Session["user"];
 
@@ -45,17 +40,20 @@ namespace LayeredBusinessModel.WebUI
             List<DvdInfo> dvdsWithBanner = dvdInfoService.getAllDvdInfosWithBanner();
 
             //selects a random dvd with a banner image to display as spotlight, could be set using an admin module
-            Random rnd = new Random();
-            DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
-
-            anchorSpotlight.HRef = "Detail.aspx?id=" + spotlightDvd.dvd_info_id;
-            foreach (KeyValuePair<int, String> k in spotlightDvd.media)
+            if(dvdsWithBanner.Count>0)
             {
-                if(k.Key == 4)
+                Random rnd = new Random();
+                DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
+
+                anchorSpotlight.HRef = "Detail.aspx?id=" + spotlightDvd.dvd_info_id;
+                foreach (KeyValuePair<int, String> k in spotlightDvd.media)
                 {
-                    imgSpotlight.Src = k.Value;
-                }
-            }  
+                    if (k.Key == 4)
+                    {
+                        imgSpotlight.Src = k.Value;
+                    }
+                } 
+            }             
         }
 
         private void setupRecommendations()

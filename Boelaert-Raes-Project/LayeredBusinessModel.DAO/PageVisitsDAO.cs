@@ -59,6 +59,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     pageVisits.Add(createPageVisits(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {

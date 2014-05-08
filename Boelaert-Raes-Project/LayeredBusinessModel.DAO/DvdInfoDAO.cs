@@ -350,6 +350,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     dvdlist.Add(createDvdInfo(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -380,6 +381,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     dvdlist.Add(createDvdInfo(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -411,6 +413,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     dvdlist.Add(createDvdInfo(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -442,6 +445,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     dvdlist.Add(createDvdInfo(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -473,6 +477,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     dvdlist.Add(createDvdInfo(reader));
                 }
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -550,6 +555,7 @@ namespace LayeredBusinessModel.DAO
                     KeyValuePair<int, String> mediaObject = new KeyValuePair<int,string>(Convert.ToInt32(reader["media_type_id"]),reader["url"].ToString());
                     media.Add(mediaObject);
                 }
+                reader.Close();
 
             }
             catch (Exception ex)

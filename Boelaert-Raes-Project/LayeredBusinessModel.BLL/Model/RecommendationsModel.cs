@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.BLL
         1) Gets all past orders and determines the user's 3 favourite genres.
         2) Gets a list of DVDs that have the most matches with the user's favourites. 
            A dvd that contains all 3 favourite genres will rank higher than a dvd that only matches 1.
-        3) Removes dvd's that the user has already rented or bought before.
+        3) Removes dvds that the user has already rented or bought before.
         4) If no dvd's are left (or if the user has no orderlines), a ????????(todo: base on page visits) list of DVDs is shown.
          */
         public List<DvdInfo> getRecommendations(Customer customer, int amount)

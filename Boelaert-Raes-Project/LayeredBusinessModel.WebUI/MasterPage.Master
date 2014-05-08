@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>DVD Site</title>
+    <title>Taboelaert Raesa</title>
     
 
 
@@ -90,11 +90,10 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="divider"></li>
-                                        <li><a href="ForgotPassword.aspx"><span class="glyphicon glyphicon-question-sign"></span>  Forgot your password?</a></li>
+                                        <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
-                                            <input class="btn btn-primary btn-block" type="button" id="sign-in-google" value="Sign Up" />
+                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'Register.aspx'"/> 
                                         </li>
                                     </ul>
                                 </li>

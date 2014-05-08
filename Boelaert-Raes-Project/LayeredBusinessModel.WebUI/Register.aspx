@@ -1,5 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="LayeredBusinessModel.WebUI.Register" %>
 
+<%@ Register Assembly="Arcabase.EID.SDK" Namespace="Arcabase.EID.SDK.Web" TagPrefix="cc2" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
         .auto-style1 {
@@ -17,12 +21,41 @@
                     <legend>Sign up</legend>
 
                     <div class="form-group">
-                        <label for="inputName" class="col-sm-4 control-label">Name</label>
+                        <label for="txtName" class="col-sm-4 control-label">Name</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="inputName" placeholder="Name" runat="server" />
+                            <asp:TextBox ID="txtName" runat="server" CssClass="form-control"></asp:TextBox>
                             <p class="help-block">
-                                <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="inputName" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="valReqName" runat="server" ControlToValidate="txtName" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                            </p>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="txtStreet" class="col-sm-4 control-label">Street</label>
+                        <div class="col-sm-4">
+                            <asp:TextBox ID="txtStreet" runat="server" CssClass="form-control"></asp:TextBox>
+                            <p class="help-block">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtStreet" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtPostalcode" class="col-sm-4 control-label">Postalcode</label>
+                        <div class="col-sm-4">
+                            <asp:TextBox ID="txtPostalcode" runat="server" CssClass="form-control"></asp:TextBox>
+                            <p class="help-block">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPostalcode" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtCountry" class="col-sm-4 control-label">Country</label>
+                        <div class="col-sm-4">
+                            <asp:TextBox ID="txtCountry" runat="server" CssClass="form-control"></asp:TextBox>
+                            <p class="help-block">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtCountry" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
                             </p>
                         </div>
                     </div>
@@ -77,39 +110,28 @@
 
                         <div class="col-sm-4">
                             <button class="btn btn-success form-control" id="btnSignUp" runat="server" onserverclick="btnRegister_Click">Sign up</button>
-                            <button class="btn btn-success form-control" id="btnEID" runat="server" onserverclick="btnEID_ServerClick" causesvalidation="false">eID</button>
+                           
+                            <asp:Button ID="btnEID" runat="server" Text="eID" CssClass="btn btn-success form-control" OnClick="btnEID_Click" CausesValidation="false" UseSubmitBehavior="false"/>
+                            
                             <!--<button class="btn btn-danger" id="btnReset" runat="server">Reset</button>-->
                         </div>
                     </div>
-                    <div>
-                        <asp:Panel ID="pnlAppletIE" runat="server" Height="100px" Width="50px" Visible="false">
-                                    <applet
-                                      codebase = "."
-                                      archive  = "scripts/eidlib.jar"
-                                      name     = "BEIDApplet"
-                                      width    = "0"
-                                      height   = "0"
-                                      type     = "application/x-java-applet;version=1.5.0"
-                                      code     = "be.belgium.eid.BEID_Applet.class"
-                                    >   
-                                </applet>
-                                <script type="text/javascript" src="scripts/eidreader.js"></script>
-                                <script type="text/javascript">ReadCard();</script>
- </asp:Panel>
- <asp:Panel ID="pnlAppletFF" runat="server" Height="100px" Width="50px" Visible="false">
-                                    <applet
-                                      codebase = "."
-                                      archive  = "scripts/eidlib.jar"
-                                      name     = "BEIDApplet"
-                                      width    = "0"
-                                      height   = "0"
-                                      type     = "application/x-java-applet;version=1.5.0"
-                                      classid  = "java:be.belgium.eid.BEID_Applet.class"
-                                    >
-                                </applet>
-                                <script type="text/javascript" src="scripts/eidreader.js"></script>
-                                <script type="text/javascript">ReadCard();</script> </asp:Panel>
-                    </div>
+                    
+
+                    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                    <cc1:ModalPopupExtender ID="mpeEid" BackgroundCssClass="bgPopup" PopupControlID="pnleID" TargetControlID="btnDummyButton" runat="server"></cc1:ModalPopupExtender>
+                   
+
+                    <asp:Button ID="btnDummyButton" runat="server" Style="display:none;" />
+           
+                    <asp:Panel ID="pnleID" runat="server" Style="display:none;">
+                        <cc2:EID_Read ID="EID_Read1" runat="server" Visible="false"/>
+                    </asp:Panel>
+
+                   
+
+
+
                 </fieldset>
             </div>
         </div>

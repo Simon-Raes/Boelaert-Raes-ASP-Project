@@ -129,8 +129,8 @@ namespace LayeredBusinessModel.WebUI
                     {
                         case "usd":
                             currency = "$";
-                            dvdInfo.buy_price = currencyWebService.convert(dvdInfo.buy_price,"usd");
-                            dvdInfo.rent_price = currencyWebService.convert(dvdInfo.rent_price, "usd");
+                            dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price,"usd");
+                            dvdInfo.rent_price = (float)currencyWebService.convert(dvdInfo.rent_price, "usd");
                             break;
                     }
                 }
@@ -141,8 +141,8 @@ namespace LayeredBusinessModel.WebUI
                 {
                     case "usd":
                         currency = "$";
-                        dvdInfo.buy_price = currencyWebService.convert(dvdInfo.buy_price,"usd");
-                        dvdInfo.rent_price = currencyWebService.convert(dvdInfo.rent_price, "usd");
+                        dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price, "usd");
+                        dvdInfo.rent_price = (float)currencyWebService.convert(dvdInfo.rent_price, "usd");
                         break;
                 }
             }

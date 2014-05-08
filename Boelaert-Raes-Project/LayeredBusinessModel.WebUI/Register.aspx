@@ -77,8 +77,38 @@
 
                         <div class="col-sm-4">
                             <button class="btn btn-success form-control" id="btnSignUp" runat="server" onserverclick="btnRegister_Click">Sign up</button>
+                            <button class="btn btn-success form-control" id="btnEID" runat="server" onserverclick="btnEID_ServerClick" causesvalidation="false">eID</button>
                             <!--<button class="btn btn-danger" id="btnReset" runat="server">Reset</button>-->
                         </div>
+                    </div>
+                    <div>
+                        <asp:Panel ID="pnlAppletIE" runat="server" Height="100px" Width="50px" Visible="false">
+                                    <applet
+                                      codebase = "."
+                                      archive  = "scripts/eidlib.jar"
+                                      name     = "BEIDApplet"
+                                      width    = "0"
+                                      height   = "0"
+                                      type     = "application/x-java-applet;version=1.5.0"
+                                      code     = "be.belgium.eid.BEID_Applet.class"
+                                    >   
+                                </applet>
+                                <script type="text/javascript" src="scripts/eidreader.js"></script>
+                                <script type="text/javascript">ReadCard();</script>
+ </asp:Panel>
+ <asp:Panel ID="pnlAppletFF" runat="server" Height="100px" Width="50px" Visible="false">
+                                    <applet
+                                      codebase = "."
+                                      archive  = "scripts/eidlib.jar"
+                                      name     = "BEIDApplet"
+                                      width    = "0"
+                                      height   = "0"
+                                      type     = "application/x-java-applet;version=1.5.0"
+                                      classid  = "java:be.belgium.eid.BEID_Applet.class"
+                                    >
+                                </applet>
+                                <script type="text/javascript" src="scripts/eidreader.js"></script>
+                                <script type="text/javascript">ReadCard();</script> </asp:Panel>
                     </div>
                 </fieldset>
             </div>

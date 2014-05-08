@@ -148,6 +148,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlButton btnSignUp;
         
         /// <summary>
+        /// btnEID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlButton btnEID;
+        
+        /// <summary>
         /// btnReset control.
         /// </summary>
         /// <remarks>
@@ -155,5 +164,23 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlButton btnReset;
+        
+        /// <summary>
+        /// pnlAppletIE control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAppletIE;
+        
+        /// <summary>
+        /// pnlAppletFF control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAppletFF;
     }
 }

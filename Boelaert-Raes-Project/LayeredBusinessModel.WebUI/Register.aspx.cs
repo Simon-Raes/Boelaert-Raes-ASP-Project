@@ -113,6 +113,28 @@ namespace LayeredBusinessModel.WebUI
                 args.IsValid = false;
             }
         }
+
+        protected void btnEID_ServerClick(object sender, EventArgs e)
+        {
+            HttpBrowserCapabilities bc = Request.Browser;
+            pnlAppletIE.Visible = false;
+            pnlAppletFF.Visible = false;
+            if (bc.Browser == "IE")
+            {
+                pnlAppletIE.Visible = true;
+            }
+            else
+            {
+                if (bc.Browser == "Firefox")
+                {
+                    pnlAppletFF.Visible = true;
+                }
+                else
+                {
+                    pnlAppletIE.Visible = true;
+                }
+            }
+        }
        
     }
 }

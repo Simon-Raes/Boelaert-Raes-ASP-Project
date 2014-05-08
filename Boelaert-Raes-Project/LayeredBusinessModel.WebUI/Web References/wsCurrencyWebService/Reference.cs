@@ -74,11 +74,11 @@ namespace LayeredBusinessModel.WebUI.wsCurrencyWebService {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/convert", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public float convert(float price, string currency) {
+        public decimal convert(float price, string currency) {
             object[] results = this.Invoke("convert", new object[] {
                         price,
                         currency});
-            return ((float)(results[0]));
+            return ((decimal)(results[0]));
         }
         
         /// <remarks/>
@@ -140,10 +140,10 @@ namespace LayeredBusinessModel.WebUI.wsCurrencyWebService {
         }
         
         /// <remarks/>
-        public float Result {
+        public decimal Result {
             get {
                 this.RaiseExceptionIfNecessary();
-                return ((float)(this.results[0]));
+                return ((decimal)(this.results[0]));
             }
         }
     }

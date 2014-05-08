@@ -96,6 +96,8 @@
     <Content Include="Login.aspx" />
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="Scripts\eidlib.jar" />
+    <Content Include="Scripts\eidreader.js" />
     <Content Include="tempMovie.aspx" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -292,10 +294,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:49269/CurrencyWebService.asmx">
+    <WebReferenceUrl Include="http://localhost:45896/CurrencyWebService.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\wsCurrencyWebService\</RelPath>
-      <UpdateFromURL>http://localhost:49269/CurrencyWebService.asmx</UpdateFromURL>
+      <UpdateFromURL>http://localhost:45896/CurrencyWebService.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -320,9 +322,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>49611</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49269/</IISUrl>
+          <IISUrl>http://localhost:45896/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -13,7 +13,7 @@
       <s:element name="convertResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="convertResult" type="s:float" />
+            <s:element minOccurs="1" maxOccurs="1" name="convertResult" type="s:decimal" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -58,10 +58,10 @@
   </wsdl:binding>
   <wsdl:service name="CurrencyWebService">
     <wsdl:port name="CurrencyWebServiceSoap" binding="tns:CurrencyWebServiceSoap">
-      <soap:address location="http://localhost:49269/CurrencyWebService.asmx" />
+      <soap:address location="http://localhost:45896/CurrencyWebService.asmx" />
     </wsdl:port>
     <wsdl:port name="CurrencyWebServiceSoap12" binding="tns:CurrencyWebServiceSoap12">
-      <soap12:address location="http://localhost:49269/CurrencyWebService.asmx" />
+      <soap12:address location="http://localhost:45896/CurrencyWebService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

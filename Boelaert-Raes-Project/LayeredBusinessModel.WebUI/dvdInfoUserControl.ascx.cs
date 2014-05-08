@@ -55,8 +55,8 @@ namespace LayeredBusinessModel.WebUI
                     {
                         case "usd":
                             currency = "$";
-                            buy_price = currencyWebService.convert(buy_price,"usd");
-                            rent_price = currencyWebService.convert(rent_price, "usd");
+                            buy_price = (float) currencyWebService.convert(buy_price,"usd");
+                            rent_price = (float) currencyWebService.convert(rent_price, "usd");
                             break;
                     }
                 }
@@ -67,8 +67,8 @@ namespace LayeredBusinessModel.WebUI
                 {
                     case "usd":
                         currency="$";
-                        buy_price = currencyWebService.convert(buy_price,"usd");
-                        rent_price = currencyWebService.convert(rent_price, "usd");
+                        buy_price = (float)currencyWebService.convert(buy_price,"usd");
+                        rent_price = (float)currencyWebService.convert(rent_price, "usd");
                         break;
                 }
             }

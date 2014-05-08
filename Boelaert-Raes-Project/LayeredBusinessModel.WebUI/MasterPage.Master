@@ -69,7 +69,7 @@
                                     <button id="btnSearchNew" runat="server" onserverclick="btnMainSearch_Click1" class="btn btn-default">Search</button>
                                 </li>
 
-                                <li id="liSignup" runat="server"><a href="Register.aspx">Sign Up</a></li>
+                                <li id="liSignup" runat="server"><a href="signup.aspx">Sign Up</a></li>
                                 <li id="liLogin" runat="server" class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                                     <ul class="dropdown-menu" style="padding: 15px; min-width: 250px;">

@@ -26,7 +26,7 @@ namespace LayeredBusinessModel.WebUI.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:49269/CurrencyWebService.asmx")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:45896/CurrencyWebService.asmx")]
         public string LayeredBusinessModel_WebUI_wsCurrencyWebService_CurrencyWebService {
             get {
                 return ((string)(this["LayeredBusinessModel_WebUI_wsCurrencyWebService_CurrencyWebService"]));

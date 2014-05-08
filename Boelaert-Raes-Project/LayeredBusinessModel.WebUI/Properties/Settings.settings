@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="LayeredBusinessModel_WebUI_wsCurrencyWebService_CurrencyWebService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:49269/CurrencyWebService.asmx</Value>
+      <Value Profile="(Default)">http://localhost:45896/CurrencyWebService.asmx</Value>
     </Setting>
   </Settings>
 </SettingsFile>

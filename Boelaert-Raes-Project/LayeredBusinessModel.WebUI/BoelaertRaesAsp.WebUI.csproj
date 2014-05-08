@@ -38,6 +38,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=3.0.20820.16598, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL" />
+    <Reference Include="Arcabase.EID.SDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b84d20ea1506aba8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Visual Studio 2012\Projects\eID\EID\DLL\Arcabase.EID.SDK.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -58,7 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="ArcabaseEID.jar" />
     <Content Include="BoelaertRaesAsp.WebUI.PublishSettings.xml" />
+    <Content Include="DLL\AjaxControlToolkit.dll" />
+    <Content Include="DLL\Arcabase.EID.SDK.dll" />
+    <Content Include="EIDCommunicationService.asmx" />
     <Content Include="Overview.aspx" />
     <Content Include="Orders.aspx" />
     <Content Include="Settings.aspx" />
@@ -96,6 +105,7 @@
     <Content Include="Login.aspx" />
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="signup.aspx" />
     <Content Include="tempMovie.aspx" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -241,6 +251,13 @@
     <Compile Include="Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="signup.aspx.cs">
+      <DependentUpon>signup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="signup.aspx.designer.cs">
+      <DependentUpon>signup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="tempMovie.aspx.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -264,6 +281,7 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
+    <Content Include="DLL\vssver2.scc" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -292,10 +310,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:49269/CurrencyWebService.asmx">
+    <WebReferenceUrl Include="http://localhost:45896/CurrencyWebService.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\wsCurrencyWebService\</RelPath>
-      <UpdateFromURL>http://localhost:49269/CurrencyWebService.asmx</UpdateFromURL>
+      <UpdateFromURL>http://localhost:45896/CurrencyWebService.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -320,9 +338,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>49611</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49269/</IISUrl>
+          <IISUrl>http://localhost:45896/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

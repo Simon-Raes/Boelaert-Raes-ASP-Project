@@ -75,7 +75,13 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<OrderLine> orderList = new List<OrderLine>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
+            SqlCommand command = new SqlCommand("SELECT orderline_id, order_id, OrderLine.order_line_type_id, OrderLine.dvd_info_id, dvd_copy_id, "+
+                "startdate, enddate, DvdInfo.name as dvd_info_name, OrderLineType.name as order_line_type_name FROM OrderLine "+
+                "JOIN DvdInfo " +
+                "ON DvdInfo.dvd_info_id = OrderLine.dvd_info_id "+
+                "JOIN OrderLineType "+
+                "ON OrderLineType.order_line_type_id = OrderLine.order_line_type_id "+
+                "WHERE order_id = @order_id", cnn);
             command.Parameters.Add(new SqlParameter("@order_id", order_id));
 
             try
@@ -85,7 +91,7 @@ namespace LayeredBusinessModel.DAO
 
                 while (reader.Read())
                 {
-                    orderList.Add(createOrderLine(reader));
+                    orderList.Add(createOrderLineWithNames(reader));
                 }
 
                 reader.Close();
@@ -390,6 +396,44 @@ namespace LayeredBusinessModel.DAO
                     order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
                     dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
                     dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+
+            return order;
+        }
+
+        private OrderLine createOrderLineWithNames(SqlDataReader reader)
+        {
+            OrderLine order;
+
+            if (reader["dvd_copy_id"] == DBNull.Value)
+            {
+                order = new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order_id = Convert.ToInt32(reader["order_id"]),
+                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
+                    order_line_type_name = Convert.ToString(reader["order_line_type_name"]),
+
+                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    dvd_info_name = Convert.ToString(reader["dvd_info_name"]),
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+            else
+            {
+                order = new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order_id = Convert.ToInt32(reader["order_id"]),
+                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
+                    order_line_type_name = Convert.ToString(reader["order_line_type_name"]),
+                    dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
+                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    dvd_info_name = Convert.ToString(reader["dvd_info_name"]),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };

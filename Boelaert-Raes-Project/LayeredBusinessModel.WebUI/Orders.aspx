@@ -10,39 +10,41 @@
                 <li><a href="Overview.aspx">Overview</a></li>
                 <li class="active"><a href="Orders.aspx">Orders</a></li>
                 <li><a href="Settings.aspx">Settings</a></li>
-                <li class="pull-right"><button runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
+                <li class="pull-right">
+                    <button runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
             </ul>
-            
+
 
             <br />
-
-            <asp:GridView ID="gvOrders" runat="server" OnRowCommand="gvOrders_RowCommand">
+            <asp:GridView ID="gvOrders" CssClass="gridViewStyle" runat="server" OnRowCommand="gvOrders_RowCommand">
                 <Columns>
                     <asp:ButtonField CommandName="Details" HeaderText="Details" Text="Details" />
                 </Columns>
             </asp:GridView>
-            <asp:Panel ID="pnlOrderDetails" runat="server" Visible="False">
-                <br />
-                Order number:
-                            <asp:Label ID="lblOrderID" runat="server" Text="Label"></asp:Label>
-                <br />
-                Order status:
-                            <asp:Label ID="lblOrderStatus" runat="server" Text="Label"></asp:Label>
-                (1 = new, 2 = paid, 3 = shipped)<br />
+
+        </div>
+    </div>
+
+    <asp:Panel ID="pnlOrderDetails" runat="server" Visible="False">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                
+                <h2>
+                    Order <asp:Label ID="lblOrderID" runat="server" Text="Label"></asp:Label> 
+                    <asp:Label ID="lblOrderStatus" runat="server" Text="Label"></asp:Label>
+                </h2>
                 <asp:Label ID="lblOrderStatusDetails" runat="server" Text=""></asp:Label>
 
                 <br />
                 <asp:Label ID="lblPay" runat="server" Text="Click here to pay for this order:"></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Go to payment page" />
                 <br />
-                <asp:GridView ID="gvOrderDetails" runat="server" OnRowCommand="gvOrderDetails_RowCommand">
+                <asp:GridView ID="gvOrderDetails" CssClass="gridViewStyle" runat="server" OnRowCommand="gvOrderDetails_RowCommand">
                     <Columns>
                         <asp:ButtonField CommandName="CancelOrderLine" Text="Cancel" />
                     </Columns>
                 </asp:GridView>
-            </asp:Panel>
-            <br />
-            Geplande verhuurcopies misschien in een aparte lijst zetten, moeten tot 2 dagen voor verhuur geannuleerd kunnen worden.<br />
-            &nbsp;&nbsp;
+            </div>
         </div>
-    </div>
+    </asp:Panel>
+
 </asp:Content>

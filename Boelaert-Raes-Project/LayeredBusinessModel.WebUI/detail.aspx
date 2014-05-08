@@ -31,7 +31,7 @@
                     <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                     <hr />
                     <div class="row">
-<%--                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />--%>
+                        <%--                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />--%>
                         <button id="btnBuyB" runat="server" type="submit" onserverclick="btnBuy_Click"></button>
 
                         <asp:Label ID="lblBuyStatus" runat="server" Text=""></asp:Label>
@@ -48,21 +48,32 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h2>Rent DVD</h2>
-            <div class="col-md-3">
-                <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
-                    <NextPrevStyle ForeColor="White" />
-                    <TitleStyle BackColor="#3399FF" ForeColor="White" />
-                </asp:Calendar>
-            </div>
-            <div class="col-md-3">
-                <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
-                <br />
-                <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br />
-                <br />
-                <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent7_Click" />
+            <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                <ContentTemplate>
+                    
+
+                    <div class="col-md-3">
+                        <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
+                            <NextPrevStyle ForeColor="White" />
+                            <TitleStyle BackColor="#3399FF" ForeColor="White" />
+                        </asp:Calendar>
+                    </div>
+                    <div class="col-md-3">
+                        <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
+                        <br />
+                        <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br />
+                        <br />
+                        <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent7_Click" />
 
 
-            </div>
+                    </div>
+
+                </ContentTemplate>
+
+            </asp:UpdatePanel>
+
             <%--<div class="col-md-3">
             </div>
             <div class="col-md-3">

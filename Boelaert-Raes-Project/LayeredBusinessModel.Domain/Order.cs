@@ -11,6 +11,7 @@ namespace LayeredBusinessModel.Domain
         public int order_id { get; set; }
         public int customer_id { get; set; }
         public int orderstatus_id { get; set; }
+        public String orderstatus_name { get; set; }
         public DateTime date { get; set; }
     }
 }

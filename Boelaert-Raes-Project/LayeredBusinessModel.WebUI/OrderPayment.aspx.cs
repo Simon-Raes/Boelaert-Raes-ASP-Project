@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
+using System.Data;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -33,9 +34,44 @@ namespace LayeredBusinessModel.WebUI
                             OrderLineService orderLineService = new OrderLineService();
                             List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
 
+                            Boolean hasRentItems = false;
+
+                            foreach (OrderLine item in orderLines)
+                            {
+                                if (item.order_line_type_id == 1)
+                                {
+                                    hasRentItems = true;
+                                }
+                            }
+
+                            DataTable orderTable = new DataTable();
+                            orderTable.Columns.Add("Item number");
+                            orderTable.Columns.Add("Name");
+                            orderTable.Columns.Add("Type");
+                            if(hasRentItems)
+                            {
+                                orderTable.Columns.Add("Start date");
+                                orderTable.Columns.Add("End date");
+                            }
+                            
+
+                            foreach (OrderLine item in orderLines)
+                            {
+                                DataRow orderRow = orderTable.NewRow();
+                                orderRow[0] = item.orderline_id;
+                                orderRow[1] = item.dvd_info_name;
+                                orderRow[2] = item.order_line_type_name;
+                                if(item.order_line_type_id == 1)
+                                {
+                                    orderRow[3] = item.startdate.ToString("dd/MM/yyyy");
+                                    orderRow[4] = item.enddate.ToString("dd/MM/yyyy"); 
+                                }
+                                
+                                orderTable.Rows.Add(orderRow);
+                            }
 
                             //set gridview
-                            gvOrderDetails.DataSource = orderLines;
+                            gvOrderDetails.DataSource = orderTable;
                             gvOrderDetails.DataBind();
                         }
                         else

@@ -12,42 +12,47 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderDAO : DAO
     {
-        public List<Order> getAll()
-        {
-            cnn = new SqlConnection(sDatabaseLocatie);
-            List<Order> orderList = new List<Order>();
+        //public List<Order> getAll()
+        //{
+        //    cnn = new SqlConnection(sDatabaseLocatie);
+        //    List<Order> orderList = new List<Order>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
-            try
-            {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
+        //    SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
+        //    try
+        //    {
+        //        cnn.Open();
+        //        SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    orderList.Add(createOrder(reader));
-                }
+        //        while (reader.Read())
+        //        {
+        //            orderList.Add(createOrder(reader));
+        //        }
 
-                reader.Close();
+        //        reader.Close();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return orderList;
-        }
+        //    }
+        //    finally
+        //    {
+        //        cnn.Close();
+        //    }
+        //    return orderList;
+        //}
 
         public Order getOrder(String id)
         {
             cnn = new SqlConnection(sDatabaseLocatie);
             Order order = null;
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE order_id = @order_id", cnn);
+            SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                "Join Orderstatus " +
+                "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
+                "WHERE order_id = @order_id", cnn);
+
+
             command.Parameters.Add(new SqlParameter("@order_id", id));
 
             try
@@ -111,7 +116,10 @@ namespace LayeredBusinessModel.DAO
             cnn = new SqlConnection(sDatabaseLocatie);
             List<Order> orderList = new List<Order>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Orders WHERE customer_id = @customer_id", cnn);
+            SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders "+
+                "Join Orderstatus "+
+                "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
+                "WHERE customer_id = @customer_id", cnn);
             command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
 
             try
@@ -195,6 +203,7 @@ namespace LayeredBusinessModel.DAO
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
                 orderstatus_id = Convert.ToInt32(reader["orderstatus_id"]),
+                orderstatus_name = Convert.ToString(reader["name"]),
                 customer_id = Convert.ToInt32(reader["customer_id"]),
                 date = Convert.ToDateTime(reader["date"])
             };

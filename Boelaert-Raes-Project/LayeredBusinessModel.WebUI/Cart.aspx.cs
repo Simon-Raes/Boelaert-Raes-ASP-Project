@@ -21,13 +21,58 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!Page.IsPostBack)
             {
-                shoppingCartService = new ShoppingCartService();
+                
                 if (Session["user"] != null)
                 {
-                    gvCart.DataSource = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]).customer_id);
-                    gvCart.DataBind();
+                    fillCartGridView();
                 }
             }
+        }
+
+        private void fillCartGridView()
+        {
+            Boolean hasRentItems = false;
+
+            shoppingCartService = new ShoppingCartService();
+            List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]).customer_id);
+
+            foreach (ShoppingcartItem item in cartContent)
+            {
+                if (item.typeName.Equals("Verhuur"))
+                {
+                    hasRentItems = true;
+                }
+            }
+
+            DataTable cartTable = new DataTable();
+
+            cartTable.Columns.Add("Id");
+            cartTable.Columns.Add("Name");
+            cartTable.Columns.Add("Amount");
+
+            if (hasRentItems)
+            {
+                cartTable.Columns.Add("Start date");
+                cartTable.Columns.Add("End date");
+            }
+
+            foreach (ShoppingcartItem item in cartContent)
+            {
+                DataRow cartRow = cartTable.NewRow();
+                cartRow[0] = item.shoppingcart_item_id;
+                cartRow[1] = item.name;
+                cartRow[2] = 1;
+
+                if (item.typeName.Equals("Verhuur"))
+                {
+                    cartRow[3] = item.startdate.ToString("dd/MM/yyyy");
+                    cartRow[4] = item.enddate.ToString("dd/MM/yyyy");                    
+                }
+                cartTable.Rows.Add(cartRow);
+            }
+
+            gvCart.DataSource = cartTable;
+            gvCart.DataBind();
         }
 
         /**Deletes item from cart*/
@@ -49,8 +94,7 @@ namespace LayeredBusinessModel.WebUI
             //todo: find a way to remove a gridview row without needing a new query + databind
             if (Session["user"] != null)
             {
-                gvCart.DataSource = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]).customer_id);
-                gvCart.DataBind();
+                fillCartGridView();
             }
 
         }

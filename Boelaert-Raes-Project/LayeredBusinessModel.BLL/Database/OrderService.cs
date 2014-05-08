@@ -13,11 +13,11 @@ namespace LayeredBusinessModel.BLL
     {
         OrderDAO orderDAO;
 
-        public List<Order> getAll()
-        {
-            orderDAO = new OrderDAO();
-            return orderDAO.getAll();
-        }
+        //public List<Order> getAll()
+        //{
+        //    orderDAO = new OrderDAO();
+        //    return orderDAO.getAll();
+        //}
 
         public Order getOrder(String id)
         {

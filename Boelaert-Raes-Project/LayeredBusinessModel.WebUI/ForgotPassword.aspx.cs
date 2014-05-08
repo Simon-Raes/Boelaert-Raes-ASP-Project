@@ -16,7 +16,36 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            checkQueryString();
+        }
 
+        private void checkQueryString()
+        {
+            if(Request.QueryString["resetId"]!=null)
+            {
+                //if(databaseContainsThisResetID)
+                //{
+                    
+                //get user from database (using resetID)
+                //Customer user = database.getUserfromresetstringthingamagik();
+ 
+
+                //}
+
+                //generate new password
+                String newPassword = "randomTextGeneration!";
+
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    //todo: put credentials in web.config
+                    Credentials = new NetworkCredential("taboelaertraesa@gmail.com", "KathoVives"),
+                    EnableSsl = true
+                };
+                client.Send("info@TaboelaertRaesa.com", "user.email", "Your Taboelaert Raesa password has been reset", "Dear " + "user.name" +
+                    ",\n\nyour password has been reset to: '" + newPassword + "'." +
+                    "For security reasons, please change this password next time you log in." +
+                    "\n\nRegards,\nThe Taboelaert Raesa team.");
+            }
         }
 
         protected void btnReset_Click(object sender, EventArgs e)
@@ -30,23 +59,24 @@ namespace LayeredBusinessModel.WebUI
 
             if(user!=null)
             {
-                lblStatus.Text = "We've sent you an email to reset your password (not really, not yet implemented).";
+                lblStatus.Text = "We've sent you an email to reset your password.";
                 lblStatus.ForeColor = System.Drawing.Color.Green;
-                //todo: send email asking the user if he requested the reset.
-                //email should contain a link to the website that resets the password when used
-
-                var client = new SmtpClient("smtp.gmail.com", 587)
+                
+                SmtpClient clienta = new SmtpClient("smtp.gmail.com", 587)
                 {
                     //todo: put credentials in web.config
                     Credentials = new NetworkCredential("taboelaertraesa@gmail.com", "KathoVives"),
                     EnableSsl = true
                 };
-                client.Send("info@TaboelaertRaesa.com", "user-email@gmail.com", "Password reset", "Dear username, your password has been reset to: xdf24Te. Please change "+
-                    "this password next time you log in. security etc.");
-                Console.WriteLine("Sent");
-                Console.ReadLine();
+                clienta.Send("info@TaboelaertRaesa.com", user.email, "Password reset request", "Dear " + user.name + ",\n\n. " +
+                    "We received a request to reset the password on your Taboelaert Raesa account. Click the following URL to complete the process:\n"+
+                    "(URL with querystring here ..../ForgotPassword?resetId=xxxxx (id should already be in database to compare to querystring)\n\n"+
+                    "If you did not request this reset, you can ignore this email.\n\nRegards,\nThe Taboelaert Raesa team.");
 
-                //after link gets clicked: generate new random password for the user and mail it to them
+                //generate new passwordReset record: useremail - resetID
+                
+               
+
             }
             else
             {

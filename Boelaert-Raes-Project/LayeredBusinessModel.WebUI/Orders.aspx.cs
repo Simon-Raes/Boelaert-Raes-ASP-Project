@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using System.Data;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -19,12 +20,32 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
-                OrderService orderService = new OrderService();
-                customerOrders = orderService.getOrdersForCustomer(user.customer_id);
-                gvOrders.DataSource = customerOrders;
-                gvOrders.DataBind();                
+                fillOrdersGridView();         
                 
             }
+        }
+
+        private void fillOrdersGridView()
+        {
+            OrderService orderService = new OrderService();
+            customerOrders = orderService.getOrdersForCustomer(((Customer)Session["user"]).customer_id);
+            
+            DataTable orderTable = new DataTable();
+            orderTable.Columns.Add("Ordernumber");
+            orderTable.Columns.Add("Status");
+            orderTable.Columns.Add("Date");                      
+
+            foreach (Order item in customerOrders)
+            {
+                DataRow orderRow = orderTable.NewRow();
+                orderRow[0] = item.order_id;
+                orderRow[1] = item.orderstatus_name;
+                orderRow[2] = item.date;                
+                orderTable.Rows.Add(orderRow);
+            }
+            
+            gvOrders.DataSource = orderTable;
+            gvOrders.DataBind();  
         }
 
         protected void gvOrders_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -40,7 +61,7 @@ namespace LayeredBusinessModel.WebUI
                 //get the order info
                 OrderService orderService = new OrderService();
                 Order selectedOrder = orderService.getOrder(orderID);
-                lblOrderStatus.Text = selectedOrder.orderstatus_id.ToString(); //1 = new, 2 = paid, 3 = shipped
+                lblOrderStatus.Text = "("+selectedOrder.orderstatus_name+")"; //1 = new, 2 = paid, 3 = shipped
                 lblOrderID.Text = selectedOrder.order_id.ToString();
 
                 //hide pay button if the order has already been paid
@@ -58,7 +79,45 @@ namespace LayeredBusinessModel.WebUI
                 //get all articles in the order and display them
                 OrderLineService orderLineService = new OrderLineService();
                 List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
-                gvOrderDetails.DataSource = orderLines;
+
+                Boolean hasRentItems = false;
+
+                foreach (OrderLine item in orderLines)
+                {
+                    if (item.order_line_type_id == 1)
+                    {
+                        hasRentItems = true;
+                    }
+                }
+
+                DataTable orderTable = new DataTable();
+                orderTable.Columns.Add("Item number");
+                orderTable.Columns.Add("Name");
+                orderTable.Columns.Add("Type");
+                if(hasRentItems)
+                {
+                    orderTable.Columns.Add("Start date");
+                    orderTable.Columns.Add("End date");
+                }
+                
+
+                foreach (OrderLine item in orderLines)
+                {
+                    DataRow orderRow = orderTable.NewRow();
+                    orderRow[0] = item.orderline_id;
+                    orderRow[1] = item.dvd_info_name;
+                    orderRow[2] = item.order_line_type_name;
+                    if (item.order_line_type_id == 1)
+                    {
+                        orderRow[3] = item.startdate.ToString("dd/MM/yyyy");
+                        orderRow[4] = item.enddate.ToString("dd/MM/yyyy");
+                    }
+                    
+                    orderTable.Rows.Add(orderRow);
+                }
+
+
+                gvOrderDetails.DataSource = orderTable;
                 gvOrderDetails.DataBind();
 
 
@@ -79,7 +138,7 @@ namespace LayeredBusinessModel.WebUI
                 }
                 else
                 {
-                    //user hasn't paid yet, check status of copies in store: (todo)
+                    //user hasn't paid yet, check status of copies in store: (todo) (?)
                 }
             }
         }
@@ -134,6 +193,12 @@ namespace LayeredBusinessModel.WebUI
                             string script = "alert(\"An error occured while trying to removing this item from your order.\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         }
+                    }
+                    else if ((orderLine.startdate - DateTime.Today.Date) < TimeSpan.FromDays(0))
+                    {
+                        //can't remove this copy anymore - too late
+                        string script = "alert(\"Can't cancel orders that already shipped!\");";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
                     else
                     {

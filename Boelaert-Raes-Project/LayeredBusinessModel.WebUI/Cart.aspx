@@ -10,11 +10,12 @@
                 Cart content:
             </p>
             <p>
-                <asp:GridView ID="gvCart" runat="server" OnRowDeleting="gvCart_RowDeleting">
+                <asp:GridView ID="gvCart" CssClass="gridViewStyle" runat="server" OnRowDeleting="gvCart_RowDeleting">
                     <Columns>
                         <asp:CommandField AccessibleHeaderText="Remove" DeleteText="Remove" ShowDeleteButton="True" />
                     </Columns>
                 </asp:GridView>
+                Should also show items and orderprices, but needs extra query (we're already breaking the database as it is)
             </p>
             <p>
                 <asp:Button ID="btnCheckout" runat="server" OnClick="btnCheckout_Click" Text="Checkout" />

@@ -11,7 +11,7 @@
             <br />
             The site layout was designed with help from Twitter Bootstrap.<br />
             <br />
-            Hosting by Somee(?).
+            Hosting by http://www.smarterasp.net/.
             <br /><br />
             Link to digital manual here.
             2014
@@ -32,8 +32,8 @@
                     <img src="http://i.imgur.com/1kvtNkr.png" /></a>
             </div>
             <div class="col-lg-3">
-                <a href="https://somee.com/default.aspx">
-                    <img src="http://i.imgur.com/9bggZ9U.png" /></a>
+                <a href="http://www.smarterasp.net/">
+                    <img src="http://i.imgur.com/URIMBq7.png" /></a>
             </div>
         </div>
     </div>

@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.WebUI
 
             foreach (ShoppingcartItem item in cartContent)
             {
-                if (item.dvdCopy.type.name.Equals("Verhuur"))
+                if (item.dvdCopyType.id == 1)
                 {
                     hasRentItems = true;
                 }
@@ -64,7 +64,7 @@ namespace LayeredBusinessModel.WebUI
                 cartRow[1] = item.dvdInfo.name;
                 cartRow[2] = 1;
 
-                if (item.dvdCopy.type.name.Equals("Verhuur"))
+                if (item.dvdCopyType.id == 1)
                 {
                     cartRow[3] = item.startdate.ToString("dd/MM/yyyy");
                     cartRow[4] = item.enddate.ToString("dd/MM/yyyy");                    
@@ -136,7 +136,7 @@ namespace LayeredBusinessModel.WebUI
                             startdate = item.startdate,
                             enddate = item.enddate,
                             //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                            orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopy.dvd_copy_id)
+                            orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopyType.id)
                         };
 
                         orderLineService.addOrderLine(orderline);

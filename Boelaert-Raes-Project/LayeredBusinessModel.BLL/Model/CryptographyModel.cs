@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.BLL
 
         public static string encryptPassword(string message)
         {
-            byte[] results;
+            byte[] results = null;
             UTF8Encoding utf8 = new UTF8Encoding();
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 
@@ -32,6 +32,10 @@ namespace LayeredBusinessModel.BLL
                 ICryptoTransform encryptor = encryptionProvider.CreateEncryptor();
                 results = encryptor.TransformFinalBlock(encrypt_data, 0, encrypt_data.Length);
             }
+            catch (CryptographicException ex)
+            {
+
+            }
             finally
             {
                 encryptionProvider.Clear();
@@ -45,7 +49,7 @@ namespace LayeredBusinessModel.BLL
 
         public static string decryptPassword(string message)
         {
-            byte[] results;
+            byte[] results = null;
             UTF8Encoding utf8 = new UTF8Encoding();
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 
@@ -62,6 +66,10 @@ namespace LayeredBusinessModel.BLL
             {
                 ICryptoTransform decryptor = encryptionProvider.CreateDecryptor();
                 results = decryptor.TransformFinalBlock(decrypt_data, 0, decrypt_data.Length);
+            }
+            catch (CryptographicException ex)
+            {
+
             }
             finally
             {

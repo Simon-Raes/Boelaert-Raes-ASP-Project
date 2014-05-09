@@ -164,7 +164,7 @@
     </div>
 
     <div id="pnlSignupCompleted" runat="server">
-        Check uw mailbox (binnenkort)
+        <asp:Label ID="lblEmailSent" runat="server" Text="Label"></asp:Label>
     </div>
 
 

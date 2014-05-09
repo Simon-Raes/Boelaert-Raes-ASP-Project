@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
 using System.Data;
+using LayeredBusinessModel.BLL.Model;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -20,8 +21,11 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
-                fillOrdersGridView();         
-                
+                fillOrdersGridView();                        
+            }
+            else
+            {
+                //todo: error about not being logged in
             }
         }
 
@@ -77,8 +81,9 @@ namespace LayeredBusinessModel.WebUI
                 }
 
                 //get all articles in the order and display them
+                Order order = orderService.getOrder(orderID);
                 OrderLineService orderLineService = new OrderLineService();
-                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
+                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
 
                 Boolean hasRentItems = false;
 
@@ -122,18 +127,14 @@ namespace LayeredBusinessModel.WebUI
 
 
                 //check if all items have been assigned a copy
-                Boolean allInStock = true;
+                
 
                 //user has already paid, check status of copies in cart
                 if (selectedOrder.orderstatus.id > 1)
                 {
-                    foreach (OrderLine orderLine in orderLines)
-                    {
-                        if (orderLine.dvdCopy.dvd_copy_id <= 0)
-                        {
-                            allInStock = false;
-                        }
-                    }
+
+                    Boolean allInStock = hasAllInStock(orderLines);
+
                     updateOrderStatusDetails(allInStock);
                 }
                 else
@@ -145,11 +146,35 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnPay_Click(object sender, EventArgs e)
         {
-            //get the order
-            String orderID = lblOrderID.Text;
+            Customer user = (Customer)Session["user"];
+            if(user!=null)
+            {
+                //get the order
+                String orderID = lblOrderID.Text;  
+                
+                //redirect to payment page, with query string to connect to the order
+                Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
+            }
+            else
+            {
+                //todo= error about not being logged in
+            }
 
-            //redirect to payment page, with query string to connect to the order
-            Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
+        }
+
+        private Boolean hasAllInStock(List<OrderLine> orderLines)
+        {
+            Boolean allInStock = true;
+
+            foreach (OrderLine orderLine in orderLines)
+            {
+                if (orderLine.dvdCopy == null)
+                {
+                    allInStock = false;
+                }
+            }
+
+            return allInStock;
         }
 
         private void updateOrderStatusDetails(Boolean allInStock)

@@ -74,7 +74,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<OrderLine> getOrderLinesForOrder(int order_id)
+        public List<OrderLine> getOrderLinesForOrder(Order order)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -87,7 +87,7 @@ namespace LayeredBusinessModel.DAO
                     "JOIN OrderLineType " +
                     "ON OrderLineType.order_line_type_id = OrderLine.order_line_type_id " +
                     "WHERE order_id = @order_id", cnn);
-                command.Parameters.Add(new SqlParameter("@order_id", order_id));
+                command.Parameters.Add(new SqlParameter("@order_id", order.order_id));
 
                 try
                 {
@@ -95,7 +95,7 @@ namespace LayeredBusinessModel.DAO
                     SqlDataReader reader = command.ExecuteReader();
 
                     while (reader.Read())
-                    {
+                    {                        
                         orderList.Add(createOrderLineWithNames(reader));
                     }
 

@@ -53,11 +53,15 @@
     <Compile Include="Database\PageVisitsService.cs" />
     <Compile Include="Database\TokenService.cs" />
     <Compile Include="Model\AvailabilityModel.cs" />
+    <Compile Include="Model\EmailModel.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\CryptographyModel.cs" />
     <Compile Include="Model\PageVisitsModel.cs" />
+    <Compile Include="Model\PasswordResetModel.cs" />
     <Compile Include="Model\RentModel.cs" />
+    <Compile Include="Model\SignUpModel.cs" />
+    <Compile Include="Model\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database\SearchService.cs" />
     <Compile Include="Database\ShoppingCartService.cs" />

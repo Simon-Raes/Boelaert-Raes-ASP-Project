@@ -109,13 +109,31 @@ namespace LayeredBusinessModel.WebUI
 
                 if (customer != null)
                 {
+                    //put user in session and send user back to his last active page
                     Session["user"] = customer;
                     Response.Redirect(Request.RawUrl);
                 }
                 else
                 {
-                    //incorrect login and/or password
-                    Response.Redirect("~/Register.aspx?status=wronglogin");
+                    //user couldn't be logged in, request the status code so the correct error can be displayed to the user
+                    LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);
+                    switch(status)
+                    {
+                        case LoginStatusCode.NOTVERIFIED:
+                            string script = "alert(\"This account has not yet been verified.\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            break;
+                        case LoginStatusCode.WRONGLOGIN:
+                            script = "alert(\"Unknown login name.\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            break;
+                        case LoginStatusCode.WRONGPASSWORD:
+                            script = "alert(\"Incorrect login/password combination.\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            break;
+
+                    }
+                    //todo: find a better way to give feedback (without alert dialog)                    
                 }
             }  
         }

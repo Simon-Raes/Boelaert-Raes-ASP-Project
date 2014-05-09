@@ -131,7 +131,7 @@ namespace LayeredBusinessModel.WebUI
                     int numberOfCurrentlyRentedItems = 0;
                     foreach (ShoppingcartItem item in cartContent)
                     {
-                        if (item.dvdCopy.type.name.Equals("Verhuur"))
+                        if (item.dvdCopyType.id == 1)
                         {
                             numberOfCurrentlyRentedItems++;
                         }

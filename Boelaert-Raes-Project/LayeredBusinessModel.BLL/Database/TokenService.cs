@@ -11,10 +11,10 @@ namespace LayeredBusinessModel.BLL.Database
 {
     class TokenService
     {
-        public Token checkToken(String t)
+        public Token checkToken(String token_id)
         {
             TokenDAO tokenDAO = new TokenDAO();
-            Token token = tokenDAO.getTokenByToken(t);
+            Token token = tokenDAO.getTokenByToken(token_id);
             if (token != null)
             {
                 //token bestaat wel
@@ -25,7 +25,13 @@ namespace LayeredBusinessModel.BLL.Database
             return token;
         }
 
-        public Boolean deleteTokenbyToken(String token)
+        public void addToken(Token token)
+        {
+            TokenDAO tokenDAO = new TokenDAO();
+            tokenDAO.addToken(token);
+        }
+
+        public Boolean deleteToken(Token token)
         {
             TokenDAO tokenDAO = new TokenDAO();
             return tokenDAO.removeToken(token);

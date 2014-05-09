@@ -12,6 +12,25 @@ using System.Net.Mail;
 
 namespace LayeredBusinessModel.WebUI
 {
+
+
+
+
+
+
+
+
+    //NO LONGER USED!!
+
+
+
+
+
+
+
+
+
+
     public partial class Register : System.Web.UI.Page
     {
         CustomerService customerService;

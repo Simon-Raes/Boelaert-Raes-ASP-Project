@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6DDADDC1-91EE-44C4-990C-C7F91292DF88}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{CB28EA8F-C869-46C0-B5D4-EA57F284280D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayeredBusinessModel.Domain</RootNamespace>
-    <AssemblyName>LayeredBusinessModel.Domain</AssemblyName>
+    <RootNamespace>Project1</RootNamespace>
+    <AssemblyName>Project1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,32 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Category.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="DvdCopy.cs" />
-    <Compile Include="DvdCopyType.cs" />
-    <Compile Include="DvdInfo.cs" />
-    <Compile Include="Genre.cs" />
-    <Compile Include="LoginStatusCode.cs" />
-    <Compile Include="MediaType.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="OrderLine.cs" />
-    <Compile Include="OrderLineType.cs" />
-    <Compile Include="OrderStatus.cs" />
-    <Compile Include="PageVisits.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShoppingcartItem.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="TokenStatus.cs" />
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

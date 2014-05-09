@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     *  Represents a genre
+     */
     public class Genre
     {
-        public int genre_id { get; set; }
-        public int category_id { get; set; }
-        public String name { get; set; }
+        public int genre_id { get; set; }       //an unique id
+
+        public Category category { get; set; }  //the category
+
+        public String name { get; set; }        //description
     }
 }

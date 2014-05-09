@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
 using System.Data;
+using LayeredBusinessModel.BLL.Database;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -38,7 +39,7 @@ namespace LayeredBusinessModel.WebUI
 
             foreach (ShoppingcartItem item in cartContent)
             {
-                if (item.typeName.Equals("Verhuur"))
+                if (item.dvdCopy.type.name.Equals("Verhuur"))
                 {
                     hasRentItems = true;
                 }
@@ -60,10 +61,10 @@ namespace LayeredBusinessModel.WebUI
             {
                 DataRow cartRow = cartTable.NewRow();
                 cartRow[0] = item.shoppingcart_item_id;
-                cartRow[1] = item.name;
+                cartRow[1] = item.dvdInfo.name;
                 cartRow[2] = 1;
 
-                if (item.typeName.Equals("Verhuur"))
+                if (item.dvdCopy.type.name.Equals("Verhuur"))
                 {
                     cartRow[3] = item.startdate.ToString("dd/MM/yyyy");
                     cartRow[4] = item.enddate.ToString("dd/MM/yyyy");                    
@@ -129,13 +130,13 @@ namespace LayeredBusinessModel.WebUI
 
                         OrderLine orderline = new OrderLine
                         {
-                            order_id = orderID,
-                            dvd_info_id = item.dvd_info_id,
+                            order = new OrderService().getOrder(orderID.ToString()),
+                            dvdInfo = new DvdInfoService().getDvdInfoWithID(item.dvdInfo.dvd_info_id.ToString()),
                             //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
                             startdate = item.startdate,
                             enddate = item.enddate,
                             //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                            order_line_type_id = item.copy_type_id
+                            orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopy.dvd_copy_id)
                         };
 
                         orderLineService.addOrderLine(orderline);

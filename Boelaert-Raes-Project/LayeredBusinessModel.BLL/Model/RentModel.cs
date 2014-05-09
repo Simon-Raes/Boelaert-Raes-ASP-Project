@@ -51,22 +51,22 @@ namespace LayeredBusinessModel.BLL.Model
             foreach (OrderLine order in orders)
             {
                 //kijken of copy_id al in de lijst zit
-                if (!dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
+                if (!dicCopyUnavailableDates.ContainsKey(order.dvdCopy.dvd_copy_id))
                 {
                     //zo niet, in de lijst steken
                     List<DateTime> bezettemomenten = new List<DateTime>();
-                    dicCopyUnavailableDates.Add(order.dvd_copy_id, bezettemomenten);
+                    dicCopyUnavailableDates.Add(order.dvdCopy.dvd_copy_id, bezettemomenten);
                 }
-                if (dicCopyUnavailableDates.ContainsKey(order.dvd_copy_id))
+                if (dicCopyUnavailableDates.ContainsKey(order.dvdCopy.dvd_copy_id))
                 {
                     for (int i = 0; i < 14; i++)
                     {
                         DateTime tempDate = DateTime.Now.Date.AddDays(i);
                         if (tempDate >= order.startdate && tempDate <= order.enddate)
                         {
-                            if (!dicCopyUnavailableDates[order.dvd_copy_id].Contains(tempDate))
+                            if (!dicCopyUnavailableDates[order.dvdCopy.dvd_copy_id].Contains(tempDate))
                             {
-                                dicCopyUnavailableDates[order.dvd_copy_id].Add(tempDate);
+                                dicCopyUnavailableDates[order.dvdCopy.dvd_copy_id].Add(tempDate);
                             }
                         }
                     }
@@ -134,18 +134,18 @@ namespace LayeredBusinessModel.BLL.Model
                 List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startDate);
                                 
                 foreach (OrderLine order in orders)
-                {                    
-                    if (!unavailableDatesMap.ContainsKey(order.dvd_copy_id))
+                {
+                    if (!unavailableDatesMap.ContainsKey(order.dvdCopy.dvd_copy_id))
                     {                       
                         //set the default availability at 2 weeks from now 
-                        unavailableDatesMap.Add(order.dvd_copy_id, order.startdate);
+                        unavailableDatesMap.Add(order.dvdCopy.dvd_copy_id, order.startdate);
                     }
-                    if (unavailableDatesMap.ContainsKey(order.dvd_copy_id))
+                    if (unavailableDatesMap.ContainsKey(order.dvdCopy.dvd_copy_id))
                     {
                         //if the order for the copy is unavailable sooner, add that one to the dictionary
-                        if (order.startdate < unavailableDatesMap[order.dvd_copy_id] && order.startdate > DateTime.Today)
+                        if (order.startdate < unavailableDatesMap[order.dvdCopy.dvd_copy_id] && order.startdate > DateTime.Today)
                         {
-                            unavailableDatesMap[order.dvd_copy_id] = order.startdate;
+                            unavailableDatesMap[order.dvdCopy.dvd_copy_id] = order.startdate;
                         }
                     }
                 }

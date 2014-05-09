@@ -83,7 +83,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, cat);
                 categoryService = new CategoryService();
-                labelText = categoryService.getCategory(Convert.ToInt32(cat)).name + " DVDs";
+                labelText = categoryService.getCategoryByID(Convert.ToInt32(cat)).name + " DVDs";
             }
             else if (year != null)
             {

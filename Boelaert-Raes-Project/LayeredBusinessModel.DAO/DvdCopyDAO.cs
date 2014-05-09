@@ -148,8 +148,8 @@ namespace LayeredBusinessModel.DAO
                 //todo: alternatief om deze zielige code mee te vervangen
 
                 SqlCommand command = new SqlCommand("UPDATE DvdCopy" +
-                " SET dvd_info_id =" + copy.dvd_info_id +
-                ", copy_type_id = " + copy.copy_type_id +
+                " SET dvd_info_id =" + copy.dvdinfo.dvd_info_id +
+                ", copy_type_id = " + copy.type.id +
                 ", serialnumber ='" + copy.serialnumber +
                 "', note = '" + copy.note +
                 "', in_stock = '" + copy.in_stock +
@@ -263,8 +263,8 @@ namespace LayeredBusinessModel.DAO
             DvdCopy dvdCopy = new DvdCopy
             {
                 dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                copy_type_id = Convert.ToInt32(reader["copy_type_id"]),
+                dvdinfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
+                type = new DvdCopyTypeDAO().getTypeForID(Convert.ToInt32(reader["copy_type_id"])),
                 serialnumber = Convert.ToString(reader["serialnumber"]),
                 note = Convert.ToString(reader["note"]),
                 in_stock = Convert.ToBoolean(reader["in_stock"])

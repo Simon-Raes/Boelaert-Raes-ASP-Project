@@ -25,10 +25,11 @@ namespace LayeredBusinessModel.BLL
             return orderLineDAO.removeOrderLine(orderLine);
         }
 
-        public List<OrderLine> getOrderLinesForOrder(int order_id)
+        public List<OrderLine> getOrderLinesForOrder(Order order)
         {
             orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getOrderLinesForOrder(order_id);
+            List<OrderLine> orderLines = orderLineDAO.getOrderLinesForOrder(order);            
+            return orderLines;
         }
 
         public List<OrderLine> getOrderLinesForCustomer(Customer customer)

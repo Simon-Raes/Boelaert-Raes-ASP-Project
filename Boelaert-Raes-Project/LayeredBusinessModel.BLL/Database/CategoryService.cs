@@ -19,7 +19,7 @@ namespace LayeredBusinessModel.BLL
             return categoryDAO.getAll();
         }
 
-        public Category getCategory(int categoryID)
+        public Category getCategoryByID(int categoryID)
         {
             categoryDAO = new CategoryDAO();
             return categoryDAO.getCategory(categoryID);

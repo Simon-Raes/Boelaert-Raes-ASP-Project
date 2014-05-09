@@ -88,11 +88,11 @@ namespace LayeredBusinessModel.BLL.Model
             {
                 messageContent += "Some items in this order are currently out of stock. Your order will be dispatched as soon as they become available.\n\n";
             }
-            messageContent += "Order " + order.order_id + " (" + order.orderstatus_name + ")\n";
+            messageContent += "Order " + order.order_id + " (" + order.orderstatus.name + ")\n";
             foreach (OrderLine orderLine in orderLines)
             {
-                messageContent += orderLine.dvd_info_name + " (" + orderLine.order_line_type_name;
-                if (orderLine.order_line_type_id == 1)
+                messageContent += orderLine.dvdInfo.name + " (" + orderLine.orderLineType.name;
+                if (orderLine.orderLineType.id == 1)
                 {
                     messageContent += " from " + orderLine.startdate + " until " + orderLine.enddate;
                 }

@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     *  Represents an orderline
+     */
     public class OrderLine
     {
-        public int orderline_id { get; set; }
-        public int order_id { get; set; }
-        public int order_line_type_id { get; set; }
-        public String order_line_type_name { get; set; } //for display in order overview
-        public int dvd_info_id { get; set; }
-        public String dvd_info_name { get; set; } //for display in order overview
-        public int dvd_copy_id { get; set; }
-        public DateTime startdate { get; set; } //in case of rent (or reservation?)
-        public DateTime enddate { get; set; } //in case of rent (or reservation?)
+        public int orderline_id { get; set; }               //unique orderline id       
+        public Order order { get; set; }
+        public OrderLineType orderLineType { get; set; }
+        public DvdInfo dvdInfo { get; set; }
+        public DvdCopy dvdCopy { get; set; }
+        public DateTime startdate { get; set; }             //in case of rent (or reservation?)
+        public DateTime enddate { get; set; }               //in case of rent (or reservation?)
     }
 }

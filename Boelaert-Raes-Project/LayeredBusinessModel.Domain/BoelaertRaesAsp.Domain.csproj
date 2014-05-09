@@ -42,12 +42,15 @@
     <Compile Include="Category.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="DvdCopy.cs" />
+    <Compile Include="DvdCopyType.cs" />
     <Compile Include="DvdInfo.cs" />
     <Compile Include="Genre.cs" />
     <Compile Include="LoginStatusCode.cs" />
     <Compile Include="MediaType.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderLine.cs" />
+    <Compile Include="OrderLineType.cs" />
+    <Compile Include="OrderStatus.cs" />
     <Compile Include="PageVisits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShoppingcartItem.cs" />

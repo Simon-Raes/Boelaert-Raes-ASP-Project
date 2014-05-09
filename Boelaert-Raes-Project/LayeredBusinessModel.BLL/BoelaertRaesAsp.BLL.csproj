@@ -42,11 +42,14 @@
     <Compile Include="Database\CategoryService.cs" />
     <Compile Include="Database\CustomerService.cs" />
     <Compile Include="Database\DvdCopyService.cs" />
+    <Compile Include="Database\DvdCopyTypeService.cs" />
     <Compile Include="Database\DvdGenreService.cs" />
     <Compile Include="Database\DvdInfoService.cs" />
     <Compile Include="Database\GenreService.cs" />
     <Compile Include="Database\OrderLineService.cs" />
+    <Compile Include="Database\OrderLineTypeService.cs" />
     <Compile Include="Database\OrderService.cs" />
+    <Compile Include="Database\OrderStatusService.cs" />
     <Compile Include="Database\PageVisitsService.cs" />
     <Compile Include="Database\TokenService.cs" />
     <Compile Include="Model\AvailabilityModel.cs" />

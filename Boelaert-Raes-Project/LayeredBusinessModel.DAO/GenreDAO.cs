@@ -145,7 +145,7 @@ namespace LayeredBusinessModel.DAO
             Genre genre = new Genre
             {
                 genre_id = Convert.ToInt32(reader["genre_id"]),
-                category_id = Convert.ToInt32(reader["category_id"]),
+                category = new CategoryDAO().getCategory(Convert.ToInt32(reader["category_id"])),
                 name = Convert.ToString(reader["name"])
             };
             return genre;

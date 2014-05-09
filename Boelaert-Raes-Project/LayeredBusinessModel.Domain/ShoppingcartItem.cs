@@ -14,8 +14,9 @@ namespace LayeredBusinessModel.Domain
         public int shoppingcart_item_id { get; set; }   //a unique id  
         public Customer customer { get; set; }
         public DvdInfo dvdInfo { get; set; }
+        public DvdCopyType dvdCopyType { get; set; }
         public DateTime startdate { get; set; }         //start date from order
         public DateTime enddate { get; set; }           //end date from order
-        public DvdCopy dvdCopy { get; set; }
+        
     }
 }

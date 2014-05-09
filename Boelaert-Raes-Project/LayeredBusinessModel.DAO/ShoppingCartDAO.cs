@@ -225,7 +225,7 @@ namespace LayeredBusinessModel.DAO
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
                 customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader[1])),
                 dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),   
-                dvdCopy = new DvdCopyDAO().getCopyWithId(Convert.ToInt32(reader[3])),
+                dvdCopyType = new DvdCopyTypeDAO().getTypeForID(Convert.ToInt32(reader[3])),
                 startdate = startdate,
                 enddate = enddate
                 //name = Convert.ToString(reader["name"]),

@@ -68,6 +68,7 @@
     <Content Include="DLL\AjaxControlToolkit.dll" />
     <Content Include="DLL\Arcabase.EID.SDK.dll" />
     <Content Include="EIDCommunicationService.asmx" />
+    <Content Include="Error.aspx" />
     <Content Include="Overview.aspx" />
     <Content Include="Orders.aspx" />
     <Content Include="Settings.aspx" />
@@ -123,6 +124,13 @@
     </Compile>
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
     <Compile Include="Overview.aspx.cs">
       <DependentUpon>Overview.aspx</DependentUpon>
@@ -292,6 +300,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomException\CustomException.csproj">
+      <Project>{4ded7566-2f7e-42e9-9e5b-bf3a995c11e5}</Project>
+      <Name>CustomException</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LayeredBusinessModel.BLL\BoelaertRaesAsp.BLL.csproj">
       <Project>{f288d196-3fdf-4571-a7cc-9300d59ccd77}</Project>
       <Name>BoelaertRaesAsp.BLL</Name>

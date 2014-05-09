@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -15,14 +16,22 @@ namespace LayeredBusinessModel.BLL
 
         public List<Category> getAll()
         {
-            categoryDAO = new CategoryDAO();
-            return categoryDAO.getAll();
+            try
+            {
+                categoryDAO = new CategoryDAO();
+                return categoryDAO.getAll();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            
         }
 
         public Category getCategoryByID(int categoryID)
         {
             categoryDAO = new CategoryDAO();
-            return categoryDAO.getCategory(categoryID);
+            return categoryDAO.getCategoryByID(categoryID);
         }
     }
 }

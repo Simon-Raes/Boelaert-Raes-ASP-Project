@@ -58,6 +58,10 @@
     <Compile Include="TokenDAO.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomException\CustomException.csproj">
+      <Project>{4ded7566-2f7e-42e9-9e5b-bf3a995c11e5}</Project>
+      <Name>CustomException</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LayeredBusinessModel.Domain\BoelaertRaesAsp.Domain.csproj">
       <Project>{6ddaddc1-91ee-44c4-990c-c7f91292df88}</Project>
       <Name>BoelaertRaesAsp.Domain</Name>

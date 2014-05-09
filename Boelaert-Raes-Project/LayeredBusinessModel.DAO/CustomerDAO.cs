@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
 using System.Data;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
@@ -16,6 +17,9 @@ namespace LayeredBusinessModel.DAO
      */
     public class CustomerDAO : DAO
     {
+        private SqlCommand command;
+        private SqlDataReader reader;
+
         /*
          *  Returns a list with all the customers 
          */
@@ -23,26 +27,35 @@ namespace LayeredBusinessModel.DAO
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Customers", cnn);
-                List<Customer> customerList = new List<Customer>();
+                command = new SqlCommand("SELECT * FROM Customers", cnn);            
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        customerList.Add(createCustomer(reader));
+                        List<Customer> customerList = new List<Customer>();
+                        while (reader.Read())
+                        {
+                            customerList.Add(createCustomer(reader));
+                        }
+                        return customerList;
                     }
-                    reader.Close();
-                    return customerList;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CustomerDAO getAll()", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }
@@ -52,28 +65,33 @@ namespace LayeredBusinessModel.DAO
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
+                command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
                 command.Parameters.Add(new SqlParameter("@id", id));
-
-                Customer customer = null;
+                
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        customer = createCustomer(reader);
+                        reader.Read();
+                        return createCustomer(reader);                     
                     }
-                    reader.Close();
-                    return customer;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CustomerDAO getCustomerByID", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }
@@ -82,32 +100,37 @@ namespace LayeredBusinessModel.DAO
         /*
          *  Returns a customer based on an emailaddress
          */
-        public Customer getCustomerWithEmail(string email)
+        public Customer getCustomerByEmail(string email)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
+                command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
                 command.Parameters.Add(new SqlParameter("@email", email));
-
-                Customer customer = null;
+                               
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        customer = createCustomer(reader);
+                        reader.Read();                        
+                        return createCustomer(reader);
                     }
-                    reader.Close();
-                    return customer;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CustomerDAO getCustomerByEmail()", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }
@@ -121,8 +144,7 @@ namespace LayeredBusinessModel.DAO
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("UPDATE Customers SET name = @name, email = @email, password = @password, number_of_visits = @number_of_visits, street = @street, zip = @zip, municipality=@municipality,isVerrified=@verrified WHERE customer_id = @id", cnn);
-
+                command = new SqlCommand("UPDATE Customers SET name = @name, email = @email, password = @password, number_of_visits = @number_of_visits, street = @street, zip = @zip, municipality=@municipality,isVerrified=@verrified WHERE customer_id = @id", cnn);
                 command.Parameters.Add(new SqlParameter("@name", customer.name));
                 command.Parameters.Add(new SqlParameter("@email", customer.email));
                 command.Parameters.Add(new SqlParameter("@password", customer.password));
@@ -136,19 +158,20 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Close();
+                    command.ExecuteNonQuery(); //rowsaffected gebruiken om te kijken of de update gelukt is?
                     return true;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CustomerDAO updateCustomer", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return false;
             }
         }
 
@@ -160,10 +183,8 @@ namespace LayeredBusinessModel.DAO
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("INSERT INTO Customers (name,email,password,number_of_visits,street,zip,municipality,isVerrified)" +
+                command = new SqlCommand("INSERT INTO Customers (name,email,password,number_of_visits,street,zip,municipality,isVerrified)" +
                 "VALUES(@name,@email,@password,@visits,@street,@zip,@municipality,@verrified)", cnn);
-
                 command.Parameters.Add(new SqlParameter("@name", customer.name));
                 command.Parameters.Add(new SqlParameter("@email", customer.email));
                 command.Parameters.Add(new SqlParameter("@password", customer.password));
@@ -181,13 +202,43 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CustomerDAO addCustomer()", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return false;
+            }
+        }
+
+        public Boolean verrifyCustomer(Customer customer)
+        {
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
+
+                try
+                {
+                    cnn.Open();
+                    command.ExecuteNonQuery();                    
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    throw new MyBaseException("CustomerDAO verrifyCustomer()", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
             }
         }
 
@@ -210,34 +261,6 @@ namespace LayeredBusinessModel.DAO
                 isVerrified = Convert.ToBoolean(reader["isVerrified"])
             };
             return customer;
-        }
-
-        public Boolean verrifyCustomer(Customer customer)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                SqlCommand command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
-
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
-                command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
-
-                try
-                {
-                    cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Close();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return false;
-            }
         }
     }
 }

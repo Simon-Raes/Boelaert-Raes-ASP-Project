@@ -6,70 +6,93 @@ using System.Threading.Tasks;
 
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
+using CustomException;
 using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
     public class CategoryDAO : DAO
     {
-        public List<Category> getAll()
-        {
-            List<Category> categoryList = new List<Category>();
+        private SqlCommand command;
+        private SqlDataReader reader;
 
+        /*
+         * Returns a list with all the categories in it
+         */
+        public List<Category> getAll() 
+        {  
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM categories", cnn);
+                command = new SqlCommand("SELECT * FROM categories", cnn);
                 try
                 {
+                    List<Category> categoryList = new List<Category>();
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+                    reader = command.ExecuteReader();
 
-                    while (reader.Read())
+                    if (reader.HasRows)
                     {
-                        categoryList.Add(createCategory(reader));
+                        while (reader.Read())
+                        {
+                            categoryList.Add(createCategory(reader));
+                        }
+                        return categoryList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CategorieDAO getAll()", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return categoryList;
+                return null;
             }            
-        }
+        }    
 
-        public Category getCategory(int categoryID)
+        /*
+         * Returns a category based on an ID
+         */
+        public Category getCategoryByID(int id)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                Category category = null;
-
-                SqlCommand command = new SqlCommand("SELECT * FROM Categories WHERE category_id = " + categoryID, cnn);
+                command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
+                command.Parameters.Add(new SqlParameter("@category_id", id));
                 try
                 {
+                    Category category = null;
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+                    reader = command.ExecuteReader();
 
-                    reader.Read();
-                    category = createCategory(reader);
-                    reader.Close();
-
+                    while(reader.Read()){
+                        category = createCategory(reader);
+                    }  
+                    return category;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new MyBaseException("CategorieDAO getCategoryByID() " + ex.Message, ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return category;
             }
         }
 

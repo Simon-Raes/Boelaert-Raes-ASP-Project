@@ -40,7 +40,7 @@ namespace LayeredBusinessModel.BLL
         public Customer getCustomerWithEmail(String email)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerWithEmail(email);
+            return customerDAO.getCustomerByEmail(email);
         }
 
         /*

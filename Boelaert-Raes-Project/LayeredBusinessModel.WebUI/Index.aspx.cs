@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.BLL;
+﻿using CustomException;
+using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.Domain;
 using System;

@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     * Represents a token
+     */ 
     public class Token
     {
-        public TokenStatus status { get; set; }
-        public Customer customer { get; set; }
-        public String token { get; set; }
-        public DateTime timestamp { get; set; }
+        public TokenStatus status { get; set; }     //status
+        public Customer customer { get; set; }      //customer
+        public String token { get; set; }           //token
+        public DateTime timestamp { get; set; }     //timestamp
     }
 }

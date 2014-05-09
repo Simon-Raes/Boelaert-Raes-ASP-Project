@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 DataRow orderRow = orderTable.NewRow();
                 orderRow[0] = item.order_id;
-                orderRow[1] = item.orderstatus_name;
+                orderRow[1] = item.orderstatus.name;
                 orderRow[2] = item.date;                
                 orderTable.Rows.Add(orderRow);
             }
@@ -61,11 +61,11 @@ namespace LayeredBusinessModel.WebUI
                 //get the order info
                 OrderService orderService = new OrderService();
                 Order selectedOrder = orderService.getOrder(orderID);
-                lblOrderStatus.Text = "("+selectedOrder.orderstatus_name+")"; //1 = new, 2 = paid, 3 = shipped
+                lblOrderStatus.Text = "("+selectedOrder.orderstatus.name+")"; //1 = new, 2 = paid, 3 = shipped
                 lblOrderID.Text = selectedOrder.order_id.ToString();
 
                 //hide pay button if the order has already been paid
-                if (selectedOrder.orderstatus_id != 1)
+                if (selectedOrder.orderstatus.id != 1)
                 {
                     lblPay.Visible = false;
                     btnPay.Visible = false;
@@ -84,7 +84,7 @@ namespace LayeredBusinessModel.WebUI
 
                 foreach (OrderLine item in orderLines)
                 {
-                    if (item.order_line_type_id == 1)
+                    if (item.orderLineType.id == 1)
                     {
                         hasRentItems = true;
                     }
@@ -105,9 +105,9 @@ namespace LayeredBusinessModel.WebUI
                 {
                     DataRow orderRow = orderTable.NewRow();
                     orderRow[0] = item.orderline_id;
-                    orderRow[1] = item.dvd_info_name;
-                    orderRow[2] = item.order_line_type_name;
-                    if (item.order_line_type_id == 1)
+                    orderRow[1] = item.dvdInfo.name;
+                    orderRow[2] = item.orderLineType.name;
+                    if (item.orderLineType.id == 1)
                     {
                         orderRow[3] = item.startdate.ToString("dd/MM/yyyy");
                         orderRow[4] = item.enddate.ToString("dd/MM/yyyy");
@@ -125,11 +125,11 @@ namespace LayeredBusinessModel.WebUI
                 Boolean allInStock = true;
 
                 //user has already paid, check status of copies in cart
-                if (selectedOrder.orderstatus_id > 1)
+                if (selectedOrder.orderstatus.id > 1)
                 {
                     foreach (OrderLine orderLine in orderLines)
                     {
-                        if (orderLine.dvd_copy_id <= 0)
+                        if (orderLine.dvdCopy.dvd_copy_id <= 0)
                         {
                             allInStock = false;
                         }
@@ -176,7 +176,7 @@ namespace LayeredBusinessModel.WebUI
                 OrderLineService orderLineService = new OrderLineService();
                 OrderLine orderLine = orderLineService.getOrderLine(orderLineID);
 
-                if (orderLine.order_line_type_id == 1) //only allow cancelling of rent-lines (type 1)
+                if (orderLine.orderLineType.id == 1) //only allow cancelling of rent-lines (type 1)
                 {
                     if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
                     {

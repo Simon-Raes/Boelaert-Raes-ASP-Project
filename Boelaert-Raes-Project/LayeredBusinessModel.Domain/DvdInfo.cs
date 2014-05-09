@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /**
+     * Represents a DVD
+     */
     public class DvdInfo
     {
-        public int dvd_info_id { get; set; }
-        public String name { get; set; }
-        public String year { get; set; }
-        public String barcode { get; set; }
-        public String author { get; set; }
+        public int dvd_info_id { get; set; }        //a unique id
+        public String name { get; set; }            //name
+        public String year { get; set; }            //year
+        public String barcode { get; set; }         //barcode
+        public String author { get; set; }          //author
         
-        public String descripion { get; set; }
-        public float rent_price { get; set; }
-        public float buy_price { get; set; }
-        public DateTime date_added { get; set; }
-        public int amount_sold { get; set; }
+        public String descripion { get; set; }      //description
+        public float rent_price { get; set; }       //rent price
+        public float buy_price { get; set; }        //but price
+        public DateTime date_added { get; set; }    //date this dvd was added
+        public int amount_sold { get; set; }        //The amount sold for this dvd
 
 
-        public List<KeyValuePair<int, string>> media { get; set; }
-        public String[] actors { get; set; }
-        public String duration { get; set; }
-        public List<Genre> genres { get; set; }
+        public List<KeyValuePair<int, string>> media { get; set; }  //Media linked with this dvd
+        public String[] actors { get; set; }        //List of actors
+        public String duration { get; set; }        //Duration
+        public List<Genre> genres { get; set; }     //list of gengres
     }
 }

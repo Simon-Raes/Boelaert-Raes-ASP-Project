@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL.Model;
+using LayeredBusinessModel.BLL.Database;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -17,7 +18,7 @@ namespace LayeredBusinessModel.BLL
             Order selectedOrder = orderService.getOrder(orderID);
 
             //set the order status to PAID
-            selectedOrder.orderstatus_id = 2;
+            selectedOrder.orderstatus = new OrderStatusService().getOrderstatusByID(2);
             orderService.updateOrder(selectedOrder);
 
             //assign copies to the orderlines
@@ -32,10 +33,10 @@ namespace LayeredBusinessModel.BLL
             foreach (OrderLine orderLine in orderLines)
             {
 
-                if (orderLine.order_line_type_id == 1) //rent copy
+                if (orderLine.orderLineType.id == 1) //rent copy
                 {
                     DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo thisDVD = dvdInfoService.getDvdInfoWithID(orderLine.dvd_info_id.ToString());
+                    DvdInfo thisDVD = dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString());
 
                     //get all available dates starting from TODAY 
                     //(also needs to check dates between today and start of requested rent period to determine smallest open window)
@@ -121,14 +122,13 @@ namespace LayeredBusinessModel.BLL
                     //assign the copy if it has been found
                     if (selectedCopyId > 0)
                     {
-                        orderLine.dvd_copy_id = selectedCopyId;
+                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId);
 
-                        //set the found copy as the copy for this orderline
-                        orderLine.dvd_copy_id = selectedCopyId;
+                        
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
-                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(orderLine.dvd_info_id.ToString());
+                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString());
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                         dvdInfoService.updateDvdInfo(dvdInfo);
                     }
@@ -146,11 +146,11 @@ namespace LayeredBusinessModel.BLL
                             selectedCopyId = dvdCopies[0].dvd_copy_id;
 
                             //set the found copy as the copy for this orderline
-                            orderLine.dvd_copy_id = selectedCopyId;
+                           orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId);
                             orderLineService.updateOrderLine(orderLine);
 
                             //update the amount_sold field of the dvdInfo record
-                            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(dvdCopies[0].dvd_info_id.ToString());
+                            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(dvdCopies[0].dvdinfo.dvd_info_id.ToString());
                             dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                             dvdInfoService.updateDvdInfo(dvdInfo);
                         }
@@ -165,11 +165,11 @@ namespace LayeredBusinessModel.BLL
                 }
 
 
-                else if (orderLine.order_line_type_id == 2) //sale copy
+                else if (orderLine.orderLineType.id == 2) //sale copy
                 {
                     //get all available copies
                     //get this list again for every item so you can add a new, available copy to the order (todo: try do this without going to the database for every item)
-                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(Convert.ToString(orderLine.dvd_info_id));
+                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(Convert.ToString(orderLine.dvdInfo.dvd_info_id));
 
                     //check if there is a copy available
                     if (availableCopies.Count > 0)
@@ -178,12 +178,12 @@ namespace LayeredBusinessModel.BLL
                         copy = availableCopies[0];
 
                         //set the found copy as the copy for this orderline
-                        orderLine.dvd_copy_id = copy.dvd_copy_id;
+                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(copy.dvd_copy_id);
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
                         DvdInfoService dvdInfoService = new DvdInfoService();
-                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(copy.dvd_info_id.ToString());
+                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(copy.dvdinfo.dvd_info_id.ToString());
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                         dvdInfoService.updateDvdInfo(dvdInfo);
 
@@ -227,16 +227,16 @@ namespace LayeredBusinessModel.BLL
             //set order total cost
             foreach (OrderLine orderLine in orderLines)
             {
-                if (orderLine.order_line_type_id == 1) //rent
+                if (orderLine.orderLineType.id == 1) //rent
                 {
                     TimeSpan duration = orderLine.enddate - orderLine.startdate;
                     int durationDays = duration.Days;
 
-                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvd_info_id.ToString()).rent_price * durationDays;
+                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString()).rent_price * durationDays;
                 }
-                else if (orderLine.order_line_type_id == 2) //buy
+                else if (orderLine.orderLineType.id == 2) //buy
                 {
-                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvd_info_id.ToString()).buy_price;
+                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString()).buy_price;
                 }
             }
 

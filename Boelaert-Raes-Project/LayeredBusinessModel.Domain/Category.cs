@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /**
+     * Represents a Category
+     */  
     public class Category
     {
-        public int category_id { get; set; }
-        public String name { get; set; }
+        public int category_id { get; set; }    //an unique id
+        public String name { get; set; }        //a description
     }
 }

@@ -90,8 +90,8 @@ namespace LayeredBusinessModel.DAO
                 "date = @date " +
                 "WHERE order_id=@order_id", cnn);
 
-                command.Parameters.Add(new SqlParameter("@customer_id", order.customer_id));
-                command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", order.customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus.id));
                 command.Parameters.Add(new SqlParameter("@date", order.date));
                 command.Parameters.Add(new SqlParameter("@order_id", order.order_id));
 
@@ -212,9 +212,8 @@ namespace LayeredBusinessModel.DAO
             Order order = new Order
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
-                orderstatus_id = Convert.ToInt32(reader["orderstatus_id"]),
-                orderstatus_name = Convert.ToString(reader["name"]),
-                customer_id = Convert.ToInt32(reader["customer_id"]),
+                orderstatus = new OrderStatusDAO().getOrderStatusByID(Convert.ToInt32(reader["orderstatus_id"])),
+                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader["customer_id"])),
                 date = Convert.ToDateTime(reader["date"])
             };
             return order;

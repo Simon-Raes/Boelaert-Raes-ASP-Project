@@ -84,8 +84,8 @@ namespace LayeredBusinessModel.DAO
                 SqlCommand command = new SqlCommand("INSERT INTO PageVisits " +
                 "(customer_id, dvd_info_id, number_of_visits) " +
                 "VALUES(@customer_id, @dvd_info_id, @number_of_visits)", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvdInfo.dvd_info_id));
                 command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
 
                 try
@@ -113,8 +113,8 @@ namespace LayeredBusinessModel.DAO
                 "WHERE customer_id = @customer_id " +
                 "AND dvd_info_id = @dvd_info_id", cnn);
                 command.Parameters.Add(new SqlParameter("@number_of_visits", pageVisits.number_of_visits));
-                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer_id));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", pageVisits.customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", pageVisits.dvdInfo.dvd_info_id));
 
                 try
                 {
@@ -135,8 +135,8 @@ namespace LayeredBusinessModel.DAO
         {
             PageVisits pageVisits = new PageVisits
             {
-                customer_id = Convert.ToInt32(reader["customer_id"]),
-                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader["customer_id"])),
+                dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                 number_of_visits = Convert.ToInt32(reader["number_of_visits"])
             };
             return pageVisits;

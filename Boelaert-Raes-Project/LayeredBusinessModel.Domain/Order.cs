@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     *  Represents an order
+     */ 
     public class Order
     {
-        public int order_id { get; set; }
-        public int customer_id { get; set; }
-        public int orderstatus_id { get; set; }
-        public String orderstatus_name { get; set; }
-        public DateTime date { get; set; }
+        public int order_id { get; set; }               //a unique order id
+        public Customer customer { get; set; }          //the customer
+        public OrderStatus orderstatus { get; set; }    //orderstatus
+        public DateTime date { get; set; }              //date
     }
 }

@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     * Represents a shoppingcartitem
+     */ 
     public class ShoppingcartItem
     {
-        public int shoppingcart_item_id { get; set; }
-        public int customer_id { get; set; }
-        public int dvd_info_id { get; set; }
-        public DateTime startdate { get; set; }
-        public DateTime enddate { get; set; }
-        public int copy_type_id { get; set; }
-
-        //extra values that are displayed in the shoppingcart gridview, info comes from sql JOINs with other tables
-        public String name { get; set; } //dvd name from table DvdInfo
-        public String typeName { get; set; } //copyType name (verhuur or verkoop) from table DvdCopyType
-
+        public int shoppingcart_item_id { get; set; }   //a unique id  
+        public Customer customer { get; set; }
+        public DvdInfo dvdInfo { get; set; }
+        public DateTime startdate { get; set; }         //start date from order
+        public DateTime enddate { get; set; }           //end date from order
+        public DvdCopy dvdCopy { get; set; }
     }
 }

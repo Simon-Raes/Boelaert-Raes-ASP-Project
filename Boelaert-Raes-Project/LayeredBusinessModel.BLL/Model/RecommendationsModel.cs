@@ -38,7 +38,7 @@ namespace LayeredBusinessModel.BLL
             {
                 foreach (OrderLine line in orderLines)
                 {
-                    int dvdID = line.dvd_info_id;
+                    int dvdID = line.dvdInfo.dvd_info_id;
                     genres.AddRange(genreService.getGenresForDvd(dvdID));
 
                     //fill orderLinesDvdIds
@@ -155,7 +155,7 @@ namespace LayeredBusinessModel.BLL
 
             foreach (PageVisits pageVisits in pageVisitsList)
             {
-                dvdInfos.Add(dvdInfoService.getDvdInfoWithID(pageVisits.dvd_info_id.ToString()));
+                dvdInfos.Add(dvdInfoService.getDvdInfoWithID(pageVisits.dvdInfo.dvd_info_id.ToString()));
             }
 
 

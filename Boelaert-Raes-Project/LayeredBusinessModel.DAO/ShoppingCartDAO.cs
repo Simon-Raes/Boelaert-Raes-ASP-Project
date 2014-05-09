@@ -223,13 +223,13 @@ namespace LayeredBusinessModel.DAO
             ShoppingcartItem cartItem = new ShoppingcartItem
             {
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
-                customer_id = Convert.ToInt32(reader[1]),
-                dvd_info_id = Convert.ToInt32(reader[2]),   
-                copy_type_id = Convert.ToInt32(reader[3]),
+                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader[1])),
+                dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),   
+                dvdCopy = new DvdCopyDAO().getCopyWithId(Convert.ToInt32(reader[3])),
                 startdate = startdate,
-                enddate = enddate,
-                name = Convert.ToString(reader["name"]),
-                typeName = Convert.ToString(reader["typeName"])
+                enddate = enddate
+                //name = Convert.ToString(reader["name"]),
+                //typeName = Convert.ToString(reader["typeName"])
             };
 
 

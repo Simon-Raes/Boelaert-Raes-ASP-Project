@@ -25,7 +25,7 @@ namespace LayeredBusinessModel.WebUI
                     Order order = orderService.getOrder(orderID);
                     if (order != null)
                     {
-                        if (order.customer_id == user.customer_id)
+                        if (order.customer.customer_id == user.customer_id)
                         {
                             //all good
                             lblStatus.Text = orderID;
@@ -38,7 +38,7 @@ namespace LayeredBusinessModel.WebUI
 
                             foreach (OrderLine item in orderLines)
                             {
-                                if (item.order_line_type_id == 1)
+                                if (item.orderLineType.id == 1)
                                 {
                                     hasRentItems = true;
                                 }
@@ -59,9 +59,9 @@ namespace LayeredBusinessModel.WebUI
                             {
                                 DataRow orderRow = orderTable.NewRow();
                                 orderRow[0] = item.orderline_id;
-                                orderRow[1] = item.dvd_info_name;
-                                orderRow[2] = item.order_line_type_name;
-                                if(item.order_line_type_id == 1)
+                                orderRow[1] = item.dvdInfo.name;
+                                orderRow[2] = item.orderLineType.name;
+                                if(item.orderLineType.id == 1)
                                 {
                                     orderRow[3] = item.startdate.ToString("dd/MM/yyyy");
                                     orderRow[4] = item.enddate.ToString("dd/MM/yyyy"); 

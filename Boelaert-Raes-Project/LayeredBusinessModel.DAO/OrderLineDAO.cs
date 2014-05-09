@@ -244,9 +244,9 @@ namespace LayeredBusinessModel.DAO
                 "(order_id, order_line_type_id, dvd_info_id, dvd_copy_id, startdate, enddate)" +
                 "VALUES(@order_id, @order_line_type_id, @dvd_info_id, null, @startdate, @enddate)", cnn);
 
-                command.Parameters.Add(new SqlParameter("@order_id", orderline.order_id));
-                command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@order_id", orderline.order.order_id));
+                command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.orderLineType.id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvdInfo.dvd_info_id));
                 //command.Parameters.Add(new SqlParameter("@dvd_copy_id", null)); //a copy is not yet assigned here, will only be added after a customer pays
 
                 //TODO: betere oplossing voor dates
@@ -294,9 +294,9 @@ namespace LayeredBusinessModel.DAO
                 "enddate = @enddate " +
                 "WHERE orderline_id = @orderline_id", cnn);
 
-                command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.order_line_type_id));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvd_info_id));
-                command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvd_copy_id));
+                command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.orderLineType.id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvdInfo.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvdCopy.dvd_copy_id));
 
                 //TODO: betere oplossing voor dates
                 if (orderline.startdate == DateTime.MinValue)
@@ -399,10 +399,9 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order_id = Convert.ToInt32(reader["order_id"]),
-                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
-
-                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };
@@ -412,10 +411,10 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order_id = Convert.ToInt32(reader["order_id"]),
-                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
-                    dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    dvdCopy = new DvdCopyDAO().getCopyWithId(Convert.ToInt32(reader["dvd_copy_id"])),
+                    dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };
@@ -433,12 +432,9 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order_id = Convert.ToInt32(reader["order_id"]),
-                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
-                    order_line_type_name = Convert.ToString(reader["order_line_type_name"]),
-
-                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                    dvd_info_name = Convert.ToString(reader["dvd_info_name"]),
+                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };
@@ -448,12 +444,10 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order_id = Convert.ToInt32(reader["order_id"]),
-                    order_line_type_id = Convert.ToInt32(reader["order_line_type_id"]),
-                    order_line_type_name = Convert.ToString(reader["order_line_type_name"]),
-                    dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                    dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                    dvd_info_name = Convert.ToString(reader["dvd_info_name"]),
+                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    dvdCopy = new DvdCopyDAO().getCopyWithId(Convert.ToInt32(reader["dvd_copy_id"])),
+                    dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };

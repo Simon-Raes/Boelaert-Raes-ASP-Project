@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace LayeredBusinessModel.Domain
 {
+    /*
+     * Represents PageVisits
+     */ 
     public class PageVisits
     {
-        public int customer_id { get; set; }
-        public int dvd_info_id { get; set; }
-        public int number_of_visits { get; set; }
+        public Customer customer { get; set; }
+        public DvdInfo dvdInfo { get; set; }
+        public int number_of_visits { get; set; }   //the amount the customer has visited this dvd
     }
 }

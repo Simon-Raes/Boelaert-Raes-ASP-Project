@@ -20,14 +20,14 @@ namespace LayeredBusinessModel.BLL.Model
             if(pageVisits==null)
             {
                 pageVisits = new PageVisits();
-                pageVisits.customer_id = customer.customer_id;
-                pageVisits.dvd_info_id = dvdInfo.dvd_info_id;
+                pageVisits.customer = customer;
+                pageVisits.dvdInfo = dvdInfo;
                 pageVisits.number_of_visits = 1;
                 pageVisitsService.addPageVisits(pageVisits);
             }
             else
             {
-                pageVisits.number_of_visits = pageVisits.number_of_visits+1;
+                pageVisits.number_of_visits += 1;
                 pageVisitsService.updatePageVisits(pageVisits);
             }
         }

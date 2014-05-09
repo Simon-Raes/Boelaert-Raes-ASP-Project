@@ -60,16 +60,11 @@ namespace LayeredBusinessModel.WebUI
                     //only update if the user entered the correct old password
                     if (inputOldPassword.Value.Equals(CryptographyModel.decryptPassword(user.password)))
                     {
-                        //create customer object based on logged-in-user info and info from textfields
-                        Customer customer = new Customer
-                        {
-                            customer_id = user.customer_id, //keep existing customer_id
-                            email = inputEmail.Value,
-                            //login = user.login, //keep existing login
-                            name = inputName.Value,
-                            numberOfVisits = user.numberOfVisits, //keep existing numberOfVisits
-                            password = CryptographyModel.encryptPassword(inputPassword.Value)
-                        };
+                        //update customer                        
+                        Customer customer = user;
+                        customer.name = inputName.Value;
+                        customer.email = inputEmail.Value;
+                        customer.password = CryptographyModel.encryptPassword(inputPassword.Value);
 
                         //update user's database data
                         CustomerService customerService = new CustomerService();

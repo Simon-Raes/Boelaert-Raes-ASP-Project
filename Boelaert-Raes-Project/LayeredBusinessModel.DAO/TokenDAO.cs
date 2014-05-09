@@ -74,11 +74,35 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public Boolean removeToken(String token) {
+        //public Boolean removeToken(String token) {
+        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
+        //    {
+        //        SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
+        //        command.Parameters.Add(new SqlParameter("@token", token));
+        //        try
+        //        {
+        //            cnn.Open();
+        //            command.ExecuteNonQuery();
+        //            return true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //        }
+        //        finally
+        //        {
+        //            cnn.Close();
+        //        }
+        //        return false;
+        //    }
+        //}
+
+        public Boolean removeToken(Token token)
+        {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
-                command.Parameters.Add(new SqlParameter("@token", token));
+                command.Parameters.Add(new SqlParameter("@token", token.token));
                 try
                 {
                     cnn.Open();

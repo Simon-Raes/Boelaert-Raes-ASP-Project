@@ -11,10 +11,9 @@ namespace LayeredBusinessModel.BLL
 {
     public class OrderModel
     {
-        public void payOrder(String orderID)
+        public void payOrder(Order selectedOrder)
         {
             OrderService orderService = new OrderService();
-            Order selectedOrder = orderService.getOrder(orderID);
 
             //set the order status to PAID
             selectedOrder.orderstatus_id = 2;
@@ -22,7 +21,7 @@ namespace LayeredBusinessModel.BLL
 
             //assign copies to the orderlines
             OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
+            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(selectedOrder.order_id));
 
             DvdCopyService dvdCopyService = new DvdCopyService();
             List<DvdCopy> availableCopies = null;

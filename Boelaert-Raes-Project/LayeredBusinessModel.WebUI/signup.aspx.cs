@@ -1,4 +1,5 @@
 ﻿using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,9 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            checkQueryString();
             setupEID();
+
             if (!Page.IsPostBack)
             {
                 pnlSignup.Visible = true;
@@ -21,29 +24,24 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-               // Page.Validate();
-                if (Page.IsValid)
+                
+            }
+        }
+
+        private void checkQueryString()
+        {
+            if (Request.QueryString["token"] != null)
+            {
+                SignUpModel signUpModel = new SignUpModel();
+                if(signUpModel.checkSignUpVerification(Request.QueryString["token"]))
                 {
-                    Customer customer = new Customer
-                    {
-                        email = txtEmail.Text,
-                        password = CryptographyModel.encryptPassword(txtPassword.Text),
-                        name = txtName.Text,
-                        street = txtStreet.Text,
-                        zip = txtPostalcode.Text,
-                        municipality = txtMunicipality.Text,
-                        isVerrified = false
-                    };
-                    CustomerService customerService = new CustomerService();
-                    if (customerService.addCustomer(customer))
-                    {
-                        pnlSignup.Visible = false;
-                        pnlSignupCompleted.Visible = true;
-                    }
-                    else
-                    {
-                        txtName.Text = "mislukt";
-                    }
+                    //user verification succesful, log in the user and redirect
+                    
+                }
+                else
+                {
+                    //something went wrong (none existing token?)
+                    //todo:alert user?
                 }
             }
         }
@@ -90,12 +88,37 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnSignup_Click(object sender, EventArgs e)
         {
-            int i = 0;
+            Page.Validate();
+            if (Page.IsValid)
+            {
+                Customer customer = new Customer
+                {
+                    email = txtEmail.Text,
+                    password = CryptographyModel.encryptPassword(txtPassword.Text),
+                    name = txtName.Text,
+                    street = txtStreet.Text,
+                    zip = txtPostalcode.Text,
+                    municipality = txtMunicipality.Text,
+                    isVerified = false
+                };
+                SignUpModel signUpModel = new SignUpModel();
+                if (signUpModel.signUpCustomer(customer))
+                {
+                    pnlSignup.Visible = false;
+                    lblEmailSent.Text = "An email has been sent to "+customer.email+". Please follow the instructions in the email to complete your registration.";
+                    pnlSignupCompleted.Visible = true;
+                }
+                else
+                {
+                    pnlSignup.Visible = false;
+                    lblEmailSent.Text = "An error occured while completing your registration, please try again later. Contact our support if this problem persists.";
+                    pnlSignupCompleted.Visible = true;
+                }
+            }
         }
 
         protected void btneID_Click(object sender, EventArgs e)
-        {
-            
+        {            
             ModalPopupExtender1.Show();
             EID_Read1.Visible = true;
             disableValidation();

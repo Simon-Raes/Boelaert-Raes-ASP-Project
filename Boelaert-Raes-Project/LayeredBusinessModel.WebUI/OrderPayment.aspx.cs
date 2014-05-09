@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Data;
+using LayeredBusinessModel.BLL.Model;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -101,15 +102,52 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnPay_Click(object sender, EventArgs e)
         {
-            //get the order
-            String orderID = lblStatus.Text;
+            Customer user = (Customer)Session["user"];
+            if(user!=null)
+            {
+                //get the order
+                String orderID = lblStatus.Text;
+                OrderService orderService = new OrderService();
+                Order order = orderService.getOrder(orderID);
 
-            //pay for the order
-            OrderModel helper = new OrderModel();
-            helper.payOrder(orderID);
+                //pay for the order
+                OrderModel helper = new OrderModel();
+                helper.payOrder(order);
 
-            //redirect away from the payment page - todo: go to thank you/info page
-            Response.Redirect("~/Index.aspx");
+                //get the orderLines
+                OrderLineService orderLineService = new OrderLineService();
+                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(Convert.ToInt32(orderID));
+                //check if all orderLines can be given a dvdCopy
+                Boolean allInStock = hasAllInStock(orderLines);
+                //send the user an order confirmation
+                EmailModel emailModel = new EmailModel();
+                emailModel.sendOrderConfirmationEmail(user, order, orderLines, allInStock);
+
+                //redirect away from the payment page - todo: go to thank you/info page
+                Response.Redirect("~/Index.aspx");
+            }
+            else
+            {
+                //todo: error about not being logged in
+            }
+            
+
+            
+        }
+
+        private Boolean hasAllInStock(List<OrderLine> orderLines)
+        {
+            Boolean allInStock = true;
+
+            foreach (OrderLine orderLine in orderLines)
+            {
+                if (orderLine.dvd_copy_id <= 0)
+                {
+                    allInStock = false;
+                }
+            }
+
+            return allInStock;
         }
 
 

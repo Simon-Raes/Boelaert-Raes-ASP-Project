@@ -19,6 +19,6 @@ namespace LayeredBusinessModel.Domain
         public String zip { get; set; }
         public String municipality { get; set; }        
         public int numberOfVisits { get; set; }
-        public Boolean isVerrified { get; set; }
+        public Boolean isVerified { get; set; }
     }
 }

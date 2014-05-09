@@ -63,20 +63,20 @@ namespace LayeredBusinessModel.BLL
             return customerDAO.addCustomer(customer);
         }
 
-        public Boolean verrifyCustomer(Customer customer, String strToken)
+        public Boolean verrifyCustomer(Customer customer, Token strToken)
         {
-            if (customer.isVerrified)
+            if (customer.isVerified)
             {
                 return false;
             }
             else
             {
-                customer.isVerrified = true;
+                customer.isVerified = true;
                 customerDAO = new CustomerDAO();
                 if (customerDAO.verrifyCustomer(customer))
                 {
                     TokenService t = new TokenService();
-                    t.deleteTokenbyToken(strToken);
+                    t.deleteToken(strToken);
                     return true;
                 }
                 return false;

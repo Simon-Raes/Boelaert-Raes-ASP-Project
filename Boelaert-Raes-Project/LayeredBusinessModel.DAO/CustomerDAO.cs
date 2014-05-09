@@ -130,7 +130,7 @@ namespace LayeredBusinessModel.DAO
                 command.Parameters.Add(new SqlParameter("@street", customer.street));
                 command.Parameters.Add(new SqlParameter("@zip", customer.zip));
                 command.Parameters.Add(new SqlParameter("@municipality", customer.municipality));
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
                 command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
 
                 try
@@ -171,7 +171,7 @@ namespace LayeredBusinessModel.DAO
                 command.Parameters.Add(new SqlParameter("@zip", customer.zip));
                 command.Parameters.Add(new SqlParameter("@street", customer.street));
                 command.Parameters.Add(new SqlParameter("@municipality", customer.municipality));
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
 
                 try
                 {
@@ -207,7 +207,7 @@ namespace LayeredBusinessModel.DAO
                 street = Convert.ToString(reader["street"]),
                 municipality = Convert.ToString(reader["municipality"]),
                 zip = Convert.ToString(reader["zip"]),
-                isVerrified = Convert.ToBoolean(reader["isVerrified"])
+                isVerified = Convert.ToBoolean(reader["isVerrified"])
             };
             return customer;
         }
@@ -218,7 +218,7 @@ namespace LayeredBusinessModel.DAO
             {
                 SqlCommand command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
 
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
                 command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
 
                 try

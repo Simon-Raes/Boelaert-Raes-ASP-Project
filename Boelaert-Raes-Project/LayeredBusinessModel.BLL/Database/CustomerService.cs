@@ -6,14 +6,20 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
+using LayeredBusinessModel.BLL.Database;
 
 namespace LayeredBusinessModel.BLL
 {
-
+    /*
+     *  All servicemethods for Customer
+     */
     public class CustomerService
     {
         private CustomerDAO customerDAO;
 
+        /*
+         *  Returns a list with all the customers
+         */
         public List<Customer> getAll()
         {
             List<Customer> customerList = new List<Customer>();
@@ -21,30 +27,61 @@ namespace LayeredBusinessModel.BLL
             customerList = customerDAO.getAllCustomers();
             return customerList;  
         }
-        /*
-        public Customer getCustomerWithLogin(String login)
+
+        public Customer getCustomerByID(int id)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerWithLogin(login);
-        }*/
+            return customerDAO.getCustomerByID(id);
+        }
 
+        /*
+         *  Returns a customer based on an emailadress
+         */
         public Customer getCustomerWithEmail(String email)
         {
             customerDAO = new CustomerDAO();
             return customerDAO.getCustomerWithEmail(email);
         }
 
-        public void updateCustomer(Customer customer)
+        /*
+         *  Updates a customer
+         *  Returns true if succeedes, false is not
+         */
+        public Boolean updateCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();
-            customerDAO.updateCustomer(customer);
+            return customerDAO.updateCustomer(customer);
         }
 
+        /*
+         *  Adds a new customer
+         *  Returns true if succeedes, false is not
+         */ 
         public Boolean addCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();
             return customerDAO.addCustomer(customer);
-       }
+        }
+
+        public Boolean verrifyCustomer(Customer customer, String strToken)
+        {
+            if (customer.isVerrified)
+            {
+                return false;
+            }
+            else
+            {
+                customer.isVerrified = true;
+                customerDAO = new CustomerDAO();
+                if (customerDAO.verrifyCustomer(customer))
+                {
+                    TokenService t = new TokenService();
+                    t.deleteTokenbyToken(strToken);
+                    return true;
+                }
+                return false;
+            }            
+        }
     }
     
 }

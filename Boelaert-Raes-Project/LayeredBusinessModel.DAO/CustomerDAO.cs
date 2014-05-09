@@ -11,8 +11,14 @@ using System.Data;
 
 namespace LayeredBusinessModel.DAO
 {
+    /*
+     * All DAO-methods for Customer
+     */
     public class CustomerDAO : DAO
     {
+        /*
+         *  Returns a list with all the customers 
+         */
         public List<Customer> getAllCustomers()
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -42,39 +48,40 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        /*
-         * niet meer nodig normaal
-         * 
-        public Customer getCustomerWithLogin(string login)
+        public Customer getCustomerByID(int id)
         {
-            
-            cnn = new SqlConnection(sDatabaseLocatie);
-            Customer customer = null;
-
-            SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE login = @login", cnn);
-            command.Parameters.Add(new SqlParameter("@login", login));
-
-            try
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                cnn.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                customer = createCustomer(reader);
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                customer = null;
-            }
-            finally
-            {
-                cnn.Close();
-            }
+                SqlCommand command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
+                command.Parameters.Add(new SqlParameter("@id", id));
 
-            return customer;
+                Customer customer = null;
+                try
+                {
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        customer = createCustomer(reader);
+                    }
+                    reader.Close();
+                    return customer;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return null;
+            }
         }
-         * */
 
+        /*
+         *  Returns a customer based on an emailaddress
+         */
         public Customer getCustomerWithEmail(string email)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -106,6 +113,10 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         *      Updates a customer.
+         *      Returns true if succeeded, false if not
+         */
         public Boolean updateCustomer(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -141,6 +152,10 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         *      Adds a new customer.
+         *      Returns true if succeeded, false if not
+         */
         public Boolean addCustomer(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -148,25 +163,6 @@ namespace LayeredBusinessModel.DAO
 
                 SqlCommand command = new SqlCommand("INSERT INTO Customers (name,email,password,number_of_visits,street,zip,municipality,isVerrified)" +
                 "VALUES(@name,@email,@password,@visits,@street,@zip,@municipality,@verrified)", cnn);
-
-                /*
-                 * SqlParameter nameParam = new SqlParameter("@name",SqlDbType.VarChar,50);
-                nameParam.Value = customer.name;
-                SqlParameter emailParam = new SqlParameter("@email", SqlDbType.VarChar,50);
-                emailParam.Value = customer.email;
-                SqlParameter passwordParam = new SqlParameter("@password", SqlDbType.VarChar, 50);
-                passwordParam.Value = customer.password;
-                SqlParameter visitsParam = new SqlParameter("@visits", SqlDbType.Int);
-                visitsParam.Value = 0;
-                SqlParameter zipParam = new SqlParameter("@zip", SqlDbType.VarChar, 10);
-                zipParam.Value = customer.zip;
-                SqlParameter streetParam = new SqlParameter("@street", SqlDbType.VarChar, 50);
-                streetParam.Value = customer.street;
-                SqlParameter municipalityParam = new SqlParameter("@municipality", SqlDbType.VarChar, 50);
-                municipalityParam.Value = customer.municipality;
-                SqlParameter verrifiedParam = new SqlParameter("@verrified", SqlDbType.Bit);
-                verrifiedParam.Value = false;
-                */
 
                 command.Parameters.Add(new SqlParameter("@name", customer.name));
                 command.Parameters.Add(new SqlParameter("@email", customer.email));
@@ -195,6 +191,9 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         *      Returns a customer based on a sqlReader
+         */
         private Customer createCustomer(SqlDataReader reader)
         {
             //gebruik van object initializer ipv constructor
@@ -213,7 +212,32 @@ namespace LayeredBusinessModel.DAO
             return customer;
         }
 
+        public Boolean verrifyCustomer(Customer customer)
+        {
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                SqlCommand command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
+
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
+
+                try
+                {
+                    cnn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Close();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    cnn.Close();
+                }
+                return false;
+            }
+        }
     }
-
-
 }

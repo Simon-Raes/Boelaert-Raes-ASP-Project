@@ -52,6 +52,7 @@
     <Compile Include="PageVisitsDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShoppingCartDAO.cs" />
+    <Compile Include="TokenDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LayeredBusinessModel.Domain\BoelaertRaesAsp.Domain.csproj">

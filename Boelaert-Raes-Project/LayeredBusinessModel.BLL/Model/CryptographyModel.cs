@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Text;
 using System.Security.Cryptography;
 
 namespace LayeredBusinessModel.BLL
 {
     public class CryptographyModel
     {
-        const string passphrase = "Password@123";  //todo: better, more secure passphrase
+        const string passphrase = "f0Ev9Pbdts5T4TAwh";  //todo: better, more secure passphrase
 
         public static string encryptPassword(string message)
         {

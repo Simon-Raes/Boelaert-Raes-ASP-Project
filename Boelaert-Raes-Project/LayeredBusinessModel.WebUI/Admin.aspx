@@ -1,12 +1,21 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Admin.aspx.cs" Inherits="LayeredBusinessModel.WebUI.Admin" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-
-     <div class="panel panel-default">
+    <div class="panel panel-default">
         <div class="panel-body">
-            
-            
+            Add 10 buy copies and 2 rent copies to a dvdInfo. (enter dvdInfo id number) <br />
+            <asp:TextBox ID="txtDvdInfo" runat="server"></asp:TextBox>
+            <button class="btn btn-success" id="Button2" runat="server" onserverclick="Button1_Click">Add copies to dvdInfo</button>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+
             <div class="form-horizontal">
                 <fieldset>
                     <legend>Add new DVD</legend>
@@ -41,7 +50,7 @@
                             <input type="email" class="form-control" id="inputYear" placeholder="Year" runat="server" />
                             <p class="help-block">
                                 The year in which the DVD was released.
-                                 </p>
+                            </p>
                         </div>
                     </div>
 
@@ -95,7 +104,7 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="inputAmountSold" class="col-sm-2 control-label">Amount sold</label>
                         <div class="col-sm-8">

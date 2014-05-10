@@ -35,6 +35,16 @@ namespace LayeredBusinessModel.WebUI
             //Reset all dvd copies to be back in stock (in_stock = true)
             DvdCopyService dvdCopyService = new DvdCopyService();
             dvdCopyService.resetAllCopies();
+
+
+
+            
         }
+
+      
+
+        
+
+      
     }
 }

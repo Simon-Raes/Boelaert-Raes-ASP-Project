@@ -68,5 +68,14 @@ namespace LayeredBusinessModel.WebUI
             DvdGenreService dvdGenreService = new DvdGenreService();
             dvdGenreService.addDvdGenre(Convert.ToInt32(genre), dvdInfoID);
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            //disabled code so we don't accidentally add more copies than needed
+
+            // String id = txtDvdInfo.Text;
+            //DvdCopyService dvdCopyService = new DvdCopyService();
+            //dvdCopyService.addCopiesForDvd(id);
+        }
     }
 }

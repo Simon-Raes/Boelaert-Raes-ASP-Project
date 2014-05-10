@@ -75,6 +75,44 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        public Boolean addCopiesForDvd(String dvd_info_id)
+        {
+            Boolean success = true;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                Random rnd = new Random();
+
+                for (int i = 0; i < 12; i++) //add 12 copies
+                {
+                    SqlCommand command = new SqlCommand("INSERT INTO DvdCopy (dvd_info_id,copy_type_id,serialnumber,note,in_stock)" +
+                    "VALUES(@dvd_info_id,@copy_type_id,@serialnumber,@note,@in_stock)", cnn);
+                    command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd_info_id));
+                    command.Parameters.Add(new SqlParameter("@copy_type_id", i < 10 ? 2 : 1)); //insert 10 buy copies and 2 rent copies
+                    command.Parameters.Add(new SqlParameter("@serialnumber", rnd.Next(99999999))); //insert random number as serial number
+                    command.Parameters.Add(new SqlParameter("@note", ""));
+                    command.Parameters.Add(new SqlParameter("@in_stock", true));
+                    try
+                    {
+                        cnn.Open();
+                        command.ExecuteNonQuery();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                    }
+                    finally
+                    {
+                        cnn.Close();
+                    }
+                }
+
+                return success;
+            }
+        }
+
         public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(String info_id)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))

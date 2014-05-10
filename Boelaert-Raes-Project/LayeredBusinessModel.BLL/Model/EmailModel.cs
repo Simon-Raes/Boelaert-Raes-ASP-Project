@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using System.Net.Mail;
 using System.Net;
+using System.Configuration;
 
 namespace LayeredBusinessModel.BLL.Model
 {
@@ -103,5 +104,12 @@ namespace LayeredBusinessModel.BLL.Model
 
             client.Send("info@TaboelaertRaesa.com", customer.email, "Your Taboelaert Raesa order information", messageContent);
         }
+
+        public void htmltest()
+        {
+            
+        }
+
+        
     }
 }

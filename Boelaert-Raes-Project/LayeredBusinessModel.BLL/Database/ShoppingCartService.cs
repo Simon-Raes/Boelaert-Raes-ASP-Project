@@ -13,23 +13,23 @@ namespace LayeredBusinessModel.BLL
     {
         private ShoppingCartDAO shoppingCartDAO;
 
-        public List<ShoppingcartItem> getCartContentForCustomer(int id){
+        public List<ShoppingcartItem> getCartContentForCustomer(Customer customer){
             shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.getCartContentForCustomer(id);
+            return shoppingCartDAO.getCartContentForCustomer(customer);
         }
 
         /*adds buy copy to cart(no dates)*/
-        public Boolean addItemToCart(int customerID, int dvd_info_id)
+        public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
         {
             shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.addItemToCart(customerID, dvd_info_id);
+            return shoppingCartDAO.addItemToCart(customer, dvdInfo);
         }
 
         //overloaded method for adding rent items with dates
-        public Boolean addItemToCart(int customerID, int dvdInfoID, DateTime startdate, DateTime enddate)
+        public Boolean addItemToCart(Customer customer, int dvdInfoID, DateTime startdate, DateTime enddate)
         {
             shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.addItemToCart(customerID, dvdInfoID, startdate, enddate);
+            return shoppingCartDAO.addItemToCart(customer, dvdInfoID, startdate, enddate);
         }
 
         public Boolean removeItemFromCart(String cartItemID)
@@ -38,10 +38,10 @@ namespace LayeredBusinessModel.BLL
             return shoppingCartDAO.removeItemFromCart(cartItemID);
         }
 
-        public void clearCustomerCart(int customerID)
+        public void clearCustomerCart(Customer customer)
         {
             shoppingCartDAO = new ShoppingCartDAO();
-            shoppingCartDAO.clearCustomerCart(customerID);
+            shoppingCartDAO.clearCustomerCart(customer);
         }
 
         public void clearTable()

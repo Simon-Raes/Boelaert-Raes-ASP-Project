@@ -35,7 +35,7 @@ namespace LayeredBusinessModel.WebUI
             Boolean hasRentItems = false;
 
             shoppingCartService = new ShoppingCartService();
-            List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]).customer_id);
+            List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]));
 
             foreach (ShoppingcartItem item in cartContent)
             {
@@ -110,7 +110,7 @@ namespace LayeredBusinessModel.WebUI
 
                 //get all items currently in cart
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
 
                 //only do a checkout if the cart actually contains items
                 if (cartContent.Count > 0)
@@ -145,7 +145,7 @@ namespace LayeredBusinessModel.WebUI
                     }
 
                     //clear cart
-                    shoppingCartService.clearCustomerCart(user.customer_id);
+                    shoppingCartService.clearCustomerCart(user);
                     //this also clears items that were not added to the order!
 
                     //clear cart display

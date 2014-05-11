@@ -12,12 +12,12 @@ namespace LayeredBusinessModel.DAO
 {
     public class ShoppingCartDAO : DAO
     {
-        public List<ShoppingcartItem> getCartContentForCustomer(int id)
+        /*Returns all ShoppingcartItems currently in the user's cart*/
+        public List<ShoppingcartItem> getCartContentForCustomer(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
-
 
                 /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
                 SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
@@ -27,7 +27,7 @@ namespace LayeredBusinessModel.DAO
                 "ON ShoppingcartItem.dvd_info_id = DvdInfo.dvd_info_id " +
                 "INNER JOIN DvdCopyType " +
                 "ON ShoppingcartItem.copy_type_id = DvdCopyType.copy_type_id " +
-                "WHERE customer_id = " + id, cnn);
+                "WHERE customer_id = " + customer.customer_id, cnn);
 
                 try
                 {
@@ -55,7 +55,7 @@ namespace LayeredBusinessModel.DAO
         }
 
         /**Adds BUY dvd to cart*/
-        public Boolean addItemToCart(int customerID, int dvdInfoID)
+        public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
         {
             Boolean status = false;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -66,8 +66,8 @@ namespace LayeredBusinessModel.DAO
                 SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
                 "(customer_id, dvd_info_id, copy_type_id)" +
                 "VALUES(@customer_id, @dvd_info_id, 2)", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customerID));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
 
                 try
                 {
@@ -88,19 +88,18 @@ namespace LayeredBusinessModel.DAO
         }
 
         /**Adds RENT dvd to cart*/
-        public Boolean addItemToCart(int customerID, int dvdInfoID, DateTime startdate, DateTime enddate)
+        public Boolean addItemToCart(Customer customer, int dvdInfoID, DateTime startdate, DateTime enddate)
         {
             Boolean status = false;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
                 SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
                 "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
-                "VALUES(@customer_id, @dvd_info_id, convert(datetime,'" + startdate + "',103), convert(datetime,'" + enddate + "',103), 1)", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customerID));
+                "VALUES(@customer_id, @dvd_info_id, @startdate, @enddate, 1)", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
-                //command.Parameters.Add(new SqlParameter("@startdate", "convert(datetime,'" + startdate + "',103)"));
-                //command.Parameters.Add(new SqlParameter("@enddate", "convert(datetime,'" + enddate + "',103)"));
+                command.Parameters.Add(new SqlParameter("@startdate", startdate));
+                command.Parameters.Add(new SqlParameter("@enddate", enddate));
 
                 try
                 {
@@ -121,7 +120,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-
+        /*Remove the item from the cart it's in*/
         public Boolean removeItemFromCart(String cartItemID)
         {
             Boolean status = false;
@@ -130,7 +129,6 @@ namespace LayeredBusinessModel.DAO
 
                 SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
                 command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
-
 
                 try
                 {
@@ -151,14 +149,12 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*Delete all items from this user's shoppingcart*/
-        public void clearCustomerCart(int customer_id)
+        public void clearCustomerCart(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-
                 SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 try
                 {
@@ -197,7 +193,7 @@ namespace LayeredBusinessModel.DAO
         }
 
 
-        /*todo, COUNT items in cart*/
+        /*todo: COUNT items in cart*/
         public int getCartContentCountForCustomer(int id)
         {
             //stub
@@ -232,7 +228,6 @@ namespace LayeredBusinessModel.DAO
                 //name = Convert.ToString(reader["name"]),
                 //typeName = Convert.ToString(reader["typeName"])
             };
-
 
             return cartItem;
         }

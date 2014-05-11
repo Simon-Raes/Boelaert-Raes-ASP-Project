@@ -35,8 +35,11 @@ namespace LayeredBusinessModel.BLL
         {
             dvdInfoDAO = new DvdInfoDAO();
             DvdInfo dvd  = dvdInfoDAO.getDvdInfoWithId(id);
-            GenreService g = new GenreService();
-            dvd.genres = g.getGenresForDvd(Convert.ToInt32(id));
+            if(dvd!=null)
+            {
+                GenreService g = new GenreService();
+                dvd.genres = g.getGenresForDvd(Convert.ToInt32(id));
+            }            
 
             return dvd;
         }

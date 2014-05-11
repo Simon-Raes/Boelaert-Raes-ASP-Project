@@ -248,12 +248,15 @@ namespace LayeredBusinessModel.WebUI
         /**Adds the buy dvd to the user's shopping cart*/
         protected void btnBuy_Click(object sender, EventArgs e)
         {
-            if(Session["user"]!=null)
+            Customer customer = (Customer)Session["user"];
+            if (customer != null)
             {
-                if (Request.QueryString["id"] != null)
-                {
+                DvdInfoService dvdInfoService = new DvdInfoService();
+                DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
+                if (dvdInfo != null)
+                {                    
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, Convert.ToInt32(Request.QueryString["id"]));
+                    shoppingCartService.addItemToCart(customer, dvdInfo);
                 }                
             }
             else
@@ -300,7 +303,7 @@ namespace LayeredBusinessModel.WebUI
 
                 //check the number of rent items in the user's cart
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user.customer_id);
+                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
                 int numberOfCurrentlyRentedItems = 0;
                 foreach (ShoppingcartItem item in cartContent)
                 {
@@ -321,7 +324,7 @@ namespace LayeredBusinessModel.WebUI
                 //check if the user can still rent additional items
                 if (numberOfCurrentlyRentedItems < 5)
                 {
-                    if(shoppingCartService.addItemToCart(user.customer_id, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
+                    if(shoppingCartService.addItemToCart(user, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
                     {
                         ////all good
                         ////todo:delete this popup

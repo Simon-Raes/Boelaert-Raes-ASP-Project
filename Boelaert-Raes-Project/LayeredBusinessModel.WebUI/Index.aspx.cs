@@ -116,12 +116,17 @@ namespace LayeredBusinessModel.WebUI
             //add item to cart
             int dvd_info_id = e.dvd_info_id;
 
-            if (Session["user"] != null)
+            Customer user = (Customer)Session["user"];
+
+            if (user != null)
             {
-                if (dvd_info_id != null)
-                {
+                DvdInfoService dvdInfoService = new DvdInfoService();
+                DvdInfo thisDvd = dvdInfoService.getDvdInfoWithID(dvd_info_id.ToString());
+
+                if (thisDvd != null)
+                {                    
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(((Customer)Session["user"]).customer_id, dvd_info_id);
+                    shoppingCartService.addItemToCart(user, thisDvd);
                 }
             }
             else

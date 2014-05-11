@@ -111,13 +111,15 @@ namespace LayeredBusinessModel.DAO
                 return genrelist;
             }
         }
-        public Genre getGenre(int genreID)
+        public Genre getGenre(String genreID)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 Genre genre = null;
 
-                SqlCommand command = new SqlCommand("SELECT * FROM genres WHERE genre_id = " + genreID, cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM genres WHERE genre_id = @genre_id", cnn);
+                command.Parameters.Add(new SqlParameter("@genre_id", genreID));
+
                 try
                 {
                     cnn.Open();

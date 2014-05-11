@@ -13,10 +13,10 @@ namespace LayeredBusinessModel.BLL
     {
         private DvdGenreDAO dvdGenreDAO;
 
-        public void addDvdGenre(int genre_id, int dvd_info_id)
+        public void addDvdGenre(Genre genre, DvdInfo dvdInfo)
         {
             dvdGenreDAO = new DvdGenreDAO();
-            dvdGenreDAO.addDvdGenre(genre_id, dvd_info_id);            
+            dvdGenreDAO.addGenreForDvd(genre, dvdInfo);            
         }
     }
 }

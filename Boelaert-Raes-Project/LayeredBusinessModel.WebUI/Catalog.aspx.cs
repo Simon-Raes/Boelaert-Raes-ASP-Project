@@ -42,8 +42,8 @@ namespace LayeredBusinessModel.WebUI
             }
             
             String labelText="";
-            String genre = Request.QueryString["genre"];
-            String cat = Request.QueryString["cat"];
+            String genre_id = Request.QueryString["genre"];
+            String category_id = Request.QueryString["cat"];
             String type = Request.QueryString["type"];
             String year = Request.QueryString["year"];
             String director = Request.QueryString["director"];
@@ -72,18 +72,18 @@ namespace LayeredBusinessModel.WebUI
                     labelText = "Recent releases";
                 }
             }            
-            else if (genre != null)
+            else if (genre_id != null)
             {
-                dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre);
+                dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre_id);
                 genreService = new GenreService();
-                labelText = genreService.getGenre(Convert.ToInt32(genre)).name + " DVDs";
+                labelText = genreService.getGenre(genre_id).name + " DVDs";
 
             }
-            else if (cat != null)
+            else if (category_id != null)
             {
-                dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, cat);
+                dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);
                 categoryService = new CategoryService();
-                labelText = categoryService.getCategoryByID(Convert.ToInt32(cat)).name + " DVDs";
+                labelText = categoryService.getCategoryByID(Convert.ToInt32(category_id)).name + " DVDs";
             }
             else if (year != null)
             {
@@ -102,7 +102,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else if (related != null)
             {
-                dvdContent = dvdInfoService.getRelatedDvds(Convert.ToInt32(related),16);
+                dvdContent = dvdInfoService.getRelatedDvds(related,16);
                 labelText = "Related dvds for " + dvdInfoService.getDvdInfoWithID(related).name;
 
             }

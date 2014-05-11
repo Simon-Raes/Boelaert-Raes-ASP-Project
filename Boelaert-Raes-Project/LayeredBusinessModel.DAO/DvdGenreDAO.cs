@@ -12,7 +12,7 @@ namespace LayeredBusinessModel.DAO
 {
     public class DvdGenreDAO : DAO
     {
-        public void addDvdGenre(int genre_id, int dvd_info_id)
+        public void addGenreForDvd(Genre genre, DvdInfo dvdInfo)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -20,8 +20,8 @@ namespace LayeredBusinessModel.DAO
                 SqlCommand command = new SqlCommand("INSERT INTO DvdGenre " +
                 "(dvd_info_id, genre_id) " +
                 "VALUES (@dvd_info_id, @genre_id)", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd_info_id));
-                command.Parameters.Add(new SqlParameter("@genre_id", genre_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@genre_id", genre.genre_id));
 
                 try
                 {
@@ -39,19 +39,20 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<int> findRelatedDvdsBasedOnGenre(int dvdId, int amount)
+        public List<int> findRelatedDvdsBasedOnGenre(DvdInfo dvdInfo, int amount)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<int> dvdIds = new List<int>();
 
-                SqlCommand sql = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != " + dvdId + " and genre_id in (select genre_id from dvdgenre where dvd_info_id = " + dvdId + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
-                sql.Parameters.Add(new SqlParameter("@amount", amount));
+                SqlCommand command = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != @dvd_info_id and genre_id in (select genre_id from dvdgenre where dvd_info_id = @dvd_info_id) group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", amount));
+                command.Parameters.Add(new SqlParameter("@amount", amount));
                 try
                 {
                     cnn.Open();
 
-                    SqlDataReader reader = sql.ExecuteReader();
+                    SqlDataReader reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {

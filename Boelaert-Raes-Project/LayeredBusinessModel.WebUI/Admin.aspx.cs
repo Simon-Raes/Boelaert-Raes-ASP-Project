@@ -23,7 +23,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnAdd_Click(object sender, EventArgs e)
         {
-            String genre = inputGenre.Value.Split(',')[0]; //selects the ID
+            String genre_id = inputGenre.Value.Split(',')[0]; //selects the ID
             String name = inputName.Value;
             String year = inputYear.Value;
             String barcode = new Random().Next(999999999).ToString(); //random barcode
@@ -65,8 +65,11 @@ namespace LayeredBusinessModel.WebUI
             }
 
             //add genre record
+            GenreService genreService = new GenreService();
+            Genre genre = genreService.getGenre(genre_id);
+
             DvdGenreService dvdGenreService = new DvdGenreService();
-            dvdGenreService.addDvdGenre(Convert.ToInt32(genre), dvdInfoID);
+            dvdGenreService.addDvdGenre(genre, dvdInfo);
         }
 
         protected void Button1_Click(object sender, EventArgs e)

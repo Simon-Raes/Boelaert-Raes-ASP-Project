@@ -11,7 +11,7 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
-    //klasse waarvan de andere over-erven voor gemakkelijker onderhoud bij aanpassing connectionstring
+    //Superclass for all DAO classes so the connectionstring only has to be changed in one location.
     public class DAO
     {
         protected string strSQL;

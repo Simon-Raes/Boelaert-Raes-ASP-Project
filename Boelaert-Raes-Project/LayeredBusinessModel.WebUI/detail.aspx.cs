@@ -28,28 +28,26 @@ namespace LayeredBusinessModel.WebUI
             //todo: ajax stuff
             //if (!IsPostBack)
             //{
-            if (Request.QueryString["id"] != null)
+            String dvd_info_id = Request.QueryString["id"];
+            if (dvd_info_id != null)
             {
-                int id;
-                if (int.TryParse(Request.QueryString["id"], out id))
-                {
-                    setupDvdInfo(id);
-                    setupRelatedDvds(id);
-                }
+                setupDvdInfo(dvd_info_id);
+                setupRelatedDvds(dvd_info_id);
 
                 Customer user = (Customer)Session["user"];
+
                 if (user != null)
                 {
                     PageVisitsModel pageVisitsModel = new PageVisitsModel();
                     DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id.ToString());
+                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(dvd_info_id);
                     pageVisitsModel.incrementPageVisits(user, dvdInfo);
                 }
             }
             //}
         }
 
-        private void setupDvdInfo(int id)
+        private void setupDvdInfo(String id)
         {
             wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
             String currency = "€";
@@ -201,7 +199,7 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        private void setupRelatedDvds(int id)
+        private void setupRelatedDvds(String id)
         {
             List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id, 4);
             if (list.Count == 0)
@@ -305,7 +303,7 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfoService dvdInfoService = new DvdInfoService();
                     DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
 
-                    
+
                     DvdCopyService dvdCopyService = new DvdCopyService();
                     List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(dvdInfo);
 

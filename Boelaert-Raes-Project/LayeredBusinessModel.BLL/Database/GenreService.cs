@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.BLL
             return genreDAO.getGenresForDvd(categoryID);
         }
 
-        public Genre getGenre(int id)
+        public Genre getGenre(String id)
         {
             genreDAO = new GenreDAO();
             return genreDAO.getGenre(id);

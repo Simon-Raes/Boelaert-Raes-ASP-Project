@@ -399,7 +399,7 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
@@ -411,7 +411,7 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
                     dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
@@ -432,7 +432,7 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
@@ -444,7 +444,7 @@ namespace LayeredBusinessModel.DAO
                 order = new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrder(reader["order_id"].ToString()),
+                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
                     dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),

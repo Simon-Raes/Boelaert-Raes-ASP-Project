@@ -220,8 +220,10 @@ namespace LayeredBusinessModel.DAO
                 List<DvdInfo> dvdlist = new List<DvdInfo>();
 
                 //todo: parameters
-                //beter met CONTAINS dan wildcards+LIKE?
+                //% moet onderdeel zijn van paramater, niet query! (denk ik)  
+
                 SqlCommand command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE '%" + searchText + "%' OR barcode LIKE '%" + searchText + "%' OR author LIKE '%" + searchText + "%';", cnn);
+                //command.Parameters.Add(new SqlParameter("@searchtext", searchText));
                 try
                 {
                     cnn.Open();
@@ -254,7 +256,7 @@ namespace LayeredBusinessModel.DAO
                 List<DvdInfo> dvdlist = new List<DvdInfo>();
 
                 //todo: parameters
-                //beter met CONTAINS dan wildcards+LIKE?    
+                //% moet onderdeel zijn van paramater, niet query! (denk ik)   
 
 
                 SqlCommand command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " + //"SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, DvdInfo.image "
@@ -270,19 +272,7 @@ namespace LayeredBusinessModel.DAO
                 "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
 
 
-                /**
-                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
-                    name = Convert.ToString(reader["name"]),
-                    year = Convert.ToString(reader["year"]),
-                    barcode = Convert.ToString(reader["barcode"]),
-                    author = Convert.ToString(reader["author"]),
-                    image = Convert.ToString(reader["image"]),
-                    descripion = Convert.ToString(reader["description"]),
-                    rent_price = float.Parse(reader["rent_price"].ToString()),
-                    buy_price = float.Parse(reader["buy_price"].ToString()),
-                    date_added = Convert.ToDateTime(reader["date_added"]),
-                    amount_sold = Convert.ToInt32(reader["amount_sold"])
-                        */
+               
 
 
                 try

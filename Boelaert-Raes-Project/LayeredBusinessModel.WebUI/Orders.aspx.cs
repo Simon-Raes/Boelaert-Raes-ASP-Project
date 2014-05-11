@@ -32,7 +32,7 @@ namespace LayeredBusinessModel.WebUI
         private void fillOrdersGridView()
         {
             OrderService orderService = new OrderService();
-            customerOrders = orderService.getOrdersForCustomer(((Customer)Session["user"]).customer_id);
+            customerOrders = orderService.getOrdersForCustomer(((Customer)Session["user"]));
             
             DataTable orderTable = new DataTable();
             orderTable.Columns.Add("Ordernumber");

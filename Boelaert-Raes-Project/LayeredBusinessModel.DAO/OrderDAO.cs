@@ -42,7 +42,7 @@ namespace LayeredBusinessModel.DAO
         //    return orderList;
         //}
 
-        public Order getOrder(String id)
+        public Order getOrderWithId(String id)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -52,8 +52,6 @@ namespace LayeredBusinessModel.DAO
                     "Join Orderstatus " +
                     "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
                     "WHERE order_id = @order_id", cnn);
-
-
                 command.Parameters.Add(new SqlParameter("@order_id", id));
 
                 try
@@ -65,7 +63,6 @@ namespace LayeredBusinessModel.DAO
                     order = createOrder(reader);
 
                     reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -89,7 +86,6 @@ namespace LayeredBusinessModel.DAO
                 "orderstatus_id = @orderstatus_id, " +
                 "date = @date " +
                 "WHERE order_id=@order_id", cnn);
-
                 command.Parameters.Add(new SqlParameter("@customer_id", order.customer.customer_id));
                 command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus.id));
                 command.Parameters.Add(new SqlParameter("@date", order.date));
@@ -98,11 +94,8 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-
                     SqlDataReader reader = command.ExecuteReader();
-
                     reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -115,7 +108,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<Order> getOrdersForCustomer(int customer_id)
+        public List<Order> getOrdersForCustomer(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -125,7 +118,7 @@ namespace LayeredBusinessModel.DAO
                     "Join Orderstatus " +
                     "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
                     "WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 try
                 {
@@ -138,7 +131,6 @@ namespace LayeredBusinessModel.DAO
                     }
 
                     reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -153,20 +145,19 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*Inserts new order for customer and returns the order_id*/
-        public int addOrderForCustomer(int customer_id)
+        public int addOrderForCustomer(Customer customer)
         {
             int orderID = -1;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                //todo: paramaters (of ander beter systeem) gebruiken!
-
                 SqlCommand command = new SqlCommand("INSERT INTO Orders" +
                 "(orderstatus_id, customer_id, date) " +
                 "OUTPUT INSERTED.order_id " +
-                    //add new order with status 1 (= new) and date of today
-                "VALUES('" + 1 + "','" + customer_id + "'," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
-
+                //todo: left the date like this for now, seems to work in both versions of the site, don't want to risk breaking it
+                "VALUES(@orderstatus_id, @customer_id," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
+                command.Parameters.Add(new SqlParameter("@orderstatus_id", 1));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@date", DateTime.Today));
 
                 try
                 {

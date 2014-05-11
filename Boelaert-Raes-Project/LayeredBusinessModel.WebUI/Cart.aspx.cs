@@ -105,11 +105,9 @@ namespace LayeredBusinessModel.WebUI
         /**Creates a new order and moves the cart content to that order*/
         protected void btnCheckout_Click(object sender, EventArgs e)
         {
-
-            if (Session["user"] != null)
+            Customer user = (Customer)Session["user"];
+            if (user != null)
             {
-                Customer user = (Customer)Session["user"];
-
                 //get all items currently in cart
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
@@ -120,7 +118,7 @@ namespace LayeredBusinessModel.WebUI
                     //create new order for this user
                     //problem here: an order will still be created if all cart items are out of stock (=not added to order)
                     OrderService orderService = new OrderService();
-                    int orderID = orderService.addOrderForCustomer(user.customer_id);
+                    int orderID = orderService.addOrderForCustomer(user);
 
 
                     OrderLineService orderLineService = new OrderLineService();

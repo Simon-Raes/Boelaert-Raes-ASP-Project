@@ -8,9 +8,11 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <div class="panel panel-default" id="pnlSignup" runat="server">
-        <div class="panel-heading"><h3>Sign up</h3></div>
-        <div class="panel-body">            
-            
+        <div class="panel-heading">
+            <h3>Sign up</h3>
+        </div>
+        <div class="panel-body">
+
 
             <div class="panel panel-info">
                 <div class="panel-heading">Account</div>
@@ -19,7 +21,7 @@
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Email</span>
-                                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" ></asp:TextBox>                        
+                                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -30,12 +32,13 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Password</span>
-                                <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -45,16 +48,14 @@
                             </p>
                         </div>
                     </div>
-               </div>
-
-
+                </div>
 
                 <div class="panel-body">
-                     <div class="row">
+                    <div class="row">
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Confirm password</span>
-                                <asp:TextBox ID="txtpassword2" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtpassword2" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -69,12 +70,20 @@
             <div class="panel panel-info">
                 <div class="panel-heading">Personal </div>
 
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                <asp:Button ID="btneID" runat="server" Text="Click here to load your personal data from an electronic ID" CssClass="btn btn-info" OnClick="btneID_Click" CausesValidation="false" UseSubmitBehavior="false" />
+                            </div>
+                        </div>
+                    </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Name</span>
-                                <asp:TextBox ID="txtName" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtName" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -90,7 +99,7 @@
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Street</span>
-                                <asp:TextBox ID="txtStreet" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtStreet" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -106,7 +115,7 @@
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Postalcode</span>
-                                <asp:TextBox ID="txtPostalcode" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtPostalcode" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -118,14 +127,14 @@
                 </div>
 
                 <div class="panel-body">
-                     <div class="row">
+                    <div class="row">
                         <div class="col-md-8">
                             <div class="input-group">
                                 <span class="input-group-addon">Municipality</span>
-                                <asp:TextBox ID="txtMunicipality" runat="server" CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtMunicipality" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
-                         <div class="col-md-4">
+                        <div class="col-md-4">
                             <p class="help-block">
                                 <asp:RequiredFieldValidator ID="rfvMunicipality" runat="server" ErrorMessage="Municipality is required!" ControlToValidate="txtMunicipality" Display="Dynamic"></asp:RequiredFieldValidator>
                             </p>
@@ -136,35 +145,37 @@
 
 
                 <div class="panel-body">
-                    <div class="btn-group" style="float:right;">
+                    <div class="btn-group" style="float: right;">
                         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-                        <cc1:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btneID" PopupControlID="pnleID"></cc1:ModalPopupExtender>
-
-                       <!--
-                            <asp:Button ID="btneID" runat="server" Text="eID" CssClass="btn btn-info" OnClick="btneID_Click" CausesValidation="false" UseSubmitBehavior="false" />
-                        -->
-                    <asp:Panel ID="pnleID" runat="server" Style="display:none;">
-                        <cc2:EID_Read ID="EID_Read1" runat="server" />
-                    </asp:Panel>
-
+                        <cc1:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btneID" PopupControlID="pnleID" BackgroundCssClass="modalBackground"></cc1:ModalPopupExtender>
                         
+                        <asp:Panel ID="pnleID" runat="server" Style="display: none;">
+                            <cc2:EID_Read ID="EID_Read1" runat="server" />
+                        </asp:Panel>
+
+
                     </div>
                 </div>
+            </div>
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="btn btn-danger" OnClick="btnReset_Click" UseSubmitBehavior="false" CausesValidation="false" />
                 </div>
-                <div class="btn-group btn-group-justified">
-                    <div class="btn-group">
-                        <asp:Button ID="btnReset" runat="server" Text="Reset" CssClass="btn btn-danger" OnClick="btnReset_Click" UseSubmitBehavior="false" CausesValidation="false"/>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <asp:Button ID="btnSignup" runat="server" Text="Sign up" CssClass="btn btn-success" OnClick="btnSignup_Click" UseSubmitBehavior="false" CausesValidation="true"/>
-                    </div>
+
+                <div class="btn-group">
+                    <asp:Button ID="btnSignup" runat="server" Text="Sign up" CssClass="btn btn-success" OnClick="btnSignup_Click" UseSubmitBehavior="false" CausesValidation="true" />
                 </div>
+            </div>
         </div>
     </div>
 
     <div id="pnlSignupCompleted" runat="server">
-        <asp:Label ID="lblEmailSent" runat="server" Text="Label"></asp:Label>
+        <div class="panel panel-default" id="Div1" runat="server">
+            <div class="panel-heading">
+                <h2><asp:Label ID="lblHeader" runat="server" Text="Label"></asp:Label></h2>
+                <asp:Label ID="lblEmailSent" runat="server" Text="Label"></asp:Label>
+            </div>
+        </div>
     </div>
 
 

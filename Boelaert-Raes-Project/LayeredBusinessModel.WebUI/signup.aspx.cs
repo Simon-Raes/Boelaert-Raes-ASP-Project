@@ -105,12 +105,13 @@ namespace LayeredBusinessModel.WebUI
                 if (signUpModel.signUpCustomer(customer))
                 {
                     pnlSignup.Visible = false;
+                    lblHeader.Text = "Welcome to Taboelaert Raesa!";
                     lblEmailSent.Text = "An email has been sent to "+customer.email+". Please follow the instructions in the email to complete your registration.";
                     pnlSignupCompleted.Visible = true;
                 }
                 else
                 {
-                    pnlSignup.Visible = false;
+                    pnlSignup.Visible = false;                    
                     lblEmailSent.Text = "An error occured while completing your registration, please try again later. Contact our support if this problem persists.";
                     pnlSignupCompleted.Visible = true;
                 }

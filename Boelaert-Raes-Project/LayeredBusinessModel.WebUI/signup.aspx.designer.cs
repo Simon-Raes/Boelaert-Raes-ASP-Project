@@ -94,6 +94,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassword2;
         
         /// <summary>
+        /// btneID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btneID;
+        
+        /// <summary>
         /// txtName control.
         /// </summary>
         /// <remarks>
@@ -184,15 +193,6 @@ namespace LayeredBusinessModel.WebUI {
         protected global::AjaxControlToolkit.ModalPopupExtender ModalPopupExtender1;
         
         /// <summary>
-        /// btneID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btneID;
-        
-        /// <summary>
         /// pnleID control.
         /// </summary>
         /// <remarks>
@@ -236,6 +236,24 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl pnlSignupCompleted;
+        
+        /// <summary>
+        /// Div1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1;
+        
+        /// <summary>
+        /// lblHeader control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHeader;
         
         /// <summary>
         /// lblEmailSent control.

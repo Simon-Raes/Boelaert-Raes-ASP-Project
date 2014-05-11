@@ -19,7 +19,7 @@ namespace LayeredBusinessModel.BLL
         2) Gets a list of DVDs that have the most matches with the user's favourites. 
            A dvd that contains all 3 favourite genres will rank higher than a dvd that only matches 1.
         3) Removes dvds that the user has already rented or bought before.
-        4) If no dvd's are left (or if the user has no orderlines), a ????????(todo: base on page visits) list of DVDs is shown.
+        4) If no dvd's are left (or if the user has no orderlines), a list of DVDs is generated based on the users page views shown.
          */
         public List<DvdInfo> getRecommendations(Customer customer, int amount)
         {
@@ -118,8 +118,7 @@ namespace LayeredBusinessModel.BLL
                 }
                 else
                 {
-                    //customer has already bought or rented every suggestion, just recommend some popular dvds (TODO: find something different to recommend)
-                    //this list can ALSO contain dvd's the user has already rented!! Definitely needs something else to suggest
+                    //customer has already bought or rented every suggestion, recommend the movies whose pages the user has viewed most often
                     dvdList = getMostViewedDvdInfos(customer);
                 }
             }

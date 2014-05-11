@@ -171,8 +171,7 @@ namespace LayeredBusinessModel.BLL.Model
 
         /**Returns true if at least one copy is available for the full 14 days (= no orders in the next 14 days)*/
         private Boolean fullCopiesAvailable(DvdInfo dvd, DateTime startDate)
-        {
-            //todo: first get all fully available copies
+        {            
             DvdCopyService dvdCopyService = new DvdCopyService();
             //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
             List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(dvd, startDate);

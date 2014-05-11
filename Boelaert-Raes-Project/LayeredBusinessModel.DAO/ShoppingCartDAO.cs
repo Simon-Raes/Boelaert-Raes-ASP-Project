@@ -110,6 +110,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
+
                     status = false;
                 }
                 finally

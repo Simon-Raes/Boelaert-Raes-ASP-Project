@@ -219,7 +219,7 @@ namespace LayeredBusinessModel.DAO
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerrified));
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
                 command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
 
                 try

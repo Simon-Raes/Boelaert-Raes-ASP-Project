@@ -280,9 +280,15 @@ namespace LayeredBusinessModel.WebUI
 
         private void rentMovie(int days)
         {
+            //todo:delete this popup
+            //string scripta = "alert(\"You clicked the rent button (DELETE THIS AGAIN)\");";
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scripta, true);
+
             //only excecute if a user is logged in
             if (Session["user"] != null)
             {
+                
+
                 Customer user = ((Customer)Session["user"]);
 
                 //add rent item to cart       
@@ -315,7 +321,20 @@ namespace LayeredBusinessModel.WebUI
                 //check if the user can still rent additional items
                 if (numberOfCurrentlyRentedItems < 5)
                 {
-                    shoppingCartService.addItemToCart(user.customer_id, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate);
+                    if(shoppingCartService.addItemToCart(user.customer_id, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
+                    {
+                        ////all good
+                        ////todo:delete this popup
+                        //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                    }
+                    else
+                    {
+                        ////something went wrong
+                        ////todo:delete this popup
+                        //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                    }
 
                 }
                 else
@@ -331,6 +350,10 @@ namespace LayeredBusinessModel.WebUI
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
 
             }
+
+            ////todo:delete this popup
+            //string scriptcz = "alert(\"what\");";
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptcz, true);
         }
 
         protected void calRent_DayRender(object sender, DayRenderEventArgs e)

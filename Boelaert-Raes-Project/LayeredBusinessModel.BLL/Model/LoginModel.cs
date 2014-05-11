@@ -48,8 +48,6 @@ namespace LayeredBusinessModel.BLL.Model
                 }
             }
 
-            //todo: somehow get the status back to the webUI so the user knows when he can't log in
-
             return customer;            
         }   
      

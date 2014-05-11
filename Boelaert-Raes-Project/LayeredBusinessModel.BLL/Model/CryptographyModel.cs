@@ -10,7 +10,7 @@ namespace LayeredBusinessModel.BLL
 {
     public class CryptographyModel
     {
-        const string passphrase = "f0Ev9Pbdts5T4TAwh";  //todo: better, more secure passphrase
+        const string passphrase = "f0Ev9Pbdts5T4TAwh"; 
 
         public static string encryptPassword(string message)
         {

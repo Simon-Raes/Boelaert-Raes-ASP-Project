@@ -7,7 +7,7 @@
     <!-- Spotlight -->
     <div class="panel panel-default">
         <div class="panel-body">
-            <asp:Label ID="Label4" runat="server" Text="Spotlight" Font-Size="20"></asp:Label>
+            <asp:Label ID="Label4" runat="server" Text="Spotlight" Font-Size="20"></asp:Label>            
             <br /><br />
             <a id="anchorSpotlight" runat="server"><img id="imgSpotlight" runat="server" class="img-responsive" src="http://cdn.wegotthiscovered.com/wp-content/uploads/Expendables-Banner-Poster.jpg" /></a>
         </div>

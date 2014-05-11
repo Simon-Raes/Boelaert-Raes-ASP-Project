@@ -287,15 +287,12 @@ namespace LayeredBusinessModel.WebUI
             //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scripta, true);
 
             //only excecute if a user is logged in
-            if (Session["user"] != null)
+            Customer user = ((Customer)Session["user"]);
+
+            if (user != null)
             {
                 if (Request.QueryString["id"] != null)
                 {
-
-
-
-                    Customer user = ((Customer)Session["user"]);
-
                     //add rent item to cart       
                     DateTime startdate = calRent.SelectedDate;
                     DateTime enddate = startdate.AddDays(days - 1);
@@ -321,7 +318,7 @@ namespace LayeredBusinessModel.WebUI
 
                     //check the number of items currently being rented by the user
                     OrderLineService orderLineService = new OrderLineService();
-                    List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user.customer_id);
+                    List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user);
                     foreach (OrderLine orderLine in orderLines)
                     {
                         numberOfCurrentlyRentedItems++;

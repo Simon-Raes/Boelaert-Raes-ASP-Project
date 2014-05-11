@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.BLL
         public OrderLine getOrderLine(String orderLineID)
         {
             orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getOrderLine(orderLineID);
+            return orderLineDAO.getOrderLineById(orderLineID);
         }
 
         public Boolean removeOrderLine(OrderLine orderLine)
@@ -38,13 +38,11 @@ namespace LayeredBusinessModel.BLL
             return orderLineDAO.getOrderLinesForCustomer(customer);
         }
 
-        public List<OrderLine> getActiveRentOrderLinesForCustomer(int customer_id)
+        public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
         {
             orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getActiveRentOrderLinesForCustomer(customer_id);
-        }
-
-       
+            return orderLineDAO.getActiveRentOrderLinesForCustomer(customer);
+        }       
 
         public void addOrderLine(OrderLine orderLine)
         {

@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderLineDAO : DAO
     {
-        public OrderLine getOrderLine(String orderLineId)
+        public OrderLine getOrderLineById(String orderLineId)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -151,7 +151,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<OrderLine> getActiveRentOrderLinesForCustomer(int customer_id)
+        public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -167,7 +167,7 @@ namespace LayeredBusinessModel.DAO
                     "enddate > getdate() "
                     , cnn);
 
-                command.Parameters.Add(new SqlParameter("@customer_id", customer_id));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 try
                 {
@@ -194,44 +194,41 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+                
+        //public List<OrderLine> getOrderLinesForOrder(String order_id)
+        //{
+        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
+        //    {
+        //        List<OrderLine> orderList = new List<OrderLine>();
 
+        //        //todo: exacte query
+        //        SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
+        //        command.Parameters.Add(new SqlParameter("@order_id", order_id));
 
+        //        try
+        //        {
+        //            cnn.Open();
+        //            SqlDataReader reader = command.ExecuteReader();
 
-        /**Gets all rent copies that will be back in stock in the next 2 weeks*/
-        public List<OrderLine> getOrderLinesForReservation(String order_id)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                List<OrderLine> orderList = new List<OrderLine>();
+        //            while (reader.Read())
+        //            {
+        //                orderList.Add(createOrderLine(reader));
+        //            }
 
-                //todo: exacte query
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
-                command.Parameters.Add(new SqlParameter("@order_id", order_id));
+        //            reader.Close();
 
-                try
-                {
-                    cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    while (reader.Read())
-                    {
-                        orderList.Add(createOrderLine(reader));
-                    }
-
-                    reader.Close();
-
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return orderList;
-            }
-        }
+        //        }
+        //        finally
+        //        {
+        //            cnn.Close();
+        //        }
+        //        return orderList;
+        //    }
+        //}
 
         /**Adds a new orderline to the database*/
         public Boolean addOrderLine(OrderLine orderline)

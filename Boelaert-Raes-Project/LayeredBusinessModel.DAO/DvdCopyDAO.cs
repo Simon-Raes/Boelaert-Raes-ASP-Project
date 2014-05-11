@@ -11,13 +11,14 @@ namespace LayeredBusinessModel.DAO
 {
     public class DvdCopyDAO : DAO
     {
-        public List<DvdCopy> getAllCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<DvdCopy> dvdCopies = new List<DvdCopy>();
 
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = " + info_id, cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                 try
                 {
                     cnn.Open();
@@ -43,13 +44,15 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public DvdCopy getCopyWithId(int copy_id)
+        public DvdCopy getCopyWithId(String copy_id)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 DvdCopy dvdCopy = new DvdCopy();
 
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_copy_id = " + copy_id, cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_copy_id = @dvd_copy_id", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_copy_id", copy_id));
+
                 try
                 {
                     cnn.Open();
@@ -75,7 +78,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public Boolean addCopiesForDvd(String dvd_info_id)
+        public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
             Boolean success = true;
 
@@ -87,7 +90,7 @@ namespace LayeredBusinessModel.DAO
                 {
                     SqlCommand command = new SqlCommand("INSERT INTO DvdCopy (dvd_info_id,copy_type_id,serialnumber,note,in_stock)" +
                     "VALUES(@dvd_info_id,@copy_type_id,@serialnumber,@note,@in_stock)", cnn);
-                    command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd_info_id));
+                    command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                     command.Parameters.Add(new SqlParameter("@copy_type_id", i < 10 ? 2 : 1)); //insert 10 buy copies and 2 rent copies
                     command.Parameters.Add(new SqlParameter("@serialnumber", rnd.Next(99999999))); //insert random number as serial number
                     command.Parameters.Add(new SqlParameter("@note", ""));
@@ -113,14 +116,15 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<DvdCopy> dvdCopies = new List<DvdCopy>();
 
                 //is hier nog met hardcoded type_id
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = " + info_id + " AND copy_type_id = 1 AND in_stock = 1;", cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 1 AND in_stock = 1;", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                 try
                 {
                     cnn.Open();
@@ -146,14 +150,16 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<DvdCopy> dvdCopies = new List<DvdCopy>();
 
                 //is hier nog met hardcoded type_id
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = " + info_id + " AND copy_type_id = 2 AND in_stock = 1;", cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 2 AND in_stock = 1;", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
+
                 try
                 {
                     cnn.Open();
@@ -185,13 +191,16 @@ namespace LayeredBusinessModel.DAO
 
                 //todo: alternatief om deze zielige code mee te vervangen
 
-                SqlCommand command = new SqlCommand("UPDATE DvdCopy" +
-                " SET dvd_info_id =" + copy.dvdinfo.dvd_info_id +
-                ", copy_type_id = " + copy.type.id +
-                ", serialnumber ='" + copy.serialnumber +
-                "', note = '" + copy.note +
-                "', in_stock = '" + copy.in_stock +
-                "' WHERE dvd_copy_id =" + copy.dvd_copy_id + ";", cnn);
+                SqlCommand command = new SqlCommand("UPDATE DvdCopy " +
+                "SET dvd_info_id = @dvd_info_id, copy_type_id = @copy_type_id, serialnumber = @serialnumber, note = @note, in_stock = @in_stock "+
+                "WHERE dvd_copy_id = @dvd_copy_id", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", copy.dvdinfo.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@copy_type_id", copy.type.id));
+                command.Parameters.Add(new SqlParameter("@serialnumber", copy.serialnumber));
+                command.Parameters.Add(new SqlParameter("@note", copy.note));
+                command.Parameters.Add(new SqlParameter("@in_stock", copy.in_stock));
+                command.Parameters.Add(new SqlParameter("@dvd_copy_id", copy.dvd_copy_id));
+
                 try
                 {
                     cnn.Open();
@@ -208,21 +217,17 @@ namespace LayeredBusinessModel.DAO
         }
 
         //update methode voor wanneer je geen volledig object kan gebruiken
-        public void updateDvdCopyInStockStatus(String dvdCopyID, Boolean in_stock)
+        public void updateDvdCopyInStockStatus(DvdCopy dvdCopy, Boolean in_stock)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-
-                SqlCommand command = new SqlCommand("UPDATE DvdCopy" +
-                " SET in_stock = '" + in_stock +
-                "' WHERE dvd_copy_id =" + dvdCopyID + ";", cnn);
+                SqlCommand command = new SqlCommand("UPDATE DvdCopy SET in_stock = @in_stock WHERE dvd_copy_id = @dvd_copy_id", cnn);
+                command.Parameters.Add(new SqlParameter("@in_stock", in_stock));
+                command.Parameters.Add(new SqlParameter("@dvd_copy_id", dvdCopy.dvd_copy_id));
                 try
                 {
                     cnn.Open();
-
                     command.ExecuteNonQuery();
-
                 }
                 catch (Exception ex)
                 {
@@ -240,11 +245,10 @@ namespace LayeredBusinessModel.DAO
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 List<DvdCopy> orderList = new List<DvdCopy>();
-                SqlCommand command = new SqlCommand(
-                "select * from DvdCopy  " +
-                "where DvdCopy.dvd_info_id = @dvd_info_id and  " +
-                "DvdCopy.copy_type_id = 1 and " +
-                "DvdCopy.dvd_copy_id not in " +
+                SqlCommand command = new SqlCommand("SELECT * from DvdCopy " +
+                "WHERE DvdCopy.dvd_info_id = @dvd_info_id AND " +
+                "DvdCopy.copy_type_id = 1 AND " +
+                "DvdCopy.dvd_copy_id NOT IN " +
                 "(select dvd_copy_id from OrderLine where dvd_copy_id is not null and (startdate >= @startdate or enddate >= @startdate)) ", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
                 command.Parameters.Add(new SqlParameter("@startdate", startdate));

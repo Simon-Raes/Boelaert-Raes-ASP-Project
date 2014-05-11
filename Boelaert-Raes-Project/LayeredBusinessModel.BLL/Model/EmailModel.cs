@@ -82,7 +82,7 @@ namespace LayeredBusinessModel.BLL.Model
                 }
                 else
                 {
-                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'></td>";
+                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>"+orderLine.orderLineType.name+"</td>";
                 }
                 messageContent += "</tr>";                
             }

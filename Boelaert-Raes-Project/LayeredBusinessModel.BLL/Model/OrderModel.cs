@@ -121,7 +121,7 @@ namespace LayeredBusinessModel.BLL
                     //assign the copy if it has been found
                     if (selectedCopyId > 0)
                     {
-                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId);
+                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId.ToString());
 
                         
                         orderLineService.updateOrderLine(orderLine);
@@ -145,7 +145,7 @@ namespace LayeredBusinessModel.BLL
                             selectedCopyId = dvdCopies[0].dvd_copy_id;
 
                             //set the found copy as the copy for this orderline
-                           orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId);
+                           orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId.ToString());
                             orderLineService.updateOrderLine(orderLine);
 
                             //update the amount_sold field of the dvdInfo record
@@ -168,7 +168,9 @@ namespace LayeredBusinessModel.BLL
                 {
                     //get all available copies
                     //get this list again for every item so you can add a new, available copy to the order (todo: try do this without going to the database for every item)
-                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(Convert.ToString(orderLine.dvdInfo.dvd_info_id));
+
+
+                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(orderLine.dvdInfo);
 
                     //check if there is a copy available
                     if (availableCopies.Count > 0)
@@ -177,7 +179,7 @@ namespace LayeredBusinessModel.BLL
                         copy = availableCopies[0];
 
                         //set the found copy as the copy for this orderline
-                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(copy.dvd_copy_id);
+                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(copy.dvd_copy_id.ToString());
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record

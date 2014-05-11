@@ -267,7 +267,6 @@
     </Compile>
     <Compile Include="tempMovie.aspx.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="tempMovie.aspx.designer.cs">
       <DependentUpon>tempMovie.aspx</DependentUpon>

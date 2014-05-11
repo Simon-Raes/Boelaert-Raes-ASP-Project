@@ -89,7 +89,9 @@ namespace LayeredBusinessModel.WebUI
 
             //set copy as in_stock
             DvdCopyService dvdCopyService = new DvdCopyService();
-            dvdCopyService.updateDvdCopyInStockStatus(gvCart.Rows[index].Cells[3].Text, true);
+            DvdCopy dvdCopy = dvdCopyService.getDvdCopyWithId(gvCart.Rows[index].Cells[3].Text);
+
+            dvdCopyService.updateDvdCopyInStockStatus(dvdCopy, true);
 
             //update gridview
             //todo: find a way to remove a gridview row without needing a new query + databind

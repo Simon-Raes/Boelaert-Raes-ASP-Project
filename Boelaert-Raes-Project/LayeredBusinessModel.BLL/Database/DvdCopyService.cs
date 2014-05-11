@@ -13,34 +13,34 @@ namespace LayeredBusinessModel.BLL
     {
         private DvdCopyDAO dvdCopyDAO;
 
-        public List<DvdCopy> getAllCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllCopiesForDvdInfo(info_id);
+            return dvdCopyDAO.getAllCopiesForDvdInfo(dvdInfo);
         }
 
-        public DvdCopy getDvdCopyWithId(int copy_id)
+        public DvdCopy getDvdCopyWithId(String copy_id)
         {
             dvdCopyDAO = new DvdCopyDAO();
             return dvdCopyDAO.getCopyWithId(copy_id);
         }
 
-        public Boolean addCopiesForDvd(String dvd_info_id)
+        public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
             DvdCopyDAO dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.addCopiesForDvd(dvd_info_id);
+            return dvdCopyDAO.addCopiesForDvd(dvdInfo);
         }
 
-        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllInStockRentCopiesForDvdInfo(info_id);
+            return dvdCopyDAO.getAllInStockRentCopiesForDvdInfo(dvdInfo);
         }
 
-        public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(String info_id)
+        public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllInStockBuyCopiesForDvdInfo(info_id);
+            return dvdCopyDAO.getAllInStockBuyCopiesForDvdInfo(dvdInfo);
         }
 
         /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/
@@ -56,10 +56,10 @@ namespace LayeredBusinessModel.BLL
             dvdCopyDAO.updateDvdCopy(copy);
         }
 
-        public void updateDvdCopyInStockStatus(String dvdCopyID, bool in_stock)
+        public void updateDvdCopyInStockStatus(DvdCopy dvdCopy, bool in_stock)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            dvdCopyDAO.updateDvdCopyInStockStatus(dvdCopyID,in_stock);
+            dvdCopyDAO.updateDvdCopyInStockStatus(dvdCopy, in_stock);
         }
 
         public void resetAllCopies()

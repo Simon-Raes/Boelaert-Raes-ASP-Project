@@ -28,24 +28,24 @@ namespace LayeredBusinessModel.WebUI
             //todo: ajax stuff
             //if (!IsPostBack)
             //{
-                if (Request.QueryString["id"] != null)
+            if (Request.QueryString["id"] != null)
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
                 {
-                    int id;
-                    if (int.TryParse(Request.QueryString["id"], out id))
-                    {
-                        setupDvdInfo(id);
-                        setupRelatedDvds(id);
-                    }
+                    setupDvdInfo(id);
+                    setupRelatedDvds(id);
+                }
 
-                    Customer user = (Customer)Session["user"];
-                    if (user != null)
-                    {
-                        PageVisitsModel pageVisitsModel = new PageVisitsModel();
-                        DvdInfoService dvdInfoService = new DvdInfoService();
-                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id.ToString());
-                        pageVisitsModel.incrementPageVisits(user, dvdInfo);
-                    }
-                }                
+                Customer user = (Customer)Session["user"];
+                if (user != null)
+                {
+                    PageVisitsModel pageVisitsModel = new PageVisitsModel();
+                    DvdInfoService dvdInfoService = new DvdInfoService();
+                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id.ToString());
+                    pageVisitsModel.incrementPageVisits(user, dvdInfo);
+                }
+            }
             //}
         }
 
@@ -56,7 +56,7 @@ namespace LayeredBusinessModel.WebUI
 
             DvdInfoService dvdbll = new DvdInfoService();
             DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
-           
+
 
 
             lblTitle.Text = dvdInfo.name + " ";
@@ -68,7 +68,7 @@ namespace LayeredBusinessModel.WebUI
             linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
 
 
-            if(!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
+            if (!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
             {
                 foreach (String a in dvdInfo.actors)
                 {
@@ -88,16 +88,17 @@ namespace LayeredBusinessModel.WebUI
             {
                 lblActors.Visible = false;
             }
-            
 
-            if(!dvdInfo.duration.Equals(""))
+
+            if (!dvdInfo.duration.Equals(""))
             {
                 lblDuration.Text = dvdInfo.duration + " min";
-            } else
+            }
+            else
             {
                 spanRuntime.Visible = false;
             }
-            
+
 
 
             foreach (Genre g in dvdInfo.genres)
@@ -112,11 +113,11 @@ namespace LayeredBusinessModel.WebUI
                 genreLinks.Controls.Add(l);
             }
             int j = genreLinks.Controls.Count;
-            if(j>0)
+            if (j > 0)
             {
-                genreLinks.Controls.RemoveAt(j - 1); 
+                genreLinks.Controls.RemoveAt(j - 1);
             }
-            
+
 
             lblPlot.Text = dvdInfo.descripion;
 
@@ -129,7 +130,7 @@ namespace LayeredBusinessModel.WebUI
                     {
                         case "usd":
                             currency = "$";
-                            dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price,"usd");
+                            dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price, "usd");
                             dvdInfo.rent_price = (float)currencyWebService.convert(dvdInfo.rent_price, "usd");
                             break;
                     }
@@ -147,11 +148,11 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
 
-                        
-            if(AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
+
+            if (AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
             {
                 lblBuyStatus.Text = "";
-                btnBuyB.Attributes.Add("Class", "btn btn-success");                
+                btnBuyB.Attributes.Add("Class", "btn btn-success");
             }
             else
             {
@@ -161,9 +162,9 @@ namespace LayeredBusinessModel.WebUI
 
 
             btnBuyB.InnerText = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
-            btnRent1.Text = "Rent 1 day " + currency + " "  + dvdInfo.rent_price.ToString();
-            btnRent3.Text = "Rent 3 days " + currency + " "  + (dvdInfo.rent_price * 3).ToString();
-            btnRent7.Text = "Rent 7 days " + currency + " "  + (dvdInfo.rent_price * 7).ToString();
+            btnRent1.Text = "Rent 1 day " + currency + " " + dvdInfo.rent_price.ToString();
+            btnRent3.Text = "Rent 3 days " + currency + " " + (dvdInfo.rent_price * 3).ToString();
+            btnRent7.Text = "Rent 7 days " + currency + " " + (dvdInfo.rent_price * 7).ToString();
 
             foreach (KeyValuePair<int, String> k in dvdInfo.media)
             {
@@ -202,7 +203,7 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupRelatedDvds(int id)
         {
-            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id,4);
+            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id, 4);
             if (list.Count == 0)
             {
                 pnlRelatedDvds.Visible = false;
@@ -228,7 +229,7 @@ namespace LayeredBusinessModel.WebUI
                     relatedDvds.Controls.Add(dvdInfo);
                 }
             }
-            
+
 
         }
 
@@ -254,10 +255,10 @@ namespace LayeredBusinessModel.WebUI
                 DvdInfoService dvdInfoService = new DvdInfoService();
                 DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
                 if (dvdInfo != null)
-                {                    
+                {
                     ShoppingCartService shoppingCartService = new ShoppingCartService();
                     shoppingCartService.addItemToCart(customer, dvdInfo);
-                }                
+                }
             }
             else
             {
@@ -290,60 +291,68 @@ namespace LayeredBusinessModel.WebUI
             //only excecute if a user is logged in
             if (Session["user"] != null)
             {
-                
-
-                Customer user = ((Customer)Session["user"]);
-
-                //add rent item to cart       
-                DateTime startdate = calRent.SelectedDate;
-                DateTime enddate = startdate.AddDays(days-1);
-
-                DvdCopyService dvdCopyService = new DvdCopyService();
-                List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(Request.QueryString["id"]);
-
-                //check the number of rent items in the user's cart
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
-                int numberOfCurrentlyRentedItems = 0;
-                foreach (ShoppingcartItem item in cartContent)
+                if (Request.QueryString["id"] != null)
                 {
-                    if (item.dvdCopyType.name.Equals("Verhuur"))
+
+
+
+                    Customer user = ((Customer)Session["user"]);
+
+                    //add rent item to cart       
+                    DateTime startdate = calRent.SelectedDate;
+                    DateTime enddate = startdate.AddDays(days - 1);
+
+                    DvdInfoService dvdInfoService = new DvdInfoService();
+                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
+
+                    
+                    DvdCopyService dvdCopyService = new DvdCopyService();
+                    List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(dvdInfo);
+
+                    //check the number of rent items in the user's cart
+                    ShoppingCartService shoppingCartService = new ShoppingCartService();
+                    List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
+                    int numberOfCurrentlyRentedItems = 0;
+                    foreach (ShoppingcartItem item in cartContent)
+                    {
+                        if (item.dvdCopyType.name.Equals("Verhuur"))
+                        {
+                            numberOfCurrentlyRentedItems++;
+                        }
+                    }
+
+                    //check the number of items currently being rented by the user
+                    OrderLineService orderLineService = new OrderLineService();
+                    List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user.customer_id);
+                    foreach (OrderLine orderLine in orderLines)
                     {
                         numberOfCurrentlyRentedItems++;
                     }
-                }
 
-                //check the number of items currently being rented by the user
-                OrderLineService orderLineService = new OrderLineService();
-                List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user.customer_id);
-                foreach (OrderLine orderLine in orderLines)
-                {
-                    numberOfCurrentlyRentedItems++;
-                }
-
-                //check if the user can still rent additional items
-                if (numberOfCurrentlyRentedItems < 5)
-                {
-                    if(shoppingCartService.addItemToCart(user, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
+                    //check if the user can still rent additional items
+                    if (numberOfCurrentlyRentedItems < 5)
                     {
-                        ////all good
-                        ////todo:delete this popup
-                        //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
-                        //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                        if (shoppingCartService.addItemToCart(user, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
+                        {
+                            ////all good
+                            ////todo:delete this popup
+                            //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                        }
+                        else
+                        {
+                            ////something went wrong
+                            ////todo:delete this popup
+                            //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                        }
+
                     }
                     else
                     {
-                        ////something went wrong
-                        ////todo:delete this popup
-                        //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
-                        //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                        string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
-
-                }
-                else
-                {
-                    string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                 }
 
             }
@@ -360,11 +369,11 @@ namespace LayeredBusinessModel.WebUI
         }
 
         protected void calRent_DayRender(object sender, DayRenderEventArgs e)
-        {            
+        {
             if (Request.QueryString["id"] != null)
             {
                 //only get dates once per calendar build-up
-                if(dates == null)
+                if (dates == null)
                 {
                     RentModel rentService = new RentModel();
 
@@ -372,7 +381,7 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
 
                     dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
-                }                
+                }
 
                 //movie can be reserved between today and 14 days from now   
                 if (dates.Contains(e.Day.Date))
@@ -383,7 +392,7 @@ namespace LayeredBusinessModel.WebUI
                 else
                 {
                     e.Day.IsSelectable = false;
-                    e.Cell.BackColor = System.Drawing.Color.LightGray;                    
+                    e.Cell.BackColor = System.Drawing.Color.LightGray;
                 }
             }
 
@@ -392,7 +401,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void calRent_SelectionChanged(object sender, EventArgs e)
         {
-            if(Request.QueryString["id"]!=null)
+            if (Request.QueryString["id"] != null)
             {
                 DvdInfoService dvdbll = new DvdInfoService();
                 DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
@@ -400,16 +409,16 @@ namespace LayeredBusinessModel.WebUI
                 //get all dvd copies that are available on that date:  
                 RentModel rentService = new RentModel();
                 int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
-                
-                if(daysAvailable>=1)
+
+                if (daysAvailable >= 1)
                 {
                     btnRent1.Visible = true;
                 }
-                if(daysAvailable>=3)
+                if (daysAvailable >= 3)
                 {
                     btnRent3.Visible = true;
                 }
-                if(daysAvailable>=7)
+                if (daysAvailable >= 7)
                 {
                     btnRent7.Visible = true;
                 }

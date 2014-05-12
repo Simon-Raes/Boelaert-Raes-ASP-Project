@@ -46,7 +46,7 @@
                             </p>
                             
                         </div>
-                        <div class="col-sm-4">Changing email will also change your login name!</div>
+                        <div class="col-sm-4">Please note: Changing your email address will also change your login name!</div>
                     </div>
 
                     <div class="form-group">

@@ -14,6 +14,9 @@ namespace LayeredBusinessModel.BLL.Model
 {
     public class EmailModel
     {
+        //todo: a way to get the urls from a relative location so no domain-url hardcoding is requried
+
+
         /*Send an email asking for user confirmation.*/
         public void sendRegistrationEmail(Customer customer, Token token)
         {
@@ -22,7 +25,7 @@ namespace LayeredBusinessModel.BLL.Model
             client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa account verification", "Dear " + customer.name + ",\n\n" +
                 "Thank you for registering with Taboelaert Raesa.n\n" +
                 "To complete your registration process, please click the following link: \n" +
-                "http://simonraes-001-site1.smarterasp.net/signup.aspx?token=" + token.token + " .\n\n" +
+                "http://simonraes-001-site1.smarterasp.net/signup.aspx?token=" + token.token + " \n\n" +
                 "\n\nRegards,\nThe Taboelaert Raesa team.");
         }
 
@@ -43,7 +46,7 @@ namespace LayeredBusinessModel.BLL.Model
 
             client.Send("info@TaboelaertRaesa.com", customer.email, "Password reset request", "Dear " + customer.name + ",\n\n" +
                 "We received a request to reset the password on your Taboelaert Raesa account. Click the following URL to complete the process:\n" +
-                "http://simonraes-001-site1.smarterasp.net/ForgotPassword.aspx?resetToken=" + token.token + " .\n\n" +
+                "http://simonraes-001-site1.smarterasp.net/ForgotPassword.aspx?resetToken=" + token.token + " \n\n" +
                 "If you did not request this reset, you can ignore this email.\n\nRegards,\nThe Taboelaert Raesa team.");
         }
 

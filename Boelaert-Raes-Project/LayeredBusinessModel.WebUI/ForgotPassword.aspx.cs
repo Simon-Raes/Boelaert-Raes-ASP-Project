@@ -25,10 +25,25 @@ namespace LayeredBusinessModel.WebUI
         {
             if(Request.QueryString["resetToken"]!=null)
             {
+                divDefault.Visible = false;
+                divResetComplete.Visible = true;
+
                 PasswordResetModel passwordResetModel = new PasswordResetModel();
-                passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]);
-                //redirect user away from this page so het can't refresh the querystring URL and reset his password a second time.
-                Response.Redirect("Index.aspx");
+                if(passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]))
+                {
+                    lblHeader.Text = "Password reset complete";
+                    lblStatusComplete.Text = "We've sent you an email with your new password.";
+                }
+                else
+                {
+                    lblHeader.Text = "An error occurred";
+                    lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
+                }
+            }
+            else
+            {
+                divDefault.Visible = true;
+                divResetComplete.Visible = false;
             }
         }
 

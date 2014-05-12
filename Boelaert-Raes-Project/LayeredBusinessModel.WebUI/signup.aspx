@@ -171,7 +171,7 @@
 
     <div id="pnlSignupCompleted" runat="server">
         <div class="panel panel-default" id="Div1" runat="server">
-            <div class="panel-heading">
+            <div class="panel-body">
                 <h2><asp:Label ID="lblHeader" runat="server" Text="Label"></asp:Label></h2>
                 <asp:Label ID="lblEmailSent" runat="server" Text="Label"></asp:Label>
             </div>

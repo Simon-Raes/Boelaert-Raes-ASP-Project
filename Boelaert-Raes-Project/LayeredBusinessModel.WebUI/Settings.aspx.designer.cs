@@ -58,13 +58,13 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl inputEmail;
         
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// valRequiredEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valRequiredEmail;
         
         /// <summary>
         /// valCustEmail control.
@@ -76,13 +76,13 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.CustomValidator valCustEmail;
         
         /// <summary>
-        /// RegularExpressionValidator1 control.
+        /// valRegEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator valRegEmail;
         
         /// <summary>
         /// inputOldPassword control.
@@ -94,13 +94,31 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlInputPassword inputOldPassword;
         
         /// <summary>
-        /// RequiredFieldValidator5 control.
+        /// valRequiredOldPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valRequiredOldPassword;
+        
+        /// <summary>
+        /// cbPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cbPassword;
+        
+        /// <summary>
+        /// divNewPass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divNewPass;
         
         /// <summary>
         /// inputPassword control.
@@ -112,13 +130,13 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlInputPassword inputPassword;
         
         /// <summary>
-        /// RequiredFieldValidator3 control.
+        /// valRequiredNewPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valRequiredNewPassword;
         
         /// <summary>
         /// inputPasswordAgain control.
@@ -130,22 +148,22 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlInputPassword inputPasswordAgain;
         
         /// <summary>
-        /// RequiredFieldValidator4 control.
+        /// valRequiredNewPasswordAgain control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator valRequiredNewPasswordAgain;
         
         /// <summary>
-        /// CompareValidator1 control.
+        /// valCompareNewPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
+        protected global::System.Web.UI.WebControls.CompareValidator valCompareNewPassword;
         
         /// <summary>
         /// btnSignUp control.

@@ -9,7 +9,8 @@
                 <li><a href="Overview.aspx">Overview</a></li>
                 <li><a href="Orders.aspx">Orders</a></li>
                 <li class="active"><a href="Settings.aspx">Settings</a></li>
-                <li class="pull-right"><button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
+                <li class="pull-right">
+                    <button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
 
             </ul>
 
@@ -34,15 +35,18 @@
                     </div>
 
                     <div class="form-group">
+
                         <label for="inputEmail" class="col-sm-4 control-label">Email</label>
                         <div class="col-sm-4">
                             <input type="email" class="form-control" id="inputEmail" placeholder="Email" runat="server" />
                             <p class="help-block">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="inputEmail" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="valRequiredEmail" runat="server" ControlToValidate="inputEmail" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
                                 <asp:CustomValidator ID="valCustEmail" runat="server" ControlToValidate="inputEmail" ErrorMessage="An account with that address already exists." OnServerValidate="valCustEmail_ServerValidate" Display="Dynamic" ForeColor="#CC3300"></asp:CustomValidator>
-                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="inputEmail" ErrorMessage="Not a valid e-mail address." ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Display="Dynamic" ForeColor="#CC3300"></asp:RegularExpressionValidator>
+                                <asp:RegularExpressionValidator ID="valRegEmail" runat="server" ControlToValidate="inputEmail" ErrorMessage="Not a valid e-mail address." ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Display="Dynamic" ForeColor="#CC3300"></asp:RegularExpressionValidator>
                             </p>
+                            
                         </div>
+                        <div class="col-sm-4">Changing email will also change your login name!</div>
                     </div>
 
                     <div class="form-group">
@@ -50,34 +54,49 @@
                         <div class="col-sm-4">
                             <input type="password" class="form-control" id="inputOldPassword" placeholder="Current password" runat="server" />
                             <p class="help-block">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="inputOldPassword" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                                <asp:RequiredFieldValidator ID="valRequiredOldPassword" runat="server" ControlToValidate="inputOldPassword" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
 
                             </p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="inputPassword" class="col-sm-4 control-label">New password</label>
+                        <div class="col-sm-4"></div> <!-- for padding left -->
                         <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Password" runat="server" />
-                            <p class="help-block">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="inputPassword" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                            <asp:CheckBox ID="cbPassword" runat="server" AutoPostBack="True" OnCheckedChanged="cbPassword_CheckedChanged" />
+                            Change password
+                        </div>
+                    </div>
+                    
+                    <!-- Textfields for new password -->
+                    <div id="divNewPass" runat="server">
+                        <div class="form-group">
+                            <label for="inputPassword" class="col-sm-4 control-label">New password</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="inputPassword" placeholder="Password" runat="server" />
+                                <p class="help-block">
+                                    <asp:RequiredFieldValidator ID="valRequiredNewPassword" runat="server" ControlToValidate="inputPassword" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
 
-                            </p>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputPasswordAgain" class="col-sm-4 control-label">New password (again)</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="inputPasswordAgain" placeholder="Password" runat="server" />
+                                <p class="help-block">
+                                    <asp:RequiredFieldValidator ID="valRequiredNewPasswordAgain" runat="server" ControlToValidate="inputPasswordAgain" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
+                                    <asp:CompareValidator ID="valCompareNewPassword" runat="server" ControlToCompare="inputPassword" ControlToValidate="inputPasswordAgain" ErrorMessage="Password fields must be equal." Display="Dynamic" ForeColor="#CC3300">Password fields must be equal.</asp:CompareValidator>
+
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="inputPasswordAgain" class="col-sm-4 control-label">New password (again)</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputPasswordAgain" placeholder="Password" runat="server" />
-                            <p class="help-block">
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="inputPasswordAgain" ErrorMessage="Field can't be empty." Display="Dynamic" ForeColor="#CC3300"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToCompare="inputPassword" ControlToValidate="inputPasswordAgain" ErrorMessage="Password fields must be equal." Display="Dynamic" ForeColor="#CC3300">Password fields must be equal.</asp:CompareValidator>
+                    <br />
 
-                            </p>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-4 control-label"></div>
 

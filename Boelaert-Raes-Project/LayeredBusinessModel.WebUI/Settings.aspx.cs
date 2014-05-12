@@ -15,11 +15,20 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            checkCheckBoxPassword();
+
             Customer user = (Customer)Session["user"];
             if (user != null)
+            {                
+                if(!Page.IsPostBack)
+                {
+                    inputName.Value = user.name;
+                    inputEmail.Value = user.email;
+                }
+            }
+            else
             {
-                inputName.Value = user.name;
-                inputEmail.Value = user.email;
+                Response.Redirect("Index.aspx");
             }
         }
 
@@ -64,7 +73,18 @@ namespace LayeredBusinessModel.WebUI
                         Customer customer = user;
                         customer.name = inputName.Value;
                         customer.email = inputEmail.Value;
-                        customer.password = CryptographyModel.encryptPassword(inputPassword.Value);
+
+                        if(cbPassword.Checked)
+                        {
+                            //user wanted a new password, update it
+                            customer.password = CryptographyModel.encryptPassword(inputPassword.Value);
+                        }
+                        else
+                        {
+                            //user did not want to change his password, keep the old one
+                            customer.password = customer.password;
+                        }
+                        
 
                         //update user's database data
                         CustomerService customerService = new CustomerService();
@@ -96,6 +116,35 @@ namespace LayeredBusinessModel.WebUI
         {
             Session["user"] = null;
             Response.Redirect("~/Index.aspx");
+        }
+
+        protected void cbPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            checkCheckBoxPassword();            
+        }
+        
+        /*Enable or disable new password fields*/
+        private void checkCheckBoxPassword()
+        {
+            if (cbPassword.Checked)
+            {
+                divNewPass.Visible = true;
+                inputPassword.Visible = true;
+                inputPasswordAgain.Visible = true;
+                valRequiredNewPassword.Enabled = true;
+                valRequiredNewPasswordAgain.Enabled = true;
+                valCompareNewPassword.Enabled = true;
+            }
+            else
+            {
+                divNewPass.Visible = false;
+                inputPassword.Visible = false;
+                inputPasswordAgain.Visible = false;
+                //disable validators when fields are not being used
+                valRequiredNewPassword.Enabled = false;
+                valRequiredNewPasswordAgain.Enabled = false;
+                valCompareNewPassword.Enabled = false;
+            }
         }
     }
 }

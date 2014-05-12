@@ -11,7 +11,7 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class TokenService
     {
-        public Token getTokenByToken(String token_id)
+        public Token getTokenByTokenId(String token_id)
         {
             TokenDAO tokenDAO = new TokenDAO();
             Token token = tokenDAO.getTokenByToken(token_id);
@@ -23,6 +23,12 @@ namespace LayeredBusinessModel.BLL.Database
                 token.customer = c.getCustomerByID(token.customer.customer_id);
             }
             return token;
+        }
+
+        public List<Token> getTokensForCustomer(Customer customer)
+        {
+            TokenDAO tokenDAO = new TokenDAO();
+            return tokenDAO.getTokensForCustomer(customer);           
         }
 
         public void addToken(Token token)

@@ -120,11 +120,10 @@ namespace LayeredBusinessModel.WebUI
                     switch(status)
                     {
                         case LoginStatusCode.NOTVERIFIED:
-                            string script = "alert(\"This account has not yet been verified.\");";
-                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);                            
                             break;
                         case LoginStatusCode.WRONGLOGIN:
-                            script = "alert(\"Unknown login name.\");";
+                            String script = "alert(\"Unknown login name.\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                             break;
                         case LoginStatusCode.WRONGPASSWORD:

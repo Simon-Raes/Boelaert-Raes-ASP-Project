@@ -18,15 +18,15 @@ namespace LayeredBusinessModel.BLL.Model
 
 
         /*Send an email asking for user confirmation.*/
-        public void sendRegistrationEmail(Customer customer, Token token)
+        public void sendRegistrationEmail(Token token)
         {
             var client = getSmtpClient();                      
 
-            client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa account verification", "Dear " + customer.name + ",\n\n" +
-                "Thank you for registering with Taboelaert Raesa.n\n" +
+            client.Send("info@TaboelaertRaesa.com", token.customer.email, "Taboelaert Raesa account verification", "Dear " + token.customer.name + ",\n\n" +
+                "Thank you for registering with Taboelaert Raesa.\n\n" +
                 "To complete your registration process, please click the following link: \n" +
                 "http://simonraes-001-site1.smarterasp.net/signup.aspx?token=" + token.token + " \n\n" +
-                "\n\nRegards,\nThe Taboelaert Raesa team.");
+                "Regards,\nThe Taboelaert Raesa team.");
         }
 
         /*Send an email alerting the user he has been registered and verified.*/
@@ -35,7 +35,7 @@ namespace LayeredBusinessModel.BLL.Model
             var client = getSmtpClient();  
 
             client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa registration completed", "Dear " + customer.name + ",\n\n" +
-                "Your Taboelaert Raesa registraton has been completed. Welcome!\n\n" +
+                "Your registration has been completed. Welcome to Taboelaert Raesa!\n\n" +
                 "Regards,\nThe Taboelaert Raesa team.");
         }
 

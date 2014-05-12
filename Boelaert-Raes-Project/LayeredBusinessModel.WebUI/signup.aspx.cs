@@ -33,7 +33,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 SignUpModel signUpModel = new SignUpModel();
                 TokenService tokenService = new TokenService();
-                Token token = tokenService.getTokenByToken(token_id);
+                Token token = tokenService.getTokenByTokenId(token_id);
 
                 if(signUpModel.completeSignUpProcess(token))
                 {

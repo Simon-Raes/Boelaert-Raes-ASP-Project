@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.DAO
         public List<Token> getTokensForCustomer(Customer customer) {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Token where customer_id=@customer_id", cnn);
+                SqlCommand command = new SqlCommand("SELECT * FROM Tokens where customer_id=@customer_id", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 List<Token> tokens = new List<Token>();
@@ -26,7 +26,9 @@ namespace LayeredBusinessModel.DAO
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        tokens.Add(createToken(reader));
+                        Token token = createToken(reader);
+                        token.customer = customer;
+                        tokens.Add(token);
                     }
                     reader.Close();
                     return tokens;

@@ -34,7 +34,7 @@ namespace LayeredBusinessModel.BLL.Model
 
                 //send email asking for verification
                 EmailModel emailModel = new EmailModel();
-                emailModel.sendRegistrationEmail(customer, token);
+                emailModel.sendRegistrationEmail(token);
             }
             else
             {
@@ -63,11 +63,44 @@ namespace LayeredBusinessModel.BLL.Model
 
             //delete the token since it will never be used again
             TokenService tokenService = new TokenService();
-            if(!tokenService.deleteToken(token))
+            if (!tokenService.deleteToken(token))
             {
                 status = false;
             }
-            
+
+            return status;
+        }
+
+        /*Sends a verification email to the supplied email address. Will only work if the user actually has an unused verification token in the database.*/
+        public Boolean sendVerificationForEmail(String email)
+        {
+            Boolean status = false;
+
+            CustomerService customerService = new CustomerService();
+            Customer customer = customerService.getCustomerWithEmail(email);
+            if (customer != null)
+            {
+                TokenService tokenService = new TokenService();
+                List<Token> tokens = tokenService.getTokensForCustomer(customer);
+                Token verificationToken = null;
+                if (tokens.Count > 0)
+                {
+                    foreach (Token token in tokens)
+                    {
+                        if (token.status == TokenStatus.VERIFICATION)
+                        {
+                            verificationToken = token;
+                        }
+                    }
+                    if (verificationToken != null)
+                    {
+                        status = true;
+
+                        EmailModel emailModel = new EmailModel();
+                        emailModel.sendRegistrationEmail(verificationToken);
+                    }
+                }
+            }
             return status;
         }
     }

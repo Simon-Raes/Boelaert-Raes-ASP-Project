@@ -20,7 +20,7 @@ namespace LayeredBusinessModel.BLL.Model
             var client = getSmtpClient();                      
 
             client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa account verification", "Dear " + customer.name + ",\n\n" +
-                "Welcome to Taboelaert Raesa!\n\n" +
+                "Thank you for registering with Taboelaert Raesa.n\n" +
                 "To complete your registration process, please click the following link: \n" +
                 "http://simonraes-001-site1.smarterasp.net/signup.aspx?token=" + token.token + " .\n\n" +
                 "\n\nRegards,\nThe Taboelaert Raesa team.");
@@ -32,7 +32,7 @@ namespace LayeredBusinessModel.BLL.Model
             var client = getSmtpClient();  
 
             client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa registration completed", "Dear " + customer.name + ",\n\n" +
-                "Your Taboelaert Raesa registraton has been completed.\n\n" +
+                "Your Taboelaert Raesa registraton has been completed. Welcome!\n\n" +
                 "Regards,\nThe Taboelaert Raesa team.");
         }
 
@@ -63,7 +63,7 @@ namespace LayeredBusinessModel.BLL.Model
         {
             var client = getSmtpClient();  
 
-            //create email content
+            //create HTML email content
             String messageContent = "Dear " + customer.name + ",<br /><br />" +
                 "Thank you for your business. Your order information can be found below.<br /><br />";
             if (!allInStock)
@@ -102,6 +102,7 @@ namespace LayeredBusinessModel.BLL.Model
             client.Send(message);
         }
 
+        /*Returns SMTP credentials from web.config*/
         private SmtpClient getSmtpClient()
         {
             var client = new System.Net.Mail.SmtpClient();
@@ -112,7 +113,5 @@ namespace LayeredBusinessModel.BLL.Model
 
             return client;
         }
-
-
     }
 }

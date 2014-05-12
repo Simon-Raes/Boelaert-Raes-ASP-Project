@@ -9,9 +9,9 @@ using System.Security.Cryptography;
 
 namespace LayeredBusinessModel.BLL.Database
 {
-    class TokenService
+    public class TokenService
     {
-        public Token checkToken(String token_id)
+        public Token getTokenByToken(String token_id)
         {
             TokenDAO tokenDAO = new TokenDAO();
             Token token = tokenDAO.getTokenByToken(token_id);

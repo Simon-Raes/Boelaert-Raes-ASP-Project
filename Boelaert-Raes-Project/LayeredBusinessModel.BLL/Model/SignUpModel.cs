@@ -12,7 +12,7 @@ namespace LayeredBusinessModel.BLL.Model
     public class SignUpModel
     {
         /*Starts the sign up process.*/
-        public Boolean signUpCustomer(Customer user)
+        public Boolean beginSignUpProcess(Customer user)
         {
             CustomerService customerService = new CustomerService();
             Boolean addedUser = false;
@@ -43,27 +43,32 @@ namespace LayeredBusinessModel.BLL.Model
             return addedUser;
         }
 
-        public Boolean checkSignUpVerification(String tokenToken)
+        /*Verifies the user of the supplied token*/
+        public Boolean completeSignUpProcess(Token token)
         {
-            //check token
-            TokenService tokenService = new TokenService();
-            Token token = tokenService.checkToken(tokenToken);
+            Boolean status = true;
 
             //edit customer object to set verified to true
             Customer customer = token.customer;
             customer.isVerified = true;
             CustomerService customerService = new CustomerService();
-            customerService.updateCustomer(customer);
+            if (!customerService.updateCustomer(customer))
+            {
+                status = false;
+            }
 
             //send a second email confirming the verification
             EmailModel emailModel = new EmailModel();
             emailModel.sendRegistrationCompleteEmail(customer);
 
-            //delete the token again
-            tokenService.deleteToken(token);
-
-            //return true
-            return true;
+            //delete the token since it will never be used again
+            TokenService tokenService = new TokenService();
+            if(!tokenService.deleteToken(token))
+            {
+                status = false;
+            }
+            
+            return status;
         }
     }
 }

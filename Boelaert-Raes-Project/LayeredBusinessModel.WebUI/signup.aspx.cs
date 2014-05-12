@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+using LayeredBusinessModel.BLL.Database;
+
 namespace LayeredBusinessModel.WebUI
 {
     public partial class signup : System.Web.UI.Page
@@ -21,22 +23,24 @@ namespace LayeredBusinessModel.WebUI
             {
                 pnlSignup.Visible = true;
                 pnlSignupCompleted.Visible = false;                
-            }
-            else
-            {
-                
-            }
+            }            
         }
 
         private void checkQueryString()
         {
-            if (Request.QueryString["token"] != null)
+            String token_id = Request.QueryString["token"];
+            if (token_id != null)
             {
                 SignUpModel signUpModel = new SignUpModel();
-                if(signUpModel.checkSignUpVerification(Request.QueryString["token"]))
+                TokenService tokenService = new TokenService();
+                Token token = tokenService.getTokenByToken(token_id);
+
+                if(signUpModel.completeSignUpProcess(token))
                 {
                     //user verification succesful, log in the user and redirect
-                    
+                    Customer user = token.customer;
+                    Session["user"] = user;
+                    Response.Redirect("Index.aspx");
                 }
                 else
                 {
@@ -102,7 +106,7 @@ namespace LayeredBusinessModel.WebUI
                     isVerified = false
                 };
                 SignUpModel signUpModel = new SignUpModel();
-                if (signUpModel.signUpCustomer(customer))
+                if (signUpModel.beginSignUpProcess(customer))
                 {
                     pnlSignup.Visible = false;
                     lblHeader.Text = "Welcome to Taboelaert Raesa!";

@@ -13,6 +13,15 @@ namespace LayeredBusinessModel.WebUI {
     public partial class AccountOrders {
         
         /// <summary>
+        /// lblNoOrders control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNoOrders;
+        
+        /// <summary>
         /// gvOrders control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,24 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Label lblOrderStatusDetails;
         
         /// <summary>
+        /// gvOrderDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvOrderDetails;
+        
+        /// <summary>
+        /// lblTotalCost control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalCost;
+        
+        /// <summary>
         /// lblPay control.
         /// </summary>
         /// <remarks>
@@ -74,14 +101,5 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnPay;
-        
-        /// <summary>
-        /// gvOrderDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvOrderDetails;
     }
 }

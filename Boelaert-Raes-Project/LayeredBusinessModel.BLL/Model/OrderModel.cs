@@ -35,7 +35,7 @@ namespace LayeredBusinessModel.BLL
                 if (orderLine.orderLineType.id == 1) //rent copy
                 {
                     DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo thisDVD = dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString());
+                    DvdInfo thisDVD = orderLine.dvdInfo;
 
                     //get all available dates starting from TODAY 
                     //(also needs to check dates between today and start of requested rent period to determine smallest open window)
@@ -127,7 +127,7 @@ namespace LayeredBusinessModel.BLL
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
-                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString());
+                        DvdInfo dvdInfo = orderLine.dvdInfo;
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                         dvdInfoService.updateDvdInfo(dvdInfo);
                     }
@@ -149,7 +149,7 @@ namespace LayeredBusinessModel.BLL
                             orderLineService.updateOrderLine(orderLine);
 
                             //update the amount_sold field of the dvdInfo record
-                            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(dvdCopies[0].dvdinfo.dvd_info_id.ToString());
+                            DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
                             dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                             dvdInfoService.updateDvdInfo(dvdInfo);
                         }
@@ -179,12 +179,12 @@ namespace LayeredBusinessModel.BLL
                         copy = availableCopies[0];
 
                         //set the found copy as the copy for this orderline
-                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(copy.dvd_copy_id.ToString());
+                        orderLine.dvdCopy = copy;
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
                         DvdInfoService dvdInfoService = new DvdInfoService();
-                        DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(copy.dvdinfo.dvd_info_id.ToString());
+                        DvdInfo dvdInfo = copy.dvdinfo;
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
                         dvdInfoService.updateDvdInfo(dvdInfo);
 
@@ -214,18 +214,15 @@ namespace LayeredBusinessModel.BLL
 
         }
 
-        public String getOrderCost(String orderID)
+        public double getOrderCost(Order order)
         {
             double totalCost = 0;
 
             OrderLineService orderLineService = new OrderLineService();
-            DvdInfoService dvdInfoService = new DvdInfoService();
-            OrderService orderService = new OrderService();
-            Order order = orderService.getOrder(orderID);
+            //OrderService orderService = new OrderService();
+            //Order order = orderService.getOrder(orderID);
 
             List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
-
-
 
             //set order total cost
             foreach (OrderLine orderLine in orderLines)
@@ -235,15 +232,15 @@ namespace LayeredBusinessModel.BLL
                     TimeSpan duration = orderLine.enddate - orderLine.startdate;
                     int durationDays = duration.Days;
 
-                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString()).rent_price * durationDays;
+                    totalCost += orderLine.dvdInfo.rent_price * durationDays;
                 }
                 else if (orderLine.orderLineType.id == 2) //buy
                 {
-                    totalCost += dvdInfoService.getDvdInfoWithID(orderLine.dvdInfo.dvd_info_id.ToString()).buy_price;
+                    totalCost += orderLine.dvdInfo.buy_price;
                 }
             }
 
-            return totalCost.ToString();
+            return Math.Round(totalCost,2);
         }
     }
 }

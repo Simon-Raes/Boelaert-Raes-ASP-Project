@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="divCartContent" runat="server">
         <div class="panel-body">
             <p>
                 Cart content:
@@ -15,7 +15,7 @@
                         <asp:CommandField AccessibleHeaderText="Remove" DeleteText="Remove" ShowDeleteButton="True" />
                     </Columns>
                 </asp:GridView>
-                Should also show items and orderprices
+                Total cost: <asp:Label ID="lblTotalCost" runat="server" Text=""></asp:Label>
             </p>
             <p>
                 <asp:Button ID="btnCheckout" runat="server" OnClick="btnCheckout_Click" Text="Checkout" />
@@ -23,6 +23,12 @@
             <p>
                 &nbsp;
             </p>
+        </div>
+    </div>
+
+    <div class="panel panel-default" id="divCartEmpty" runat="server">
+        <div class="panel-body">
+            Your cart is empty.
         </div>
     </div>
 </asp:Content>

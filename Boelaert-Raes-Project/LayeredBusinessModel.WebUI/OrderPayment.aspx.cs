@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.WebUI
                             //all good
                             lblStatus.Text = orderID;
                             OrderModel helper = new OrderModel();
-                            lblCost.Text = "Total cost: " + helper.getOrderCost(orderID);
+                            lblCost.Text = Math.Round(helper.getOrderCost(order), 2).ToString();
                             OrderLineService orderLineService = new OrderLineService();
                             List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
 
@@ -47,8 +47,9 @@ namespace LayeredBusinessModel.WebUI
 
                             DataTable orderTable = new DataTable();
                             orderTable.Columns.Add("Item number");
-                            orderTable.Columns.Add("Name");
+                            orderTable.Columns.Add("Name");                            
                             orderTable.Columns.Add("Type");
+                            orderTable.Columns.Add("Price");
                             if(hasRentItems)
                             {
                                 orderTable.Columns.Add("Start date");
@@ -64,8 +65,15 @@ namespace LayeredBusinessModel.WebUI
                                 orderRow[2] = item.orderLineType.name;
                                 if(item.orderLineType.id == 1)
                                 {
-                                    orderRow[3] = item.startdate.ToString("dd/MM/yyyy");
-                                    orderRow[4] = item.enddate.ToString("dd/MM/yyyy"); 
+                                    double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;                                    
+                                    orderRow[3] = Math.Round(cost, 2);
+                                    orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
+                                    orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    double cost = item.dvdInfo.buy_price;
+                                    orderRow[3] = Math.Round(cost,2);
                                 }
                                 
                                 orderTable.Rows.Add(orderRow);

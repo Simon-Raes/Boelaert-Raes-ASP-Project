@@ -22,7 +22,7 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!Page.IsPostBack)
             {
-                
+
                 if (Session["user"] != null)
                 {
                     fillCartGridView();
@@ -33,47 +33,71 @@ namespace LayeredBusinessModel.WebUI
         private void fillCartGridView()
         {
             Boolean hasRentItems = false;
+            double totalCost = 0;
 
             shoppingCartService = new ShoppingCartService();
             List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]));
-
-            foreach (ShoppingcartItem item in cartContent)
+            if (cartContent.Count > 0)
             {
-                if (item.dvdCopyType.id == 1)
+                divCartContent.Visible = true;
+                divCartEmpty.Visible = false;
+
+                foreach (ShoppingcartItem item in cartContent)
                 {
-                    hasRentItems = true;
+                    if (item.dvdCopyType.id == 1)
+                    {
+                        hasRentItems = true;
+                    }
                 }
-            }
 
-            DataTable cartTable = new DataTable();
+                DataTable cartTable = new DataTable();
 
-            cartTable.Columns.Add("Id");
-            cartTable.Columns.Add("Name");
-            cartTable.Columns.Add("Amount");
+                cartTable.Columns.Add("Id");
+                cartTable.Columns.Add("Name");
+                cartTable.Columns.Add("Amount");
+                cartTable.Columns.Add("Price");
 
-            if (hasRentItems)
-            {
-                cartTable.Columns.Add("Start date");
-                cartTable.Columns.Add("End date");
-            }
-
-            foreach (ShoppingcartItem item in cartContent)
-            {
-                DataRow cartRow = cartTable.NewRow();
-                cartRow[0] = item.shoppingcart_item_id;
-                cartRow[1] = item.dvdInfo.name;
-                cartRow[2] = 1;
-
-                if (item.dvdCopyType.id == 1)
+                if (hasRentItems)
                 {
-                    cartRow[3] = item.startdate.ToString("dd/MM/yyyy");
-                    cartRow[4] = item.enddate.ToString("dd/MM/yyyy");                    
+                    cartTable.Columns.Add("Start date");
+                    cartTable.Columns.Add("End date");
                 }
-                cartTable.Rows.Add(cartRow);
-            }
 
-            gvCart.DataSource = cartTable;
-            gvCart.DataBind();
+                foreach (ShoppingcartItem item in cartContent)
+                {
+                    DataRow cartRow = cartTable.NewRow();
+                    cartRow[0] = item.shoppingcart_item_id;
+                    cartRow[1] = item.dvdInfo.name;
+                    cartRow[2] = 1;
+                    cartRow[3] = item.dvdInfo.buy_price;
+
+                    if (item.dvdCopyType.id == 1)
+                    {
+                        double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
+                        totalCost += cost;
+                        cartRow[3] = Math.Round(cost,2);
+                        cartRow[4] = item.startdate.ToString("dd/MM/yyyy");
+                        cartRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        double cost = item.dvdInfo.buy_price;
+                        totalCost += cost;
+                        cartRow[3] = Math.Round(cost, 2);
+                    }
+                    cartTable.Rows.Add(cartRow);
+                }
+
+                lblTotalCost.Text = Math.Round(totalCost,2).ToString() + " (todo: euro/dollar)";
+
+                gvCart.DataSource = cartTable;
+                gvCart.DataBind();
+            }
+            else
+            {
+                divCartContent.Visible = false;
+                divCartEmpty.Visible = true;
+            }
         }
 
         /**Deletes item from cart*/

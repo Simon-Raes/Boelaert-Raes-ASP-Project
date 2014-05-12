@@ -27,9 +27,8 @@ namespace LayeredBusinessModel.BLL
 
         public List<OrderLine> getOrderLinesForOrder(Order order)
         {
-            orderLineDAO = new OrderLineDAO();
-            List<OrderLine> orderLines = orderLineDAO.getOrderLinesForOrder(order);            
-            return orderLines;
+            orderLineDAO = new OrderLineDAO();                       
+            return orderLineDAO.getOrderLinesForOrder(order);
         }
 
         public List<OrderLine> getOrderLinesForCustomer(Customer customer)

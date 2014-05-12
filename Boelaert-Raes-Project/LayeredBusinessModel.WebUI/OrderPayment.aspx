@@ -3,14 +3,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
     <div class="panel panel-default">
         <div class="panel-body">
-            Order:
-    <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label><br />
-            <asp:GridView ID="gvOrderDetails"  CssClass="gridViewStyle" runat="server"></asp:GridView>
+            Order
+            <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label><br />
+            <asp:GridView ID="gvOrderDetails" CssClass="gridViewStyle" runat="server"></asp:GridView>
 
             <br />
-            Total:
+            Total cost:
         <asp:Label ID="lblCost" runat="server" Text=""></asp:Label>
             <br />
             <br />

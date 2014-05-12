@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Security.Cryptography;
+using System.Configuration;
 
 namespace LayeredBusinessModel.BLL
 {
     public class CryptographyModel
     {
-        const string passphrase = "f0Ev9Pbdts5T4TAwh"; 
+        private static String passphrase = ConfigurationManager.AppSettings["PassPhrase"];
 
         public static string encryptPassword(string message)
         {

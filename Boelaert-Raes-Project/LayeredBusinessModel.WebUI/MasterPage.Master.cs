@@ -13,6 +13,7 @@ using System.Web.UI.HtmlControls;
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections.Specialized;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -20,7 +21,19 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            fillSideBar();
+            try
+            {
+                fillSideBar();
+            }
+            catch (NoRecordException ex)
+            {
+                //bacause this a main function - it fills the sidebar with the genres - this exception will be thrown up so that the global.asax can take care of the exception
+                //and redirect the user to the error page
+
+                //for debugging reasons i will place a breakpoint here. I'll work my way throu the WebUI layer until i have handled every exception. After that i'll throws the exceptions 
+                //throw;
+            }
+
 
             setupCurrencyLinks();
 
@@ -35,7 +48,7 @@ namespace LayeredBusinessModel.WebUI
                 //btnLogin.Text = "Login";
                 //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
                 //btnCart.Visible = false;
-                
+
             }
             else
             {
@@ -46,10 +59,10 @@ namespace LayeredBusinessModel.WebUI
 
                 //set buttons
                 Customer user = (Customer)Session["user"];
-                liAccount.InnerHtml = "<a href='Overview.aspx'>"+user.name+"</a>";                
+                liAccount.InnerHtml = "<a href='Overview.aspx'>" + user.name + "</a>";
                 ShoppingCartService shoppingCartService = new ShoppingCartService();
                 List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
-                liCart.InnerText = "Cart: " + cartContent.Count;               
+                liCart.InnerText = "Cart: " + cartContent.Count;
 
             }
         }
@@ -70,15 +83,15 @@ namespace LayeredBusinessModel.WebUI
                 string[] separateURL = url.Split('?');
                 NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(separateURL[1]);
                 if (Request.QueryString["currency"] != null)
-                {                    
+                {
                     queryString.Remove("currency");
                 }
                 //als de querystring al bestaat, deze uitbreiden
                 euroLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=euro";
                 dollerLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=usd";
-            }            
+            }
 
-            
+
             //als de querystring het attribut currency bevat (als de gebruiker op één van de twee currencylinks heeft geklikt)
             if (Request.QueryString["currency"] != null)
             {
@@ -100,7 +113,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            
+
 
             if (txtEmail.Value != null && txtEmail.Value != null)
             {
@@ -117,10 +130,10 @@ namespace LayeredBusinessModel.WebUI
                 {
                     //user couldn't be logged in, request the status code so the correct error can be displayed to the user
                     LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);
-                    switch(status)
+                    switch (status)
                     {
                         case LoginStatusCode.NOTVERIFIED:
-                            Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);                            
+                            Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);
                             break;
                         case LoginStatusCode.WRONGLOGIN:
                             String script = "alert(\"Unknown login name.\");";
@@ -134,7 +147,7 @@ namespace LayeredBusinessModel.WebUI
                     }
                     //todo: find a better way to give feedback (without alert dialog)                    
                 }
-            }  
+            }
         }
 
         protected void btnCart_Click(object sender, EventArgs e)
@@ -159,51 +172,45 @@ namespace LayeredBusinessModel.WebUI
             Response.Redirect("Catalog.aspx?search=" + searchText);
         }
 
-        /*Fills the sidebar category and genre menu with database data.*/
+        /*
+         * Fills the sidebar category and genre menu with database data.
+         */
         private void fillSideBar()
         {
-            //Menu opvullen met alle categoriën en genres
-            try
+            //retrieve list with categories and loop throu it
+            List<Category> categories = new CategoryService().getAll();
+            foreach (Category c in categories)
             {
-                List<Category> categories = new CategoryService().getAll();
-                foreach (Category c in categories)
+                //create category list
+                HtmlGenericControl categoryDiv = new HtmlGenericControl("div");
+                categoryDiv.Attributes["class"] = "list-group";
+
+                //create category title item
+                HtmlAnchor categoryHeader = new HtmlAnchor();
+                categoryHeader.Attributes["class"] = "list-group-item active";
+                categoryHeader.HRef = "catalog.aspx?cat=" + c.category_id;
+                categoryHeader.InnerHtml = c.name;
+
+                //add title to list
+                categoryDiv.Controls.Add(categoryHeader);
+
+                //add list to sidebar
+                divSideBar.Controls.Add(categoryDiv);
+
+                //retrieve list of genres in a certain category and loop throu it
+                List<Genre> genres = new GenreService().getGenresForCategory(c.category_id.ToString());
+                foreach (Genre g in genres)
                 {
-                    //create category list
-                    HtmlGenericControl categoryDiv = new HtmlGenericControl("div");
-                    categoryDiv.Attributes["class"] = "list-group";
+                    //create sidebar genre item
+                    HtmlAnchor genreItem = new HtmlAnchor();
+                    genreItem.Attributes["class"] = "list-group-item";
+                    genreItem.HRef = "catalog.aspx?genre=" + g.genre_id;
+                    genreItem.InnerHtml = g.name;
 
-                    //create category title item
-                    HtmlAnchor categoryHeader = new HtmlAnchor();
-                    categoryHeader.Attributes["class"] = "list-group-item active";
-                    categoryHeader.HRef = "catalog.aspx?cat=" + c.category_id;
-                    categoryHeader.InnerHtml = c.name;
-
-                    //add title to list
-                    categoryDiv.Controls.Add(categoryHeader);
-
-                    //add list to sidebar
-                    divSideBar.Controls.Add(categoryDiv);
-
-
-                    List<Genre> genres = new GenreService().getGenresForCategory(c.category_id.ToString());
-                    foreach (Genre g in genres)
-                    {
-                        //create sidebar genre item
-                        HtmlAnchor genreItem = new HtmlAnchor();
-                        genreItem.Attributes["class"] = "list-group-item";
-                        genreItem.HRef = "catalog.aspx?genre=" + g.genre_id;
-                        genreItem.InnerHtml = g.name;
-
-                        //add it to the category list
-                        categoryDiv.Controls.Add(genreItem);
-                    }
+                    //add it to the category list
+                    categoryDiv.Controls.Add(genreItem);
                 }
             }
-            catch (Exception ex)
-            {
-                
-            }
-            
         }
     }
 }

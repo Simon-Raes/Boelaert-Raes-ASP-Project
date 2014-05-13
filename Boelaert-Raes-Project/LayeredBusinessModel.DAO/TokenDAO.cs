@@ -2,18 +2,20 @@
 using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class TokenDAO : DAO
     {
-
+        /*
+         * Returns a list with tokens for customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<Token> getTokensForCustomer(Customer customer) {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -38,7 +40,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get tokens for customer", ex);
                 }
                 finally
                 {
@@ -51,10 +53,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - TokenDAO getTokensForCustomer()");
             }
         }
 
+        /*
+         * Returns a token based on the tokenstring
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public Token getTokenByToken(String token)
         {
             SqlCommand command = null;
@@ -72,11 +79,11 @@ namespace LayeredBusinessModel.DAO
                     {
                         reader.Read();                    
                         return createToken(reader);
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get token based on tokenstring", ex);
                 }
                 finally
                 {
@@ -89,7 +96,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - TokenDAO getTokenByToken()");
             }
         }
 
@@ -116,6 +123,11 @@ namespace LayeredBusinessModel.DAO
         //    }
         //}
 
+        /*
+         * Removes a token
+         * Returns true if records were deleted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean removeToken(Token token)
         {
             SqlCommand command = null;
@@ -126,12 +138,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete token", ex);
                 }
                 finally
                 {
@@ -140,10 +155,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Removes tokens for customer
+         * Returns true if records were deleted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean removeTokensForCustomer(Customer customer) {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -153,12 +172,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete tokens for customers", ex);
                 }
                 finally
                 {
@@ -167,10 +189,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Adds a tokens
+         * Returns true if records were inserted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean addToken(Token token) 
         {
             SqlCommand command = null;
@@ -188,12 +214,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to add a tokens", ex);
                 }
                 finally
                 {
@@ -202,7 +231,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 

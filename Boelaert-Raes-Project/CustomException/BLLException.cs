@@ -6,18 +6,19 @@ using System.Threading.Tasks;
 
 namespace CustomException
 {
-    public class NoRecordException : Exception
+    public class BLLException : MyBaseException
     {
-        public NoRecordException()
+
+        public BLLException()
         {
         }
 
-        public NoRecordException(string message)
+        public BLLException(string message)
             : base(message)
         {
         }
 
-        public NoRecordException(string message, Exception innerException)
+        public BLLException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

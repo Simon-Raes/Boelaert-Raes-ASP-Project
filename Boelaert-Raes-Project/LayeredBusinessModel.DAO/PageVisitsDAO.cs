@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class PageVisitsDAO : DAO
     {
-
+        /*
+         * Returns a Pagevitit for a customer and dvd
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public PageVisits getPageVisits(Customer customer, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -31,11 +36,11 @@ namespace LayeredBusinessModel.DAO
                     {
                         reader.Read();
                         return createPageVisits(reader);
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get pagevisits for customer and dvd", ex);
                 }
                 finally
                 {
@@ -48,10 +53,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - PageVisitsDAO getPageVisits()");
             }
         }
 
+        /*
+         * Returns a list with Pagevisits for a customer 
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<PageVisits> getTopPageVisitsForCustomer(Customer customer, int number_of_results)
         {
             SqlCommand command = null;
@@ -78,7 +88,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get pagevisits for customer", ex);
                 }
                 finally
                 {
@@ -91,10 +101,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - PageVisitsDAO getTopPageVisitsForCustomer()");
             }
         }
 
+        /*
+         * Adds a pagevisit
+         * Returns true if the pagevisit was inserted, false if no records were inserted
+         * Throws DALException if something else went wrong
+         */
         public Boolean addPageVisits(PageVisits pageVisits)
         {
             SqlCommand command = null;
@@ -110,12 +125,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to insert a pagevisit", ex);
                 }
                 finally
                 {
@@ -124,10 +142,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Updates a pagevisit
+         * Returns true if the pagevisit was updated, false if no records were updated
+         * Throws DALException if something else went wrong
+         */
         public Boolean updatePageVisits(PageVisits pageVisits)
         {
             SqlCommand command = null;
@@ -144,12 +166,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to insert a pagevisit", ex);
                 }
                 finally
                 {
@@ -158,7 +183,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }        
 

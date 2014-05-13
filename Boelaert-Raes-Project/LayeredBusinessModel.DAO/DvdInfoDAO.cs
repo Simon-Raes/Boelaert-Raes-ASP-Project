@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class DvdInfoDAO : DAO
     {
+        /*
+         * Adds a dvd
+         * Return the id from the newly added dvd
+         * Throws DALException if something else went wrong
+         */ 
         public int addDvdInfo(DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -52,7 +58,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-                    
+                    throw new DALException("Failed to add dvdinfo", ex);
                 }
                 finally
                 {
@@ -61,10 +67,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return -1;
             }
         }
-
+        
+        /*
+         * Returns a List with all the dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> getAllDvdInfos()
         {
             SqlCommand command = null;
@@ -89,7 +99,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all the dvd's", ex);
                 }
                 finally
                 {
@@ -102,11 +112,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfos()");
             }
         }
 
-        /**Returns all DvdInfo's that have a banner image*/
+        /*
+         * Returns all DvdInfo's that have a banner image
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong 
+         */
         public List<DvdInfo> getAllDvdInfosWithBanner()
         {
             SqlCommand command = null;
@@ -124,18 +138,17 @@ namespace LayeredBusinessModel.DAO
                     reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();                        
                         while (reader.Read())
                         {
                             dvdlist.Add(createDvdInfo(reader));
                         }
                         return dvdlist;
-                    } 
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all the dvd's with a banner", ex);
                 }
                 finally
                 {
@@ -148,11 +161,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfosWithBanner()");
             }
         }
 
-
+        /*
+         * Returns a dvdinfo based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public DvdInfo getDvdInfoWithId(String id)
         {
             SqlCommand command = null;
@@ -169,12 +186,12 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createDvdInfo(reader);                        
+                        return createDvdInfo(reader);
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the dvdinfo based on an ID", ex);
                 }
                 finally
                 {
@@ -183,15 +200,17 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getDvdInfoWithId()");
             }
         }
 
-
-        //todo
+        /*
+         * Updates a dvd
+         * Returns true if the dvd was updated, false if no dvdwas updated
+         * Throws DALException if something else went wrong
+         */ 
         public Boolean updateDvdInfo(DvdInfo dvd)
         {
-
             SqlCommand command = null;
             SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -221,12 +240,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true; 
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;                    
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to update dvd", ex);
                 }
                 finally
                 {
@@ -239,10 +261,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Returns a list with dvd's based on searchtext
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdWithText(String searchText)
         {
             SqlCommand command = null;
@@ -268,7 +294,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's based on searchtext", ex);
                 }
                 finally
                 {
@@ -281,22 +307,21 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithText()");
             }
         }
 
+        /*
+         * Returns a list with dvd's based on searchtext and category
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdWithTextAndCategory(String searchText, String categoryID)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                
-
-                //todo: parameters
-                //% moet onderdeel zijn van paramater, niet query! (denk ik)   
-
-
                 command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " + 
                 "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration " +
                 "FROM DvdInfo " +
@@ -305,14 +330,12 @@ namespace LayeredBusinessModel.DAO
                 "INNER JOIN Genres " +
                 "ON DvdGenre.genre_id = Genres.genre_id " +
                 "WHERE Genres.category_id = @cat_id " +
-                "AND (DvdInfo.name LIKE @searchtex OR DvdInfo.barcode LIKE @searchtex OR DvdInfo.author LIKE @searchtex) " +
+                "AND (DvdInfo.name LIKE @searchtext OR DvdInfo.barcode LIKE @searchtext OR DvdInfo.author LIKE @searchtext) " +
                 "GROUP BY DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " +
                 "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
 
                 command.Parameters.Add(new SqlParameter("@cat_id", categoryID));
-                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));
-               
-
+                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));  
 
                 try
                 {
@@ -330,7 +353,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's based on searchtext and categorie", ex);
                 }
                 finally
                 {
@@ -343,10 +366,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndCategory()");
             }
         }
 
+        /*
+         * Returns a list with dvd's based on searchtext and genre
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdWithTextAndGenre(String searchText, String genreID)
         {
             SqlCommand command = null;
@@ -376,11 +404,10 @@ namespace LayeredBusinessModel.DAO
                         }
                         return dvdlist;
                     }
-
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's based on searchtext and genre", ex);
                 }
                 finally
                 {
@@ -393,10 +420,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndGenre()");
             }
         }
 
+        /*
+         * Returns a list with the latest dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> getLatestDvds(int amount)
         {
             SqlCommand command = null;
@@ -423,7 +455,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the latest dvd's", ex);
                 }
                 finally
                 {
@@ -436,10 +468,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getLatestDvds()");
             }
         }
 
+        /*
+         * Returns a list with dvd's from a certain year
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdFromYear(String year)
         {
             SqlCommand command = null;
@@ -465,7 +502,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's from a certain year", ex);
                 }
                 finally
                 {
@@ -478,11 +515,16 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromYear()");
             }
 
         }
 
+        /*
+         * Returns a list with dvd's from a certain director
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdFromDirector(String director)
         {
             SqlCommand command = null;
@@ -508,7 +550,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's from a certain director", ex);
                 }
                 finally
                 {
@@ -521,11 +563,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromDirector()");
             }
-
         }
 
+        /*
+         * Returns a list with dvd's from a certain actor
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> searchDvdWithActor(String actor)
         {
             SqlCommand command = null;
@@ -551,7 +597,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get dvd's from a certain actor", ex);
                 }
                 finally
                 {
@@ -564,11 +610,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithActor()");
             }
         }
 
-
+        /*
+         * Returns a list with popular dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<DvdInfo> getMostPopularDvds(int amount)
         {
             SqlCommand command = null;
@@ -594,7 +644,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get popular dvd's", ex);
                 }
                 finally
                 {
@@ -607,10 +657,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getMostPopularDvds()");
             }
         }
 
+        /*
+         * Returns a list with recommendations
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<int> getRecommendations(int[] genres, int amount)
         {
             SqlCommand command = null;
@@ -651,7 +706,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get recommendations", ex);
                 }
                 finally
                 {
@@ -664,10 +719,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getRecommendations()");
             }
         }
 
+        /*
+         * Returns a list with media for a dvd
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         private List<KeyValuePair<int, String>> getMedia(String id)
         {
             SqlCommand command = null;
@@ -690,11 +750,10 @@ namespace LayeredBusinessModel.DAO
                         }
                         return media;
                     }
-
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get media for dvd", ex);
                 }
                 finally
                 {
@@ -707,7 +766,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdInfoDAO getMedia()");
             }
         }
 

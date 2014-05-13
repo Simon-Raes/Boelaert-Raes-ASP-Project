@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class ShoppingCartDAO : DAO
     {
-        /*Returns all ShoppingcartItems currently in the user's cart*/
+        /*
+         * Returns a list with shoppingcartitems for a customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<ShoppingcartItem> getCartContentForCustomer(Customer customer)
         {
             SqlCommand command = null;
@@ -46,7 +51,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get a shoppingcaritems for customer", ex);
                 }
                 finally
                 {
@@ -59,11 +64,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - ShoppingCartDAO getCartContentForCustomer()");
             }
         }
 
-        /**Adds BUY dvd to cart*/
+        /*
+         * Adds a buy item for customer
+         * Returns true if records were inserted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -78,12 +87,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-                    
+                    throw new DALException("Failed to add buy item for customer", ex);
                 }
                 finally
                 {
@@ -92,11 +104,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /**Adds RENT dvd to cart*/
+        /*
+         * Adds a rent item for customer
+         * Returns true if records were inserted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean addItemToCart(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
             SqlCommand command = null;
@@ -113,12 +128,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to add rent item for customer", ex);
                 }
                 finally
                 {
@@ -127,11 +145,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /*Remove the item from the cart it's in*/
+        /*
+         * Removes a shoppingcartitem based on an ID
+         * Returns true if records were deleted, false if not
+         * Throws DALException if something else went wrong
+         */
         public Boolean removeItemFromCart(String cartItemID)
         {
             SqlCommand command = null;
@@ -143,12 +164,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete shoppingcartitem based on ID", ex);
                 }
                 finally
                 {
@@ -157,11 +181,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /*Delete all items from this user's shoppingcart*/
+        /*
+        * Removes all shoppingcartitems for customer
+        * Returns true if records were deleted, false if not
+        * Throws DALException if something else went wrong
+        */
         public Boolean clearCustomerCart(Customer customer)
         {
             SqlCommand command = null;
@@ -173,12 +200,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete all shoppingcartitems for customer", ex);
                 }
                 finally
                 {
@@ -187,11 +217,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /*Delete ALL data from this table*/
+        /*
+        * Removes all shoppingcartitems
+        * Returns true if records were deleted, false if not
+        * Throws DALException if something else went wrong
+        */
         public Boolean clearTable()
         {
             SqlCommand command = null;
@@ -201,12 +234,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete all shoppingcartitems", ex);
                 }
                 finally
                 {
@@ -215,7 +251,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 

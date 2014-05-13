@@ -11,52 +11,42 @@ using LayeredBusinessModel.BLL.Database;
 namespace LayeredBusinessModel.BLL
 {
     /*
-     *  All servicemethods for Customer
+     *  All business methods for Customer
      */
     public class CustomerService
     {
         private CustomerDAO customerDAO;
+        private Validation validation;
 
         /*
-         *  Returns a list with all the customers
-         */
+         * Returns a list off Customers
+         */ 
         public List<Customer> getAll()
         {
-            List<Customer> customerList = new List<Customer>();
-            customerDAO = new CustomerDAO();
-            customerList = customerDAO.getAll();
-            return customerList;  
+            return new CustomerDAO().getAll();
         }
 
-        public Customer getCustomerByID(String id)
+        public Customer getByID(String id)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.getByID(id);
+            return customerDAO.getByID(id);           
         }
 
-        /*
-         *  Returns a customer based on an emailadress
-         */
+        
         public Customer getCustomerWithEmail(String email)
         {
             customerDAO = new CustomerDAO();
             return customerDAO.getByEmail(email);
         }
 
-        /*
-         *  Updates a customer
-         *  Returns true if succeedes, false is not
-         */
+        
         public Boolean updateCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();
             return customerDAO.update(customer);
         }
 
-        /*
-         *  Adds a new customer
-         *  Returns true if succeedes, false is not
-         */ 
+        
         public Boolean addCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();

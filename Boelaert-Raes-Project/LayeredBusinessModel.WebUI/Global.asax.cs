@@ -42,11 +42,18 @@ namespace LayeredBusinessModel.WebUI
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception ex = Server.GetLastError();
-
-            if (ex is HttpUnhandledException)
+            if (ex.InnerException as NoRecordException != null) //.innerException moet weg wanner overal de exceptions correct worden opgegooid
             {
-                Server.Transfer("Error.aspx");
+                //only NoRecordExceptions will be handled here
+                //Response.Redirect(string.Format("Error.aspx?aspxerrorpath={0}&nored=true", Request.Url.PathAndQuery));
             }
+            else
+            {
+                //all other exceptions will be handled here
+                Response.Redirect(string.Format("Error.aspx?aspxerrorpath={0}", Request.Url.PathAndQuery));
+            }
+            Server.ClearError();
+            
         }
 
         protected void Session_End(object sender, EventArgs e)

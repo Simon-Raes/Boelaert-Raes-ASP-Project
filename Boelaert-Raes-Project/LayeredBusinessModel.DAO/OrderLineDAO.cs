@@ -9,12 +9,17 @@ using LayeredBusinessModel.Domain;
 using System.Configuration;
 
 using System.Data.SqlTypes;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class OrderLineDAO : DAO
     {
-
+        /*
+         * Returns an orderline based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public OrderLine getOrderLineById(String orderLineId)
         {
             SqlCommand command = null;
@@ -37,7 +42,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get an orderline based on an ID", ex);
                 }
                 finally
                 {
@@ -50,10 +55,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineDAO getOrderLineById()");
             }
         }
 
+        /*
+         * Removes an ordeline
+         * Returns true if orderline was deleted, false if no orderline was deleted
+         * Throws DALException if something else went wrong
+         */
         public Boolean removeOrderLine(OrderLine orderLine)
         {
             SqlCommand command = null;
@@ -66,12 +76,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete orderline", ex);
                 }
                 finally
                 {
@@ -80,10 +93,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Returns a list with orderline from a certain order
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<OrderLine> getOrderLinesForOrder(Order order)
         {
             SqlCommand command = null;
@@ -115,7 +132,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the orderlines for a certain order", ex);
                 }
                 finally
                 {
@@ -128,10 +145,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineDAO getOrderLinesForOrder()");
             }
         }
 
+        /*
+         * Returns a list with orderlines from a certain customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<OrderLine> getOrderLinesForCustomer(Customer customer)
         {
             SqlCommand command = null;
@@ -160,7 +182,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the orderlines for a certain customer", ex);
                 }
                 finally
                 {
@@ -173,10 +195,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineDAO getOrderLinesForCustomer()");
             }
         }
 
+        /*
+         * Returns a list with active rent orderlines for a customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
         {
             SqlCommand command = null;
@@ -204,11 +231,11 @@ namespace LayeredBusinessModel.DAO
                             orderList.Add(createOrderLine(reader));
                         }
                         return orderList;
-                    }
+                    }                    
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the active rent orderlines for a customer", ex);
                 }
                 finally
                 {
@@ -221,7 +248,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineDAO getOrderLinesForCustomer()");
             }
         }
 
@@ -261,13 +288,16 @@ namespace LayeredBusinessModel.DAO
         //    }
         //}
 
-        /**Adds a new orderline to the database*/
+        /*
+         * Adds an orderline 
+         * Returns true if the orderline was inserted, false if no orderline was inserted
+         * Throws DALException if something else went wrong
+         */
         public Boolean addOrderLine(OrderLine orderline)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
                 command = new SqlCommand("INSERT INTO OrderLine" +
                 "(order_id, order_line_type_id, dvd_info_id, dvd_copy_id, startdate, enddate)" +
                 "VALUES(@order_id, @order_line_type_id, @dvd_info_id, null, @startdate, @enddate)", cnn);
@@ -292,12 +322,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-                    
+                    throw new DALException("Failed to add the orderline", ex);
                 }
                 finally
                 {
@@ -306,11 +339,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /**Updates an existing orderline*/
+        /*
+         * Updates an orderline 
+         * Returns true if the orderline was updated, false if no orderline was updates
+         * Throws DALException if something else went wrong
+         */
         public Boolean updateOrderLine(OrderLine orderline)
         {
             SqlCommand command = null;
@@ -345,12 +381,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to update orderline", ex);
                 }
                 finally
                 {
@@ -359,10 +398,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Returns a list with all the orderlines from a certain startdate
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<OrderLine> getAllOrderlinesForDvdFromStartdate(DvdInfo dvd, DateTime startdate)
         {
             SqlCommand command = null;
@@ -389,7 +432,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get orderlines from a certain startdate", ex);
                 }
                 finally
                 {
@@ -402,12 +445,16 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineDAO getAllOrderlinesForDvdFromStartdate()");
             }
         }
 
 
-        /*Delete ALL data from this table (for dev use)*/
+        /*
+         * Deletes all the orderlines
+         * Returns true if ordelines were deleted, false if no orderline were deleted
+         * Throws DALException if something else went wrong
+         */
         public Boolean clearTable()
         {
             SqlCommand command = null;
@@ -417,11 +464,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
+                    throw new DALException("Failed to delete orderlines", ex);
                 }
                 finally
                 {
@@ -430,7 +481,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 

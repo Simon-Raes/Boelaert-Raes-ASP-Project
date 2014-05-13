@@ -7,19 +7,23 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class DvdGenreDAO : DAO
     {
-
+        /*
+         * Adds a genre for a dvd
+         * Returns true if rows were inserted, false if no rows were inserted
+         * Throws a DALException if something else went wrong
+         */ 
         public Boolean addGenreForDvd(Genre genre, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
 
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
                 command = new SqlCommand("INSERT INTO DvdGenre " +
                 "(dvd_info_id, genre_id) " +
                 "VALUES (@dvd_info_id, @genre_id)", cnn);
@@ -29,12 +33,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to add genre for dvd", ex);
                 }
                 finally
                 {
@@ -43,10 +50,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
-
+        
+        /*
+         * Returns a list with ID from related dvd based on a genre
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<int> findRelatedDvdsBasedOnGenre(DvdInfo dvdInfo, int amount)
         {
             SqlCommand command = null;
@@ -73,7 +84,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get related dvd's based on genre", ex);
                 }
                 finally
                 {
@@ -86,7 +97,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdGenreDAO findRelatedDvdsBasedOnGenre()");
             }
         }
     }

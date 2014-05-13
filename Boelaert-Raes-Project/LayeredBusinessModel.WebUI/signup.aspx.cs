@@ -33,7 +33,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 SignUpModel signUpModel = new SignUpModel();
                 TokenService tokenService = new TokenService();
-                Token token = tokenService.getTokenByTokenId(token_id);
+                Token token = tokenService.getByID(token_id);       //Throws NoRecordException
 
                 if(signUpModel.completeSignUpProcess(token))
                 {

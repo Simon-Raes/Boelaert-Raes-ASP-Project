@@ -16,6 +16,7 @@ namespace LayeredBusinessModel.DAO
         /*
          * Returns a list with all the categories in it
          * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public List<Category> getAll() 
         {
@@ -39,14 +40,10 @@ namespace LayeredBusinessModel.DAO
                         }
                         return categoryList;
                     }
-                    else
-                    {
-                        throw new NoRecordException("No records were found - CategorieDAO getAll()");
-                    }
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CategorieDAO getAll()", ex);
+                    throw new DALException("Failed to get all the categories", ex);
                 }
                 finally
                 {
@@ -59,11 +56,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
+                throw new NoRecordException("No records were found - CategorieDAO getAll()");
             }            
-        }    
+        }
 
         /*
          * Returns a category based on an ID
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public Category getCategoryByID(String id)
         {
@@ -83,14 +83,10 @@ namespace LayeredBusinessModel.DAO
                         reader.Read();
                         return createCategory(reader);
                     }
-                    else
-                    {  
-                        throw new NoRecordException("No records were found - CategorieDAO getAll()");
-                    }
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CategorieDAO getCategoryByID() " + ex.Message, ex);
+                    throw new DALException("Failed to get a category based on an ID", ex);
                 }
                 finally
                 {
@@ -102,7 +98,8 @@ namespace LayeredBusinessModel.DAO
                     {
                         cnn.Close();
                     }
-                }
+                } 
+                throw new NoRecordException("No records were found - CategorieDAO getByID()");                   
             }
         }
 

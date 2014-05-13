@@ -83,7 +83,15 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);
                 categoryService = new CategoryService();
-                labelText = categoryService.getCategoryByID(category_id).name + " DVDs";
+
+                try
+                {                   
+                   labelText = categoryService.getByID(category_id).name + " DVDs";
+                }
+                catch (NoRecordException ex)
+                {
+                    labelText = "Sorry, we have spit out the entire database but found nothing...";
+                }
             }
             else if (year != null)
             {

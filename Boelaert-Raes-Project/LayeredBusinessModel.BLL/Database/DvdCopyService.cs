@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -50,7 +51,7 @@ namespace LayeredBusinessModel.BLL
         public List<DvdCopy> getAllFullyAvailableCopies(DvdInfo dvd, DateTime startdate)
         {
             DvdCopyDAO dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllFullyAvailableCopies(dvd, startdate);
+            return dvdCopyDAO.getAllFullyAvailableCopies(dvd, startdate);           
         }
 
         public void updateCopy(DvdCopy copy)

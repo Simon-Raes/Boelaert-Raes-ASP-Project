@@ -11,7 +11,7 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class TokenService
     {
-        public Token getTokenByTokenId(String token_id)
+        public Token getByID(String token_id)
         {
             TokenDAO tokenDAO = new TokenDAO();
             Token token = tokenDAO.getTokenByToken(token_id);
@@ -19,8 +19,7 @@ namespace LayeredBusinessModel.BLL.Database
             {
                 //token bestaat wel
                 //customer opvragen en in token plaatsen
-                CustomerService c = new CustomerService();
-                token.customer = c.getCustomerByID(token.customer.customer_id.ToString());
+                token.customer = new CustomerService().getByID(token.customer.customer_id.ToString());      //throws NoRecordException
             }
             return token;
         }

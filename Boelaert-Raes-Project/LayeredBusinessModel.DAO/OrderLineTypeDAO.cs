@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using CustomException;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,6 +11,11 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderLineTypeDAO : DAO
     {
+        /*
+         * Returns an Orderlinetype based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public OrderLineType getOrderLineTypeForID(String id)
         {
             SqlCommand command = null;
@@ -30,7 +36,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get orderlinetype based on an ID", ex);
                 }
                 finally
                 {
@@ -43,7 +49,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineType getOrderLineTypeForID()");
             }
         }
 

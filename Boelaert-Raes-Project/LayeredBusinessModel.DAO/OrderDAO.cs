@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
@@ -43,6 +44,11 @@ namespace LayeredBusinessModel.DAO
         //    return orderList;
         //}
 
+        /*
+         * Returns an order based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public Order getOrderWithId(String id)
         {
             SqlCommand command = null;
@@ -68,7 +74,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get an order based on an ID", ex);
                 }
                 finally
                 {
@@ -81,10 +87,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderDAO getOrderWithId()");
             }
         }
 
+        /*
+         * Updates an order
+         * Returns true if the order was updated, false if no order was updated
+         * Throws DALException if something else went wrong
+         */
         public Boolean updateOrder(Order order)
         {
             SqlCommand command = null;
@@ -104,12 +115,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to update order", ex);
                 }
                 finally
                 {
@@ -118,10 +132,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
+        /*
+         * Returns a list with orders for a customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<Order> getOrdersForCustomer(Customer customer)
         {
             SqlCommand command = null;
@@ -151,7 +169,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get the order for a customer", ex);
                 }
                 finally
                 {
@@ -164,15 +182,18 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderDAO getOrdersForCustomer()");
             }
         }
 
-        /*Inserts new order for customer and returns the order_id*/
+        /*
+         * Inserts an order for a customer
+         * Returns the ID from the newly added order
+         * Throws DALException if something else went wrong
+         */
         public int addOrderForCustomer(Customer customer)
         {
             SqlCommand command = null;
-            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("INSERT INTO Orders" +
@@ -191,6 +212,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
+                    throw new DALException("Failed to insert order for customer", ex);
                 }
                 finally
                 {
@@ -199,11 +221,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return -1;
             }
         }
 
-        /*Delete ALL data from this table*/
+        /*
+         * Deletes all the orders
+         * Returns true if orders where deleted, false if no orders were deleted
+         * Throws DALException if something else went wrong
+         */
         public Boolean clearTable()
         {
             SqlCommand command = null;
@@ -213,12 +238,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-                    
+                    throw new DALException("Failed to delete all orders", ex);                    
                 }
                 finally
                 {
@@ -227,7 +255,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 

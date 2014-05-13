@@ -11,6 +11,7 @@ using System.Net.Mail;
 using System.Net;
 
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -29,15 +30,22 @@ namespace LayeredBusinessModel.WebUI
                 divResetComplete.Visible = true;
 
                 PasswordResetModel passwordResetModel = new PasswordResetModel();
-                if(passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]))
+                try
                 {
-                    lblHeader.Text = "Password reset complete";
-                    lblStatusComplete.Text = "We've sent you an email with your new password.";
+                    if (passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]))        //Throws NoRecordException
+                    {
+                        lblHeader.Text = "Password reset complete";
+                        lblStatusComplete.Text = "We've sent you an email with your new password.";
+                    }
+                    else
+                    {
+                        lblHeader.Text = "An error occurred";
+                        lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
+                    }
                 }
-                else
+                catch (NoRecordException ex)
                 {
-                    lblHeader.Text = "An error occurred";
-                    lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
+                    int i = 0;
                 }
             }
             else

@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using CustomException;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -12,6 +13,8 @@ namespace LayeredBusinessModel.DAO
     {
         /*
          * Returs a DvdCopyType based on an ID
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public DvdCopyType getTypeForID(String id)
         {
@@ -35,7 +38,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get a type based on an ID", ex);
                 }
                 finally
                 {
@@ -48,12 +51,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdCopyTypeDAO getTypeForID()");
             }
         }
 
         /*
          * Returns a DvdCopyType based on a name
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public DvdCopyType getTypeByName(String name)
         {
@@ -77,7 +82,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get a type based on an ID", ex);
                 }
                 finally
                 {
@@ -90,7 +95,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdCopyTypeDAO getTypeByName()");
             }
         }
 

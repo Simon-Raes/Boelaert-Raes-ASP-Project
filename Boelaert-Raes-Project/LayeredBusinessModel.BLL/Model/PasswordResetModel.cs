@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.BLL.Model
             Boolean didReset = false;
 
             TokenService tokenService = new TokenService();
-            Token token = tokenService.getTokenByTokenId(token_id);
+            Token token = tokenService.getByID(token_id);           //Throws NoRecordException
             if (token != null)
             {
                 //give the user a new password

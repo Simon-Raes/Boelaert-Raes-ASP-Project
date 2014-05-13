@@ -6,21 +6,25 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
     public partial class Customers : System.Web.UI.Page
     {
-        private CustomerService customerService;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
-                customerService = new CustomerService();
-
-                gvBeer.DataSource = customerService.getAll();
-                gvBeer.DataBind();
+                try
+                {
+                    gvBeer.DataSource = new CustomerService().getAll();           //Throws NoRecordException
+                    gvBeer.DataBind();
+                }
+                catch(NoRecordException ex) 
+                {
+                    int i = 0;
+                }
             }
         }
     }

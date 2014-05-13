@@ -7,12 +7,15 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 namespace LayeredBusinessModel.DAO
 {
     public class DvdCopyDAO : DAO
     {
         /*
          * Returns a list of dvdcopies for a dvd
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)
         {
@@ -35,11 +38,11 @@ namespace LayeredBusinessModel.DAO
                             dvdCopies.Add(createDvdCopy(reader));
                         }
                         return dvdCopies;
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all copies for dvdinfo", ex);
                 }
                 finally
                 {
@@ -52,12 +55,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null; ;
+                throw new NoRecordException("No records were found - DvdCopyDAO getAllCopiesForDvdInfo()");
             }
         }
 
         /*
          *  Returns a dvdcopy based on an ID
+         *  Throws a NoRecordException if no records were found
+         *  Throws a DALException if something else went wrong
          */
         public DvdCopy getCopyWithId(String copy_id)
         {
@@ -85,7 +90,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get copy by ID", ex);
                 }
                 finally
                 {
@@ -98,21 +103,21 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdCopyDAO getCopyWithId()");
             }
         }
 
         /*
          *  Adds a dvdCopy for a dvd
-         *  Returns true if operation was successful, false if not
+         *  Returns true if insert was successful, false if no rows were inserted
+         *  Throws a DALException if something went wrong
          */
         public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
             SqlCommand command = null;
-
+            Boolean status = true;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                Boolean success = true;
                 Random rnd = new Random();
 
                 for (int i = 0; i < 12; i++) //add 12 copies
@@ -127,11 +132,13 @@ namespace LayeredBusinessModel.DAO
                     try
                     {
                         cnn.Open();
-                        command.ExecuteNonQuery();
+                        if (command.ExecuteNonQuery() == 0) {
+                            status = false;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        success = false;
+                        throw new DALException("Failed to insert coppies for dvd", ex);
                     }
                     finally
                     {
@@ -139,15 +146,17 @@ namespace LayeredBusinessModel.DAO
                         {
                             cnn.Close();
                         }
-                    }
+                    }                   
                 }
-                return success;
+                return status;
             }
         }
 
 
         /*
          * Returns a List of dvdCopyes based on a dvdInfo, a type(rent or buy) that are in stock
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something elsd went wrong
          */
         public List<DvdCopy> getAllInStockCopiesForDvdInfo(DvdInfo dvdInfo, DvdCopyType type)
         {
@@ -175,7 +184,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all in stock copies for dvdinfo", ex);
                 }
                 finally
                 {
@@ -188,7 +197,7 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdCopyDAO getAllInStockCopiesForDvdInfo()");
             }
         }
 
@@ -274,7 +283,8 @@ namespace LayeredBusinessModel.DAO
 
         /*
          * Updates a dvdCopy
-         * Returns true if operation was successful, false if not
+         * Returns true if copy was updated, false if no copy was updated
+         * Throws DALException if something else went wrong
          */
         public Boolean updateDvdCopy(DvdCopy copy)
         {
@@ -299,12 +309,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to update copy", ex);
                 }
                 finally
                 {
@@ -313,11 +326,16 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
         //update methode voor wanneer je geen volledig object kan gebruiken
+
+        /*
+         * Updates the stock-status for a copy
+         * Returns true if the copy was updated, false if no copy was updated
+         * Throws a DALException if something else went wrong
+         */ 
         public Boolean updateDvdCopyInStockStatus(DvdCopy dvdCopy, Boolean in_stock)
         {
             SqlCommand command = null;
@@ -330,12 +348,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to update copy stock-status", ex);
                 }
                 finally
                 {
@@ -344,11 +365,14 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 
-        /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/
+        /*
+         * Returns a list of all dvd copies that are available for the full 14 day period, starting today
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
+         */
         public List<DvdCopy> getAllFullyAvailableCopies(DvdInfo dvd, DateTime startdate)
         {
             SqlCommand command = null;
@@ -380,7 +404,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get fully available copies for dvdinfo", ex);
                 }
                 finally
                 {
@@ -393,11 +417,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - DvdCopyDAO getAllFullyAvailableCopies()");
             }
         }
 
-        /*Sets all copies back to in_stock = true*/
+        /*
+         * Sets all copies back to in_stock = true
+         * Returns true if all the copies were succelfully updated, false if no copies were updated
+         * Throws a DALException if something else went wrong
+         */
         public Boolean resetAllCopies()
         {
             SqlCommand command = null;
@@ -408,12 +436,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to reset all the copies", ex);
                 }
                 finally
                 {
@@ -422,7 +453,6 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return false;
             }
         }
 

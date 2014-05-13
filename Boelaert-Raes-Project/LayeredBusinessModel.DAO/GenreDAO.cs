@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class GenreDAO : DAO
     {
+        /*
+         * Returns a list with all the genres
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<Genre> getGenres()
         {
             SqlCommand command = null;
@@ -32,11 +38,11 @@ namespace LayeredBusinessModel.DAO
                             genrelist.Add(createGenre(reader));
                         }
                         return genrelist;
-                    }
+                    }                 
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all the genres", ex);
                 }
                 finally
                 {
@@ -49,11 +55,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - GenreDAO getGenres()");
             }
         }
 
-
+        /*
+         * Returns a list with all the genres for a certain category
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<Genre> getGenresForCategory(String categoryID)
         {
             SqlCommand command = null;
@@ -79,7 +89,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all the genres for a certain category", ex);
                 }
                 finally
                 {
@@ -92,10 +102,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - GenreDAO getGenresForCategory()");
             }
         }
 
+        /*
+         * Returns a list with all the genres for a certain dvd
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */ 
         public List<Genre> getGenresForDvd(String dvd_id)
         {
             SqlCommand command = null;
@@ -124,7 +139,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get all the genres for a certain dvd", ex);
                 }
                 finally
                 {
@@ -137,9 +152,15 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - GenreDAO getGenresForDvd()");
             }
         }
+
+        /*
+         * Returns a genre based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public Genre getGenre(String genreID)
         {
             SqlCommand command = null;
@@ -161,13 +182,16 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get a genre based on an ID", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return null;
+                throw new NoRecordException("No records were found - GenreDAO getGenre()");
             }
         }
 

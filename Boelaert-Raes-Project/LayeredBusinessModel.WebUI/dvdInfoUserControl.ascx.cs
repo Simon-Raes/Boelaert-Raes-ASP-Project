@@ -119,9 +119,6 @@ namespace LayeredBusinessModel.WebUI
             CustomEvents ce = new CustomEvents();
             ce.dvd_info_id = id;
             ChoiceComplete(this, ce);
-
-            
-
         }
 
         protected void btnRent_Click(object sender, EventArgs e)

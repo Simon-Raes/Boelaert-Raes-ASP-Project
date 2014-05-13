@@ -24,14 +24,14 @@ namespace LayeredBusinessModel.BLL
         {
             List<Customer> customerList = new List<Customer>();
             customerDAO = new CustomerDAO();
-            customerList = customerDAO.getAllCustomers();
+            customerList = customerDAO.getAll();
             return customerList;  
         }
 
-        public Customer getCustomerByID(int id)
+        public Customer getCustomerByID(String id)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerByID(id);
+            return customerDAO.getByID(id);
         }
 
         /*
@@ -40,7 +40,7 @@ namespace LayeredBusinessModel.BLL
         public Customer getCustomerWithEmail(String email)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerByEmail(email);
+            return customerDAO.getByEmail(email);
         }
 
         /*
@@ -50,7 +50,7 @@ namespace LayeredBusinessModel.BLL
         public Boolean updateCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.updateCustomer(customer);
+            return customerDAO.update(customer);
         }
 
         /*
@@ -60,7 +60,7 @@ namespace LayeredBusinessModel.BLL
         public Boolean addCustomer(Customer customer)
         {
             customerDAO = new CustomerDAO();
-            return customerDAO.addCustomer(customer);
+            return customerDAO.add(customer);
         }
 
         public Boolean verrifyCustomer(Customer customer, Token strToken)
@@ -73,7 +73,7 @@ namespace LayeredBusinessModel.BLL
             {
                 customer.isVerified = true;
                 customerDAO = new CustomerDAO();
-                if (customerDAO.verrifyCustomer(customer))
+                if (customerDAO.verrify(customer))
                 {
                     TokenService t = new TokenService();
                     t.deleteToken(strToken);

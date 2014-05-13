@@ -10,7 +10,7 @@
 namespace LayeredBusinessModel.WebUI {
     
     
-    public partial class Error {
+    public partial class NoResult {
         
         /// <summary>
         /// lblErrorMessage control.

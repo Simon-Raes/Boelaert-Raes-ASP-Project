@@ -10,7 +10,7 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class OrderLineTypeService
     {
-        public OrderLineType getOrderLineTypeByID(int id)
+        public OrderLineType getOrderLineTypeByID(String id)
         {
             OrderLineTypeDAO orderLineTypeDAO = new OrderLineTypeDAO();
             return orderLineTypeDAO.getOrderLineTypeForID(id);

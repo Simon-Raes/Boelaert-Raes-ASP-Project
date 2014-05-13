@@ -12,6 +12,7 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderDAO : DAO
     {
+
         //public List<Order> getAll()
         //{
         //    cnn = new SqlConnection(sDatabaseLocatie);
@@ -44,11 +45,12 @@ namespace LayeredBusinessModel.DAO
 
         public Order getOrderWithId(String id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                Order order = null;
-
-                SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
                     "Join Orderstatus " +
                     "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
                     "WHERE order_id = @order_id", cnn);
@@ -57,12 +59,12 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Read();
-                    order = createOrder(reader);
-
-                    reader.Close();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createOrder(reader);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -70,18 +72,26 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return order;
+                return null;
             }
         }
 
-        public void updateOrder(Order order)
+        public Boolean updateOrder(Order order)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("UPDATE Orders " +
+                command = new SqlCommand("UPDATE Orders " +
                 "SET customer_id = @customer_id, " +
                 "orderstatus_id = @orderstatus_id, " +
                 "date = @date " +
@@ -94,8 +104,8 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Close();
+                    command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -103,18 +113,23 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         public List<Order> getOrdersForCustomer(Customer customer)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<Order> orderList = new List<Order>();
-
-                SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
                     "Join Orderstatus " +
                     "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
                     "WHERE customer_id = @customer_id", cnn);
@@ -123,14 +138,16 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderList.Add(createOrder(reader));
+                        List<Order> orderList = new List<Order>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrder(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
                 }
                 catch (Exception ex)
                 {
@@ -138,19 +155,27 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
         /*Inserts new order for customer and returns the order_id*/
         public int addOrderForCustomer(Customer customer)
         {
-            int orderID = -1;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("INSERT INTO Orders" +
+                command = new SqlCommand("INSERT INTO Orders" +
                 "(orderstatus_id, customer_id, date) " +
                 "OUTPUT INSERTED.order_id " +
                 //todo: left the date like this for now, seems to work in both versions of the site, don't want to risk breaking it
@@ -162,52 +187,59 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    orderID = (int)command.ExecuteScalar();
+                    return (int)command.ExecuteScalar();
                 }
                 catch (Exception ex)
                 {
-                    //return -1 on error
-                    orderID = -1;
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderID;
+                return -1;
             }
         }
 
         /*Delete ALL data from this table*/
-        public void clearTable()
+        public Boolean clearTable()
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM Orders", cnn);
+                command = new SqlCommand("DELETE FROM Orders", cnn);
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
+                    
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         private Order createOrder(SqlDataReader reader)
         {
-            Order order = new Order
+            return new Order
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
-                orderstatus = new OrderStatusDAO().getOrderStatusByID(Convert.ToInt32(reader["orderstatus_id"])),
-                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader["customer_id"])),
+                orderstatus = new OrderStatusDAO().getOrderStatusByID(reader["orderstatus_id"].ToString()),
+                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),
                 date = Convert.ToDateTime(reader["date"])
             };
-            return order;
         }
     }
 }

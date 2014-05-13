@@ -11,25 +11,23 @@ namespace LayeredBusinessModel.DAO
     public class OrderStatusDAO : DAO
     {
 
-        public OrderStatus getOrderStatusByID(int id) 
+        public OrderStatus getOrderStatusByID(String id) 
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderStatus WHERE orderstatus_id = @orderstatus_id", cnn);
+                command = new SqlCommand("SELECT * FROM OrderStatus WHERE orderstatus_id = @orderstatus_id", cnn);
                 command.Parameters.Add(new SqlParameter("@orderstatus_id", id));
                 try
                 {
-                    OrderStatus orderstatus = null;
-
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if(reader.HasRows)
                     {
-                        orderstatus = createOrderStatus(reader);
-                    }   
-                    reader.Close();
-                    return orderstatus;
+                        reader.Read();
+                        return createOrderStatus(reader);
+                    }  
                 }
                 catch (Exception ex)
                 {
@@ -37,7 +35,14 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }        
@@ -45,12 +50,11 @@ namespace LayeredBusinessModel.DAO
 
         private OrderStatus createOrderStatus(SqlDataReader reader)
         {
-            OrderStatus orderstatus = new OrderStatus
+            return new OrderStatus
             {
                 id = Convert.ToInt16(reader["orderstatus_id"]),
                 name = reader["name"].ToString()
             };
-            return orderstatus;
         }
  
     }

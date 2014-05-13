@@ -12,10 +12,16 @@ namespace LayeredBusinessModel.BLL.Database
     {
         private DvdCopyTypeDAO typeDAO; 
 
-        public DvdCopyType getTypeForId(int id)
+        public DvdCopyType getTypeForID(String id)
         {
             typeDAO = new DvdCopyTypeDAO();
             return typeDAO.getTypeForID(id);
+        }
+
+        public DvdCopyType getTypeByName(String name)
+        {
+            typeDAO = new DvdCopyTypeDAO();
+            return typeDAO.getTypeByName(name);
         }
 
     }

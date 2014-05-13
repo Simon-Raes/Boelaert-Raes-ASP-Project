@@ -17,14 +17,15 @@ namespace LayeredBusinessModel.DAO
      */
     public class CustomerDAO : DAO
     {
-        private SqlCommand command;
-        private SqlDataReader reader;
 
         /*
          *  Returns a list with all the customers 
          */
-        public List<Customer> getAllCustomers()
+        public List<Customer> getAll()
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM Customers", cnn);            
@@ -61,8 +62,14 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public Customer getCustomerByID(int id)
+        /*
+         * Returns a Customer based on an ID
+         */
+        public Customer getByID(String id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
@@ -100,8 +107,11 @@ namespace LayeredBusinessModel.DAO
         /*
          *  Returns a customer based on an emailaddress
          */
-        public Customer getCustomerByEmail(string email)
+        public Customer getByEmail(String email)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
@@ -140,8 +150,10 @@ namespace LayeredBusinessModel.DAO
          *      Updates a customer.
          *      Returns true if succeeded, false if not
          */
-        public Boolean updateCustomer(Customer customer)
+        public Boolean update(Customer customer)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("UPDATE Customers SET name = @name, email = @email, password = @password, number_of_visits = @number_of_visits, street = @street, zip = @zip, municipality=@municipality,isVerrified=@verrified WHERE customer_id = @id", cnn);
@@ -179,8 +191,10 @@ namespace LayeredBusinessModel.DAO
          *      Adds a new customer.
          *      Returns true if succeeded, false if not
          */
-        public Boolean addCustomer(Customer customer)
+        public Boolean add(Customer customer)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("INSERT INTO Customers (name,email,password,number_of_visits,street,zip,municipality,isVerrified)" +
@@ -214,8 +228,10 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        public Boolean verrifyCustomer(Customer customer)
+        public Boolean verrify(Customer customer)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
@@ -247,8 +263,7 @@ namespace LayeredBusinessModel.DAO
          */
         private Customer createCustomer(SqlDataReader reader)
         {
-            //gebruik van object initializer ipv constructor
-            Customer customer = new Customer
+            return new Customer
             {
                 customer_id = Convert.ToInt32(reader["customer_id"]),
                 name = Convert.ToString(reader["name"]),
@@ -260,7 +275,6 @@ namespace LayeredBusinessModel.DAO
                 zip = Convert.ToString(reader["zip"]),
                 isVerified = Convert.ToBoolean(reader["isVerrified"])
             };
-            return customer;
         }
 
     }

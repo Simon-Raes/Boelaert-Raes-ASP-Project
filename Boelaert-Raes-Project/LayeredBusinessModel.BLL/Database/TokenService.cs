@@ -20,7 +20,7 @@ namespace LayeredBusinessModel.BLL.Database
                 //token bestaat wel
                 //customer opvragen en in token plaatsen
                 CustomerService c = new CustomerService();
-                token.customer = c.getCustomerByID(token.customer.customer_id);
+                token.customer = c.getCustomerByID(token.customer.customer_id.ToString());
             }
             return token;
         }

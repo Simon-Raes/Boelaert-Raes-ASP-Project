@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.Security;
 using System.Web.SessionState;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -40,7 +41,12 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Application_Error(object sender, EventArgs e)
         {
-                    
+            Exception ex = Server.GetLastError();
+
+            if (ex is HttpUnhandledException)
+            {
+                Server.Transfer("Error.aspx");
+            }
         }
 
         protected void Session_End(object sender, EventArgs e)
@@ -52,5 +58,6 @@ namespace LayeredBusinessModel.WebUI
         {
 
         }
+
     }
 }

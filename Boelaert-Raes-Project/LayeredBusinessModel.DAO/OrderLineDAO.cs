@@ -14,26 +14,26 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderLineDAO : DAO
     {
+
         public OrderLine getOrderLineById(String orderLineId)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                OrderLine orderLine = null;
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
+                command = new SqlCommand("SELECT * FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
                 command.Parameters.Add(new SqlParameter("@orderline_id", orderLineId));
 
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderLine = createOrderLine(reader);
+                        reader.Read();
+                        return createOrderLine(reader);
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -41,46 +41,56 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderLine;
+                return null;
             }
         }
 
         public Boolean removeOrderLine(OrderLine orderLine)
         {
-            Boolean status = false;
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
+                command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
                 command.Parameters.Add(new SqlParameter("@orderline_id", orderLine.orderline_id));
 
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    status = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    status = false;
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return status;
+                return false;
             }
         }
 
         public List<OrderLine> getOrderLinesForOrder(Order order)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<OrderLine> orderList = new List<OrderLine>();
-
-                SqlCommand command = new SqlCommand("SELECT orderline_id, order_id, OrderLine.order_line_type_id, OrderLine.dvd_info_id, dvd_copy_id, " +
+                command = new SqlCommand("SELECT orderline_id, order_id, OrderLine.order_line_type_id, OrderLine.dvd_info_id, dvd_copy_id, " +
                     "startdate, enddate, DvdInfo.name as dvd_info_name, OrderLineType.name as order_line_type_name FROM OrderLine " +
                     "JOIN DvdInfo " +
                     "ON DvdInfo.dvd_info_id = OrderLine.dvd_info_id " +
@@ -92,15 +102,16 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {                        
-                        orderList.Add(createOrderLineWithNames(reader));
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<OrderLine> orderList = new List<OrderLine>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrderLineWithNames(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -108,19 +119,26 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
         public List<OrderLine> getOrderLinesForCustomer(Customer customer)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<OrderLine> orderList = new List<OrderLine>();
-
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderLine " +
+                command = new SqlCommand("SELECT * FROM OrderLine " +
                     "INNER JOIN Orders " +
                     "ON OrderLine.order_id = Orders.order_id " +
                     "WHERE customer_id = @customer_id", cnn);
@@ -129,15 +147,16 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderList.Add(createOrderLine(reader));
+                        List<OrderLine> orderList = new List<OrderLine>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrderLine(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -145,42 +164,47 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
         public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<OrderLine> orderList = new List<OrderLine>();
-
-
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderLine " +
-
+                command = new SqlCommand("SELECT * FROM OrderLine " +
                     "JOIN Orders " +
                     "ON Orders.order_id = OrderLine.order_id " +
                     "WHERE customer_id = @customer_id AND " +
                     "OrderLine.order_line_type_id = 1 AND " +
                     "enddate > getdate() "
                     , cnn);
-
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderList.Add(createOrderLine(reader));
+                        List<OrderLine> orderList = new List<OrderLine>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrderLine(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -188,9 +212,16 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
@@ -233,11 +264,11 @@ namespace LayeredBusinessModel.DAO
         /**Adds a new orderline to the database*/
         public Boolean addOrderLine(OrderLine orderline)
         {
-            Boolean didComplete = false;
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
 
-                SqlCommand command = new SqlCommand("INSERT INTO OrderLine" +
+                command = new SqlCommand("INSERT INTO OrderLine" +
                 "(order_id, order_line_type_id, dvd_info_id, dvd_copy_id, startdate, enddate)" +
                 "VALUES(@order_id, @order_line_type_id, @dvd_info_id, null, @startdate, @enddate)", cnn);
 
@@ -262,28 +293,30 @@ namespace LayeredBusinessModel.DAO
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    didComplete = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    didComplete = false;
+                    
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return didComplete;
+                return false;
             }
         }
 
         /**Updates an existing orderline*/
         public Boolean updateOrderLine(OrderLine orderline)
         {
-            Boolean didComplete = false;
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("UPDATE OrderLine " +
+                command = new SqlCommand("UPDATE OrderLine " +
                 "SET order_line_type_id = @order_line_type_id, " +
                 "dvd_info_id = @dvd_info_id, " +
                 "dvd_copy_id = @dvd_copy_id, " +
@@ -313,42 +346,46 @@ namespace LayeredBusinessModel.DAO
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    didComplete = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    didComplete = false;
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return didComplete;
+                return false;
             }
         }
 
         public List<OrderLine> getAllOrderlinesForDvdFromStartdate(DvdInfo dvd, DateTime startdate)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<OrderLine> orderList = new List<OrderLine>();
-
-                SqlCommand command = new SqlCommand("select * from OrderLine where dvd_info_id = @dvd_info_id and order_line_type_id = 1 and (	(startdate <= @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >=  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >=  @startdate and startdate < DATEADD(dd,14,getdate()))	) AND dvd_copy_id IS NOT NULL order by dvd_copy_id, startdate, enddate", cnn);
+                command = new SqlCommand("select * from OrderLine where dvd_info_id = @dvd_info_id and order_line_type_id = 1 and (	(startdate <= @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >=  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >=  @startdate and startdate < DATEADD(dd,14,getdate()))	) AND dvd_copy_id IS NOT NULL order by dvd_copy_id, startdate, enddate", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
                 command.Parameters.Add(new SqlParameter("@startdate", startdate));
 
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderList.Add(createOrderLine(reader));
+                        List<OrderLine> orderList = new List<OrderLine>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrderLine(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -356,48 +393,56 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
 
-        
-
-
         /*Delete ALL data from this table (for dev use)*/
-        public void clearTable()
+        public Boolean clearTable()
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM OrderLine", cnn);
+                command = new SqlCommand("DELETE FROM OrderLine", cnn);
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         private OrderLine createOrderLine(SqlDataReader reader)
         {
-            OrderLine order;
-
             if (reader["dvd_copy_id"] == DBNull.Value)
             {
-                order = new OrderLine
+                return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
-                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
@@ -405,32 +450,28 @@ namespace LayeredBusinessModel.DAO
             }
             else
             {
-                order = new OrderLine
+                return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
-                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };
             }
-
-            return order;
         }
 
         private OrderLine createOrderLineWithNames(SqlDataReader reader)
         {
-            OrderLine order;
-
             if (reader["dvd_copy_id"] == DBNull.Value)
             {
-                order = new OrderLine
+                return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
-                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
@@ -438,21 +479,17 @@ namespace LayeredBusinessModel.DAO
             }
             else
             {
-                order = new OrderLine
+                return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
-                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(Convert.ToInt32(reader["order_line_type_id"])),
+                    orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
                 };
             }
-
-            return order;
         }
-
-
     }
 }

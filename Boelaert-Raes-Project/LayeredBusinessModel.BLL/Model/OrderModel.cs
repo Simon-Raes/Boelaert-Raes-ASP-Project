@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.BLL
             OrderService orderService = new OrderService();
 
             //set the order status to PAID
-            selectedOrder.orderstatus = new OrderStatusService().getOrderstatusByID(2);
+            selectedOrder.orderstatus = new OrderStatusService().getOrderstatusByID("2");
             orderService.updateOrder(selectedOrder);
 
             //assign copies to the orderlines

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
+using LayeredBusinessModel.BLL.Database;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -34,13 +35,15 @@ namespace LayeredBusinessModel.BLL
         public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllInStockRentCopiesForDvdInfo(dvdInfo);
+            DvdCopyType type = new DvdCopyTypeService().getTypeByName("Verhuur");
+            return dvdCopyDAO.getAllInStockCopiesForDvdInfo(dvdInfo,type);
         }
 
         public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.getAllInStockBuyCopiesForDvdInfo(dvdInfo);
+            DvdCopyType type = new DvdCopyTypeService().getTypeByName("Verkoop");
+            return dvdCopyDAO.getAllInStockCopiesForDvdInfo(dvdInfo, type);
         }
 
         /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/

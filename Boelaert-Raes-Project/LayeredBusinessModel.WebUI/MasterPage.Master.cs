@@ -185,7 +185,7 @@ namespace LayeredBusinessModel.WebUI
                     divSideBar.Controls.Add(categoryDiv);
 
 
-                    List<Genre> genres = new GenreService().getGenresForCategory(c.category_id);
+                    List<Genre> genres = new GenreService().getGenresForCategory(c.category_id.ToString());
                     foreach (Genre g in genres)
                     {
                         //create sidebar genre item
@@ -201,8 +201,7 @@ namespace LayeredBusinessModel.WebUI
             }
             catch (Exception ex)
             {
-                int i = 0;
-                i +=1;
+                
             }
             
         }

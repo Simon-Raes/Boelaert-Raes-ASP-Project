@@ -38,7 +38,7 @@ namespace LayeredBusinessModel.BLL
             if(dvd!=null)
             {
                 GenreService g = new GenreService();
-                dvd.genres = g.getGenresForDvd(Convert.ToInt32(id));
+                dvd.genres = g.getGenresForDvd(id);
             }            
 
             return dvd;

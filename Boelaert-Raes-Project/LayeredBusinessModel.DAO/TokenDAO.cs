@@ -13,25 +13,28 @@ namespace LayeredBusinessModel.DAO
 {
     public class TokenDAO : DAO
     {
+
         public List<Token> getTokensForCustomer(Customer customer) {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Tokens where customer_id=@customer_id", cnn);
+                command = new SqlCommand("SELECT * FROM Tokens where customer_id=@customer_id", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-
-                List<Token> tokens = new List<Token>();
+                
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        Token token = createToken(reader);
-                        token.customer = customer;
-                        tokens.Add(token);
+                        List<Token> tokens = new List<Token>();
+                        while (reader.Read())
+                        {
+                            tokens.Add(createToken(reader));
+                        }
+                        return tokens;
                     }
-                    reader.Close();
-                    return tokens;
                 }
                 catch (Exception ex)
                 {
@@ -39,7 +42,14 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }
@@ -47,22 +57,22 @@ namespace LayeredBusinessModel.DAO
 
         public Token getTokenByToken(String token)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Tokens WHERE token = @token", cnn);
+                command = new SqlCommand("SELECT * FROM Tokens WHERE token = @token", cnn);
                 command.Parameters.Add(new SqlParameter("@token", token));
 
-                Token t = null;
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if(reader.HasRows)
                     {
-                        t = createToken(reader);
-                    }
-                    reader.Close();
-                    return t;
+                        reader.Read();                    
+                        return createToken(reader);
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -70,7 +80,14 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return null;
             }
@@ -101,9 +118,10 @@ namespace LayeredBusinessModel.DAO
 
         public Boolean removeToken(Token token)
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
+                command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
                 command.Parameters.Add(new SqlParameter("@token", token.token));
                 try
                 {
@@ -117,16 +135,20 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return false;
             }
         }
 
         public Boolean removeTokensForCustomer(Customer customer) {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE customer_id = @customer_id", cnn);
+                command = new SqlCommand("DELETE FROM Tokens WHERE customer_id = @customer_id", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id",  customer.customer_id));
                 try
                 {
@@ -140,7 +162,10 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return false;
             }
@@ -148,10 +173,11 @@ namespace LayeredBusinessModel.DAO
 
         public Boolean addToken(Token token) 
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
 
-                SqlCommand command = new SqlCommand("INSERT INTO Tokens (tokenstatus_id,customer_id,token,timestamp)" +
+                command = new SqlCommand("INSERT INTO Tokens (tokenstatus_id,customer_id,token,timestamp)" +
                 "VALUES(@tokenstatus_id,@customer_id,@token,@timestamp)", cnn);
 
                 command.Parameters.Add(new SqlParameter("@tokenstatus_id", getTokenStatusID(token.status)));
@@ -171,7 +197,10 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
                 return false;
             }
@@ -179,14 +208,13 @@ namespace LayeredBusinessModel.DAO
 
         protected Token createToken(SqlDataReader reader)
         {
-            Token t = new Token
+            return new Token
             {
                 status = getTokenStatus(Convert.ToInt16(reader["tokenstatus_id"])),
                 token = reader["token"].ToString(),
                 customer = makeCustomer(Convert.ToInt16(reader["customer_id"])),
                 timestamp = Convert.ToDateTime(reader["timestamp"])  
             };
-            return t;
         }
 
         private TokenStatus getTokenStatus(int i)

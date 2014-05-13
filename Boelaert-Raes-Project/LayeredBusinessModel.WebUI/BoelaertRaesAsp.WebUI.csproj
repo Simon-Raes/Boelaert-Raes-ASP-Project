@@ -69,6 +69,7 @@
     <Content Include="DLL\Arcabase.EID.SDK.dll" />
     <Content Include="EIDCommunicationService.asmx" />
     <Content Include="Error.aspx" />
+    <Content Include="NoResult.aspx" />
     <Content Include="NotYetVerified.aspx" />
     <Content Include="Overview.aspx" />
     <Content Include="Orders.aspx" />
@@ -132,6 +133,13 @@
     </Compile>
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NoResult.aspx.cs">
+      <DependentUpon>NoResult.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NoResult.aspx.designer.cs">
+      <DependentUpon>NoResult.aspx</DependentUpon>
     </Compile>
     <Compile Include="NotYetVerified.aspx.cs">
       <DependentUpon>NotYetVerified.aspx</DependentUpon>

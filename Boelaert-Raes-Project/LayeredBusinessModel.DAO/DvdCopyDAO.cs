@@ -11,26 +11,31 @@ namespace LayeredBusinessModel.DAO
 {
     public class DvdCopyDAO : DAO
     {
+        /*
+         * Returns a list of dvdcopies for a dvd
+         */
         public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)
         {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                List<DvdCopy> dvdCopies = new List<DvdCopy>();
+            SqlCommand command = null;
+            SqlDataReader reader = null;
 
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id", cnn);
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {       
+                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        dvdCopies.Add(createDvdCopy(reader));
-                    }
-
-                    reader.Close();
-
+                        List<DvdCopy> dvdCopies = new List<DvdCopy>();
+                        while (reader.Read())
+                        {
+                            dvdCopies.Add(createDvdCopy(reader));
+                        }
+                        return dvdCopies;
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -38,33 +43,45 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return dvdCopies;
+                return null; ;
             }
         }
 
+        /*
+         *  Returns a dvdcopy based on an ID
+         */
         public DvdCopy getCopyWithId(String copy_id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                DvdCopy dvdCopy = new DvdCopy();
-
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_copy_id = @dvd_copy_id", cnn);
+                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_copy_id = @dvd_copy_id", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_copy_id", copy_id));
 
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        dvdCopy = createDvdCopy(reader);
+                        DvdCopy dvdCopy = new DvdCopy();
+                        while (reader.Read())
+                        {
+                            dvdCopy = createDvdCopy(reader);
+                        }
+                        return dvdCopy;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -72,23 +89,35 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return dvdCopy;
+                return null;
             }
         }
 
+        /*
+         *  Adds a dvdCopy for a dvd
+         *  Returns true if operation was successful, false if not
+         */
         public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
-            Boolean success = true;
+            SqlCommand command = null;
 
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
+                Boolean success = true;
                 Random rnd = new Random();
 
                 for (int i = 0; i < 12; i++) //add 12 copies
                 {
-                    SqlCommand command = new SqlCommand("INSERT INTO DvdCopy (dvd_info_id,copy_type_id,serialnumber,note,in_stock)" +
+                    command = new SqlCommand("INSERT INTO DvdCopy (dvd_info_id,copy_type_id,serialnumber,note,in_stock)" +
                     "VALUES(@dvd_info_id,@copy_type_id,@serialnumber,@note,@in_stock)", cnn);
                     command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                     command.Parameters.Add(new SqlParameter("@copy_type_id", i < 10 ? 2 : 1)); //insert 10 buy copies and 2 rent copies
@@ -99,8 +128,6 @@ namespace LayeredBusinessModel.DAO
                     {
                         cnn.Open();
                         command.ExecuteNonQuery();
-
-
                     }
                     catch (Exception ex)
                     {
@@ -108,34 +135,87 @@ namespace LayeredBusinessModel.DAO
                     }
                     finally
                     {
-                        cnn.Close();
+                        if (cnn != null)
+                        {
+                            cnn.Close();
+                        }
                     }
                 }
-
                 return success;
             }
         }
 
+
+        /*
+         * Returns a List of dvdCopyes based on a dvdInfo, a type(rent or buy) that are in stock
+         */
+        public List<DvdCopy> getAllInStockCopiesForDvdInfo(DvdInfo dvdInfo, DvdCopyType type)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = @type_id AND in_stock = 1;", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@type_id", type.id));
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdCopy> dvdCopies = new List<DvdCopy>();
+                        while (reader.Read())
+                        {
+                            dvdCopies.Add(createDvdCopy(reader));
+                        }
+                        return dvdCopies;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                return null;
+            }
+        }
+
+        /*
+         * Returns a List with dvdCopies for a certain dvdInfo that are in stock and for rent
+         */
+        /*
         public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
         {
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<DvdCopy> dvdCopies = new List<DvdCopy>();
-
                 //is hier nog met hardcoded type_id
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 1 AND in_stock = 1;", cnn);
+                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 1 AND in_stock = 1;", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        dvdCopies.Add(createDvdCopy(reader));
+                        List<DvdCopy> dvdCopies = new List<DvdCopy>();
+                        while (reader.Read())
+                        {
+                            dvdCopies.Add(createDvdCopy(reader));
+                        }
+                        return dvdCopies;
                     }
-
-                    reader.Close();
 
                 }
                 catch (Exception ex)
@@ -144,9 +224,16 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return dvdCopies;
+                return null;
             }
         }
 
@@ -183,15 +270,23 @@ namespace LayeredBusinessModel.DAO
                 return dvdCopies;
             }
         }
+         * */
 
-        public void updateDvdCopy(DvdCopy copy)
+        /*
+         * Updates a dvdCopy
+         * Returns true if operation was successful, false if not
+         */
+        public Boolean updateDvdCopy(DvdCopy copy)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
 
                 //todo: alternatief om deze zielige code mee te vervangen
+                //wat bedoel je hiermee? 
 
-                SqlCommand command = new SqlCommand("UPDATE DvdCopy " +
+                command = new SqlCommand("UPDATE DvdCopy " +
                 "SET dvd_info_id = @dvd_info_id, copy_type_id = @copy_type_id, serialnumber = @serialnumber, note = @note, in_stock = @in_stock "+
                 "WHERE dvd_copy_id = @dvd_copy_id", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", copy.dvdinfo.dvd_info_id));
@@ -205,47 +300,63 @@ namespace LayeredBusinessModel.DAO
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         //update methode voor wanneer je geen volledig object kan gebruiken
-        public void updateDvdCopyInStockStatus(DvdCopy dvdCopy, Boolean in_stock)
+        public Boolean updateDvdCopyInStockStatus(DvdCopy dvdCopy, Boolean in_stock)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("UPDATE DvdCopy SET in_stock = @in_stock WHERE dvd_copy_id = @dvd_copy_id", cnn);
+                command = new SqlCommand("UPDATE DvdCopy SET in_stock = @in_stock WHERE dvd_copy_id = @dvd_copy_id", cnn);
                 command.Parameters.Add(new SqlParameter("@in_stock", in_stock));
                 command.Parameters.Add(new SqlParameter("@dvd_copy_id", dvdCopy.dvd_copy_id));
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         /**Returns a list of all dvd copies that are available for the full 14 day period, starting today*/
         public List<DvdCopy> getAllFullyAvailableCopies(DvdInfo dvd, DateTime startdate)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                List<DvdCopy> orderList = new List<DvdCopy>();
-                SqlCommand command = new SqlCommand("SELECT * from DvdCopy " +
+            {                
+                command = new SqlCommand("SELECT * from DvdCopy " +
                 "WHERE DvdCopy.dvd_info_id = @dvd_info_id AND " +
                 "DvdCopy.copy_type_id = 1 AND " +
                 "DvdCopy.dvd_copy_id NOT IN " +
@@ -256,15 +367,16 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderList.Add(createDvdCopy(reader));
+                        List<DvdCopy> orderList = new List<DvdCopy>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createDvdCopy(reader));
+                        }
+                        return orderList;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -272,47 +384,59 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return orderList;
+                return null;
             }
         }
 
         /*Sets all copies back to in_stock = true*/
-        public void resetAllCopies()
+        public Boolean resetAllCopies()
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("UPDATE DvdCopy SET in_stock = 1;", cnn);
+                command = new SqlCommand("UPDATE DvdCopy SET in_stock = 1;", cnn);
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-
+                    return true;
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         private DvdCopy createDvdCopy(SqlDataReader reader)
         {
-            DvdCopy dvdCopy = new DvdCopy
+            return new DvdCopy
             {
                 dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
                 dvdinfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
-                type = new DvdCopyTypeDAO().getTypeForID(Convert.ToInt32(reader["copy_type_id"])),
+                type = new DvdCopyTypeDAO().getTypeForID(reader["copy_type_id"].ToString()),
                 serialnumber = Convert.ToString(reader["serialnumber"]),
                 note = Convert.ToString(reader["note"]),
                 in_stock = Convert.ToBoolean(reader["in_stock"])
             };
-
-            return dvdCopy;
         }
     }
 }

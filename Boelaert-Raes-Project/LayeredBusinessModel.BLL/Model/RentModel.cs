@@ -175,7 +175,7 @@ namespace LayeredBusinessModel.BLL.Model
             DvdCopyService dvdCopyService = new DvdCopyService();
             //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
             List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(dvd, startDate);
-            if(dvdCopies.Count>0)
+            if(dvdCopies !=null && dvdCopies.Count>0)
             {
                 return true;
             }

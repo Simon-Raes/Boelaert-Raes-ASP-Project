@@ -327,7 +327,7 @@ namespace LayeredBusinessModel.WebUI
                     //check if the user can still rent additional items
                     if (numberOfCurrentlyRentedItems < 5)
                     {
-                        if (shoppingCartService.addItemToCart(user, Convert.ToInt32(Request.QueryString["id"]), startdate, enddate))
+                        if (shoppingCartService.addItemToCart(user, Request.QueryString["id"].ToString(), startdate, enddate))
                         {
                             ////all good
                             ////todo:delete this popup
@@ -419,5 +419,7 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
+
+        
     }
 }

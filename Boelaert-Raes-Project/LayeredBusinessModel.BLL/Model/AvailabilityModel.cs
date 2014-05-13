@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.BLL.Model
 
             DvdCopyService dvdCopyService = new DvdCopyService();
             List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(dvdInfo);   
-            if(availabeCopies.Count>0)
+            if(availabeCopies!= null && availabeCopies.Count>0)
             {
                 return true;
             }

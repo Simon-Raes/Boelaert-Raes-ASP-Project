@@ -15,32 +15,34 @@ namespace LayeredBusinessModel.DAO
         /*Returns all ShoppingcartItems currently in the user's cart*/
         public List<ShoppingcartItem> getCartContentForCustomer(Customer customer)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
-
                 /*Get all info for shoppinglist items, contains data from a lot of different database tables*/
-                SqlCommand command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
+                command = new SqlCommand("SELECT shoppingcart_item_id, customer_id, ShoppingcartItem.dvd_info_id, ShoppingcartItem.copy_type_id, " +
                 "DvdInfo.name, startdate, enddate, DvdCopyType.name as typeName " +
                 "FROM ShoppingcartItem " +
                 "INNER JOIN DvdInfo " +
                 "ON ShoppingcartItem.dvd_info_id = DvdInfo.dvd_info_id " +
                 "INNER JOIN DvdCopyType " +
                 "ON ShoppingcartItem.copy_type_id = DvdCopyType.copy_type_id " +
-                "WHERE customer_id = " + customer.customer_id, cnn);
-
+                "WHERE customer_id = @customer_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        cartItems.Add(createShoppingcartItem(reader));
+                        List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
+                        while (reader.Read())
+                        {
+                            cartItems.Add(createShoppingcartItem(reader));
+                        }
+                        return cartItems;
                     }
-
-                    reader.Close();
-
                 }
                 catch (Exception ex)
                 {
@@ -48,22 +50,26 @@ namespace LayeredBusinessModel.DAO
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return cartItems;
+                return null;
             }
         }
 
         /**Adds BUY dvd to cart*/
         public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
         {
-            Boolean status = false;
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                //todo: paramaters (of ander beter systeem) gebruiken!
-
-                SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
+                command = new SqlCommand("INSERT INTO shoppingcartItem" +
                 "(customer_id, dvd_info_id, copy_type_id)" +
                 "VALUES(@customer_id, @dvd_info_id, 2)", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
@@ -73,27 +79,30 @@ namespace LayeredBusinessModel.DAO
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    status = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    status = false;
+                    
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return status;
+                return false;
             }
         }
 
         /**Adds RENT dvd to cart*/
-        public Boolean addItemToCart(Customer customer, int dvdInfoID, DateTime startdate, DateTime enddate)
+        public Boolean addItemToCart(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
-            Boolean status = false;
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("INSERT INTO shoppingcartItem" +
+                command = new SqlCommand("INSERT INTO shoppingcartItem" +
                 "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
                 "VALUES(@customer_id, @dvd_info_id, @startdate, @enddate, 1)", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
@@ -105,96 +114,114 @@ namespace LayeredBusinessModel.DAO
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    status = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
 
-                    status = false;
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return status;
+                return false;
             }
         }
 
         /*Remove the item from the cart it's in*/
         public Boolean removeItemFromCart(String cartItemID)
         {
-            Boolean status = false;
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
+                command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE shoppingcart_item_id = @shoppingcart_item_id", cnn);
                 command.Parameters.Add(new SqlParameter("@shoppingcart_item_id", cartItemID));
 
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
-                    status = true;
+                    return true;
                 }
                 catch (Exception ex)
                 {
-                    status = false;
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return status;
+                return false;
             }
         }
 
         /*Delete all items from this user's shoppingcart*/
-        public void clearCustomerCart(Customer customer)
+        public Boolean clearCustomerCart(Customer customer)
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
+                command = new SqlCommand("DELETE FROM ShoppingcartItem WHERE customer_id = @customer_id", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
 
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
         /*Delete ALL data from this table*/
-        public void clearTable()
+        public Boolean clearTable()
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM ShoppingcartItem", cnn);
+                command = new SqlCommand("DELETE FROM ShoppingcartItem", cnn);
                 try
                 {
                     cnn.Open();
                     command.ExecuteNonQuery();
+                    return true;
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
+                return false;
             }
         }
 
 
         /*todo: COUNT items in cart*/
-        public int getCartContentCountForCustomer(int id)
+        public int getCartContentCountForCustomer(String id)
         {
             //stub
             return 0;
@@ -215,21 +242,18 @@ namespace LayeredBusinessModel.DAO
                 enddate = Convert.ToDateTime(reader["enddate"]);
             }
 
-
             //hier krijg ik een exception als ik "shoppingcart_item_id" gebruik, columnnummer (0) werkt wel zonder problemen
-            ShoppingcartItem cartItem = new ShoppingcartItem
+            return new ShoppingcartItem
             {
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
-                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader[1])),
+                customer = new CustomerDAO().getByID(reader[1].ToString()),
                 dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),   
-                dvdCopyType = new DvdCopyTypeDAO().getTypeForID(Convert.ToInt32(reader[3])),
+                dvdCopyType = new DvdCopyTypeDAO().getTypeForID(reader[3].ToString()),
                 startdate = startdate,
                 enddate = enddate
                 //name = Convert.ToString(reader["name"]),
                 //typeName = Convert.ToString(reader["typeName"])
             };
-
-            return cartItem;
         }
 
     }

@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -23,7 +24,6 @@ namespace LayeredBusinessModel.WebUI
                 setDvdTiles();
             }            
         }
-
 
         private void setDvdTiles()
         {
@@ -83,7 +83,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);
                 categoryService = new CategoryService();
-                labelText = categoryService.getCategoryByID(Convert.ToInt32(category_id)).name + " DVDs";
+                labelText = categoryService.getCategoryByID(category_id).name + " DVDs";
             }
             else if (year != null)
             {

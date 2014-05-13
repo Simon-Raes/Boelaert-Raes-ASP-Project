@@ -13,14 +13,15 @@ namespace LayeredBusinessModel.DAO
 {
     public class CategoryDAO : DAO
     {
-        private SqlCommand command;
-        private SqlDataReader reader;
-
         /*
          * Returns a list with all the categories in it
+         * Throws a NoRecordException if no records were found
          */
         public List<Category> getAll() 
-        {  
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM categories", cnn);
@@ -38,6 +39,10 @@ namespace LayeredBusinessModel.DAO
                         }
                         return categoryList;
                     }
+                    else
+                    {
+                        throw new NoRecordException("No records were found - CategorieDAO getAll()");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -54,29 +59,34 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
             }            
         }    
 
         /*
          * Returns a category based on an ID
          */
-        public Category getCategoryByID(int id)
+        public Category getCategoryByID(String id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
                 command.Parameters.Add(new SqlParameter("@category_id", id));
                 try
                 {
-                    Category category = null;
                     cnn.Open();
                     reader = command.ExecuteReader();
-
-                    while(reader.Read()){
-                        category = createCategory(reader);
-                    }  
-                    return category;
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createCategory(reader);
+                    }
+                    else
+                    {  
+                        throw new NoRecordException("No records were found - CategorieDAO getAll()");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -98,12 +108,11 @@ namespace LayeredBusinessModel.DAO
 
         private Category createCategory(SqlDataReader reader)
         {
-            Category category = new Category
+            return new Category
             {
                 category_id = Convert.ToInt32(reader["category_id"]),
                 name = Convert.ToString(reader["name"])
             };
-            return category;
         }
     }
 }

@@ -163,39 +163,48 @@ namespace LayeredBusinessModel.WebUI
         private void fillSideBar()
         {
             //Menu opvullen met alle categoriën en genres
-            List<Category> categories = new CategoryService().getAll();
-            foreach (Category c in categories)
+            try
             {
-                //create category list
-                HtmlGenericControl categoryDiv = new HtmlGenericControl("div");
-                categoryDiv.Attributes["class"] = "list-group";
-
-                //create category title item
-                HtmlAnchor categoryHeader = new HtmlAnchor();
-                categoryHeader.Attributes["class"] = "list-group-item active";
-                categoryHeader.HRef = "catalog.aspx?cat=" + c.category_id;
-                categoryHeader.InnerHtml = c.name;
-
-                //add title to list
-                categoryDiv.Controls.Add(categoryHeader);
-
-                //add list to sidebar
-                divSideBar.Controls.Add(categoryDiv);
-
-
-                List<Genre> genres = new GenreService().getGenresForCategory(c.category_id);
-                foreach (Genre g in genres)
+                List<Category> categories = new CategoryService().getAll();
+                foreach (Category c in categories)
                 {
-                    //create sidebar genre item
-                    HtmlAnchor genreItem = new HtmlAnchor();
-                    genreItem.Attributes["class"] = "list-group-item";
-                    genreItem.HRef = "catalog.aspx?genre=" + g.genre_id;
-                    genreItem.InnerHtml = g.name;
+                    //create category list
+                    HtmlGenericControl categoryDiv = new HtmlGenericControl("div");
+                    categoryDiv.Attributes["class"] = "list-group";
 
-                    //add it to the category list
-                    categoryDiv.Controls.Add(genreItem);
+                    //create category title item
+                    HtmlAnchor categoryHeader = new HtmlAnchor();
+                    categoryHeader.Attributes["class"] = "list-group-item active";
+                    categoryHeader.HRef = "catalog.aspx?cat=" + c.category_id;
+                    categoryHeader.InnerHtml = c.name;
+
+                    //add title to list
+                    categoryDiv.Controls.Add(categoryHeader);
+
+                    //add list to sidebar
+                    divSideBar.Controls.Add(categoryDiv);
+
+
+                    List<Genre> genres = new GenreService().getGenresForCategory(c.category_id);
+                    foreach (Genre g in genres)
+                    {
+                        //create sidebar genre item
+                        HtmlAnchor genreItem = new HtmlAnchor();
+                        genreItem.Attributes["class"] = "list-group-item";
+                        genreItem.HRef = "catalog.aspx?genre=" + g.genre_id;
+                        genreItem.InnerHtml = g.name;
+
+                        //add it to the category list
+                        categoryDiv.Controls.Add(genreItem);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                int i = 0;
+                i +=1;
+            }
+            
         }
     }
 }

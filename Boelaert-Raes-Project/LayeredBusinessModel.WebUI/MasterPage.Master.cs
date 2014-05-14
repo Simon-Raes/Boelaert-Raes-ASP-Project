@@ -60,9 +60,15 @@ namespace LayeredBusinessModel.WebUI
                 //set buttons
                 Customer user = (Customer)Session["user"];
                 liAccount.InnerHtml = "<a href='Overview.aspx'>" + user.name + "</a>";
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
-                liCart.InnerText = "Cart: " + cartContent.Count;
+                try
+                {
+                    List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(user);           //Throws NoRecordException
+                    liCart.InnerText = "Cart: " + cartContent.Count;
+                }
+                catch (NoRecordException)
+                {
+
+                }
 
             }
         }

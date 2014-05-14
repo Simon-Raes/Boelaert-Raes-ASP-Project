@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<ShoppingcartItem> getCartContentForCustomer(Customer customer)
+        public List<ShoppingcartItem> getByCustomer(Customer customer)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -77,7 +77,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were inserted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
+        public Boolean addByCustomerAndDvd(Customer customer, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -116,7 +116,8 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were inserted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean addItemToCart(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
+        /*
+        public Boolean addByCustomerAndStartdateAndEndate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -150,14 +151,14 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }
+        }*/
 
         /*
          * Removes a shoppingcartitem based on an ID
          * Returns true if records were deleted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean removeItemFromCart(String cartItemID)
+        public Boolean deleteByID(String cartItemID)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -193,7 +194,7 @@ namespace LayeredBusinessModel.DAO
         * Returns true if records were deleted, false if not
         * Throws DALException if something else went wrong
         */
-        public Boolean clearCustomerCart(Customer customer)
+        public Boolean deleteByCustomer(Customer customer)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -229,7 +230,7 @@ namespace LayeredBusinessModel.DAO
         * Returns true if records were deleted, false if not
         * Throws DALException if something else went wrong
         */
-        public Boolean clearTable()
+        public Boolean deleteAll()
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))

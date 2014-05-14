@@ -14,40 +14,35 @@ namespace LayeredBusinessModel.BLL
         private ShoppingCartDAO shoppingCartDAO;
 
         public List<ShoppingcartItem> getCartContentForCustomer(Customer customer){
-            shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.getCartContentForCustomer(customer);                 //Throws NoRecordException || DALException
+            return new ShoppingCartDAO().getByCustomer(customer);                 //Throws NoRecordException || DALException
         }
 
         /*adds buy copy to cart(no dates)*/
-        public Boolean addItemToCart(Customer customer, DvdInfo dvdInfo)
+        public Boolean addByCustomerAndDvd(Customer customer, DvdInfo dvdInfo)
         {
-            shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.addItemToCart(customer, dvdInfo);
+            return new ShoppingCartDAO().addByCustomerAndDvd(customer, dvdInfo);           
         }
 
         //overloaded method for adding rent items with dates
-        public Boolean addItemToCart(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
+        /*
+        public Boolean addByCustomerAndStartdateAndEndate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
-            shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.addItemToCart(customer, dvdInfoID, startdate, enddate);
+            return new ShoppingCartDAO().addByCustomerAndStartdateAndEndate(customer, dvdInfoID, startdate, enddate);
+        }*/
+
+        public Boolean deleteByID(String cartItemID)
+        {
+            return new ShoppingCartDAO().deleteByID(cartItemID);
         }
 
-        public Boolean removeItemFromCart(String cartItemID)
+        public Boolean deleteByCustomer(Customer customer)
         {
-            shoppingCartDAO = new ShoppingCartDAO();
-            return shoppingCartDAO.removeItemFromCart(cartItemID);
+            return new ShoppingCartDAO().deleteByCustomer(customer);
         }
 
-        public void clearCustomerCart(Customer customer)
+        public Boolean deleteAll()
         {
-            shoppingCartDAO = new ShoppingCartDAO();
-            shoppingCartDAO.clearCustomerCart(customer);
-        }
-
-        public void clearTable()
-        {
-            shoppingCartDAO = new ShoppingCartDAO();
-            shoppingCartDAO.clearTable();
+            return new ShoppingCartDAO().deleteAll();
         }
     }
 }

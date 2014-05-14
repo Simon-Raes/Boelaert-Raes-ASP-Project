@@ -140,7 +140,10 @@ namespace LayeredBusinessModel.WebUI
                 try
                 {
                     DvdInfo thisDvd = new DvdInfoService().getByID(dvd_info_id.ToString());          //Throws NoRecordException
-                    new ShoppingCartService().addItemToCart(user, thisDvd);
+                    if (new ShoppingCartService().addByCustomerAndDvd(user, thisDvd))
+                    {
+                        //success
+                    }
                 }
                 catch (NoRecordException)
                 {

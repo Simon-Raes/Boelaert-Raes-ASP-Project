@@ -24,8 +24,10 @@ namespace LayeredBusinessModel.WebUI
             try
             {
                 //Delete all shoppingcarts
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                shoppingCartService.clearTable();
+                if (new ShoppingCartService().deleteAll())
+                {
+                    //success
+                }
 
                 //Delete all orderlines
                 if (new OrderLineService().deleteAll())

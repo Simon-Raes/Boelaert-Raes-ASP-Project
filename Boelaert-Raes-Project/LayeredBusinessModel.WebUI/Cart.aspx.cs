@@ -33,13 +33,13 @@ namespace LayeredBusinessModel.WebUI
 
         private void fillCartGridView()
         {
-            Boolean hasRentItems = false;
-            double totalCost = 0;
-
-            shoppingCartService = new ShoppingCartService();
-            List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(((Customer)Session["user"]));
-            if (cartContent.Count > 0)
+            try
             {
+                List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(((Customer)Session["user"]));            //Throws NoRecordException
+
+                Boolean hasRentItems = false;
+                double totalCost = 0;
+
                 divCartContent.Visible = true;
                 divCartEmpty.Visible = false;
 
@@ -94,7 +94,7 @@ namespace LayeredBusinessModel.WebUI
                 gvCart.DataSource = cartTable;
                 gvCart.DataBind();
             }
-            else
+            catch (NoRecordException)
             {
                 divCartContent.Visible = false;
                 divCartEmpty.Visible = true;
@@ -109,9 +109,10 @@ namespace LayeredBusinessModel.WebUI
             //systeem hier is zeer onhandig, Cells[nummer] moet aangepast worden elke keer de layout gridview veranderd wordt
 
             //remove item from shoppingcart
-            ShoppingCartService shoppingCartService = new ShoppingCartService();
-            shoppingCartService.removeItemFromCart(gvCart.Rows[index].Cells[1].Text); //cell 1 = shoppingcart_item_id
-
+            if (new ShoppingCartService().deleteByID(gvCart.Rows[index].Cells[1].Text))   //cell 1 = shoppingcart_item_id
+            { 
+                //succes
+            }
             try
             {
                 //set copy as in_stock
@@ -140,64 +141,65 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
-                //get all items currently in cart
-                ShoppingCartService shoppingCartService = new ShoppingCartService();
-                List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
 
-                //only do a checkout if the cart actually contains items
-                if (cartContent.Count > 0)
+
+                try
                 {
-                    try
+                    //get all items currently in cart
+                    List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(user);           //Throws NoRecordException
+
+                    //create new order for this user
+                    //problem here: an order will still be created if all cart items are out of stock (=not added to order)
+                    int orderID = new OrderService().addOrderForCustomer(user);           //Throws NoRecordException
+
+
+                    OrderLineService orderLineService = new OrderLineService();
+                    dvdCopyService = new DvdCopyService();
+
+                    //add cart items to newly created order
+                    foreach (ShoppingcartItem item in cartContent)
                     {
-                        //create new order for this user
-                        //problem here: an order will still be created if all cart items are out of stock (=not added to order)
-                        int orderID = new OrderService().addOrderForCustomer(user);           //Throws NoRecordException
 
-
-                        OrderLineService orderLineService = new OrderLineService();
-                        dvdCopyService = new DvdCopyService();
-
-                        //add cart items to newly created order
-                        foreach (ShoppingcartItem item in cartContent)
+                        OrderLine orderline = new OrderLine
                         {
+                            order = new OrderService().getByID(orderID.ToString()),            //Throws NoRecordException
+                            dvdInfo = new DvdInfoService().getByID(item.dvdInfo.dvd_info_id.ToString()),           //Throws NoRecordException
+                            //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
+                            startdate = item.startdate,
+                            enddate = item.enddate,
+                            //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
+                            orderLineType = new OrderLineTypeService().getByID(item.dvdCopyType.id.ToString())          //Throws NoRecordException
+                        };
 
-                            OrderLine orderline = new OrderLine
-                            {
-                                order = new OrderService().getByID(orderID.ToString()),            //Throws NoRecordException
-                                dvdInfo = new DvdInfoService().getByID(item.dvdInfo.dvd_info_id.ToString()),           //Throws NoRecordException
-                                //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
-                                startdate = item.startdate,
-                                enddate = item.enddate,
-                                //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                                orderLineType = new OrderLineTypeService().getByID(item.dvdCopyType.id.ToString())          //Throws NoRecordException
-                            };
-
-                            if (orderLineService.add(orderline))
-                            {
-                                //succes
-                            }
-
-
+                        if (orderLineService.add(orderline))
+                        {
+                            //succes
                         }
 
-                        //clear cart
-                        shoppingCartService.clearCustomerCart(user);
-                        //this also clears items that were not added to the order!
-
-                        //clear cart display
-                        gvCart.DataSource = null;
-                        gvCart.DataBind();
-
-                        //redirect to payment page, with query string to connect to the order
-                        Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
 
                     }
-                    catch (NoRecordException)
+
+                    //clear cart
+                    if (shoppingCartService.deleteByCustomer(user))
                     {
-
+                        //success
                     }
+                    //this also clears items that were not added to the order!
+
+                    //clear cart display
+                    gvCart.DataSource = null;
+                    gvCart.DataBind();
+
+                    //redirect to payment page, with query string to connect to the order
+                    Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
 
                 }
+                catch (NoRecordException)
+                {
+
+                }
+
+
             }
         }
     }

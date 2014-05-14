@@ -261,7 +261,10 @@ namespace LayeredBusinessModel.WebUI
                 try
                 {
                     DvdInfo dvdInfo = new DvdInfoService().getByID(Request.QueryString["id"]);           //Throws NoRecordException
-                    new ShoppingCartService().addItemToCart(customer, dvdInfo);
+                    if (new ShoppingCartService().addByCustomerAndDvd(customer, dvdInfo))
+                    {
+                        //success
+                    }
                 }
                 catch (NoRecordException)
                 {
@@ -323,16 +326,23 @@ namespace LayeredBusinessModel.WebUI
                     List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockRentCopiesForDvdInfo(dvdInfo);           //Throws NoRecordException || DALException
                     */
 
-                    //check the number of rent items in the user's cart
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    List<ShoppingcartItem> cartContent = shoppingCartService.getCartContentForCustomer(user);
-                    int numberOfCurrentlyRentedItems = 0;
-                    foreach (ShoppingcartItem item in cartContent)
+                    try
                     {
-                        if (item.dvdCopyType.name.Equals("Verhuur"))
+                        //check the number of rent items in the user's cart
+                        List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(user);           //Throws NoRecordException
+
+                        int numberOfCurrentlyRentedItems = 0;
+                        foreach (ShoppingcartItem item in cartContent)
                         {
-                            numberOfCurrentlyRentedItems++;
+                            if (item.dvdCopyType.name.Equals("Verhuur"))
+                            {
+                                numberOfCurrentlyRentedItems++;
+                            }
                         }
+                    }
+                    catch (NoRecordException)
+                    {
+
                     }
                     
                     try

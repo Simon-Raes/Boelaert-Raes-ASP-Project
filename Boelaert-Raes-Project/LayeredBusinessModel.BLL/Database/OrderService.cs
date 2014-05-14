@@ -11,42 +11,35 @@ namespace LayeredBusinessModel.BLL
 {
     public class OrderService
     {
-        OrderDAO orderDAO;
-
         //public List<Order> getAll()
         //{
         //    orderDAO = new OrderDAO();
         //    return orderDAO.getAll();
         //}
 
-        public Order getOrder(String id)
+        public Order getByID(String id)
         {
-            orderDAO = new OrderDAO();
-            return orderDAO.getOrderWithId(id);
+            return new OrderDAO().getByID(id);            //Throws NoRecordException
         }
 
         public void updateOrder(Order order)
         {
-            orderDAO = new OrderDAO();
-            orderDAO.updateOrder(order);
+            new OrderDAO().update(order);           //Throws NoRecordException
         }
 
         public List<Order> getOrdersForCustomer(Customer customer)
         {
-            orderDAO = new OrderDAO();
-            return orderDAO.getOrdersForCustomer(customer);
+            return new OrderDAO().getByCustomer(customer);          //Throws NoRecordException
         }
 
         public int addOrderForCustomer(Customer customer)
         {
-            orderDAO = new OrderDAO();
-            return orderDAO.addOrderForCustomer(customer);
+            return new OrderDAO().addForCustomer(customer);         //Throws NoRecordException
         }
 
-        public void clearTable()
+        public void DeleteAll()
         {
-            orderDAO = new OrderDAO();
-            orderDAO.clearTable();
+            new OrderDAO().deleteAll();         //Throws NoRecordException
         }
     }
 }

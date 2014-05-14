@@ -9,6 +9,7 @@ using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
 using System.Data;
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -32,10 +33,10 @@ namespace LayeredBusinessModel.WebUI
 
         private void fillOrdersGridView()
         {
-            OrderService orderService = new OrderService();
-            customerOrders = orderService.getOrdersForCustomer(((Customer)Session["user"]));
-            if(customerOrders.Count>0)
+            try
             {
+                customerOrders = new OrderService().getOrdersForCustomer(((Customer)Session["user"]));            //Throws NoRecrdException
+
                 DataTable orderTable = new DataTable();
                 orderTable.Columns.Add("Ordernumber");
                 orderTable.Columns.Add("Status");
@@ -54,12 +55,13 @@ namespace LayeredBusinessModel.WebUI
                 }
 
                 gvOrders.DataSource = orderTable;
-                gvOrders.DataBind();  
+                gvOrders.DataBind();
+
             }
-            else
+            catch (NoRecordException)
             {
                 lblNoOrders.Visible = true;
-            }            
+            }         
         }
 
         /*Handles rowCommands for the Orders gridview*/
@@ -77,94 +79,101 @@ namespace LayeredBusinessModel.WebUI
         /*Displays the details of the selected order.*/
         private void displayOrderDetails(String orderID)
         {
-            //show details
-            pnlOrderDetails.Visible = true;
-
-            //get the order info
-            OrderService orderService = new OrderService();
-            Order selectedOrder = orderService.getOrder(orderID);
-            lblOrderStatus.Text = "(" + selectedOrder.orderstatus.name + ")"; //1 = new, 2 = paid, 3 = shipped
-            lblOrderID.Text = selectedOrder.order_id.ToString();
-
-            //hide pay button if the order has already been paid
-            if (selectedOrder.orderstatus.id != 1)
+            try
             {
-                lblPay.Visible = false;
-                btnPay.Visible = false;
-            }
-            else
-            {
-                lblPay.Visible = true;
-                btnPay.Visible = true;
-            }
+                //show details
+                pnlOrderDetails.Visible = true;
 
-            //get all articles in the order and display them
-            Order order = orderService.getOrder(orderID);
-            OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
+                //get the order info
+                OrderService orderService = new OrderService();
+                Order selectedOrder = orderService.getByID(orderID);           //Throws NoRecordException
+                lblOrderStatus.Text = "(" + selectedOrder.orderstatus.name + ")"; //1 = new, 2 = paid, 3 = shipped
+                lblOrderID.Text = selectedOrder.order_id.ToString();
 
-            Boolean hasRentItems = false;
-
-            foreach (OrderLine item in orderLines)
-            {
-                if (item.orderLineType.id == 1)
+                //hide pay button if the order has already been paid
+                if (selectedOrder.orderstatus.id != 1)
                 {
-                    hasRentItems = true;
-                }
-            }
-
-            DataTable orderTable = new DataTable();
-            orderTable.Columns.Add("Item number");
-            orderTable.Columns.Add("Name");
-            orderTable.Columns.Add("Type");
-            orderTable.Columns.Add("Price");
-
-            if (hasRentItems)
-            {
-                orderTable.Columns.Add("Start date");
-                orderTable.Columns.Add("End date");
-            }
-
-
-            foreach (OrderLine item in orderLines)
-            {
-                DataRow orderRow = orderTable.NewRow();
-                orderRow[0] = item.orderline_id;
-                orderRow[1] = item.dvdInfo.name;
-                orderRow[2] = item.orderLineType.name;
-                if (item.orderLineType.id == 1)
-                {
-                    orderRow[3] = Math.Round(item.dvdInfo.rent_price * (item.enddate - item.startdate).Days, 2);
-                    orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
-                    orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    lblPay.Visible = false;
+                    btnPay.Visible = false;
                 }
                 else
                 {
-                    orderRow[3] = Math.Round(item.dvdInfo.buy_price, 2);
+                    lblPay.Visible = true;
+                    btnPay.Visible = true;
                 }
 
-                orderTable.Rows.Add(orderRow);
+                //get all articles in the order and display them
+                Order order = orderService.getByID(orderID);           //Throws NoRecordException      
+                OrderLineService orderLineService = new OrderLineService();
+                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
+
+                Boolean hasRentItems = false;
+
+                foreach (OrderLine item in orderLines)
+                {
+                    if (item.orderLineType.id == 1)
+                    {
+                        hasRentItems = true;
+                    }
+                }
+
+                DataTable orderTable = new DataTable();
+                orderTable.Columns.Add("Item number");
+                orderTable.Columns.Add("Name");
+                orderTable.Columns.Add("Type");
+                orderTable.Columns.Add("Price");
+
+                if (hasRentItems)
+                {
+                    orderTable.Columns.Add("Start date");
+                    orderTable.Columns.Add("End date");
+                }
+
+
+                foreach (OrderLine item in orderLines)
+                {
+                    DataRow orderRow = orderTable.NewRow();
+                    orderRow[0] = item.orderline_id;
+                    orderRow[1] = item.dvdInfo.name;
+                    orderRow[2] = item.orderLineType.name;
+                    if (item.orderLineType.id == 1)
+                    {
+                        orderRow[3] = Math.Round(item.dvdInfo.rent_price * (item.enddate - item.startdate).Days, 2);
+                        orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
+                        orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        orderRow[3] = Math.Round(item.dvdInfo.buy_price, 2);
+                    }
+
+                    orderTable.Rows.Add(orderRow);
+                }
+
+
+                gvOrderDetails.DataSource = orderTable;
+                gvOrderDetails.DataBind();
+
+                //total cost
+                OrderModel orderModel = new OrderModel();
+                lblTotalCost.Text = orderModel.getOrderCost(order).ToString();
+
+                //user has already paid, check status of copies in cart
+                if (selectedOrder.orderstatus.id > 1)
+                {
+
+                    Boolean allInStock = hasAllInStock(orderLines);
+
+                    updateOrderStatusDetails(allInStock);
+                }
+                else
+                {
+                    //user hasn't paid yet, check status of copies in store: (todo) (?)
+                }
             }
-
-
-            gvOrderDetails.DataSource = orderTable;
-            gvOrderDetails.DataBind();
-
-            //total cost
-            OrderModel orderModel = new OrderModel();
-            lblTotalCost.Text = orderModel.getOrderCost(order).ToString();
-
-            //user has already paid, check status of copies in cart
-            if (selectedOrder.orderstatus.id > 1)
+            catch (NoRecordException)
             {
 
-                Boolean allInStock = hasAllInStock(orderLines);
-
-                updateOrderStatusDetails(allInStock);
-            }
-            else
-            {
-                //user hasn't paid yet, check status of copies in store: (todo) (?)
             }
         }
 

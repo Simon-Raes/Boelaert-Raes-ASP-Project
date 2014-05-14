@@ -24,9 +24,9 @@ namespace LayeredBusinessModel.WebUI
                 if (user != null)
                 {
                     String orderID = Request.QueryString["order"];
-                    Order order = orderService.getOrder(orderID);
-                    if (order != null)
+                    try
                     {
+                        Order order = orderService.getByID(orderID);           //Throws NoRecordException
                         if (order.customer.customer_id == user.customer_id)
                         {
                             //all good
@@ -48,15 +48,15 @@ namespace LayeredBusinessModel.WebUI
 
                             DataTable orderTable = new DataTable();
                             orderTable.Columns.Add("Item number");
-                            orderTable.Columns.Add("Name");                            
+                            orderTable.Columns.Add("Name");
                             orderTable.Columns.Add("Type");
                             orderTable.Columns.Add("Price");
-                            if(hasRentItems)
+                            if (hasRentItems)
                             {
                                 orderTable.Columns.Add("Start date");
                                 orderTable.Columns.Add("End date");
                             }
-                            
+
 
                             foreach (OrderLine item in orderLines)
                             {
@@ -64,9 +64,9 @@ namespace LayeredBusinessModel.WebUI
                                 orderRow[0] = item.orderline_id;
                                 orderRow[1] = item.dvdInfo.name;
                                 orderRow[2] = item.orderLineType.name;
-                                if(item.orderLineType.id == 1)
+                                if (item.orderLineType.id == 1)
                                 {
-                                    double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;                                    
+                                    double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
                                     orderRow[3] = Math.Round(cost, 2);
                                     orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
                                     orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
@@ -74,9 +74,9 @@ namespace LayeredBusinessModel.WebUI
                                 else
                                 {
                                     double cost = item.dvdInfo.buy_price;
-                                    orderRow[3] = Math.Round(cost,2);
+                                    orderRow[3] = Math.Round(cost, 2);
                                 }
-                                
+
                                 orderTable.Rows.Add(orderRow);
                             }
 
@@ -90,12 +90,10 @@ namespace LayeredBusinessModel.WebUI
                             lblStatus.Text = "Access denied";
                         }
                     }
-                    else
+                    catch (NoRecordException)
                     {
-                        //order does not exist, error
-                        lblStatus.Text = "404 - Page not found";
-                    }
 
+                    } 
                 }
                 else
                 {
@@ -114,13 +112,11 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if(user!=null)
             {
-                //get the order
-                String orderID = lblStatus.Text;
-                OrderService orderService = new OrderService();
-                Order order = orderService.getOrder(orderID);
-
                 try
                 {
+                    //get the order
+                    String orderID = lblStatus.Text;
+                    Order order = new OrderService().getByID(orderID);           //Throws NoRecordException
                     new OrderModel().payOrder(order);       //Throws NoRecordException || DALException
                 }
                 catch (NoRecordException)

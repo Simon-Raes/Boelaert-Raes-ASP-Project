@@ -76,7 +76,7 @@ namespace LayeredBusinessModel.WebUI
                     {
                         double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
                         totalCost += cost;
-                        cartRow[3] = Math.Round(cost,2);
+                        cartRow[3] = Math.Round(cost, 2);
                         cartRow[4] = item.startdate.ToString("dd/MM/yyyy");
                         cartRow[5] = item.enddate.ToString("dd/MM/yyyy");
                     }
@@ -89,7 +89,7 @@ namespace LayeredBusinessModel.WebUI
                     cartTable.Rows.Add(cartRow);
                 }
 
-                lblTotalCost.Text = Math.Round(totalCost,2).ToString() + " (todo: euro/dollar)";
+                lblTotalCost.Text = Math.Round(totalCost, 2).ToString() + " (todo: euro/dollar)";
 
                 gvCart.DataSource = cartTable;
                 gvCart.DataBind();
@@ -147,23 +147,23 @@ namespace LayeredBusinessModel.WebUI
                 //only do a checkout if the cart actually contains items
                 if (cartContent.Count > 0)
                 {
-                    //create new order for this user
-                    //problem here: an order will still be created if all cart items are out of stock (=not added to order)
-                    OrderService orderService = new OrderService();
-                    int orderID = orderService.addOrderForCustomer(user);
-
-
-                    OrderLineService orderLineService = new OrderLineService();
-                    dvdCopyService = new DvdCopyService();
-
-                    //add cart items to newly created order
-                    foreach (ShoppingcartItem item in cartContent)
+                    try
                     {
-                        try
+                        //create new order for this user
+                        //problem here: an order will still be created if all cart items are out of stock (=not added to order)
+                        int orderID = new OrderService().addOrderForCustomer(user);           //Throws NoRecordException
+
+
+                        OrderLineService orderLineService = new OrderLineService();
+                        dvdCopyService = new DvdCopyService();
+
+                        //add cart items to newly created order
+                        foreach (ShoppingcartItem item in cartContent)
                         {
+
                             OrderLine orderline = new OrderLine
                             {
-                                order = new OrderService().getOrder(orderID.ToString()),
+                                order = new OrderService().getByID(orderID.ToString()),            //Throws NoRecordException
                                 dvdInfo = new DvdInfoService().getByID(item.dvdInfo.dvd_info_id.ToString()),           //Throws NoRecordException
                                 //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
                                 startdate = item.startdate,
@@ -173,24 +173,26 @@ namespace LayeredBusinessModel.WebUI
                             };
 
                             orderLineService.addOrderLine(orderline);
-                        }
-                        catch (NoRecordException)
-                        {
+
 
                         }
+
+                        //clear cart
+                        shoppingCartService.clearCustomerCart(user);
+                        //this also clears items that were not added to the order!
+
+                        //clear cart display
+                        gvCart.DataSource = null;
+                        gvCart.DataBind();
+
+                        //redirect to payment page, with query string to connect to the order
+                        Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
 
                     }
+                    catch (NoRecordException)
+                    {
 
-                    //clear cart
-                    shoppingCartService.clearCustomerCart(user);
-                    //this also clears items that were not added to the order!
-
-                    //clear cart display
-                    gvCart.DataSource = null;
-                    gvCart.DataBind();
-
-                    //redirect to payment page, with query string to connect to the order
-                    Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
+                    }
 
                 }
             }

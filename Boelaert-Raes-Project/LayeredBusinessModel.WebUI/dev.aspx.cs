@@ -32,8 +32,7 @@ namespace LayeredBusinessModel.WebUI
                 orderLineService.clearTable();
 
                 //Delete all orders
-                OrderService orderService = new OrderService();
-                orderService.clearTable();
+                new OrderService().DeleteAll();           //Throws NoRecordException 
 
                 //Reset all dvd copies to be back in stock (in_stock = true)
                 new DvdCopyService().resetAllCopies();           //Throws NoRecordException 

@@ -507,7 +507,7 @@ namespace LayeredBusinessModel.DAO
                 return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),           //Throws NoRecordException
                     startdate = Convert.ToDateTime(reader["startdate"]),
@@ -519,7 +519,7 @@ namespace LayeredBusinessModel.DAO
                 return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
                     dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
@@ -536,7 +536,7 @@ namespace LayeredBusinessModel.DAO
                 return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
                     startdate = Convert.ToDateTime(reader["startdate"]),
@@ -548,7 +548,7 @@ namespace LayeredBusinessModel.DAO
                 return new OrderLine
                 {
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
                     dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
                     dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException

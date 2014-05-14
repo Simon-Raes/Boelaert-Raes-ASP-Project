@@ -13,7 +13,6 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderDAO : DAO
     {
-
         //public List<Order> getAll()
         //{
         //    cnn = new SqlConnection(sDatabaseLocatie);
@@ -49,7 +48,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public Order getOrderWithId(String id)
+        public Order getByID(String id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -100,7 +99,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the order was updated, false if no order was updated
          * Throws DALException if something else went wrong
          */
-        public Boolean updateOrder(Order order)
+        public Boolean update(Order order)
         {
             SqlCommand command = null;
 
@@ -144,7 +143,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<Order> getOrdersForCustomer(Customer customer)
+        public List<Order> getByCustomer(Customer customer)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -199,7 +198,7 @@ namespace LayeredBusinessModel.DAO
          * Returns the ID from the newly added order
          * Throws DALException if something else went wrong
          */
-        public int addOrderForCustomer(Customer customer)
+        public int addForCustomer(Customer customer)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -237,7 +236,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if orders where deleted, false if no orders were deleted
          * Throws DALException if something else went wrong
          */
-        public Boolean clearTable()
+        public Boolean deleteAll()
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))

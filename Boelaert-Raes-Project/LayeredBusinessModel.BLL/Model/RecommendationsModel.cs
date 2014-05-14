@@ -27,7 +27,7 @@ namespace LayeredBusinessModel.BLL
             List<Genre> genres = new List<Genre>();
 
             OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForCustomer(customer);
+            List<OrderLine> orderLines = orderLineService.getByCustomer(customer);          //Throws NoRecordException          
             orderLinesDvdIds = new List<int>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
 
             GenreService genreService = new GenreService();

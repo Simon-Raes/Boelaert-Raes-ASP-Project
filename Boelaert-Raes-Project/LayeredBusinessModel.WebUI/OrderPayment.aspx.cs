@@ -33,8 +33,7 @@ namespace LayeredBusinessModel.WebUI
                             lblStatus.Text = orderID;
                             OrderModel helper = new OrderModel();
                             lblCost.Text = Math.Round(helper.getOrderCost(order), 2).ToString();
-                            OrderLineService orderLineService = new OrderLineService();
-                            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
+                            List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException
 
                             Boolean hasRentItems = false;
 
@@ -118,23 +117,24 @@ namespace LayeredBusinessModel.WebUI
                     String orderID = lblStatus.Text;
                     Order order = new OrderService().getByID(orderID);           //Throws NoRecordException
                     new OrderModel().payOrder(order);       //Throws NoRecordException || DALException
+
+                    //get the orderLines
+                    List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException           
+                    //check if all orderLines can be given a dvdCopy
+                    Boolean allInStock = hasAllInStock(orderLines);
+                    //send the user an order confirmation
+                    EmailModel emailModel = new EmailModel();
+                    emailModel.sendOrderConfirmationEmail(user, order, orderLines, allInStock);
+
+                    //redirect away from the payment page - todo: go to thank you/info page
+                    Response.Redirect("~/Index.aspx");
                 }
                 catch (NoRecordException)
                 {
                     
                 }
 
-                //get the orderLines
-                OrderLineService orderLineService = new OrderLineService();
-                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
-                //check if all orderLines can be given a dvdCopy
-                Boolean allInStock = hasAllInStock(orderLines);
-                //send the user an order confirmation
-                EmailModel emailModel = new EmailModel();
-                emailModel.sendOrderConfirmationEmail(user, order, orderLines, allInStock);
-
-                //redirect away from the payment page - todo: go to thank you/info page
-                Response.Redirect("~/Index.aspx");
+                
             }
             else
             {

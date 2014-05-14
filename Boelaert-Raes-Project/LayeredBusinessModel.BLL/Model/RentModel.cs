@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using LayeredBusinessModel.DAO;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LayeredBusinessModel.BLL.Model
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
             Dictionary<int, List<DateTime>> result = new Dictionary<int, List<DateTime>>();
 
-            dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);
+            dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);           //Throws NoRecordException
 
             foreach (int i in dicCopyUnavailableDates.Keys)
             {
@@ -45,7 +46,7 @@ namespace LayeredBusinessModel.BLL.Model
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
 
             //alle bezettingen
-            List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startdate);
+            List<OrderLine> orders = new OrderLineDAO().getAllByDvdAndStartdate(dvd, startdate);           //Throws NoRecordException
 
             //bezettingen overlopen
             foreach (OrderLine order in orders)
@@ -94,7 +95,7 @@ namespace LayeredBusinessModel.BLL.Model
             else
             {
                 //no copies are available for the full 2 weeks, get detailed information about all copies that have some availability in the next 2 weeks:
-                Dictionary<int, List<DateTime>> result = getAllAvailableDaysPerCopyForDvdInfo(dvd, startDate);
+                Dictionary<int, List<DateTime>> result = getAllAvailableDaysPerCopyForDvdInfo(dvd, startDate);          //Throws NoRecordException
 
 
                 foreach (List<DateTime> list in result.Values)
@@ -131,7 +132,7 @@ namespace LayeredBusinessModel.BLL.Model
                 Dictionary<int, DateTime> unavailableDatesMap = new Dictionary<int, DateTime>();
 
                 //get all orderlines for copies that have some orderlines in the next 2 weeks
-                List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startDate);
+                List<OrderLine> orders = new OrderLineDAO().getAllByDvdAndStartdate(dvd, startDate);           //Throws NoRecordException
 
                 foreach (OrderLine order in orders)
                 {

@@ -22,8 +22,7 @@ namespace LayeredBusinessModel.BLL
             orderService.updateOrder(selectedOrder);            //Throws NoRecordException
 
             //assign copies to the orderlines
-            OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(selectedOrder);
+            List<OrderLine> orderLines = new OrderLineService().getByOrder(selectedOrder);            //Throws NoRecordException
 
             DvdCopyService dvdCopyService = new DvdCopyService();
             List<DvdCopy> availableCopies = null;
@@ -41,7 +40,7 @@ namespace LayeredBusinessModel.BLL
                     //get all available dates starting from TODAY 
                     //(also needs to check dates between today and start of requested rent period to determine smallest open window)
                     RentModel rentService = new RentModel();
-                    Dictionary<int, List<DateTime>> dicCopyUnavailableDates = rentService.getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);
+                    Dictionary<int, List<DateTime>> dicCopyUnavailableDates = rentService.getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);          //Throws NoRecordException     
                     Dictionary<int, int> dicDaysFreeForCopy = new Dictionary<int, int>();
 
                     int selectedCopyId = -1; //id of the copy that will be assigned to this orderLine
@@ -193,28 +192,32 @@ namespace LayeredBusinessModel.BLL
         {
             double totalCost = 0;
 
-            OrderLineService orderLineService = new OrderLineService();
             //OrderService orderService = new OrderService();
             //Order order = orderService.getOrder(orderID);
-
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
-
-            //set order total cost
-            foreach (OrderLine orderLine in orderLines)
+            try
             {
-                if (orderLine.orderLineType.id == 1) //rent
-                {
-                    TimeSpan duration = orderLine.enddate - orderLine.startdate;
-                    int durationDays = duration.Days;
+                List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException
 
-                    totalCost += orderLine.dvdInfo.rent_price * durationDays;
-                }
-                else if (orderLine.orderLineType.id == 2) //buy
+                //set order total cost
+                foreach (OrderLine orderLine in orderLines)
                 {
-                    totalCost += orderLine.dvdInfo.buy_price;
+                    if (orderLine.orderLineType.id == 1) //rent
+                    {
+                        TimeSpan duration = orderLine.enddate - orderLine.startdate;
+                        int durationDays = duration.Days;
+
+                        totalCost += orderLine.dvdInfo.rent_price * durationDays;
+                    }
+                    else if (orderLine.orderLineType.id == 2) //buy
+                    {
+                        totalCost += orderLine.dvdInfo.buy_price;
+                    }
                 }
             }
+            catch (NoRecordException)
+            {
 
+            }
             return Math.Round(totalCost, 2);
         }
     }

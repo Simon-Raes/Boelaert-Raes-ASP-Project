@@ -91,7 +91,7 @@ namespace LayeredBusinessModel.WebUI
             try
             {
                 DvdInfo thisDVD = dvdbll.getByID(Convert.ToString(id));                //Throws NoRecordExample
-                List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+                List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);            //Throws NoRecordException
 
 
                 if (dates.Count >= 14)

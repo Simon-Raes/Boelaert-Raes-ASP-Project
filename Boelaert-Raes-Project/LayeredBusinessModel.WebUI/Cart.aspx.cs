@@ -172,7 +172,10 @@ namespace LayeredBusinessModel.WebUI
                                 orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopyType.id.ToString())
                             };
 
-                            orderLineService.addOrderLine(orderline);
+                            if (orderLineService.add(orderline))
+                            {
+                                //succes
+                            }
 
 
                         }

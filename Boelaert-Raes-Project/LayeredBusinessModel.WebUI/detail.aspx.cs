@@ -334,13 +334,19 @@ namespace LayeredBusinessModel.WebUI
                             numberOfCurrentlyRentedItems++;
                         }
                     }
-
-                    //check the number of items currently being rented by the user
-                    OrderLineService orderLineService = new OrderLineService();
-                    List<OrderLine> orderLines = orderLineService.getActiveRentOrderLinesForCustomer(user);
-                    foreach (OrderLine orderLine in orderLines)
+                    
+                    try
                     {
-                        numberOfCurrentlyRentedItems++;
+                        //check the number of items currently being rented by the user
+                        List<OrderLine> orderLines = new OrderLineService().getActiveRentOrderLinesByCustomer(user);          //Throws NoRecordException
+                        foreach (OrderLine orderLine in orderLines)
+                        {
+                            numberOfCurrentlyRentedItems++;
+                        }
+                    }
+                    catch (NoRecordException)
+                    {
+
                     }
 
                     //check if the user can still rent additional items
@@ -392,7 +398,7 @@ namespace LayeredBusinessModel.WebUI
                     try
                     {
                         DvdInfo thisDVD = new DvdInfoService().getByID(Request.QueryString["id"].ToString());                //Throws NoRecordException
-                        dates = new RentModel().getAvailabilities(thisDVD, DateTime.Now);
+                        dates = new RentModel().getAvailabilities(thisDVD, DateTime.Now);           //Throws NoRecordException
                     }
                     catch (NoRecordException)
                     {
@@ -425,7 +431,7 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfo dvdInfo = new DvdInfoService().getByID(Request.QueryString["id"].ToString());            //Throws NoRecordException
 
                     //get all dvd copies that are available on that date:
-                    int daysAvailable = new RentModel().getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
+                    int daysAvailable = new RentModel().getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);    //Throws NoRecordException
 
                     if (daysAvailable >= 1)
                     {

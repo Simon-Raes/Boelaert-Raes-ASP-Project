@@ -28,8 +28,10 @@ namespace LayeredBusinessModel.WebUI
                 shoppingCartService.clearTable();
 
                 //Delete all orderlines
-                OrderLineService orderLineService = new OrderLineService();
-                orderLineService.clearTable();
+                if (new OrderLineService().deleteAll())
+                {
+                    //succes
+                }
 
                 //Delete all orders
                 new OrderService().DeleteAll();           //Throws NoRecordException 

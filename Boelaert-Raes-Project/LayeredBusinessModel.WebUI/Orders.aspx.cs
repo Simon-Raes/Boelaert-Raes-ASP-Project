@@ -19,11 +19,11 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
-                fillOrdersGridView();                        
+                fillOrdersGridView();
             }
             else
             {
@@ -61,12 +61,12 @@ namespace LayeredBusinessModel.WebUI
             catch (NoRecordException)
             {
                 lblNoOrders.Visible = true;
-            }         
+            }
         }
 
         /*Handles rowCommands for the Orders gridview*/
         protected void gvOrders_RowCommand(object sender, GridViewCommandEventArgs e)
-        {      
+        {
             if (e.CommandName == "Details")
             {
                 int index = Convert.ToInt32(e.CommandArgument.ToString());
@@ -103,9 +103,8 @@ namespace LayeredBusinessModel.WebUI
                 }
 
                 //get all articles in the order and display them
-                Order order = orderService.getByID(orderID);           //Throws NoRecordException      
-                OrderLineService orderLineService = new OrderLineService();
-                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
+                Order order = orderService.getByID(orderID);           //Throws NoRecordException  
+                List<OrderLine> orderLines = new OrderLineService().getByOrder(order);        //Throws NoRecordException
 
                 Boolean hasRentItems = false;
 
@@ -181,11 +180,11 @@ namespace LayeredBusinessModel.WebUI
         protected void btnPay_Click(object sender, EventArgs e)
         {
             Customer user = (Customer)Session["user"];
-            if(user!=null)
+            if (user != null)
             {
                 //get the order
-                String orderID = lblOrderID.Text;  
-                
+                String orderID = lblOrderID.Text;
+
                 //redirect to payment page, with query string to connect to the order
                 Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
             }
@@ -230,46 +229,53 @@ namespace LayeredBusinessModel.WebUI
         {
             if (e.CommandName.Equals("CancelOrderLine"))
             {
-                //get the orderline
-                int index = Convert.ToInt32(e.CommandArgument.ToString());
-                String orderLineID = gvOrderDetails.Rows[index].Cells[1].Text;
-                OrderLineService orderLineService = new OrderLineService();
-                OrderLine orderLine = orderLineService.getOrderLine(orderLineID);
-
-                if (orderLine.orderLineType.id == 1) //only allow cancelling of rent-lines (type 1)
+                try
                 {
-                    if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
+                    //get the orderline
+                    int index = Convert.ToInt32(e.CommandArgument.ToString());
+                    String orderLineID = gvOrderDetails.Rows[index].Cells[1].Text;
+
+                    OrderLine orderLine = new OrderLineService().getByID(orderLineID);            //Throws NoRecordException
+
+                    if (orderLine.orderLineType.id == 1) //only allow cancelling of rent-lines (type 1)
                     {
-                        if(orderLineService.removeOrderLine(orderLine))
+                        if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
                         {
-                            //succesfully removed - refresh the details gridview                            
-                            displayOrderDetails(orderLine.order.order_id.ToString());
+                            if (new OrderLineService().delete(orderLine))       
+                            {
+                                //succesfully removed - refresh the details gridview                            
+                                displayOrderDetails(orderLine.order.order_id.ToString());
+                            }
+                            else
+                            {
+                                //something went wrong
+                                string script = "alert(\"An error occured while trying to removing this item from your order.\");";
+                                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            }
+                        }
+                        else if ((orderLine.startdate - DateTime.Today.Date) < TimeSpan.FromDays(0))
+                        {
+                            //can't remove this copy anymore - too late
+                            string script = "alert(\"Can't cancel an item that has already shipped!\");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         }
                         else
                         {
-                            //something went wrong
-                            string script = "alert(\"An error occured while trying to removing this item from your order.\");";
+                            //can't remove this copy anymore - too late
+                            string script = "alert(\"This item will ship within 2 days and can no longer be cancelled.\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         }
                     }
-                    else if ((orderLine.startdate - DateTime.Today.Date) < TimeSpan.FromDays(0))
-                    {
-                        //can't remove this copy anymore - too late
-                        string script = "alert(\"Can't cancel an item that has already shipped!\");";
-                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-                    }
                     else
                     {
-                        //can't remove this copy anymore - too late
-                        string script = "alert(\"This item will ship within 2 days and can no longer be cancelled.\");";
+                        //can't remove a BUY copy
+                        string script = "alert(\"Only rent-copies can be cancelled.\");";
                         ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
                 }
-                else
+                catch (NoRecordException)
                 {
-                    //can't remove a BUY copy
-                    string script = "alert(\"Only rent-copies can be cancelled.\");";
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+
                 }
             }
         }

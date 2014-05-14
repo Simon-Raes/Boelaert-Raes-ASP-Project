@@ -20,7 +20,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public OrderLine getOrderLineById(String orderLineId)
+        public OrderLine getByID(String orderLineId)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -68,7 +68,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if orderline was deleted, false if no orderline was deleted
          * Throws DALException if something else went wrong
          */
-        public Boolean removeOrderLine(OrderLine orderLine)
+        public Boolean delete(OrderLine orderLine)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -105,7 +105,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<OrderLine> getOrderLinesForOrder(Order order)
+        public List<OrderLine> getByOrder(Order order)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -158,7 +158,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<OrderLine> getOrderLinesForCustomer(Customer customer)
+        public List<OrderLine> getByCustomer(Customer customer)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -212,7 +212,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
+        public List<OrderLine> getActiveRentOrderLinesByCustomer(Customer customer)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -305,7 +305,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the orderline was inserted, false if no orderline was inserted
          * Throws DALException if something else went wrong
          */
-        public Boolean addOrderLine(OrderLine orderline)
+        public Boolean add(OrderLine orderline)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -359,7 +359,8 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the orderline was updated, false if no orderline was updates
          * Throws DALException if something else went wrong
          */
-        public Boolean updateOrderLine(OrderLine orderline)
+        /*
+        public Boolean update(OrderLine orderline)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -411,14 +412,14 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }
+        }*/
 
         /*
          * Returns a list with all the orderlines from a certain startdate
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<OrderLine> getAllOrderlinesForDvdFromStartdate(DvdInfo dvd, DateTime startdate)
+        public List<OrderLine> getAllByDvdAndStartdate(DvdInfo dvd, DateTime startdate)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -465,13 +466,12 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-
         /*
          * Deletes all the orderlines
          * Returns true if ordelines were deleted, false if no orderline were deleted
          * Throws DALException if something else went wrong
          */
-        public Boolean clearTable()
+        public Boolean deleteAll()
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))

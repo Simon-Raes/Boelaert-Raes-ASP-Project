@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -20,31 +21,27 @@ namespace LayeredBusinessModel.WebUI
         /**Reset database to start state*/
         protected void btnResetCopies_Click(object sender, EventArgs e)
         {
-            //Delete all shoppingcarts
-            ShoppingCartService shoppingCartService = new ShoppingCartService();
-            shoppingCartService.clearTable();  
-          
-            //Delete all orderlines
-            OrderLineService orderLineService = new OrderLineService();
-            orderLineService.clearTable();
+            try
+            {
+                //Delete all shoppingcarts
+                ShoppingCartService shoppingCartService = new ShoppingCartService();
+                shoppingCartService.clearTable();
 
-            //Delete all orders
-            OrderService orderService = new OrderService();
-            orderService.clearTable();
+                //Delete all orderlines
+                OrderLineService orderLineService = new OrderLineService();
+                orderLineService.clearTable();
 
-            //Reset all dvd copies to be back in stock (in_stock = true)
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            dvdCopyService.resetAllCopies();
+                //Delete all orders
+                OrderService orderService = new OrderService();
+                orderService.clearTable();
 
+                //Reset all dvd copies to be back in stock (in_stock = true)
+                new DvdCopyService().resetAllCopies();           //Throws NoRecordException 
+            }
+            catch (NoRecordException)
+            {
 
-
-            
+            }
         }
-
-      
-
-        
-
-      
     }
 }

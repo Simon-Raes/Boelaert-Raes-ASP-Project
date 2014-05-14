@@ -37,11 +37,15 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createOrderLine(reader);
+                        return createOrderLine(reader);                 //Throws NoRecordException || DALException
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get an orderline based on an ID", ex);
                 }
                 finally
@@ -175,13 +179,17 @@ namespace LayeredBusinessModel.DAO
                         List<OrderLine> orderList = new List<OrderLine>();
                         while (reader.Read())
                         {
-                            orderList.Add(createOrderLine(reader));
+                            orderList.Add(createOrderLine(reader));         //Throws NoRecordException || DALException
                         }
                         return orderList;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get the orderlines for a certain customer", ex);
                 }
                 finally
@@ -228,13 +236,17 @@ namespace LayeredBusinessModel.DAO
                         List<OrderLine> orderList = new List<OrderLine>();
                         while (reader.Read())
                         {
-                            orderList.Add(createOrderLine(reader));
+                            orderList.Add(createOrderLine(reader));                 //Throws NoRecordException || DALException
                         }
                         return orderList;
                     }                    
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get the active rent orderlines for a customer", ex);
                 }
                 finally
@@ -425,13 +437,17 @@ namespace LayeredBusinessModel.DAO
                         List<OrderLine> orderList = new List<OrderLine>();
                         while (reader.Read())
                         {
-                            orderList.Add(createOrderLine(reader));
+                            orderList.Add(createOrderLine(reader));             //Throws NoRecordException || DALException
                         }
                         return orderList;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get orderlines from a certain startdate", ex);
                 }
                 finally
@@ -505,7 +521,7 @@ namespace LayeredBusinessModel.DAO
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
-                    dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
+                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])
@@ -534,7 +550,7 @@ namespace LayeredBusinessModel.DAO
                     orderline_id = Convert.ToInt32(reader["orderline_id"]),
                     order = new OrderDAO().getOrderWithId(reader["order_id"].ToString()),
                     orderLineType = new OrderLineTypeDAO().getOrderLineTypeForID(reader["order_line_type_id"].ToString()),
-                    dvdCopy = new DvdCopyDAO().getCopyWithId(reader["dvd_copy_id"].ToString()),
+                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
                     dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                     startdate = Convert.ToDateTime(reader["startdate"]),
                     enddate = Convert.ToDateTime(reader["enddate"])

@@ -9,6 +9,7 @@ using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Data;
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -118,9 +119,14 @@ namespace LayeredBusinessModel.WebUI
                 OrderService orderService = new OrderService();
                 Order order = orderService.getOrder(orderID);
 
-                //pay for the order
-                OrderModel helper = new OrderModel();
-                helper.payOrder(order);
+                try
+                {
+                    new OrderModel().payOrder(order);       //Throws NoRecordException || DALException
+                }
+                catch (NoRecordException)
+                {
+                    
+                }
 
                 //get the orderLines
                 OrderLineService orderLineService = new OrderLineService();

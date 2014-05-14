@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -121,9 +122,15 @@ namespace LayeredBusinessModel.BLL
                     //assign the copy if it has been found
                     if (selectedCopyId > 0)
                     {
-                        orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId.ToString());
+                        try
+                        {
+                            orderLine.dvdCopy = new DvdCopyService().getByID(selectedCopyId.ToString());            //Throws NoRecordException || DALException
+                        }
+                        catch (NoRecordException)
+                        {
+                            //No dvd's were found
+                        }
 
-                        
                         orderLineService.updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
@@ -133,34 +140,22 @@ namespace LayeredBusinessModel.BLL
                     }
                     else
                     {
-
                         //no copies with future orderLines are suited for this reservation/rent order
                         //get all fully available copies to assign to this orderline
 
-                        List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(thisDVD, orderLine.startdate);
+                        List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(thisDVD, orderLine.startdate);      //Throws NoRecordException || DALException
+                        //get the first available copy and assign it to this orderLine
+                        selectedCopyId = dvdCopies[0].dvd_copy_id;
+                        //set the found copy as the copy for this orderline
+                        orderLine.dvdCopy = new DvdCopyService().getByID(selectedCopyId.ToString());         //Throws NoRecordException || DALException
+                        //update database
+                        orderLineService.updateOrderLine(orderLine);
+                        //update the amount_sold field of the dvdInfo record
+                        DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
+                        dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
+                        dvdInfoService.updateDvdInfo(dvdInfo);
 
-                        if (dvdCopies.Count > 0)
-                        {
-                            //get the first available copy and assign it to this orderLine
-                            selectedCopyId = dvdCopies[0].dvd_copy_id;
-
-                            //set the found copy as the copy for this orderline
-                           orderLine.dvdCopy = new DvdCopyService().getDvdCopyWithId(selectedCopyId.ToString());
-                            orderLineService.updateOrderLine(orderLine);
-
-                            //update the amount_sold field of the dvdInfo record
-                            DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
-                            dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                            dvdInfoService.updateDvdInfo(dvdInfo);
-                        }
-                        else
-                        {
-                            //not available either, assign nothing
-                            //todo: notify user that his requested rent period is no longer available
-                        }
                     }
-
-
                 }
 
 
@@ -169,50 +164,30 @@ namespace LayeredBusinessModel.BLL
                     //get all available copies
                     //get this list again for every item so you can add a new, available copy to the order (todo: try do this without going to the database for every item)
 
+                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(orderLine.dvdInfo);           //Throws NoRecordException || DALException
 
-                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(orderLine.dvdInfo);
+                    //get the first available copy
+                    copy = availableCopies[0];
 
-                    //check if there is a copy available
-                    if (availableCopies.Count > 0)
+                    //set the found copy as the copy for this orderline
+                    orderLine.dvdCopy = copy;
+                    orderLineService.updateOrderLine(orderLine);
+
+                    //update the amount_sold field of the dvdInfo record
+                    DvdInfoService dvdInfoService = new DvdInfoService();
+                    DvdInfo dvdInfo = copy.dvdinfo;
+                    dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
+                    dvdInfoService.updateDvdInfo(dvdInfo);
+
+                    //mark the found copy as NOT in_stock
+                    copy.in_stock = false;
+                    if (dvdCopyService.updateCopy(copy))            //Throws NoRecordException || DALException  
                     {
-                        //get the first available copy
-                        copy = availableCopies[0];
-
-                        //set the found copy as the copy for this orderline
-                        orderLine.dvdCopy = copy;
-                        orderLineService.updateOrderLine(orderLine);
-
-                        //update the amount_sold field of the dvdInfo record
-                        DvdInfoService dvdInfoService = new DvdInfoService();
-                        DvdInfo dvdInfo = copy.dvdinfo;
-                        dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                        dvdInfoService.updateDvdInfo(dvdInfo);
-
-                        //mark the found copy as NOT in_stock
-                        copy.in_stock = false;
-                        dvdCopyService.updateCopy(copy);
-                    }
-                    else
-                    {
-                        //all InStock = false
-                        //not in stock, will not be assigned a copy!!
-                        //todo: handle this error some way, display error for this item or let the user know this item is currently out of stock
+                        //Record updated
                     }
                 }
-
-
             }
-        }
-
-        private void handleRentCopy(OrderLine orderLine)
-        {
-
-        }
-
-        private void handleBuyCopy(OrderLine orderLine)
-        {
-
-        }
+        }        
 
         public double getOrderCost(Order order)
         {
@@ -240,7 +215,7 @@ namespace LayeredBusinessModel.BLL
                 }
             }
 
-            return Math.Round(totalCost,2);
+            return Math.Round(totalCost, 2);
         }
     }
 }

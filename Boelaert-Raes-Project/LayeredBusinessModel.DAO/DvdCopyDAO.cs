@@ -64,7 +64,7 @@ namespace LayeredBusinessModel.DAO
          *  Throws a NoRecordException if no records were found
          *  Throws a DALException if something else went wrong
          */
-        public DvdCopy getCopyWithId(String copy_id)
+        public DvdCopy getByID(String copy_id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -112,6 +112,7 @@ namespace LayeredBusinessModel.DAO
          *  Returns true if insert was successful, false if no rows were inserted
          *  Throws a DALException if something went wrong
          */
+        /*
         public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -150,8 +151,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 return status;
             }
-        }
-
+        }*/
 
         /*
          * Returns a List of dvdCopyes based on a dvdInfo, a type(rent or buy) that are in stock
@@ -286,7 +286,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if copy was updated, false if no copy was updated
          * Throws DALException if something else went wrong
          */
-        public Boolean updateDvdCopy(DvdCopy copy)
+        public Boolean update(DvdCopy copy)
         {
             SqlCommand command = null;
 
@@ -336,7 +336,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the copy was updated, false if no copy was updated
          * Throws a DALException if something else went wrong
          */ 
-        public Boolean updateDvdCopyInStockStatus(DvdCopy dvdCopy, Boolean in_stock)
+        public Boolean updateStockStatus(DvdCopy dvdCopy, Boolean in_stock)
         {
             SqlCommand command = null;
 

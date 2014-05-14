@@ -9,6 +9,7 @@ using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
 using System.Data;
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -111,11 +112,18 @@ namespace LayeredBusinessModel.WebUI
             ShoppingCartService shoppingCartService = new ShoppingCartService();
             shoppingCartService.removeItemFromCart(gvCart.Rows[index].Cells[1].Text); //cell 1 = shoppingcart_item_id
 
-            //set copy as in_stock
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            DvdCopy dvdCopy = dvdCopyService.getDvdCopyWithId(gvCart.Rows[index].Cells[3].Text);
+            try
+            {
+                //set copy as in_stock
+                DvdCopyService dvdCopyService = new DvdCopyService();
 
-            dvdCopyService.updateDvdCopyInStockStatus(dvdCopy, true);
+                DvdCopy dvdCopy = dvdCopyService.getByID(gvCart.Rows[index].Cells[3].Text);             //Throws NoRecordException || DALException
+                dvdCopyService.updateStockStatus(dvdCopy, true);            //Throws NoRecordException || DALException
+            }
+            catch (NoRecordException)
+            {
+                //No dvd was found
+            }
 
             //update gridview
             //todo: find a way to remove a gridview row without needing a new query + databind

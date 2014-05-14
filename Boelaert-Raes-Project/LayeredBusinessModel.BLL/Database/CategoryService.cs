@@ -23,8 +23,7 @@ namespace LayeredBusinessModel.BLL
          */
         public List<Category> getAll()
         {
-            categoryDAO = new CategoryDAO();
-            return categoryDAO.getAll();                    //Throws NoRecordException || DALException   
+            return new CategoryDAO().getAll();                    //Throws NoRecordException || DALException   
         }
 
         /*
@@ -32,8 +31,7 @@ namespace LayeredBusinessModel.BLL
          */
         public Category getByID(String categoryID)
         {
-            categoryDAO = new CategoryDAO();
-            return categoryDAO.getByID(categoryID);         //Throws NoRecordException || DALException
+            return new CategoryDAO().getByID(categoryID);         //Throws NoRecordException || DALException
         }
     }
 }

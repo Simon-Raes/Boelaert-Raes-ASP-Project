@@ -35,13 +35,17 @@ namespace LayeredBusinessModel.DAO
                         List<Genre> genrelist = new List<Genre>();
                         while (reader.Read())
                         {
-                            genrelist.Add(createGenre(reader));
+                            genrelist.Add(createGenre(reader));     //Throws NoRecordException || DALException
                         }
                         return genrelist;
                     }                 
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all the genres", ex);
                 }
                 finally
@@ -82,13 +86,17 @@ namespace LayeredBusinessModel.DAO
                         List<Genre> genrelist = new List<Genre>();
                         while (reader.Read())
                         {
-                            genrelist.Add(createGenre(reader));
+                            genrelist.Add(createGenre(reader));         //Throws NoRecordException || DALException
                         }
                         return genrelist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all the genres for a certain category", ex);
                 }
                 finally
@@ -132,13 +140,17 @@ namespace LayeredBusinessModel.DAO
                         List<Genre> genrelist = new List<Genre>();
                         while (reader.Read())
                         {
-                            genrelist.Add(createGenre(reader));
+                            genrelist.Add(createGenre(reader));         //Throws NoRecordException || DALException
                         }
                         return genrelist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all the genres for a certain dvd", ex);
                 }
                 finally
@@ -177,11 +189,15 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createGenre(reader);
+                        return createGenre(reader);         //Throws NoRecordException || DALException
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get a genre based on an ID", ex);
                 }
                 finally
@@ -200,7 +216,7 @@ namespace LayeredBusinessModel.DAO
             return new Genre
             {
                 genre_id = Convert.ToInt32(reader["genre_id"]),
-                category = new CategoryDAO().getByID(reader["category_id"].ToString()),
+                category = new CategoryDAO().getByID(reader["category_id"].ToString()),         //Throws NoRecordException || DALException
                 name = Convert.ToString(reader["name"])
             };
         }

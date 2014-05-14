@@ -301,8 +301,9 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
 
 
-                    DvdCopyService dvdCopyService = new DvdCopyService();
-                    List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockRentCopiesForDvdInfo(dvdInfo);
+                    /* Wordt niets meegedaan
+                    List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockRentCopiesForDvdInfo(dvdInfo);           //Throws NoRecordException || DALException
+                    */
 
                     //check the number of rent items in the user's cart
                     ShoppingCartService shoppingCartService = new ShoppingCartService();

@@ -69,12 +69,16 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createOrder(reader);
+                        return createOrder(reader);         //Throws NoRecordException || DALException  
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new DALException("Failed to get an order based on an ID", ex);
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get an order based on an ID", ex);                    
                 }
                 finally
                 {
@@ -162,14 +166,18 @@ namespace LayeredBusinessModel.DAO
                         List<Order> orderList = new List<Order>();
                         while (reader.Read())
                         {
-                            orderList.Add(createOrder(reader));
+                            orderList.Add(createOrder(reader));         //Throws NoRecordException || DALException  
                         }
                         return orderList;
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new DALException("Failed to get the order for a customer", ex);
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get the order for a customer", ex);                  
                 }
                 finally
                 {
@@ -264,7 +272,7 @@ namespace LayeredBusinessModel.DAO
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
                 orderstatus = new OrderStatusDAO().getOrderStatusByID(reader["orderstatus_id"].ToString()),
-                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),
+                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),         //Throws NoRecordException || DALException         
                 date = Convert.ToDateTime(reader["date"])
             };
         }

@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -34,15 +35,10 @@ namespace LayeredBusinessModel.WebUI
 
         protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithEmail(inputEmail.Value);
-            if (cust == null)
+            try
             {
-                //email still available
-                args.IsValid = true;
-            }
-            else
-            {
+                CustomerService customerService = new CustomerService();
+                Customer cust = customerService.getByEmail(inputEmail.Value);           //Throws NoRecordException || DALException
                 if (cust.email.Equals(((Customer)Session["user"]).email))
                 {
                     //user didn't change his email, OK
@@ -53,6 +49,10 @@ namespace LayeredBusinessModel.WebUI
                     //email already taken
                     args.IsValid = false;
                 }
+            }
+            catch (NoRecordException)
+            {
+                args.IsValid = true;
             }
         }
 

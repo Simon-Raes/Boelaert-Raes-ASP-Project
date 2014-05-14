@@ -44,13 +44,17 @@ namespace LayeredBusinessModel.DAO
                         List<ShoppingcartItem> cartItems = new List<ShoppingcartItem>();
                         while (reader.Read())
                         {
-                            cartItems.Add(createShoppingcartItem(reader));
+                            cartItems.Add(createShoppingcartItem(reader));          //Throws NoRecordException || DALException  
                         }
                         return cartItems;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get a shoppingcaritems for customer", ex);
                 }
                 finally
@@ -281,7 +285,7 @@ namespace LayeredBusinessModel.DAO
             return new ShoppingcartItem
             {
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
-                customer = new CustomerDAO().getByID(reader[1].ToString()),
+                customer = new CustomerDAO().getByID(reader[1].ToString()),             //Throws NoRecordException || DALException  
                 dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),   
                 dvdCopyType = new DvdCopyTypeDAO().getTypeForID(reader[3].ToString()),
                 startdate = startdate,

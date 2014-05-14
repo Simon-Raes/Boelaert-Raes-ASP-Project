@@ -35,11 +35,15 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createPageVisits(reader);
+                        return createPageVisits(reader);            //Throws NoRecordException || DALException  
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get pagevisits for customer and dvd", ex);
                 }
                 finally
@@ -81,13 +85,17 @@ namespace LayeredBusinessModel.DAO
                         List<PageVisits> pageVisits = new List<PageVisits>();
                         while (reader.Read())
                         {
-                            pageVisits.Add(createPageVisits(reader));
+                            pageVisits.Add(createPageVisits(reader));           //Throws NoRecordException || DALException  
                         }
                         return pageVisits;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get pagevisits for customer", ex);
                 }
                 finally
@@ -190,7 +198,7 @@ namespace LayeredBusinessModel.DAO
         {
             return new PageVisits
             {
-                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),
+                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),         //Throws NoRecordException || DALException  
                 dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
                 number_of_visits = Convert.ToInt32(reader["number_of_visits"])
             };

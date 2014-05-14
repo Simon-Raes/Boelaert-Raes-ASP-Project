@@ -67,6 +67,7 @@
     <Compile Include="Database\SearchService.cs" />
     <Compile Include="Database\ShoppingCartService.cs" />
     <Compile Include="Model\RecommendationsModel.cs" />
+    <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomException\CustomException.csproj">

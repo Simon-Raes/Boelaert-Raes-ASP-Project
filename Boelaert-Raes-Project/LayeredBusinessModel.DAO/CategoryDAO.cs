@@ -11,6 +11,9 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
+    /*
+     * All methods that rely on the methods defined in this class are surrounded with try catch blocks
+     */ 
     public class CategoryDAO : DAO
     {
         /*
@@ -65,7 +68,7 @@ namespace LayeredBusinessModel.DAO
          * Throws a NoRecordException if no records were found
          * Throws a DALException if something else went wrong
          */
-        public Category getCategoryByID(String id)
+        public Category getByID(String id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;

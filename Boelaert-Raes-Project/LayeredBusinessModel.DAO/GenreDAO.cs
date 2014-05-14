@@ -200,7 +200,7 @@ namespace LayeredBusinessModel.DAO
             return new Genre
             {
                 genre_id = Convert.ToInt32(reader["genre_id"]),
-                category = new CategoryDAO().getCategoryByID(reader["category_id"].ToString()),
+                category = new CategoryDAO().getByID(reader["category_id"].ToString()),
                 name = Convert.ToString(reader["name"])
             };
         }

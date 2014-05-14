@@ -23,36 +23,44 @@ namespace LayeredBusinessModel.BLL
          */ 
         public List<Customer> getAll()
         {
-            return new CustomerDAO().getAll();
+            return new CustomerDAO().getAll();              //Throws NoRecordException || DALException
         }
 
+        /*
+         * Returns a Customer based on an ID
+         */
         public Customer getByID(String id)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.getByID(id);           
+            return new CustomerDAO().getByID(id);                 //Throws NoRecordException || DALException       
         }
 
-        
-        public Customer getCustomerWithEmail(String email)
+        /*
+         * Returns a Customer based on an Email
+         */
+        public Customer getByEmail(String email)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.getByEmail(email);
+            return new CustomerDAO().getByEmail(email);           //Throws NoRecordException || DALException
         }
 
-        
+        /*
+         * Updates a Customer
+         */ 
         public Boolean updateCustomer(Customer customer)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.update(customer);
+            return new CustomerDAO().update(customer);            //Throws DALException
         }
 
-        
+        /*
+         * Adds a Customer
+         */ 
         public Boolean addCustomer(Customer customer)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.add(customer);
+            return new CustomerDAO().add(customer);               //Throws DALException
         }
 
+        /*
+         * Verrifies a Customer
+         */  
         public Boolean verrifyCustomer(Customer customer, Token strToken)
         {
             if (customer.isVerified)
@@ -60,13 +68,11 @@ namespace LayeredBusinessModel.BLL
                 return false;
             }
             else
-            {
-                customer.isVerified = true;
-                customerDAO = new CustomerDAO();
-                if (customerDAO.verrify(customer))
+            {                
+                if (new CustomerDAO().verrify(customer))        //Throws DALException
                 {
-                    TokenService t = new TokenService();
-                    t.deleteToken(strToken);
+                    new TokenService().deleteToken(strToken);
+                    customer.isVerified = true;
                     return true;
                 }
                 return false;

@@ -118,7 +118,7 @@ namespace LayeredBusinessModel.WebUI
             if (txtEmail.Value != null && txtEmail.Value != null)
             {
                 LoginModel loginModel = new LoginModel();
-                Customer customer = loginModel.signIn(txtEmail.Value, txtPassword.Value);
+                Customer customer = loginModel.signIn(txtEmail.Value, txtPassword.Value);                       //Throws DALException
 
                 if (customer != null)
                 {
@@ -129,7 +129,7 @@ namespace LayeredBusinessModel.WebUI
                 else
                 {
                     //user couldn't be logged in, request the status code so the correct error can be displayed to the user
-                    LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);
+                    LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);      //Throws DALException
                     switch (status)
                     {
                         case LoginStatusCode.NOTVERIFIED:
@@ -178,7 +178,7 @@ namespace LayeredBusinessModel.WebUI
         private void fillSideBar()
         {
             //retrieve list with categories and loop throu it
-            List<Category> categories = new CategoryService().getAll();
+            List<Category> categories = new CategoryService().getAll();         //Throws NoRecordException || DALException         
             foreach (Category c in categories)
             {
                 //create category list

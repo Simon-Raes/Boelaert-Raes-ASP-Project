@@ -85,8 +85,8 @@ namespace LayeredBusinessModel.WebUI
                 categoryService = new CategoryService();
 
                 try
-                {                   
-                   labelText = categoryService.getByID(category_id).name + " DVDs";
+                {
+                    labelText = categoryService.getByID(category_id).name + " DVDs";         //Throws NoRecordException || DALException
                 }
                 catch (NoRecordException ex)
                 {

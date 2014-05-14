@@ -57,28 +57,23 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnReset_Click(object sender, EventArgs e)
         {
-            CustomerService customerService = new CustomerService();
-            Customer user = customerService.getCustomerWithEmail(txtPassword.Value);
-            if (user == null)
+            try
             {
-                user = customerService.getCustomerWithEmail(txtPassword.Value);
-            }
+                CustomerService customerService = new CustomerService();
+                Customer user = customerService.getByEmail(txtPassword.Value);          //Throws NoRecordException || DALException
 
-            if(user!=null)
-            {
                 lblStatus.Text = "We've sent you an email to reset your password.";
                 lblStatus.ForeColor = System.Drawing.Color.Green;
 
                 PasswordResetModel model = new PasswordResetModel();
-                model.sendPasswordResetRequest(user);               
-
+                model.sendPasswordResetRequest(user);
             }
-            else
+            catch (NoRecordException)
             {
+                //When no customer was found with the given e-mailadress
                 lblStatus.Text = "Unknown email-address.";
                 lblStatus.ForeColor = System.Drawing.Color.Red;
-            }
-            
+            }            
         }
     }
 }

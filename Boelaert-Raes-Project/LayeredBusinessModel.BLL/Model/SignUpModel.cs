@@ -22,7 +22,7 @@ namespace LayeredBusinessModel.BLL.Model
                 //create token
                 TokenService tokenService = new TokenService();
                 //need to get the customer from the database so we have his customer_id
-                Customer customer = customerService.getCustomerWithEmail(user.email);
+                Customer customer = customerService.getByEmail(user.email);             //Throws NoRecordException || DALException
                 Token token = new Token
                 {
                     customer = customer,
@@ -75,32 +75,30 @@ namespace LayeredBusinessModel.BLL.Model
         public Boolean sendVerificationForEmail(String email)
         {
             Boolean status = false;
+            
+            Customer customer = new CustomerService().getByEmail(email);          //Throws NoRecordException || DALException                        
+            List<Token> tokens = new TokenService().getTokensForCustomer(customer);
+                        
 
-            CustomerService customerService = new CustomerService();
-            Customer customer = customerService.getCustomerWithEmail(email);
-            if (customer != null)
+            if (tokens.Count > 0)
             {
-                TokenService tokenService = new TokenService();
-                List<Token> tokens = tokenService.getTokensForCustomer(customer);
                 Token verificationToken = null;
-                if (tokens.Count > 0)
+                foreach (Token token in tokens)
                 {
-                    foreach (Token token in tokens)
+                    if (token.status == TokenStatus.VERIFICATION)
                     {
-                        if (token.status == TokenStatus.VERIFICATION)
-                        {
-                            verificationToken = token;
-                        }
-                    }
-                    if (verificationToken != null)
-                    {
-                        status = true;
-
-                        EmailModel emailModel = new EmailModel();
-                        emailModel.sendRegistrationEmail(verificationToken);
+                        verificationToken = token;
                     }
                 }
+                if (verificationToken != null)
+                {
+                    status = true;
+
+                    EmailModel emailModel = new EmailModel();
+                    emailModel.sendRegistrationEmail(verificationToken);
+                }
             }
+
             return status;
         }
     }

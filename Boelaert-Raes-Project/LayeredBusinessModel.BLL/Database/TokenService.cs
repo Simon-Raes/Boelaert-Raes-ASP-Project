@@ -19,7 +19,9 @@ namespace LayeredBusinessModel.BLL.Database
             {
                 //token bestaat wel
                 //customer opvragen en in token plaatsen
-                token.customer = new CustomerService().getByID(token.customer.customer_id.ToString());      //throws NoRecordException
+               
+                token.customer = new CustomerService().getByID(token.customer.customer_id.ToString());      //throws Throws NoRecordException || DALException
+             
             }
             return token;
         }

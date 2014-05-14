@@ -46,6 +46,10 @@ namespace LayeredBusinessModel.BLL
             return new OrderLineDAO().deleteAll();
         }
 
+        public void updateOrderLine(OrderLine orderLine)
+        {
+            //Stond geen code in
+        }
         /*
         public Boolean update(OrderLine orderLine)
         {

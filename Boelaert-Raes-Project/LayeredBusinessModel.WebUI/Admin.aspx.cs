@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
-                List<Genre> genres = new GenreService().getAll();           //Throws NoRecordException
+                List<Genre> genres = new GenreService().getAll();   //Throws NoRecordException
                 foreach (Genre g in genres)
                 {
                     inputGenre.Items.Add(new ListItem(g.genre_id + ", " + g.name));

@@ -114,10 +114,6 @@ namespace LayeredBusinessModel.BLL
                         }
                     }
 
-
-
-
-
                     //assign the copy if it has been found
                     if (selectedCopyId > 0)
                     {
@@ -130,7 +126,7 @@ namespace LayeredBusinessModel.BLL
                             //No dvd's were found
                         }
 
-                        orderLineService.updateOrderLine(orderLine);
+                        new OrderLineService().updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
                         DvdInfo dvdInfo = orderLine.dvdInfo;
@@ -148,7 +144,7 @@ namespace LayeredBusinessModel.BLL
                         //set the found copy as the copy for this orderline
                         orderLine.dvdCopy = new DvdCopyService().getByID(selectedCopyId.ToString());         //Throws NoRecordException || DALException
                         //update database
-                        orderLineService.updateOrderLine(orderLine);
+                        new OrderLineService().updateOrderLine(orderLine);
                         //update the amount_sold field of the dvdInfo record
                         DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
@@ -170,7 +166,7 @@ namespace LayeredBusinessModel.BLL
 
                     //set the found copy as the copy for this orderline
                     orderLine.dvdCopy = copy;
-                    orderLineService.updateOrderLine(orderLine);
+                    new OrderLineService().updateOrderLine(orderLine);
 
                     //update the amount_sold field of the dvdInfo record
                     DvdInfoService dvdInfoService = new DvdInfoService();

@@ -339,49 +339,41 @@ namespace LayeredBusinessModel.WebUI
                                 numberOfCurrentlyRentedItems++;
                             }
                         }
-                    }
-                    catch (NoRecordException)
-                    {
 
-                    }
-                    
-                    try
-                    {
                         //check the number of items currently being rented by the user
                         List<OrderLine> orderLines = new OrderLineService().getActiveRentOrderLinesByCustomer(user);          //Throws NoRecordException
                         foreach (OrderLine orderLine in orderLines)
                         {
                             numberOfCurrentlyRentedItems++;
                         }
+
+                        //check if the user can still rent additional items
+                        if (numberOfCurrentlyRentedItems < 5)
+                        {
+                            if (new ShoppingCartService().addByCustomerAndStartdateAndEndate(user, Request.QueryString["id"].ToString(), startdate, enddate))
+                            {
+                                ////all good
+                                ////todo:delete this popup
+                                //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
+                                //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                            }
+                            else
+                            {
+                                ////something went wrong
+                                ////todo:delete this popup
+                                //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
+                                //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
+                            }
+                        }
+                        else
+                        {
+                            string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
+                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                        }
                     }
                     catch (NoRecordException)
                     {
 
-                    }
-
-                    //check if the user can still rent additional items
-                    if (numberOfCurrentlyRentedItems < 5)
-                    {
-                        if (shoppingCartService.addItemToCart(user, Request.QueryString["id"].ToString(), startdate, enddate))
-                        {
-                            ////all good
-                            ////todo:delete this popup
-                            //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
-                        }
-                        else
-                        {
-                            ////something went wrong
-                            ////todo:delete this popup
-                            //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
-                        }
-
-                    }
-                    else
-                    {
-                        string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
-                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
                 }
 

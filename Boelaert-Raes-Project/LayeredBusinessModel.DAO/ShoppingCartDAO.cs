@@ -263,7 +263,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were inserted, false if not
          * Throws DALException if something else went wrong
          */
-        /*
+        
         public Boolean addByCustomerAndStartdateAndEndate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
             SqlCommand command = null;
@@ -298,6 +298,6 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }*/
+        }
     }
 }

@@ -136,7 +136,7 @@ namespace LayeredBusinessModel.BLL
                         //update the amount_sold field of the dvdInfo record
                         DvdInfo dvdInfo = orderLine.dvdInfo;
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                        dvdInfoService.updateDvdInfo(dvdInfo);
+                        dvdInfoService.update(dvdInfo);                                                             //Throws NoRecordException
                     }
                     else
                     {
@@ -153,7 +153,7 @@ namespace LayeredBusinessModel.BLL
                         //update the amount_sold field of the dvdInfo record
                         DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
                         dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                        dvdInfoService.updateDvdInfo(dvdInfo);
+                        dvdInfoService.update(dvdInfo);                                                                 //Throws NoRecordException
 
                     }
                 }
@@ -177,7 +177,7 @@ namespace LayeredBusinessModel.BLL
                     DvdInfoService dvdInfoService = new DvdInfoService();
                     DvdInfo dvdInfo = copy.dvdinfo;
                     dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                    dvdInfoService.updateDvdInfo(dvdInfo);
+                    dvdInfoService.update(dvdInfo);         //Throws NoRecordException
 
                     //mark the found copy as NOT in_stock
                     copy.in_stock = false;

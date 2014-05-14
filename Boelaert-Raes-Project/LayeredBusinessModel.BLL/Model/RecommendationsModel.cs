@@ -95,7 +95,8 @@ namespace LayeredBusinessModel.BLL
                 }
 
                 //we now have the user's 3 favourite genres in maxGenres, use that info to get the dvds that match those 3 genres the most
-                List<int> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16); //get max 16 dvds. Index will always show maximum 4, but catalog can show up to 16
+                //get max 16 dvds. Index will always show maximum 4, but catalog can show up to 16
+                List<int> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16);            //Throws NoRecordException
 
                 List<int> dvdTempIds = new List<int>();
 
@@ -113,19 +114,19 @@ namespace LayeredBusinessModel.BLL
                 {
                     foreach (int id in dvdTempIds)
                     {
-                        dvdList.Add(dvdInfoService.getDvdInfoWithID(id.ToString()));
+                        dvdList.Add(dvdInfoService.getByID(id.ToString()));            //Throws NoRecordException            
                     }
                 }
                 else
                 {
                     //customer has already bought or rented every suggestion, recommend the movies whose pages the user has viewed most often
-                    dvdList = getMostViewedDvdInfos(customer);
+                    dvdList = getMostViewedDvdInfos(customer);          //Throws NoRecordException
                 }
             }
             else
             {
                 //customer has no orderlines, recommend the movies whose pages the user has viewed the most
-                dvdList = getMostViewedDvdInfos(customer);
+                dvdList = getMostViewedDvdInfos(customer);              //Throws NoRecordException
             }
 
 
@@ -154,9 +155,8 @@ namespace LayeredBusinessModel.BLL
 
             foreach (PageVisits pageVisits in pageVisitsList)
             {
-                dvdInfos.Add(dvdInfoService.getDvdInfoWithID(pageVisits.dvdInfo.dvd_info_id.ToString()));
+                dvdInfos.Add(dvdInfoService.getByID(pageVisits.dvdInfo.dvd_info_id.ToString()));           //Throws NoRecordException
             }
-
 
             //only return dvd's that the user hasn't bought before
             foreach (DvdInfo dvdInfo in dvdInfos)

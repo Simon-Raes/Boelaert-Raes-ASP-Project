@@ -14,13 +14,10 @@ namespace LayeredBusinessModel.BLL.Model
     {
         public static Boolean isAvailableForBuying(String movieID)
         {
-            DvdInfoService dvdInfoService = new DvdInfoService();
-            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(movieID);
-
-            DvdCopyService dvdCopyService = new DvdCopyService();
             try
             {
-                List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(dvdInfo);        //Throws NoRecordException || DALException
+                DvdInfo dvdInfo = new DvdInfoService().getByID(movieID);             //Throws NoRecordException
+                List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockBuyCopiesForDvdInfo(dvdInfo);        //Throws NoRecordException || DALException
                 return true;
             }
             catch (NoRecordException)

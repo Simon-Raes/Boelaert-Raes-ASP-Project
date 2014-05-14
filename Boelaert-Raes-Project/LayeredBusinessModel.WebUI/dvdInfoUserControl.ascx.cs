@@ -90,7 +90,7 @@ namespace LayeredBusinessModel.WebUI
             DvdInfoService dvdbll = new DvdInfoService();
             try
             {
-                DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Convert.ToString(id));
+                DvdInfo thisDVD = dvdbll.getByID(Convert.ToString(id));                //Throws NoRecordExample
                 List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
 
 

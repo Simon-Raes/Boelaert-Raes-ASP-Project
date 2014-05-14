@@ -17,7 +17,7 @@ namespace LayeredBusinessModel.DAO
          * Adds a genre for a dvd
          * Returns true if rows were inserted, false if no rows were inserted
          * Throws a DALException if something else went wrong
-         */ 
+         */
         public Boolean addForDvd(Genre genre, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -52,12 +52,12 @@ namespace LayeredBusinessModel.DAO
                 }
             }
         }
-        
+
         /*
          * Returns a list with ID from related dvd based on a genre
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
-         */ 
+         */
         public List<int> findRelatedDvdsBasedOnGenre(DvdInfo dvdInfo, int amount)
         {
             SqlCommand command = null;

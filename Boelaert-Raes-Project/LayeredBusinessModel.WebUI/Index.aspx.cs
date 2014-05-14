@@ -22,68 +22,85 @@ namespace LayeredBusinessModel.WebUI
 
             //if (!Page.IsPostBack)
             //{
-                user = (Customer)Session["user"];
+            user = (Customer)Session["user"];
 
-                //only show recommendations for a logged in user
-                if (user != null)
-                {                    
-                    setupRecommendations();
-                }        
-                setupSpotlight();
-                setupNewReleases();
-                setupMostPopular();
+            //only show recommendations for a logged in user
+            if (user != null)
+            {
+                setupRecommendations();
+            }
+            setupSpotlight();
+            setupNewReleases();
+            setupMostPopular();
             //}
         }
 
         private void setupSpotlight()
         {
-            DvdInfoService dvdInfoService = new DvdInfoService();
-            List<DvdInfo> dvdsWithBanner = dvdInfoService.getAllDvdInfosWithBanner();
-
-            //selects a random dvd with a banner image to display as spotlight, could be set using an admin module
-            if(dvdsWithBanner.Count>0)
+            try
             {
-                Random rnd = new Random();
-                DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
+                List<DvdInfo> dvdsWithBanner = new DvdInfoService().getAllWithBanner();               //Throws NoRecordException
 
-                anchorSpotlight.HRef = "Detail.aspx?id=" + spotlightDvd.dvd_info_id;
-                foreach (KeyValuePair<int, String> k in spotlightDvd.media)
+                //selects a random dvd with a banner image to display as spotlight, could be set using an admin module
+                if (dvdsWithBanner.Count > 0)
                 {
-                    if (k.Key == 4)
+                    Random rnd = new Random();
+                    DvdInfo spotlightDvd = dvdsWithBanner[rnd.Next(dvdsWithBanner.Count)];
+
+                    anchorSpotlight.HRef = "Detail.aspx?id=" + spotlightDvd.dvd_info_id;
+                    foreach (KeyValuePair<int, String> k in spotlightDvd.media)
                     {
-                        imgSpotlight.Src = k.Value;
+                        if (k.Key == 4)
+                        {
+                            imgSpotlight.Src = k.Value;
+                        }
                     }
-                } 
-            }             
+                }
+            }
+            catch (NoRecordException)
+            {
+
+            }
         }
 
         private void setupRecommendations()
         {
-            RecommendationsModel recModel = new RecommendationsModel();
-            List<DvdInfo> dvdList = recModel.getRecommendations(user, 4);
-            if (dvdList.Count > 0)
+            try
             {
-                addTilesToRow(dvdList, recommened);
                 divRecommended.Visible = true;
+                List<DvdInfo> dvdList = new RecommendationsModel().getRecommendations(user, 4);           //Throws NoRecordException()
+                addTilesToRow(dvdList, recommened);
             }
-            else
+            catch (NoRecordException)
             {
-                //user has not visited any pages and has not ordered any items, HIDE the recommendations panel
                 divRecommended.Visible = false;
             }
-                    
         }
 
         private void setupNewReleases()
         {
-            List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);
-            addTilesToRow(dvdList, newReleases);            
+            try
+            {
+                List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);              //Throws NoRecordException()
+                addTilesToRow(dvdList, newReleases);
+            }
+            catch (NoRecordException)
+            {
+                
+            }
         }
 
         private void setupMostPopular()
         {
-            List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(4);
-            addTilesToRow(dvdList, mostPopular);            
+            try
+            {
+                List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(4);         //Throws NoRecordException
+                addTilesToRow(dvdList, mostPopular);
+            }
+            catch (NoRecordException)
+            {
+
+            }
         }
 
 
@@ -103,7 +120,7 @@ namespace LayeredBusinessModel.WebUI
                     }
                 }
                 dvdInfo.title = d.name;
-               
+
                 dvdInfo.buy_price = d.buy_price;
                 dvdInfo.rent_price = d.rent_price;
 
@@ -120,21 +137,29 @@ namespace LayeredBusinessModel.WebUI
 
             if (user != null)
             {
-                DvdInfoService dvdInfoService = new DvdInfoService();
-                DvdInfo thisDvd = dvdInfoService.getDvdInfoWithID(dvd_info_id.ToString());
+                try
+                {
+                    DvdInfo thisDvd = new DvdInfoService().getByID(dvd_info_id.ToString());          //Throws NoRecordException
+                    new ShoppingCartService().addItemToCart(user, thisDvd);
+                }
+                catch (NoRecordException)
+                {
 
-                if (thisDvd != null)
-                {                    
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(user, thisDvd);
                 }
             }
             else
             {
-                //todo: please sign in!
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append("<script type = 'text/javascript'>");
+                sb.Append("window.onload=function(){");
+                sb.Append("alert('");
+                sb.Append("To do: alert user that he is not logged in");
+                sb.Append("')};");
+                sb.Append("</script>");
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", sb.ToString());
             }
         }
 
-       
+
     }
 }

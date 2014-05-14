@@ -39,10 +39,15 @@ namespace LayeredBusinessModel.WebUI
 
                 if (user != null)
                 {
-                    PageVisitsModel pageVisitsModel = new PageVisitsModel();
-                    DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(dvd_info_id);
-                    pageVisitsModel.incrementPageVisits(user, dvdInfo);
+                    try
+                    {
+                        DvdInfo dvdInfo = new DvdInfoService().getByID(dvd_info_id);         //Throws NoRecordException
+                        new PageVisitsModel().incrementPageVisits(user, dvdInfo);
+                    }
+                    catch (NoRecordException)
+                    {
+
+                    }
                 }
             }
             //}
@@ -50,82 +55,94 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupDvdInfo(String id)
         {
-            wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
-            String currency = "€";
-
-            DvdInfoService dvdbll = new DvdInfoService();
-            DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(id.ToString());
-
-
-
-            lblTitle.Text = dvdInfo.name + " ";
-            linkYear.Text = "(" + dvdInfo.year + ")";
-            linkYear.NavigateUrl = "~/Catalog.aspx?year=" + dvdInfo.year;
-
-
-            linkDirector.Text = dvdInfo.author;
-            linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
-
-
-            if (!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
+            try
             {
-                foreach (String a in dvdInfo.actors)
+                wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
+                String currency = "€";
+
+                DvdInfoService dvdbll = new DvdInfoService();
+                DvdInfo dvdInfo = dvdbll.getByID(id.ToString());           //Throws NoRecordException
+
+
+
+                lblTitle.Text = dvdInfo.name + " ";
+                linkYear.Text = "(" + dvdInfo.year + ")";
+                linkYear.NavigateUrl = "~/Catalog.aspx?year=" + dvdInfo.year;
+
+
+                linkDirector.Text = dvdInfo.author;
+                linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
+
+
+                if (!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
                 {
-                    HyperLink actor = new HyperLink();
-                    actor.Text = a;
-                    actor.NavigateUrl = "~/Catalog.aspx?actor=" + a;
-                    actorLinks.Controls.Add(actor);
+                    foreach (String a in dvdInfo.actors)
+                    {
+                        HyperLink actor = new HyperLink();
+                        actor.Text = a;
+                        actor.NavigateUrl = "~/Catalog.aspx?actor=" + a;
+                        actorLinks.Controls.Add(actor);
+                        Label l = new Label();
+                        l.Text = ", ";
+                        actorLinks.Controls.Add(l);
+                    }
+                    int i = actorLinks.Controls.Count;
+                    actorLinks.Controls.RemoveAt(i - 1);
+                    actorLinks.Controls.Add(new LiteralControl("<br />"));
+                }
+                else
+                {
+                    lblActors.Visible = false;
+                }
+
+
+                if (!dvdInfo.duration.Equals(""))
+                {
+                    lblDuration.Text = dvdInfo.duration + " min";
+                }
+                else
+                {
+                    spanRuntime.Visible = false;
+                }
+
+                foreach (Genre g in dvdInfo.genres)
+                {
+                    HyperLink genre = new HyperLink();
+                    genre.Text = g.name;
+                    genre.NavigateUrl = "~/Catalog.aspx?genre=" + g.genre_id;
+
+                    genreLinks.Controls.Add(genre);
                     Label l = new Label();
                     l.Text = ", ";
-                    actorLinks.Controls.Add(l);
+                    genreLinks.Controls.Add(l);
                 }
-                int i = actorLinks.Controls.Count;
-                actorLinks.Controls.RemoveAt(i - 1);
-                actorLinks.Controls.Add(new LiteralControl("<br />"));
-            }
-            else
-            {
-                lblActors.Visible = false;
-            }
-
-
-            if (!dvdInfo.duration.Equals(""))
-            {
-                lblDuration.Text = dvdInfo.duration + " min";
-            }
-            else
-            {
-                spanRuntime.Visible = false;
-            }
-
-
-
-            foreach (Genre g in dvdInfo.genres)
-            {
-                HyperLink genre = new HyperLink();
-                genre.Text = g.name;
-                genre.NavigateUrl = "~/Catalog.aspx?genre=" + g.genre_id;
-
-                genreLinks.Controls.Add(genre);
-                Label l = new Label();
-                l.Text = ", ";
-                genreLinks.Controls.Add(l);
-            }
-            int j = genreLinks.Controls.Count;
-            if (j > 0)
-            {
-                genreLinks.Controls.RemoveAt(j - 1);
-            }
-
-
-            lblPlot.Text = dvdInfo.descripion;
-
-
-            if (Request.QueryString["currency"] == null)
-            {
-                if (CookieUtil.CookieExists("currency"))
+                int j = genreLinks.Controls.Count;
+                if (j > 0)
                 {
-                    switch (CookieUtil.GetCookieValue("currency"))
+                    genreLinks.Controls.RemoveAt(j - 1);
+                }
+
+
+                lblPlot.Text = dvdInfo.descripion;
+
+
+                if (Request.QueryString["currency"] == null)
+                {
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        switch (CookieUtil.GetCookieValue("currency"))
+                        {
+                            case "usd":
+                                currency = "$";
+                                dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price, "usd");
+                                dvdInfo.rent_price = (float)currencyWebService.convert(dvdInfo.rent_price, "usd");
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    switch (Request.QueryString["currency"])
                     {
                         case "usd":
                             currency = "$";
@@ -134,68 +151,58 @@ namespace LayeredBusinessModel.WebUI
                             break;
                     }
                 }
-            }
-            else
-            {
-                switch (Request.QueryString["currency"])
+
+
+                if (AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
                 {
-                    case "usd":
-                        currency = "$";
-                        dvdInfo.buy_price = (float)currencyWebService.convert(dvdInfo.buy_price, "usd");
-                        dvdInfo.rent_price = (float)currencyWebService.convert(dvdInfo.rent_price, "usd");
-                        break;
+                    lblBuyStatus.Text = "";
+                    btnBuyB.Attributes.Add("Class", "btn btn-success");
                 }
-            }
-
-
-            if (AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
-            {
-                lblBuyStatus.Text = "";
-                btnBuyB.Attributes.Add("Class", "btn btn-success");
-            }
-            else
-            {
-                lblBuyStatus.Text = "Item currently out of stock!";
-                btnBuyB.Attributes.Add("Class", "btn btn-warning");
-            }
-
-
-            btnBuyB.InnerText = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
-            btnRent1.Text = "Rent 1 day " + currency + " " + dvdInfo.rent_price.ToString();
-            btnRent3.Text = "Rent 3 days " + currency + " " + (dvdInfo.rent_price * 3).ToString();
-            btnRent7.Text = "Rent 7 days " + currency + " " + (dvdInfo.rent_price * 7).ToString();
-
-            foreach (KeyValuePair<int, String> k in dvdInfo.media)
-            {
-                if (k.Key == 1)
+                else
                 {
-                    imgDvdCoverFocus.ImageUrl = k.Value;
+                    lblBuyStatus.Text = "Item currently out of stock!";
+                    btnBuyB.Attributes.Add("Class", "btn btn-warning");
                 }
 
 
+                btnBuyB.InnerText = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
+                btnRent1.Text = "Rent 1 day " + currency + " " + dvdInfo.rent_price.ToString();
+                btnRent3.Text = "Rent 3 days " + currency + " " + (dvdInfo.rent_price * 3).ToString();
+                btnRent7.Text = "Rent 7 days " + currency + " " + (dvdInfo.rent_price * 7).ToString();
 
-                else if (k.Key == 2)
+                foreach (KeyValuePair<int, String> k in dvdInfo.media)
                 {
-                    HtmlGenericControl div = new HtmlGenericControl("div");
-                    div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
+                    if (k.Key == 1)
+                    {
+                        imgDvdCoverFocus.ImageUrl = k.Value;
+                    }
 
-                    Image img = new Image();
-                    img.ImageUrl = k.Value;
-                    div.Controls.Add(img);
 
-                    scrollrow.Controls.Add(div);
+
+                    else if (k.Key == 2)
+                    {
+                        HtmlGenericControl div = new HtmlGenericControl("div");
+                        div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
+
+                        Image img = new Image();
+                        img.ImageUrl = k.Value;
+                        div.Controls.Add(img);
+
+                        scrollrow.Controls.Add(div);
+                    }
+                    else if (k.Key == 3)
+                    {
+                        HtmlGenericControl div = new HtmlGenericControl("div");
+                        div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
+                        Literal youtube = new Literal();
+                        youtube.Text = GetYouTubeScript(k.Value);
+                        div.Controls.Add(youtube);
+                        scrollrow.Controls.Add(div);
+                    }
                 }
-                else if (k.Key == 3)
-                {
-                    HtmlGenericControl div = new HtmlGenericControl("div");
-                    div.Attributes["class"] = "col-xs-3 col-sm-3 col-md-3 col-lg-3 DocumentItem";
-                    Literal youtube = new Literal();
-                    youtube.Text = GetYouTubeScript(k.Value);
-                    div.Controls.Add(youtube);
-                    scrollrow.Controls.Add(div);
-                }
-
-
+            }
+            catch (NoRecordException)
+            {
 
             }
         }
@@ -251,17 +258,26 @@ namespace LayeredBusinessModel.WebUI
             Customer customer = (Customer)Session["user"];
             if (customer != null)
             {
-                DvdInfoService dvdInfoService = new DvdInfoService();
-                DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
-                if (dvdInfo != null)
+                try
                 {
-                    ShoppingCartService shoppingCartService = new ShoppingCartService();
-                    shoppingCartService.addItemToCart(customer, dvdInfo);
+                    DvdInfo dvdInfo = new DvdInfoService().getByID(Request.QueryString["id"]);           //Throws NoRecordException
+                    new ShoppingCartService().addItemToCart(customer, dvdInfo);
+                }
+                catch (NoRecordException)
+                {
+
                 }
             }
             else
             {
-                //todo: please sign in!
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append("<script type = 'text/javascript'>");
+                sb.Append("window.onload=function(){");
+                sb.Append("alert('");
+                sb.Append("To do: alert user that he is not logged in");
+                sb.Append("')};");
+                sb.Append("</script>");
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", sb.ToString());        
             }
         }
 
@@ -299,8 +315,9 @@ namespace LayeredBusinessModel.WebUI
                     DateTime enddate = startdate.AddDays(days - 1);
 
                     DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);
-
+                    /* Wordt niets mee gedaan
+                     * DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);               //Throws NoRecordException
+                    */
 
                     /* Wordt niets meegedaan
                     List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockRentCopiesForDvdInfo(dvdInfo);           //Throws NoRecordException || DALException
@@ -372,12 +389,15 @@ namespace LayeredBusinessModel.WebUI
                 //only get dates once per calendar build-up
                 if (dates == null)
                 {
-                    RentModel rentService = new RentModel();
+                    try
+                    {
+                        DvdInfo thisDVD = new DvdInfoService().getByID(Request.QueryString["id"].ToString());                //Throws NoRecordException
+                        dates = new RentModel().getAvailabilities(thisDVD, DateTime.Now);
+                    }
+                    catch (NoRecordException)
+                    {
 
-                    DvdInfoService dvdbll = new DvdInfoService();
-                    DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
-
-                    dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+                    }
                 }
 
                 //movie can be reserved between today and 14 days from now   
@@ -400,27 +420,33 @@ namespace LayeredBusinessModel.WebUI
         {
             if (Request.QueryString["id"] != null)
             {
-                DvdInfoService dvdbll = new DvdInfoService();
-                DvdInfo dvdInfo = dvdbll.getDvdInfoWithID(Request.QueryString["id"].ToString());
+                try
+                {
+                    DvdInfo dvdInfo = new DvdInfoService().getByID(Request.QueryString["id"].ToString());            //Throws NoRecordException
 
-                //get all dvd copies that are available on that date:  
-                RentModel rentService = new RentModel();
-                int daysAvailable = rentService.getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
+                    //get all dvd copies that are available on that date:
+                    int daysAvailable = new RentModel().getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);
 
-                if (daysAvailable >= 1)
-                {
-                    btnRent1.Visible = true;
+                    if (daysAvailable >= 1)
+                    {
+                        btnRent1.Visible = true;
+                    }
+                    if (daysAvailable >= 3)
+                    {
+                        btnRent3.Visible = true;
+                    }
+                    if (daysAvailable >= 7)
+                    {
+                        btnRent7.Visible = true;
+                    }
                 }
-                if (daysAvailable >= 3)
+                catch (NoRecordException)
                 {
-                    btnRent3.Visible = true;
-                }
-                if (daysAvailable >= 7)
-                {
-                    btnRent7.Visible = true;
+
                 }
             }
         }
+
 
 
     }

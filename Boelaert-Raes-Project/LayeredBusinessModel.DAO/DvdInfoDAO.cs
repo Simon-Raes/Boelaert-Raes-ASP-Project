@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.DAO
          * Return the id from the newly added dvd
          * Throws DALException if something else went wrong
          */ 
-        public int addDvdInfo(DvdInfo dvdInfo)
+        public int add(DvdInfo dvdInfo)
         {
             SqlCommand command = null;
 
@@ -75,7 +75,8 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */ 
-        public List<DvdInfo> getAllDvdInfos()
+        /*
+        public List<DvdInfo> getAll()
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -114,14 +115,14 @@ namespace LayeredBusinessModel.DAO
                 }
                 throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfos()");
             }
-        }
+        }*/
 
         /*
          * Returns all DvdInfo's that have a banner image
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong 
          */
-        public List<DvdInfo> getAllDvdInfosWithBanner()
+        public List<DvdInfo> getAllWithBanner()
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -141,13 +142,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();                        
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException          
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all the dvd's with a banner", ex);
                 }
                 finally
@@ -170,7 +175,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */ 
-        public DvdInfo getDvdInfoWithId(String id)
+        public DvdInfo getByID(String id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -186,11 +191,15 @@ namespace LayeredBusinessModel.DAO
                     if (reader.HasRows)
                     {
                         reader.Read();
-                        return createDvdInfo(reader);
+                        return createDvdInfo(reader);           //Throws NoRecordException
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get the dvdinfo based on an ID", ex);
                 }
                 finally
@@ -209,7 +218,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the dvd was updated, false if no dvdwas updated
          * Throws DALException if something else went wrong
          */ 
-        public Boolean updateDvdInfo(DvdInfo dvd)
+        public Boolean update(DvdInfo dvd)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -287,13 +296,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's based on searchtext", ex);
                 }
                 finally
@@ -346,13 +359,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's based on searchtext and categorie", ex);
                 }
                 finally
@@ -400,13 +417,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's based on searchtext and genre", ex);
                 }
                 finally
@@ -448,13 +469,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));                     
+                            dvdlist.Add(createDvdInfo(reader));             //Throws NoRecordException                   
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get the latest dvd's", ex);
                 }
                 finally
@@ -495,13 +520,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's from a certain year", ex);
                 }
                 finally
@@ -543,13 +572,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's from a certain director", ex);
                 }
                 finally
@@ -590,13 +623,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get dvd's from a certain actor", ex);
                 }
                 finally
@@ -637,13 +674,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdInfo> dvdlist = new List<DvdInfo>();
                         while (reader.Read())
                         {
-                            dvdlist.Add(createDvdInfo(reader));
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException             
                         }
                         return dvdlist;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get popular dvd's", ex);
                 }
                 finally
@@ -784,7 +825,7 @@ namespace LayeredBusinessModel.DAO
                 buy_price = float.Parse(reader["buy_price"].ToString()),
                 date_added = Convert.ToDateTime(reader["date_added"]),
                 amount_sold = Convert.ToInt32(reader["amount_sold"]),
-                media = getMedia(reader["dvd_info_id"].ToString()),
+                media = getMedia(reader["dvd_info_id"].ToString()),         //Throws NoRecordException
                 actors = Convert.ToString(reader["actors"]).Split(','),                
                 duration = Convert.ToString(reader["duration"])
             };

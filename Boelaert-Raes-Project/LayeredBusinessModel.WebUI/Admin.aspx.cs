@@ -53,7 +53,7 @@ namespace LayeredBusinessModel.WebUI
             };
 
             DvdInfoService dvdInfoService = new DvdInfoService();
-            int dvdInfoID = dvdInfoService.addDvdInfo(dvdInfo);
+            int dvdInfoID = dvdInfoService.add(dvdInfo);                    //Throws NorecordException
             if(dvdInfoID>=0)
             {
                 lblStatus.Text = "Movie added to database.";

@@ -159,20 +159,25 @@ namespace LayeredBusinessModel.WebUI
                     //add cart items to newly created order
                     foreach (ShoppingcartItem item in cartContent)
                     {
-
-                        OrderLine orderline = new OrderLine
+                        try
                         {
-                            order = new OrderService().getOrder(orderID.ToString()),
-                            dvdInfo = new DvdInfoService().getDvdInfoWithID(item.dvdInfo.dvd_info_id.ToString()),
-                            //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
-                            startdate = item.startdate,
-                            enddate = item.enddate,
-                            //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                            orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopyType.id.ToString())
-                        };
+                            OrderLine orderline = new OrderLine
+                            {
+                                order = new OrderService().getOrder(orderID.ToString()),
+                                dvdInfo = new DvdInfoService().getByID(item.dvdInfo.dvd_info_id.ToString()),           //Throws NoRecordException
+                                //dvd_copy_id = copy.dvd_copy_id, //don't add a copy_id yet, only do this when a user has paid (id will be set in admin module)                       
+                                startdate = item.startdate,
+                                enddate = item.enddate,
+                                //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
+                                orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopyType.id.ToString())
+                            };
 
-                        orderLineService.addOrderLine(orderline);
+                            orderLineService.addOrderLine(orderline);
+                        }
+                        catch (NoRecordException)
+                        {
 
+                        }
 
                     }
 

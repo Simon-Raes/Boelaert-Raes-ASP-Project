@@ -477,7 +477,7 @@ namespace LayeredBusinessModel.DAO
             return new DvdCopy
             {
                 dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
-                dvdinfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
+                dvdinfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),           //Throws NoRecordException
                 type = new DvdCopyTypeDAO().getByID(reader["copy_type_id"].ToString()),         //Throws NoRecordException
                 serialnumber = Convert.ToString(reader["serialnumber"]),
                 note = Convert.ToString(reader["note"]),

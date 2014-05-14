@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public OrderStatus getOrderStatusByID(String id) 
+        public OrderStatus getByID(String id) 
         {
             SqlCommand command = null;
             SqlDataReader reader = null;

@@ -10,10 +10,9 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class OrderStatusService
     {
-        public OrderStatus getOrderstatusByID(String id)
+        public OrderStatus getByID(String id)
         {
-            OrderStatusDAO orderstatusDAO = new OrderStatusDAO();
-            return orderstatusDAO.getOrderStatusByID(id);
+            return new OrderStatusDAO().getByID(id);          //Throws NoRecordException
         }
     }
 }

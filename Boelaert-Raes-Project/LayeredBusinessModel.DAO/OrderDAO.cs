@@ -270,7 +270,7 @@ namespace LayeredBusinessModel.DAO
             return new Order
             {
                 order_id = Convert.ToInt32(reader["order_id"]),
-                orderstatus = new OrderStatusDAO().getOrderStatusByID(reader["orderstatus_id"].ToString()),
+                orderstatus = new OrderStatusDAO().getByID(reader["orderstatus_id"].ToString()),            //Throws NoRecordException
                 customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),         //Throws NoRecordException || DALException         
                 date = Convert.ToDateTime(reader["date"])
             };

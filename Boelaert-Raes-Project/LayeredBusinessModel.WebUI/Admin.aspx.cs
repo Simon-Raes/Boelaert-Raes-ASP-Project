@@ -15,10 +15,17 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<Genre> genres = new GenreService().getGenres();
-            foreach (Genre g in genres)
+            try
             {
-                inputGenre.Items.Add(new ListItem(g.genre_id+", "+g.name));
+                List<Genre> genres = new GenreService().getAll();           //Throws NoRecordException
+                foreach (Genre g in genres)
+                {
+                    inputGenre.Items.Add(new ListItem(g.genre_id + ", " + g.name));
+                }
+            }
+            catch (NoRecordException)
+            {
+
             }
         }
 
@@ -64,13 +71,12 @@ namespace LayeredBusinessModel.WebUI
                 lblStatus.Text = "Something went wrong.";
                 lblStatus.ForeColor = System.Drawing.Color.Red;
             }
-
-            //add genre record
-            GenreService genreService = new GenreService();
-            Genre genre = genreService.getGenre(genre_id);
+            
+            Genre genre = new GenreService().getByID(genre_id);           //Throws NorecordException
 
             try
             {
+                //add genre record
                 new DvdGenreService().addDvdGenre(genre, dvdInfo);            //Throws NorecordException
             }
             catch (NoRecordException)

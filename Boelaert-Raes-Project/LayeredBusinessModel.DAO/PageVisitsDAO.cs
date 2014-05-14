@@ -199,7 +199,7 @@ namespace LayeredBusinessModel.DAO
             return new PageVisits
             {
                 customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),         //Throws NoRecordException || DALException  
-                dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),
+                dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),           //Throws NoRecordException
                 number_of_visits = Convert.ToInt32(reader["number_of_visits"])
             };
         }

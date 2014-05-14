@@ -99,8 +99,7 @@ namespace LayeredBusinessModel.WebUI
                 try
                 {
                     dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre_id);            //Throws NoRecordException
-                    genreService = new GenreService();
-                    labelText = genreService.getGenre(genre_id).name + " DVDs";
+                    labelText = new GenreService().getByID(genre_id).name + " DVDs";          //Throws NorecordException
                 }
                 catch (NoRecordException ex)
                 {

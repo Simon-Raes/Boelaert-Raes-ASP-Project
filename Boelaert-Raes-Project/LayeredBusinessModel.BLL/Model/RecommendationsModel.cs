@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.BLL
                 foreach (OrderLine line in orderLines)
                 {
                     int dvdID = line.dvdInfo.dvd_info_id;
-                    genres.AddRange(genreService.getGenresForDvd(dvdID.ToString()));
+                    genres.AddRange(genreService.getGenresForDvd(dvdID.ToString()));            //Throws NoRecordException
 
                     //fill orderLinesDvdIds
                     if (!orderLinesDvdIds.Contains(dvdID))

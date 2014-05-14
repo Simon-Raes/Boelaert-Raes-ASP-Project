@@ -32,11 +32,11 @@ namespace LayeredBusinessModel.BLL
         public DvdInfo getByID(String id)
         {
             dvdInfoDAO = new DvdInfoDAO();
-            DvdInfo dvd = dvdInfoDAO.getByID(id);                  //Throws NoRecordException
+            DvdInfo dvd = dvdInfoDAO.getByID(id);                   //Throws NoRecordException
             if(dvd!=null)
             {
                 GenreService g = new GenreService();
-                dvd.genres = g.getGenresForDvd(id);
+                dvd.genres = g.getGenresForDvd(id);                 //Throws NoRecordException
             }            
 
             return dvd;

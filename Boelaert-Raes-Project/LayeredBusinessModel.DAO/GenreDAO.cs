@@ -17,14 +17,14 @@ namespace LayeredBusinessModel.DAO
          * Returns a list with all the genres
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
-         */ 
-        public List<Genre> getGenres()
+         */
+        public List<Genre> getAll()
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
 
             using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {   
+            {
                 command = new SqlCommand("SELECT * FROM genres", cnn);
                 try
                 {
@@ -38,7 +38,7 @@ namespace LayeredBusinessModel.DAO
                             genrelist.Add(createGenre(reader));     //Throws NoRecordException || DALException
                         }
                         return genrelist;
-                    }                 
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -67,8 +67,8 @@ namespace LayeredBusinessModel.DAO
          * Returns a list with all the genres for a certain category
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
-         */ 
-        public List<Genre> getGenresForCategory(String categoryID)
+         */
+        public List<Genre> getByCategory(String categoryID)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -118,8 +118,8 @@ namespace LayeredBusinessModel.DAO
          * Returns a list with all the genres for a certain dvd
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
-         */ 
-        public List<Genre> getGenresForDvd(String dvd_id)
+         */
+        public List<Genre> getByDvd(String dvd_id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -173,7 +173,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public Genre getGenre(String genreID)
+        public Genre getByID(String genreID)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -221,6 +221,4 @@ namespace LayeredBusinessModel.DAO
             };
         }
     }
-
-
 }

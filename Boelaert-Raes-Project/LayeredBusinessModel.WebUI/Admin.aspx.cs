@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -68,8 +69,14 @@ namespace LayeredBusinessModel.WebUI
             GenreService genreService = new GenreService();
             Genre genre = genreService.getGenre(genre_id);
 
-            DvdGenreService dvdGenreService = new DvdGenreService();
-            dvdGenreService.addDvdGenre(genre, dvdInfo);
+            try
+            {
+                new DvdGenreService().addDvdGenre(genre, dvdInfo);            //Throws NorecordException
+            }
+            catch (NoRecordException)
+            {
+
+            }
         }
 
         protected void Button1_Click(object sender, EventArgs e)

@@ -105,7 +105,7 @@ namespace LayeredBusinessModel.BLL
             DvdInfoService dvdInfoService = new DvdInfoService();
             DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id);
 
-            foreach (int i in new DvdGenreDAO().findRelatedDvdsBasedOnGenre(dvdInfo, amount))
+            foreach (int i in new DvdGenreDAO().findRelatedDvdsBasedOnGenre(dvdInfo, amount))           //Throws NoRecordException
             {
                 relatedDvds.Add(new DvdInfoDAO().getDvdInfoWithId(i.ToString()));
             }

@@ -27,6 +27,7 @@ namespace LayeredBusinessModel.WebUI
 
         private void setDvdTiles()
         {
+
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;
 
@@ -110,8 +111,15 @@ namespace LayeredBusinessModel.WebUI
             }
             else if (related != null)
             {
-                dvdContent = dvdInfoService.getRelatedDvds(related,16);
-                labelText = "Related dvds for " + dvdInfoService.getDvdInfoWithID(related).name;
+                try
+                {
+                    dvdContent = dvdInfoService.getRelatedDvds(related, 16);         //Throws NoRecordException
+                    labelText = "Related dvds for " + dvdInfoService.getDvdInfoWithID(related).name;
+                }
+                catch (NoRecordException)
+                {
+                    
+                }
 
             }
             else

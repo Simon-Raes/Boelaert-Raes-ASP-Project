@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.BLL.Model
         {
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
             Dictionary<int, List<DateTime>> result = new Dictionary<int, List<DateTime>>();
-                       
+
             dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);
 
             foreach (int i in dicCopyUnavailableDates.Keys)
@@ -81,7 +81,7 @@ namespace LayeredBusinessModel.BLL.Model
         public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startDate)
         {
             List<DateTime> dates = new List<DateTime>();
-            
+
             if (fullCopiesAvailable(dvd, startDate))
             {
                 //at least 1 copy is fully available for the next 2 weeks, send back a full dates list
@@ -118,7 +118,7 @@ namespace LayeredBusinessModel.BLL.Model
         {
             int days = -1;
 
-            
+
             if (fullCopiesAvailable(dvd, startDate))
             {
                 //there is at least 1 copy that is available for the full 14 days, no more checks are needed and the max number of days can be returned
@@ -132,11 +132,11 @@ namespace LayeredBusinessModel.BLL.Model
 
                 //get all orderlines for copies that have some orderlines in the next 2 weeks
                 List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startDate);
-                                
+
                 foreach (OrderLine order in orders)
                 {
                     if (!unavailableDatesMap.ContainsKey(order.dvdCopy.dvd_copy_id))
-                    {                       
+                    {
                         //set the default availability at 2 weeks from now 
                         unavailableDatesMap.Add(order.dvdCopy.dvd_copy_id, order.startdate);
                     }
@@ -162,7 +162,7 @@ namespace LayeredBusinessModel.BLL.Model
                             days = (date - startDate).Days;
                         }
                     }
-                    
+
                 }
             }
 
@@ -171,11 +171,11 @@ namespace LayeredBusinessModel.BLL.Model
 
         /**Returns true if at least one copy is available for the full 14 days (= no orders in the next 14 days)*/
         private Boolean fullCopiesAvailable(DvdInfo dvd, DateTime startDate)
-        {            
+        {
             DvdCopyService dvdCopyService = new DvdCopyService();
             //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
             List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(dvd, startDate);
-            if(dvdCopies !=null && dvdCopies.Count>0)
+            if (dvdCopies != null && dvdCopies.Count > 0)
             {
                 return true;
             }
@@ -184,7 +184,5 @@ namespace LayeredBusinessModel.BLL.Model
                 return false;
             }
         }
-
-
     }
 }

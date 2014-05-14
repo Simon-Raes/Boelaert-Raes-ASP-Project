@@ -107,6 +107,5 @@ namespace LayeredBusinessModel.DAO
                 name = reader["name"].ToString()
             };
         }
-
     }
 }

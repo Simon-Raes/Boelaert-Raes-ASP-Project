@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -201,13 +202,11 @@ namespace LayeredBusinessModel.WebUI
 
         private void setupRelatedDvds(String id)
         {
-            List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id, 4);
-            if (list.Count == 0)
+            try
             {
-                pnlRelatedDvds.Visible = false;
-            }
-            else
-            {
+                pnlRelatedDvds.Visible = true;
+                List<DvdInfo> list = new DvdInfoService().getRelatedDvds(id, 4);            //Throws NoRecordException
+
                 linkRelated.NavigateUrl = "~/Catalog.aspx?related=" + id;
                 foreach (DvdInfo d in list)
                 {
@@ -227,8 +226,10 @@ namespace LayeredBusinessModel.WebUI
                     relatedDvds.Controls.Add(dvdInfo);
                 }
             }
-
-
+            catch (NoRecordException)
+            {
+                pnlRelatedDvds.Visible = false;
+            }
         }
 
         protected string GetYouTubeScript(string id)
@@ -421,6 +422,6 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        
+
     }
 }

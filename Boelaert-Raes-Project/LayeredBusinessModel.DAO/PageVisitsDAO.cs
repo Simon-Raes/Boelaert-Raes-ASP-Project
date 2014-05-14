@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public PageVisits getPageVisits(Customer customer, DvdInfo dvdInfo)
+        public PageVisits getByDvdAndCustomer(Customer customer, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -118,7 +118,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the pagevisit was inserted, false if no records were inserted
          * Throws DALException if something else went wrong
          */
-        public Boolean addPageVisits(PageVisits pageVisits)
+        public Boolean add(PageVisits pageVisits)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -158,7 +158,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if the pagevisit was updated, false if no records were updated
          * Throws DALException if something else went wrong
          */
-        public Boolean updatePageVisits(PageVisits pageVisits)
+        public Boolean update(PageVisits pageVisits)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))

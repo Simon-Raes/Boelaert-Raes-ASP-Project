@@ -42,7 +42,7 @@ namespace LayeredBusinessModel.WebUI
                     try
                     {
                         DvdInfo dvdInfo = new DvdInfoService().getByID(dvd_info_id);         //Throws NoRecordException
-                        new PageVisitsModel().incrementPageVisits(user, dvdInfo);
+                        new PageVisitsModel().incrementPageVisits(user, dvdInfo);           //Throws NoRecordException
                     }
                     catch (NoRecordException)
                     {

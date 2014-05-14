@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL.Database;
 using LayeredBusinessModel.DAO;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL.Model
 {
@@ -15,20 +16,23 @@ namespace LayeredBusinessModel.BLL.Model
         /**Increases the number of pagevisits for this user and movie by one. Creates a new record if none currently exists.*/
         public void incrementPageVisits(Customer customer, DvdInfo dvdInfo)
         {
+            PageVisits pageVisits = null;
             PageVisitsService pageVisitsService = new PageVisitsService();
-            PageVisits pageVisits = pageVisitsService.getPageVisits(customer, dvdInfo);
-            if(pageVisits==null)
+            try
+            {                
+                pageVisits = pageVisitsService.getByDvdAndCustomer(customer, dvdInfo);           //Throws NoRecordException                
+                pageVisits.number_of_visits += 1;
+            }
+            catch (NoRecordException)
             {
                 pageVisits = new PageVisits();
                 pageVisits.customer = customer;
                 pageVisits.dvdInfo = dvdInfo;
                 pageVisits.number_of_visits = 1;
-                pageVisitsService.addPageVisits(pageVisits);
             }
-            else
+            if (pageVisitsService.updatePageVisits(pageVisits))
             {
-                pageVisits.number_of_visits += 1;
-                pageVisitsService.updatePageVisits(pageVisits);
+                //succes
             }
         }
     }

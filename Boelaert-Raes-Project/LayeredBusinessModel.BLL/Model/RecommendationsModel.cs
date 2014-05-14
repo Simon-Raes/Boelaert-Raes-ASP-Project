@@ -149,7 +149,7 @@ namespace LayeredBusinessModel.BLL
             CustomerService customerService = new CustomerService();     
             DvdInfoService dvdInfoService = new DvdInfoService();
 
-            List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);
+            List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
             List<DvdInfo> dvdInfos = new List<DvdInfo>();
             List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
 

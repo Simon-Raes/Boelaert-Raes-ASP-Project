@@ -285,9 +285,9 @@ namespace LayeredBusinessModel.DAO
             return new ShoppingcartItem
             {
                 shoppingcart_item_id = Convert.ToInt32(reader[0]),
-                customer = new CustomerDAO().getByID(reader[1].ToString()),             //Throws NoRecordException || DALException  
-                dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),   
-                dvdCopyType = new DvdCopyTypeDAO().getTypeForID(reader[3].ToString()),
+                customer = new CustomerDAO().getByID(reader[1].ToString()),                 //Throws NoRecordException || DALException  
+                dvdInfo = new DvdInfoDAO().getDvdInfoWithId(reader[2].ToString()),
+                dvdCopyType = new DvdCopyTypeDAO().getByID(reader[3].ToString()),           //Throws NoRecordException || DALException
                 startdate = startdate,
                 enddate = enddate
                 //name = Convert.ToString(reader["name"]),

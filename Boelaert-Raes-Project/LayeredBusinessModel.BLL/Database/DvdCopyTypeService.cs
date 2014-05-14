@@ -10,19 +10,19 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class DvdCopyTypeService
     {
-        private DvdCopyTypeDAO typeDAO; 
+        private DvdCopyTypeDAO typeDAO;
 
-        public DvdCopyType getTypeForID(String id)
+        public DvdCopyType getByName(String name)
         {
-            typeDAO = new DvdCopyTypeDAO();
-            return typeDAO.getTypeForID(id);
+            return new DvdCopyTypeDAO().getByName(name);         //Throws NoRecordException 
         }
 
-        public DvdCopyType getTypeByName(String name)
+        /*
+        public DvdCopyType getByID(String id)
         {
             typeDAO = new DvdCopyTypeDAO();
-            return typeDAO.getTypeByName(name);
+            return typeDAO.getByID(id);            //Throws NoRecordException 
         }
-
+        */
     }
 }

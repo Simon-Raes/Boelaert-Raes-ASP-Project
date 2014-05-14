@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.DAO
          * Throws a NoRecordException if no records were found
          * Throws a DALException if something else went wrong
          */
-        public DvdCopyType getTypeForID(String id)
+        public DvdCopyType getByID(String id)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -60,7 +60,7 @@ namespace LayeredBusinessModel.DAO
          * Throws a NoRecordException if no records were found
          * Throws a DALException if something else went wrong
          */
-        public DvdCopyType getTypeByName(String name)
+        public DvdCopyType getByName(String name)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;

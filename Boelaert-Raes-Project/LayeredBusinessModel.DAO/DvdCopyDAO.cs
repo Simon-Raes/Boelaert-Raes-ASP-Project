@@ -35,13 +35,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdCopy> dvdCopies = new List<DvdCopy>();
                         while (reader.Read())
                         {
-                            dvdCopies.Add(createDvdCopy(reader));
+                            dvdCopies.Add(createDvdCopy(reader));       //Throws NoRecordException
                         }
                         return dvdCopies;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all copies for dvdinfo", ex);
                 }
                 finally
@@ -83,13 +87,17 @@ namespace LayeredBusinessModel.DAO
                         DvdCopy dvdCopy = new DvdCopy();
                         while (reader.Read())
                         {
-                            dvdCopy = createDvdCopy(reader);
+                            dvdCopy = createDvdCopy(reader);                //Throws NoRecordException
                         }
                         return dvdCopy;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get copy by ID", ex);
                 }
                 finally
@@ -177,13 +185,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdCopy> dvdCopies = new List<DvdCopy>();
                         while (reader.Read())
                         {
-                            dvdCopies.Add(createDvdCopy(reader));
+                            dvdCopies.Add(createDvdCopy(reader));       //Throws NoRecordException
                         }
                         return dvdCopies;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get all in stock copies for dvdinfo", ex);
                 }
                 finally
@@ -397,13 +409,17 @@ namespace LayeredBusinessModel.DAO
                         List<DvdCopy> orderList = new List<DvdCopy>();
                         while (reader.Read())
                         {
-                            orderList.Add(createDvdCopy(reader));
+                            orderList.Add(createDvdCopy(reader));           //Throws NoRecordException
                         }
                         return orderList;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
                     throw new DALException("Failed to get fully available copies for dvdinfo", ex);
                 }
                 finally
@@ -462,7 +478,7 @@ namespace LayeredBusinessModel.DAO
             {
                 dvd_copy_id = Convert.ToInt32(reader["dvd_copy_id"]),
                 dvdinfo = new DvdInfoDAO().getDvdInfoWithId(reader["dvd_info_id"].ToString()),
-                type = new DvdCopyTypeDAO().getTypeForID(reader["copy_type_id"].ToString()),
+                type = new DvdCopyTypeDAO().getByID(reader["copy_type_id"].ToString()),         //Throws NoRecordException
                 serialnumber = Convert.ToString(reader["serialnumber"]),
                 note = Convert.ToString(reader["note"]),
                 in_stock = Convert.ToBoolean(reader["in_stock"])

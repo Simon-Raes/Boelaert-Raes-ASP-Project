@@ -53,6 +53,9 @@ namespace LayeredBusinessModel.DAO
             }        
         }
 
+        /*
+         * Creates an OrderStatus-Object
+         */ 
         private OrderStatus createOrderStatus(SqlDataReader reader)
         {
             return new OrderStatus
@@ -61,6 +64,5 @@ namespace LayeredBusinessModel.DAO
                 name = reader["name"].ToString()
             };
         }
- 
     }
 }

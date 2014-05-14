@@ -49,7 +49,7 @@ namespace LayeredBusinessModel.BLL
 
         public Boolean resetAllCopies()
         {
-            return new DvdCopyDAO().resetAllCopies();                                       //Throws NoRecordException || DALException 
+            return new DvdCopyDAO().deleteAll();                                       //Throws NoRecordException || DALException 
         }
 
         /*

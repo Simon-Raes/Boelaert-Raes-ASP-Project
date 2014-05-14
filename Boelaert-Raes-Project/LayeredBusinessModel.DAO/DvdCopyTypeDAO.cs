@@ -99,6 +99,9 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         * Creates a DvdCopyType-Object
+         */ 
         private DvdCopyType createDvdCopyType(SqlDataReader reader)
         {
             return new DvdCopyType()

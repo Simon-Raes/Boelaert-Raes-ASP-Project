@@ -49,32 +49,32 @@ namespace LayeredBusinessModel.BLL
 
         public List<DvdInfo> searchDvdWithText(String title)
         {
-            return new DvdInfoDAO().searchDvdWithText(title);           //Throws NoRecordException
+            return new DvdInfoDAO().getByText(title);           //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithTextAndCategory(String title, String categoryID)
         {
-            return new DvdInfoDAO().searchDvdWithTextAndCategory(title, categoryID);          //Throws NoRecordException
+            return new DvdInfoDAO().getByTextCategory(title, categoryID);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithTextAndGenre(String title, String genreID)
         {
-            return new DvdInfoDAO().searchDvdWithTextAndGenre(title, genreID);            //Throws NoRecordException
+            return new DvdInfoDAO().getByTextAndGenre(title, genreID);            //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdFromYear(String year)
         {
-            return new DvdInfoDAO().searchDvdFromYear(year);          //Throws NoRecordException
+            return new DvdInfoDAO().getByYear(year);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdFromDirector(String director)
         {
-            return new DvdInfoDAO().searchDvdFromDirector(director);          //Throws NoRecordException
+            return new DvdInfoDAO().getByDirector(director);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithActor(String actor)
         {
-            return new DvdInfoDAO().searchDvdWithActor(actor);            //Throws NoRecordException
+            return new DvdInfoDAO().getByActor(actor);            //Throws NoRecordException
         }
 
         public List<DvdInfo> getLatestDvds(int amount)

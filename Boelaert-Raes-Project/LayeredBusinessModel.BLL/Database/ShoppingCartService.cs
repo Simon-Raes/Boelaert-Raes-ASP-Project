@@ -20,7 +20,7 @@ namespace LayeredBusinessModel.BLL
         /*adds buy copy to cart(no dates)*/
         public Boolean addByCustomerAndDvd(Customer customer, DvdInfo dvdInfo)
         {
-            return new ShoppingCartDAO().addByCustomerAndDvd(customer, dvdInfo);           
+            return new ShoppingCartDAO().add(customer, dvdInfo);           
         }
 
         //overloaded method for adding rent items with dates

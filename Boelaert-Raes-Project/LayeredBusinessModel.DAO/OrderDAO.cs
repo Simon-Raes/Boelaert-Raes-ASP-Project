@@ -13,36 +13,6 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderDAO : DAO
     {
-        //public List<Order> getAll()
-        //{
-        //    cnn = new SqlConnection(sDatabaseLocatie);
-        //    List<Order> orderList = new List<Order>();
-
-        //    SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
-        //    try
-        //    {
-        //        cnn.Open();
-        //        SqlDataReader reader = command.ExecuteReader();
-
-        //        while (reader.Read())
-        //        {
-        //            orderList.Add(createOrder(reader));
-        //        }
-
-        //        reader.Close();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //    finally
-        //    {
-        //        cnn.Close();
-        //    }
-        //    return orderList;
-        //}
-
         /*
          * Returns an order based on an ID
          * Throws NoRecordException if no records were found
@@ -95,6 +65,61 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
+         * Returns a list with orders for a customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<Order> getByCustomer(Customer customer)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                    "Join Orderstatus " +
+                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
+                    "WHERE customer_id = @customer_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<Order> orderList = new List<Order>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrder(reader));         //Throws NoRecordException || DALException  
+                        }
+                        return orderList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get the order for a customer", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - OrderDAO getOrdersForCustomer()");
+            }
+        }
+
+        /*
          * Updates an order
          * Returns true if the order was updated, false if no order was updated
          * Throws DALException if something else went wrong
@@ -137,68 +162,13 @@ namespace LayeredBusinessModel.DAO
                 }
             }
         }
-
-        /*
-         * Returns a list with orders for a customer
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */
-        public List<Order> getByCustomer(Customer customer)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
-                    "Join Orderstatus " +
-                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
-                    "WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<Order> orderList = new List<Order>();
-                        while (reader.Read())
-                        {
-                            orderList.Add(createOrder(reader));         //Throws NoRecordException || DALException  
-                        }
-                        return orderList;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get the order for a customer", ex);                  
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - OrderDAO getOrdersForCustomer()");
-            }
-        }
-
+        
         /*
          * Inserts an order for a customer
          * Returns the ID from the newly added order
          * Throws DALException if something else went wrong
          */
-        public int addForCustomer(Customer customer)
+        public int add(Customer customer)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -265,6 +235,9 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         * Creates an Order-object
+         */ 
         private Order createOrder(SqlDataReader reader)
         {
             return new Order
@@ -275,5 +248,35 @@ namespace LayeredBusinessModel.DAO
                 date = Convert.ToDateTime(reader["date"])
             };
         }
+        
+        //public List<Order> getAll()
+        //{
+        //    cnn = new SqlConnection(sDatabaseLocatie);
+        //    List<Order> orderList = new List<Order>();
+
+        //    SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
+        //    try
+        //    {
+        //        cnn.Open();
+        //        SqlDataReader reader = command.ExecuteReader();
+
+        //        while (reader.Read())
+        //        {
+        //            orderList.Add(createOrder(reader));
+        //        }
+
+        //        reader.Close();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //        cnn.Close();
+        //    }
+        //    return orderList;
+        //}
     }
 }

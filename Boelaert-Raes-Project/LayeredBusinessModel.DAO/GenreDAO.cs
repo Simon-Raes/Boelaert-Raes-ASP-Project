@@ -14,30 +14,27 @@ namespace LayeredBusinessModel.DAO
     public class GenreDAO : DAO
     {
         /*
-         * Returns a list with all the genres
+         * Returns a genre based on an ID
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<Genre> getAll()
+        public Genre getByID(String genreID)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
-
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("SELECT * FROM genres", cnn);
+                command = new SqlCommand("SELECT * FROM genres WHERE genre_id = @genre_id", cnn);
+                command.Parameters.Add(new SqlParameter("@genre_id", genreID));
+
                 try
                 {
                     cnn.Open();
                     reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        List<Genre> genrelist = new List<Genre>();
-                        while (reader.Read())
-                        {
-                            genrelist.Add(createGenre(reader));     //Throws NoRecordException || DALException
-                        }
-                        return genrelist;
+                        reader.Read();
+                        return createGenre(reader);         //Throws NoRecordException || DALException
                     }
                 }
                 catch (Exception ex)
@@ -46,20 +43,16 @@ namespace LayeredBusinessModel.DAO
                     {
                         throw;
                     }
-                    throw new DALException("Failed to get all the genres", ex);
+                    throw new DALException("Failed to get a genre based on an ID", ex);
                 }
                 finally
                 {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
                     if (cnn != null)
                     {
                         cnn.Close();
                     }
                 }
-                throw new NoRecordException("No records were found - GenreDAO getGenres()");
+                throw new NoRecordException("No records were found - GenreDAO getGenre()");
             }
         }
 
@@ -169,27 +162,30 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         * Returns a genre based on an ID
+         * Returns a list with all the genres
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public Genre getByID(String genreID)
+        public List<Genre> getAll()
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("SELECT * FROM genres WHERE genre_id = @genre_id", cnn);
-                command.Parameters.Add(new SqlParameter("@genre_id", genreID));
-
+                command = new SqlCommand("SELECT * FROM genres", cnn);
                 try
                 {
                     cnn.Open();
                     reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        reader.Read();
-                        return createGenre(reader);         //Throws NoRecordException || DALException
+                        List<Genre> genrelist = new List<Genre>();
+                        while (reader.Read())
+                        {
+                            genrelist.Add(createGenre(reader));     //Throws NoRecordException || DALException
+                        }
+                        return genrelist;
                     }
                 }
                 catch (Exception ex)
@@ -198,16 +194,20 @@ namespace LayeredBusinessModel.DAO
                     {
                         throw;
                     }
-                    throw new DALException("Failed to get a genre based on an ID", ex);
+                    throw new DALException("Failed to get all the genres", ex);
                 }
                 finally
                 {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
                     if (cnn != null)
                     {
                         cnn.Close();
                     }
                 }
-                throw new NoRecordException("No records were found - GenreDAO getGenre()");
+                throw new NoRecordException("No records were found - GenreDAO getGenres()");
             }
         }
 

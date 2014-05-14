@@ -18,7 +18,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if rows were inserted, false if no rows were inserted
          * Throws a DALException if something else went wrong
          */
-        public Boolean addForDvd(Genre genre, DvdInfo dvdInfo)
+        public Boolean add(Genre genre, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
 

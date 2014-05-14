@@ -77,7 +77,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were inserted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean addByCustomerAndDvd(Customer customer, DvdInfo dvdInfo)
+        public Boolean add(Customer customer, DvdInfo dvdInfo)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -110,48 +110,6 @@ namespace LayeredBusinessModel.DAO
                 }
             }
         }
-
-        /*
-         * Adds a rent item for customer
-         * Returns true if records were inserted, false if not
-         * Throws DALException if something else went wrong
-         */
-        /*
-        public Boolean addByCustomerAndStartdateAndEndate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
-        {
-            SqlCommand command = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("INSERT INTO shoppingcartItem" +
-                "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
-                "VALUES(@customer_id, @dvd_info_id, @startdate, @enddate, 1)", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
-                command.Parameters.Add(new SqlParameter("@startdate", startdate));
-                command.Parameters.Add(new SqlParameter("@enddate", enddate));
-
-                try
-                {
-                    cnn.Open();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to add rent item for customer", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-            }
-        }*/
 
         /*
          * Removes a shoppingcartitem based on an ID
@@ -259,14 +217,18 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-
-        /*todo: COUNT items in cart*/
+        /*
+         * todo: COUNT items in cart
+         */
         public int getCartContentCountForCustomer(String id)
         {
             //stub
             return 0;
         }
 
+        /*
+         * Creates a ShoppingCartItem-Object
+         */ 
         private ShoppingcartItem createShoppingcartItem(SqlDataReader reader)
         {
             //date.minvalue omdat een null niet toegelaten is bij datetime, andere klassen zullen dus op mindate moeten controleren
@@ -296,5 +258,46 @@ namespace LayeredBusinessModel.DAO
             };
         }
 
+        /*
+         * Adds a rent item for customer
+         * Returns true if records were inserted, false if not
+         * Throws DALException if something else went wrong
+         */
+        /*
+        public Boolean addByCustomerAndStartdateAndEndate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
+        {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("INSERT INTO shoppingcartItem" +
+                "(customer_id, dvd_info_id, startdate, enddate, copy_type_id)" +
+                "VALUES(@customer_id, @dvd_info_id, @startdate, @enddate, 1)", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfoID));
+                command.Parameters.Add(new SqlParameter("@startdate", startdate));
+                command.Parameters.Add(new SqlParameter("@enddate", enddate));
+
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to add rent item for customer", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }*/
     }
 }

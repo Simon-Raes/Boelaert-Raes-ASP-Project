@@ -13,7 +13,7 @@ namespace LayeredBusinessModel.BLL
     {
         public Boolean addDvdGenre(Genre genre, DvdInfo dvdInfo)
         {
-            return new DvdGenreDAO().addForDvd(genre, dvdInfo);          //Throws NoRecordException            
+            return new DvdGenreDAO().add(genre, dvdInfo);          //Throws NoRecordException            
         }
     }
 }

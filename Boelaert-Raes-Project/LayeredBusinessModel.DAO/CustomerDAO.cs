@@ -18,52 +18,6 @@ namespace LayeredBusinessModel.DAO
     public class CustomerDAO : DAO
     {
         /*
-         *  Returns a list with all the customers
-         *  Throws a NoRecordException if no records were found
-         *  Throws an DALException if something went wrong 
-         */
-        public List<Customer> getAll()
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM Customers", cnn);
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<Customer> customerList = new List<Customer>();
-                        while (reader.Read())
-                        {
-                            customerList.Add(createCustomer(reader));
-                        }
-                        return customerList;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to get all the customers", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - CustomerDAO getAll()");
-            }
-        }
-
-        /*
          * Returns a Customer based on an ID
          * Throws a NoRecordException if no records were found
          * Throws an DALException if something went wrong 
@@ -134,7 +88,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-                    throw new DALException("Failedto get a customer based on a name", ex); 
+                    throw new DALException("Failedto get a customer based on a name", ex);
                 }
                 finally
                 {
@@ -148,6 +102,52 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
                 throw new NoRecordException("No records were found - CustomerDAO getByEmail()");
+            }
+        }
+
+        /*
+         *  Returns a list with all the customers
+         *  Throws a NoRecordException if no records were found
+         *  Throws an DALException if something went wrong 
+         */
+        public List<Customer> getAll()
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM Customers", cnn);
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<Customer> customerList = new List<Customer>();
+                        while (reader.Read())
+                        {
+                            customerList.Add(createCustomer(reader));
+                        }
+                        return customerList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get all the customers", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CustomerDAO getAll()");
             }
         }
 
@@ -280,7 +280,7 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         *      Returns a customer based on a sqlReader
+         *  Creates a Customer-Object
          */
         private Customer createCustomer(SqlDataReader reader)
         {
@@ -297,6 +297,5 @@ namespace LayeredBusinessModel.DAO
                 isVerified = Convert.ToBoolean(reader["isVerrified"])
             };
         }
-
     }
 }

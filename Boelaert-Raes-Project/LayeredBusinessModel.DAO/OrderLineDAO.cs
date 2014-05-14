@@ -64,43 +64,6 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         * Removes an ordeline
-         * Returns true if orderline was deleted, false if no orderline was deleted
-         * Throws DALException if something else went wrong
-         */
-        public Boolean delete(OrderLine orderLine)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
-                command.Parameters.Add(new SqlParameter("@orderline_id", orderLine.orderline_id));
-
-                try
-                {
-                    cnn.Open();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to delete orderline", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-            }
-        }
-
-        /*
          * Returns a list with orderline from a certain order
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
@@ -208,6 +171,58 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
+         * Returns a list with all the orderlines from a certain startdate
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<OrderLine> getAllByDvdAndStartdate(DvdInfo dvd, DateTime startdate)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("select * from OrderLine where dvd_info_id = @dvd_info_id and order_line_type_id = 1 and (	(startdate <= @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >=  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >=  @startdate and startdate < DATEADD(dd,14,getdate()))	) AND dvd_copy_id IS NOT NULL order by dvd_copy_id, startdate, enddate", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
+                command.Parameters.Add(new SqlParameter("@startdate", startdate));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<OrderLine> orderList = new List<OrderLine>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrderLine(reader));             //Throws NoRecordException || DALException
+                        }
+                        return orderList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get orderlines from a certain startdate", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - OrderLineDAO getAllOrderlinesForDvdFromStartdate()");
+            }
+        }
+        
+        /*
          * Returns a list with active rent orderlines for a customer
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
@@ -264,42 +279,6 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-                
-        //public List<OrderLine> getOrderLinesForOrder(String order_id)
-        //{
-        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
-        //    {
-        //        List<OrderLine> orderList = new List<OrderLine>();
-
-        //        //todo: exacte query
-        //        SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
-        //        command.Parameters.Add(new SqlParameter("@order_id", order_id));
-
-        //        try
-        //        {
-        //            cnn.Open();
-        //            SqlDataReader reader = command.ExecuteReader();
-
-        //            while (reader.Read())
-        //            {
-        //                orderList.Add(createOrderLine(reader));
-        //            }
-
-        //            reader.Close();
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //        finally
-        //        {
-        //            cnn.Close();
-        //        }
-        //        return orderList;
-        //    }
-        //}
-
         /*
          * Adds an orderline 
          * Returns true if the orderline was inserted, false if no orderline was inserted
@@ -351,6 +330,141 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
+            }
+        }
+        
+        /*
+         * Removes an ordeline
+         * Returns true if orderline was deleted, false if no orderline was deleted
+         * Throws DALException if something else went wrong
+         */
+        public Boolean delete(OrderLine orderLine)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);
+                command.Parameters.Add(new SqlParameter("@orderline_id", orderLine.orderline_id));
+
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to delete orderline", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
+        /*
+         * Deletes all the orderlines
+         * Returns true if ordelines were deleted, false if no orderline were deleted
+         * Throws DALException if something else went wrong
+         */
+        public Boolean deleteAll()
+        {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("DELETE FROM OrderLine", cnn);
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to delete orderlines", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
+        /*
+         * Creates and Ordeline-Object
+         */ 
+        private OrderLine createOrderLine(SqlDataReader reader)
+        {
+            if (reader["dvd_copy_id"] == DBNull.Value)
+            {
+                return new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),                                      //Throws NoRecordException
+                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
+                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),                               //Throws NoRecordException
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+            else
+            {
+                return new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
+                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
+                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
+                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+        }
+
+        /*
+         * Creates and Ordeline-Object with names
+         */ 
+        private OrderLine createOrderLineWithNames(SqlDataReader reader)
+        {
+            if (reader["dvd_copy_id"] == DBNull.Value)
+            {
+                return new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
+                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
+                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
+            }
+            else
+            {
+                return new OrderLine
+                {
+                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
+                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
+                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
+                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
+                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
+                    startdate = Convert.ToDateTime(reader["startdate"]),
+                    enddate = Convert.ToDateTime(reader["enddate"])
+                };
             }
         }
 
@@ -414,148 +528,39 @@ namespace LayeredBusinessModel.DAO
             }
         }*/
 
-        /*
-         * Returns a list with all the orderlines from a certain startdate
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */
-        public List<OrderLine> getAllByDvdAndStartdate(DvdInfo dvd, DateTime startdate)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("select * from OrderLine where dvd_info_id = @dvd_info_id and order_line_type_id = 1 and (	(startdate <= @startdate and (enddate > @startdate and enddate < DATEADD(dd, 14, getdate())))	or (startdate >=  @startdate and enddate < DATEADD(dd,14, GETDATE()))	or (startdate >=  @startdate and startdate < DATEADD(dd,14,getdate()))	) AND dvd_copy_id IS NOT NULL order by dvd_copy_id, startdate, enddate", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvd.dvd_info_id));
-                command.Parameters.Add(new SqlParameter("@startdate", startdate));
+        //public List<OrderLine> getOrderLinesForOrder(String order_id)
+        //{
+        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
+        //    {
+        //        List<OrderLine> orderList = new List<OrderLine>();
 
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<OrderLine> orderList = new List<OrderLine>();
-                        while (reader.Read())
-                        {
-                            orderList.Add(createOrderLine(reader));             //Throws NoRecordException || DALException
-                        }
-                        return orderList;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get orderlines from a certain startdate", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - OrderLineDAO getAllOrderlinesForDvdFromStartdate()");
-            }
-        }
+        //        //todo: exacte query
+        //        SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
+        //        command.Parameters.Add(new SqlParameter("@order_id", order_id));
 
-        /*
-         * Deletes all the orderlines
-         * Returns true if ordelines were deleted, false if no orderline were deleted
-         * Throws DALException if something else went wrong
-         */
-        public Boolean deleteAll()
-        {
-            SqlCommand command = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("DELETE FROM OrderLine", cnn);
-                try
-                {
-                    cnn.Open();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to delete orderlines", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-            }
-        }
+        //        try
+        //        {
+        //            cnn.Open();
+        //            SqlDataReader reader = command.ExecuteReader();
 
-        private OrderLine createOrderLine(SqlDataReader reader)
-        {
-            if (reader["dvd_copy_id"] == DBNull.Value)
-            {
-                return new OrderLine
-                {
-                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getByID(reader["order_id"].ToString()),                                      //Throws NoRecordException
-                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
-                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),                               //Throws NoRecordException
-                    startdate = Convert.ToDateTime(reader["startdate"]),
-                    enddate = Convert.ToDateTime(reader["enddate"])
-                };
-            }
-            else
-            {
-                return new OrderLine
-                {
-                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
-                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
-                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
-                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
-                    startdate = Convert.ToDateTime(reader["startdate"]),
-                    enddate = Convert.ToDateTime(reader["enddate"])
-                };
-            }
-        }
+        //            while (reader.Read())
+        //            {
+        //                orderList.Add(createOrderLine(reader));
+        //            }
 
-        private OrderLine createOrderLineWithNames(SqlDataReader reader)
-        {
-            if (reader["dvd_copy_id"] == DBNull.Value)
-            {
-                return new OrderLine
-                {
-                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
-                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
-                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
-                    startdate = Convert.ToDateTime(reader["startdate"]),
-                    enddate = Convert.ToDateTime(reader["enddate"])
-                };
-            }
-            else
-            {
-                return new OrderLine
-                {
-                    orderline_id = Convert.ToInt32(reader["orderline_id"]),
-                    order = new OrderDAO().getByID(reader["order_id"].ToString()),          //Throws NoRecordException
-                    orderLineType = new OrderLineTypeDAO().getByID(reader["order_line_type_id"].ToString()),            //Throws NoRecordException
-                    dvdCopy = new DvdCopyDAO().getByID(reader["dvd_copy_id"].ToString()),               //Throws NoRecordException || DALException
-                    dvdInfo = new DvdInfoDAO().getByID(reader["dvd_info_id"].ToString()),               //Throws NoRecordException
-                    startdate = Convert.ToDateTime(reader["startdate"]),
-                    enddate = Convert.ToDateTime(reader["enddate"])
-                };
-            }
-        }
+        //            reader.Close();
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //        }
+        //        finally
+        //        {
+        //            cnn.Close();
+        //        }
+        //        return orderList;
+        //    }
+        //}
     }
 }

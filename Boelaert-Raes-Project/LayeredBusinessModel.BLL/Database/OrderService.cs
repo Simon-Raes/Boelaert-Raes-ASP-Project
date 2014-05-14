@@ -34,7 +34,7 @@ namespace LayeredBusinessModel.BLL
 
         public int addOrderForCustomer(Customer customer)
         {
-            return new OrderDAO().addForCustomer(customer);         //Throws NoRecordException
+            return new OrderDAO().add(customer);         //Throws NoRecordException
         }
 
         public void DeleteAll()

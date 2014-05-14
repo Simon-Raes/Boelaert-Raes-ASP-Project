@@ -17,6 +17,49 @@ namespace LayeredBusinessModel.DAO
     public class CategoryDAO : DAO
     {
         /*
+         * Returns a category based on an ID
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
+         */
+        public Category getByID(String id)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
+                command.Parameters.Add(new SqlParameter("@category_id", id));
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createCategory(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get a category based on an ID", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CategorieDAO getByID()");
+            }
+        }
+
+        /*
          * Returns a list with all the categories in it
          * Throws a NoRecordException if no records were found
          * Throws a DALException if something else went wrong
@@ -61,51 +104,11 @@ namespace LayeredBusinessModel.DAO
                 }
                 throw new NoRecordException("No records were found - CategorieDAO getAll()");
             }            
-        }
+        }        
 
         /*
-         * Returns a category based on an ID
-         * Throws a NoRecordException if no records were found
-         * Throws a DALException if something else went wrong
-         */
-        public Category getByID(String id)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
-                command.Parameters.Add(new SqlParameter("@category_id", id));
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return createCategory(reader);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to get a category based on an ID", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                } 
-                throw new NoRecordException("No records were found - CategorieDAO getByID()");                   
-            }
-        }
-
+         * Creates a Category-Object
+         */ 
         private Category createCategory(SqlDataReader reader)
         {
             return new Category

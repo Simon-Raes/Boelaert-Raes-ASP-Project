@@ -14,6 +14,593 @@ namespace LayeredBusinessModel.DAO
     public class DvdInfoDAO : DAO
     {
         /*
+         * Returns a dvdinfo based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public DvdInfo getByID(String id)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM DvdInfo WHERE dvd_info_id = @id", cnn);
+                command.Parameters.Add(new SqlParameter("@id", id));
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createDvdInfo(reader);           //Throws NoRecordException
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get the dvdinfo based on an ID", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getDvdInfoWithId()");
+            }
+        }
+
+        /*
+         * Returns a list with dvd's from a certain year
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByYear(String year)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT  * FROM DvdInfo where year = @year", cnn);
+                command.Parameters.Add(new SqlParameter("@year", year));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's from a certain year", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromYear()");
+            }
+
+        }
+
+        /*
+         * Returns a list with dvd's from a certain director
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByDirector(String director)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT  * FROM DvdInfo where author like @director", cnn);
+                command.Parameters.Add(new SqlParameter("@director", "%" + director + "%"));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's from a certain director", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromDirector()");
+            }
+        }
+
+        /*
+         * Returns a list with dvd's from a certain actor
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByActor(String actor)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT  * FROM DvdInfo where actors like @actor", cnn);
+                command.Parameters.Add(new SqlParameter("@actor", "%" + actor + "%"));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's from a certain actor", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithActor()");
+            }
+        }
+
+        /*
+         * Returns all DvdInfo's that have a banner image
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong 
+         */
+        public List<DvdInfo> getAllWithBanner()
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM DvdInfo " +
+                "JOIN Media " +
+                "ON Media.dvd_info_id = DvdInfo.dvd_info_id " +
+                "WHERE Media.media_type_id = 4", cnn);
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException          
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get all the dvd's with a banner", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfosWithBanner()");
+            }
+        }
+
+        /*
+         * Returns a list with dvd's based on searchtext
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByText(String searchText)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE @searchtext OR barcode LIKE @searchtext OR author LIKE @searchtext", cnn);
+                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's based on searchtext", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithText()");
+            }
+        }
+
+        /*
+         * Returns a list with dvd's based on searchtext and category
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByTextCategory(String searchText, String categoryID)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " +
+                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration " +
+                "FROM DvdInfo " +
+                "INNER JOIN DvdGenre " +
+                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+                "INNER JOIN Genres " +
+                "ON DvdGenre.genre_id = Genres.genre_id " +
+                "WHERE Genres.category_id = @cat_id " +
+                "AND (DvdInfo.name LIKE @searchtext OR DvdInfo.barcode LIKE @searchtext OR DvdInfo.author LIKE @searchtext) " +
+                "GROUP BY DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " +
+                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
+
+                command.Parameters.Add(new SqlParameter("@cat_id", categoryID));
+                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's based on searchtext and categorie", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndCategory()");
+            }
+        }
+
+        /*
+         * Returns a list with dvd's based on searchtext and genre
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getByTextAndGenre(String searchText, String genreID)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * " +
+                "FROM DvdInfo " +
+                "INNER JOIN DvdGenre " +
+                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
+                "WHERE DvdGenre.genre_id = @genre_id" +
+                " AND (name LIKE @searchtext OR barcode LIKE @searchtext OR author LIKE @searchtext)", cnn);
+
+                command.Parameters.Add(new SqlParameter("@genre_id", genreID));
+                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get dvd's based on searchtext and genre", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndGenre()");
+            }
+        }
+
+        /*
+         * Returns a list with the latest dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getLatestDvds(int amount)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+
+                command = new SqlCommand("SELECT top (@amount) * FROM DvdInfo ORDER BY date_added DESC", cnn);
+                command.Parameters.Add(new SqlParameter("@amount", amount));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));             //Throws NoRecordException                   
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get the latest dvd's", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getLatestDvds()");
+            }
+        }
+
+        /*
+         * Returns a list with popular dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<DvdInfo> getMostPopularDvds(int amount)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT top (@amount) * FROM DvdInfo ORDER BY amount_sold DESC", cnn);
+                command.Parameters.Add(new SqlParameter("@amount", amount));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException             
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get popular dvd's", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getMostPopularDvds()");
+            }
+        }
+
+        /*
+         * Returns a list with recommendations
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<int> getRecommendations(int[] genres, int amount)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                //even zo laten en zoeken naar een correcte oplossing om een array als parameter mee te geven
+                command = new SqlCommand("select top @amount dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+
+                command.Parameters.Add(new SqlParameter("@amount", amount));
+
+                //create a string out of the received genres
+                //String values = "";
+                //for (int i = 1; i <= genres.Length; i++)
+                //{
+                //    values += genres[i - 1];
+                //    if (i < genres.Length)
+                //    {
+                //        values += ",";
+                //    }
+                //}
+
+                //sql.Parameters.Add(new SqlParameter("@values", values));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<int> dvdIds = new List<int>();
+                        while (reader.Read())
+                        {
+                            dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                        }
+                        return dvdIds;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get recommendations", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getRecommendations()");
+            }
+        }
+
+        /*
          * Adds a dvd
          * Return the id from the newly added dvd
          * Throws DALException if something else went wrong
@@ -68,150 +655,7 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }
-        
-        /*
-         * Returns a List with all the dvd's
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        /*
-        public List<DvdInfo> getAll()
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM DvdInfo", cnn);
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to get all the dvd's", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfos()");
-            }
-        }*/
-
-        /*
-         * Returns all DvdInfo's that have a banner image
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong 
-         */
-        public List<DvdInfo> getAllWithBanner()
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM DvdInfo " +
-                "JOIN Media " +
-                "ON Media.dvd_info_id = DvdInfo.dvd_info_id " +
-                "WHERE Media.media_type_id = 4", cnn);
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();                        
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException          
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get all the dvd's with a banner", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }                  
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfosWithBanner()");
-            }
-        }
-
-        /*
-         * Returns a dvdinfo based on an ID
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public DvdInfo getByID(String id)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM DvdInfo WHERE dvd_info_id = @id", cnn);
-                command.Parameters.Add(new SqlParameter("@id", id));
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return createDvdInfo(reader);           //Throws NoRecordException
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get the dvdinfo based on an ID", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getDvdInfoWithId()");
-            }
-        }
+        }       
 
         /*
          * Updates a dvd
@@ -274,497 +718,6 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         * Returns a list with dvd's based on searchtext
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdWithText(String searchText)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM DvdInfo WHERE name LIKE @searchtext OR barcode LIKE @searchtext OR author LIKE @searchtext", cnn);
-                command.Parameters.Add(new SqlParameter("@searchtext","%"+ searchText + "%"));
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's based on searchtext", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithText()");
-            }
-        }
-
-        /*
-         * Returns a list with dvd's based on searchtext and category
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdWithTextAndCategory(String searchText, String categoryID)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " + 
-                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration " +
-                "FROM DvdInfo " +
-                "INNER JOIN DvdGenre " +
-                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
-                "INNER JOIN Genres " +
-                "ON DvdGenre.genre_id = Genres.genre_id " +
-                "WHERE Genres.category_id = @cat_id " +
-                "AND (DvdInfo.name LIKE @searchtext OR DvdInfo.barcode LIKE @searchtext OR DvdInfo.author LIKE @searchtext) " +
-                "GROUP BY DvdInfo.dvd_info_id, DvdInfo.name, DvdInfo.year, DvdInfo.barcode, DvdInfo.author, " +
-                "DvdInfo.description, DvdInfo.rent_price, DvdInfo.buy_price, DvdInfo.date_added, DvdInfo.amount_sold, DvdInfo.actors, DvdInfo.duration ", cnn);
-
-                command.Parameters.Add(new SqlParameter("@cat_id", categoryID));
-                command.Parameters.Add(new SqlParameter("@searchtext", "%" + searchText + "%"));  
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's based on searchtext and categorie", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndCategory()");
-            }
-        }
-
-        /*
-         * Returns a list with dvd's based on searchtext and genre
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdWithTextAndGenre(String searchText, String genreID)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {   
-                command = new SqlCommand("SELECT * " + 
-                "FROM DvdInfo " +
-                "INNER JOIN DvdGenre " +
-                "ON DvdInfo.dvd_info_id = DvdGenre.dvd_info_id " +
-                "WHERE DvdGenre.genre_id = @genre_id" +
-                " AND (name LIKE @searchtext OR barcode LIKE @searchtext OR author LIKE @searchtext)", cnn);
-
-                command.Parameters.Add(new SqlParameter("@genre_id", genreID));
-                command.Parameters.Add(new SqlParameter("@searchtext","%"+ searchText + "%"));
-                
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's based on searchtext and genre", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithTextAndGenre()");
-            }
-        }
-
-        /*
-         * Returns a list with the latest dvd's
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> getLatestDvds(int amount)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                
-                command = new SqlCommand("SELECT top (@amount) * FROM DvdInfo ORDER BY date_added DESC", cnn);
-                command.Parameters.Add(new SqlParameter("@amount", amount));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));             //Throws NoRecordException                   
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get the latest dvd's", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getLatestDvds()");
-            }
-        }
-
-        /*
-         * Returns a list with dvd's from a certain year
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdFromYear(String year)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT  * FROM DvdInfo where year = @year", cnn);
-                command.Parameters.Add(new SqlParameter("@year", year));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's from a certain year", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromYear()");
-            }
-
-        }
-
-        /*
-         * Returns a list with dvd's from a certain director
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdFromDirector(String director)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT  * FROM DvdInfo where author like @director", cnn);
-                command.Parameters.Add(new SqlParameter("@director","%" + director + "%"));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's from a certain director", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdFromDirector()");
-            }
-        }
-
-        /*
-         * Returns a list with dvd's from a certain actor
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> searchDvdWithActor(String actor)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT  * FROM DvdInfo where actors like @actor", cnn);
-                command.Parameters.Add(new SqlParameter("@actor", "%" + actor + "%"));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get dvd's from a certain actor", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO searchDvdWithActor()");
-            }
-        }
-
-        /*
-         * Returns a list with popular dvd's
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<DvdInfo> getMostPopularDvds(int amount)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {                
-                command = new SqlCommand("SELECT top (@amount) * FROM DvdInfo ORDER BY amount_sold DESC", cnn);
-                command.Parameters.Add(new SqlParameter("@amount", amount));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));         //Throws NoRecordException             
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get popular dvd's", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getMostPopularDvds()");
-            }
-        }
-
-        /*
-         * Returns a list with recommendations
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */ 
-        public List<int> getRecommendations(int[] genres, int amount)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {    
-                //even zo laten en zoeken naar een correcte oplossing om een array als parameter mee te geven
-                command = new SqlCommand("select top @amount dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
-                                
-                command.Parameters.Add(new SqlParameter("@amount", amount));
-
-                //create a string out of the received genres
-                //String values = "";
-                //for (int i = 1; i <= genres.Length; i++)
-                //{
-                //    values += genres[i - 1];
-                //    if (i < genres.Length)
-                //    {
-                //        values += ",";
-                //    }
-                //}
-
-                //sql.Parameters.Add(new SqlParameter("@values", values));
-
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<int> dvdIds = new List<int>();
-                        while (reader.Read())
-                        {
-                            dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
-                        }
-                        return dvdIds;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to get recommendations", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getRecommendations()");
-            }
-        }
-
-        /*
          * Returns a list with media for a dvd
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
@@ -811,6 +764,9 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         * Creates a DvdInfo-Object
+         */ 
         private DvdInfo createDvdInfo(SqlDataReader reader)
         {
             return new DvdInfo
@@ -830,5 +786,52 @@ namespace LayeredBusinessModel.DAO
                 duration = Convert.ToString(reader["duration"])
             };
         }
+
+        /*
+         * Returns a List with all the dvd's
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        /*
+        public List<DvdInfo> getAll()
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM DvdInfo", cnn);
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<DvdInfo> dvdlist = new List<DvdInfo>();
+                        while (reader.Read())
+                        {
+                            dvdlist.Add(createDvdInfo(reader));
+                        }
+                        return dvdlist;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get all the dvd's", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfos()");
+            }
+        }*/
     }
 }

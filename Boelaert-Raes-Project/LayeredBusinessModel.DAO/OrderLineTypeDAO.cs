@@ -53,6 +53,9 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*
+         * Creates an OrdelineType-Object
+         */ 
         private OrderLineType createOrderLineStatus(SqlDataReader reader)
         {
             return new OrderLineType

@@ -194,6 +194,9 @@ namespace LayeredBusinessModel.DAO
             }
         }        
 
+        /*
+         * Creates a PageVisits-Object
+         */ 
         private PageVisits createPageVisits(SqlDataReader reader)
         {
             return new PageVisits

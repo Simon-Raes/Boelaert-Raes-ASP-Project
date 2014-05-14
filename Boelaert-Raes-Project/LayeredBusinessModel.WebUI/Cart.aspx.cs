@@ -169,7 +169,7 @@ namespace LayeredBusinessModel.WebUI
                                 startdate = item.startdate,
                                 enddate = item.enddate,
                                 //order_line_type_id is verhuur/verkoop? dan kunnen we dat eigenlijk via join ophalen via dvd_copy tabel
-                                orderLineType = new OrderLineTypeService().getOrderLineTypeByID(item.dvdCopyType.id.ToString())
+                                orderLineType = new OrderLineTypeService().getByID(item.dvdCopyType.id.ToString())          //Throws NoRecordException
                             };
 
                             if (orderLineService.add(orderline))

@@ -23,7 +23,10 @@ namespace LayeredBusinessModel.BLL.Model
                 timestamp = DateTime.Now,
                 token = Util.randomString(10)
             };
-            tokenService.addToken(token);
+            if (tokenService.add(token))
+            {
+                //succes
+            }
 
 
             //send the user an email asking if he wants to reset his password
@@ -54,7 +57,10 @@ namespace LayeredBusinessModel.BLL.Model
                 didReset = true;
 
                 //remove the token from the database so the user can't reset his password again with the same url later
-                tokenService.deleteToken(token);
+                if (tokenService.deleteToken(token))
+                {
+                    //success
+                }
             }
 
             return didReset;

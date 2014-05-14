@@ -30,7 +30,10 @@ namespace LayeredBusinessModel.BLL.Model
                     timestamp = DateTime.Now,
                     token = Util.randomString(10)
                 };
-                tokenService.addToken(token);
+                if (tokenService.add(token))
+                {
+                    //success
+                }
 
                 //send email asking for verification
                 EmailModel emailModel = new EmailModel();
@@ -77,7 +80,7 @@ namespace LayeredBusinessModel.BLL.Model
             Boolean status = false;
             
             Customer customer = new CustomerService().getByEmail(email);          //Throws NoRecordException || DALException                        
-            List<Token> tokens = new TokenService().getTokensForCustomer(customer);
+            List<Token> tokens = new TokenService().getByCustomer(customer);            //throws Throws NoRecordException
                         
 
             if (tokens.Count > 0)

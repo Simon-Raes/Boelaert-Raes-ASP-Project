@@ -71,9 +71,15 @@ namespace LayeredBusinessModel.BLL
             {                
                 if (new CustomerDAO().verrify(customer))        //Throws DALException
                 {
-                    new TokenService().deleteToken(strToken);
-                    customer.isVerified = true;
-                    return true;
+                    if (new TokenService().deleteToken(strToken))
+                    {
+                        customer.isVerified = true;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 return false;
             }            

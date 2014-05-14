@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<Token> getTokensForCustomer(Customer customer) {
+        public List<Token> getByCustomer(Customer customer) {
             SqlCommand command = null;
             SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -62,7 +62,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public Token getTokenByToken(String token)
+        public Token getByToken(String token)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -128,7 +128,7 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were deleted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean removeToken(Token token)
+        public Boolean delete(Token token)
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
@@ -163,7 +163,8 @@ namespace LayeredBusinessModel.DAO
          * Returns true if records were deleted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean removeTokensForCustomer(Customer customer) {
+        /*
+        public Boolean deleteByCustomer(Customer customer) {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
@@ -190,14 +191,14 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }
+        }*/
 
         /*
          * Adds a tokens
          * Returns true if records were inserted, false if not
          * Throws DALException if something else went wrong
          */
-        public Boolean addToken(Token token) 
+        public Boolean add(Token token) 
         {
             SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))

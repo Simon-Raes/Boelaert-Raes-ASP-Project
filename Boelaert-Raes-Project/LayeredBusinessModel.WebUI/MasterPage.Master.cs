@@ -117,10 +117,9 @@ namespace LayeredBusinessModel.WebUI
         }
 
 
+
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-
-
             if (txtEmail.Value != null && txtEmail.Value != null)
             {
                 LoginModel loginModel = new LoginModel();

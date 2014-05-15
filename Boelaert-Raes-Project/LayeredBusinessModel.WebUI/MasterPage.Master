@@ -93,7 +93,7 @@
                                         <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
-                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'Register.aspx'"/> 
+                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'signup.aspx'"/> 
                                         </li>
                                     </ul>
                                 </li>

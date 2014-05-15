@@ -23,7 +23,7 @@ namespace LayeredBusinessModel.BLL
          */
         public List<Category> getAll()
         {
-            return new CategoryDAO().getAll();                    //Throws NoRecordException || DALException   
+            return new CategoryDAO().getAll_StoredProcedure();                    //Throws NoRecordException || DALException   
         }
 
         /*

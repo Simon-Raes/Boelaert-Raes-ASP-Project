@@ -104,7 +104,55 @@ namespace LayeredBusinessModel.DAO
                 }
                 throw new NoRecordException("No records were found - CategorieDAO getAll()");
             }            
-        }        
+        }
+
+        /*
+         * Returns a list with all the categories in it
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
+         */
+        public List<Category> getAll_StoredProcedure()
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("getAllCategories", cnn);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                try
+                {
+                    List<Category> categoryList = new List<Category>();
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            categoryList.Add(createCategory(reader));
+                        }
+                        return categoryList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get all the categories", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CategorieDAO getAll()");
+            }
+        }
 
         /*
          * Creates a Category-Object

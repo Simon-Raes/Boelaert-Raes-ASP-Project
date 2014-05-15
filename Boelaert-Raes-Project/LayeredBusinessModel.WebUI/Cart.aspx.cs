@@ -211,7 +211,7 @@ namespace LayeredBusinessModel.WebUI
                     }
 
                     //clear cart
-                    if (shoppingCartService.deleteByCustomer(user))
+                    if (new ShoppingCartService().deleteByCustomer(user))
                     {
                         //success
                     }

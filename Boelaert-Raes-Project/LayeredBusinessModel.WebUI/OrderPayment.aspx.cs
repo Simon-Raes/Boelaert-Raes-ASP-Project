@@ -123,8 +123,17 @@ namespace LayeredBusinessModel.WebUI
                     //check if all orderLines can be given a dvdCopy
                     Boolean allInStock = hasAllInStock(orderLines);
                     //send the user an order confirmation
-                    EmailModel emailModel = new EmailModel();
-                    emailModel.sendOrderConfirmationEmail(user, order, orderLines, allInStock);
+
+                    String currency = "€";
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                        {
+                            currency = "$";
+                        }
+                    }
+
+                    new EmailModel().sendOrderConfirmationEmail(user, order, orderLines, allInStock, currency);
 
                     //redirect away from the payment page - todo: go to thank you/info page
                     Response.Redirect("~/Index.aspx");

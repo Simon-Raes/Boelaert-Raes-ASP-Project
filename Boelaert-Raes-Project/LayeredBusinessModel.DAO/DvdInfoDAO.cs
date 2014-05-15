@@ -550,7 +550,7 @@ namespace LayeredBusinessModel.DAO
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 //even zo laten en zoeken naar een correcte oplossing om een array als parameter mee te geven
-                command = new SqlCommand("select top @amount dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+                command = new SqlCommand("select top (@amount) dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
 
                 command.Parameters.Add(new SqlParameter("@amount", amount));
 

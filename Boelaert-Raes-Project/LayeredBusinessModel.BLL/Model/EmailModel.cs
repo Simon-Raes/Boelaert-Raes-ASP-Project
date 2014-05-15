@@ -10,6 +10,7 @@ using System.Net;
 using System.Configuration;
 using System.Net.Configuration;
 
+
 namespace LayeredBusinessModel.BLL.Model
 {
     public class EmailModel
@@ -62,7 +63,7 @@ namespace LayeredBusinessModel.BLL.Model
         }
 
         //todo: include orderLine en Order price in email!
-        public void sendOrderConfirmationEmail(Customer customer, Order order, List<OrderLine> orderLines, Boolean allInStock)
+        public void sendOrderConfirmationEmail(Customer customer, Order order, List<OrderLine> orderLines, Boolean allInStock, String currency)
         {
             var client = getSmtpClient();  
 
@@ -75,6 +76,7 @@ namespace LayeredBusinessModel.BLL.Model
             }
             messageContent += "Order " + order.order_id + " (" + order.orderstatus.name + ")<br />";
             messageContent += "<table>";
+            double orderTotal = 0;
             foreach (OrderLine orderLine in orderLines)
             {
                 messageContent += "<tr><td style='padding: 5px; border: 1px solid #ddd;'>";
@@ -82,14 +84,25 @@ namespace LayeredBusinessModel.BLL.Model
                 if (orderLine.orderLineType.id == 1)
                 {
                     messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>" + orderLine.orderLineType.name + " from " + orderLine.startdate + " until " + orderLine.enddate + "</td>";
+                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>" + currency + " " + orderLine.dvdInfo.rent_price + "</td>";
+                    orderTotal += orderLine.dvdInfo.rent_price;
                 }
                 else
                 {
                     messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>"+orderLine.orderLineType.name+"</td>";
+                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>"+ currency + " " + orderLine.dvdInfo.buy_price + "</td>";
+                    orderTotal += orderLine.dvdInfo.buy_price;
                 }
+                
                 messageContent += "</tr>";                
             }
             messageContent += "</table>";
+
+
+            messageContent += "</br>";
+            messageContent += "Total " + currency + " " +Math.Round(orderTotal, 2);
+
+
             messageContent += "<br /><br />Regards,<br />The Taboelaert Raesa team.";
             
             
@@ -97,7 +110,7 @@ namespace LayeredBusinessModel.BLL.Model
             MailAddress fromAddress = new MailAddress("info@taboelaertraesa.com");
             message.From = fromAddress;
 
-            message.To.Add("simonraes@gmail.com");
+            message.To.Add(order.customer.email);
             message.Subject = "Your Taboelaert Raesa order information";
             message.IsBodyHtml = true;
             message.Body = messageContent;

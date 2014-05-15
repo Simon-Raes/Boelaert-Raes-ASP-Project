@@ -54,8 +54,7 @@ namespace LayeredBusinessModel.WebUI
                             {
                                 orderTable.Columns.Add("Start date");
                                 orderTable.Columns.Add("End date");
-                            }
-                            
+                            }                            
 
                             foreach (OrderLine item in orderLines)
                             {

@@ -29,10 +29,34 @@ namespace LayeredBusinessModel.WebUI
                         Order order = orderService.getByID(orderID);           //Throws NoRecordException
                         if (order.customer.customer_id == user.customer_id)
                         {
+
+                            String currency = "€";
+                            if (Request.QueryString["currency"] == null)
+                            {
+                                //Check if the user has set the currencypreference
+                                if (CookieUtil.CookieExists("currency"))
+                                {
+                                    if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                                    {
+                                        currency = "$";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                switch (Request.QueryString["currency"])
+                                {
+                                    case "usd":
+                                        currency = "$";
+                                        break;
+                                }
+                            }
+
+
                             //all good
                             lblStatus.Text = orderID;
                             OrderModel helper = new OrderModel();
-                            lblCost.Text = Math.Round(helper.getOrderCost(order), 2).ToString();
+                            lblCost.Text = currency + " " + Math.Round(helper.getOrderCost(order), 2).ToString();
                             List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException
 
                             Boolean hasRentItems = false;
@@ -66,14 +90,14 @@ namespace LayeredBusinessModel.WebUI
                                 if (item.orderLineType.id == 1)
                                 {
                                     double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
-                                    orderRow[3] = Math.Round(cost, 2);
+                                    orderRow[3] = currency + " " + Math.Round(cost, 2);
                                     orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
                                     orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
                                 }
                                 else
                                 {
                                     double cost = item.dvdInfo.buy_price;
-                                    orderRow[3] = Math.Round(cost, 2);
+                                    orderRow[3] = currency + " " + Math.Round(cost, 2);
                                 }
 
                                 orderTable.Rows.Add(orderRow);

@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -26,7 +27,7 @@ namespace LayeredBusinessModel.WebUI
         public String imageUrl { get; set; }
         public String title { get; set; }
         public float buy_price { get; set; }
-        public float rent_price { get; set; }        
+        public float rent_price { get; set; }
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -37,7 +38,7 @@ namespace LayeredBusinessModel.WebUI
             dvdInfoLink.NavigateUrl = "~/detail.aspx?id=" + id;
             dvdInfoLink2.NavigateUrl = dvdInfoLink.NavigateUrl;
             imgDvdCover.ImageUrl = imageUrl;
-            if(title.Length<=40)
+            if (title.Length <= 40)
             {
                 lblTitle.Text = title;
             }
@@ -55,8 +56,8 @@ namespace LayeredBusinessModel.WebUI
                     {
                         case "usd":
                             currency = "$";
-                            buy_price = (float) currencyWebService.convert(buy_price,"usd");
-                            rent_price = (float) currencyWebService.convert(rent_price, "usd");
+                            buy_price = (float)currencyWebService.convert(buy_price, "usd");
+                            rent_price = (float)currencyWebService.convert(rent_price, "usd");
                             break;
                     }
                 }
@@ -66,13 +67,13 @@ namespace LayeredBusinessModel.WebUI
                 switch (Request.QueryString["currency"])
                 {
                     case "usd":
-                        currency="$";
-                        buy_price = (float)currencyWebService.convert(buy_price,"usd");
+                        currency = "$";
+                        buy_price = (float)currencyWebService.convert(buy_price, "usd");
                         rent_price = (float)currencyWebService.convert(rent_price, "usd");
                         break;
                 }
             }
-            
+
             //set buy button color and text
             if (AvailabilityModel.isAvailableForBuying(Convert.ToString(id)))
             {
@@ -87,23 +88,31 @@ namespace LayeredBusinessModel.WebUI
             //set rent button text           
             RentModel rentService = new RentModel();
             DvdInfoService dvdbll = new DvdInfoService();
-            DvdInfo thisDVD = dvdbll.getDvdInfoWithID(Convert.ToString(id));
-            List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);
+            try
+            {
+                DvdInfo thisDVD = dvdbll.getByID(Convert.ToString(id));                //Throws NoRecordExample
+                List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);            //Throws NoRecordException
 
-            if(dates.Count>=14)
-            {
-                //fully available, green button
-                btnRentB.Attributes.Add("Class", "btn btn-success price-box");
+
+                if (dates.Count >= 14)
+                {
+                    //fully available, green button
+                    btnRentB.Attributes.Add("Class", "btn btn-success price-box");
+                }
+                else if (dates.Count > 0)
+                {
+                    //available on some days, orange button
+                    btnRentB.Attributes.Add("Class", "btn btn-warning price-box");
+                }
+                else
+                {
+                    //not available at all, red button
+                    btnRentB.Attributes.Add("Class", "btn btn-danger price-box");
+                }
             }
-            else if(dates.Count>0)
+            catch (NoRecordException)
             {
-                //available on some days, orange button
-                btnRentB.Attributes.Add("Class", "btn btn-warning price-box");
-            }
-            else
-            {
-                //not available at all, red button
-                btnRentB.Attributes.Add("Class", "btn btn-danger price-box");
+
             }
 
             btnRentB.InnerText = "Rent " + currency + " " + rent_price;
@@ -119,9 +128,6 @@ namespace LayeredBusinessModel.WebUI
             CustomEvents ce = new CustomEvents();
             ce.dvd_info_id = id;
             ChoiceComplete(this, ce);
-
-            
-
         }
 
         protected void btnRent_Click(object sender, EventArgs e)

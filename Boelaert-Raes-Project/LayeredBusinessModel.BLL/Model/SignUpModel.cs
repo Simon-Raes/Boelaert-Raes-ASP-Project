@@ -19,10 +19,8 @@ namespace LayeredBusinessModel.BLL.Model
             if (customerService.addCustomer(user))
             {
                 addedUser = true;
-                //create token
-                TokenService tokenService = new TokenService();
                 //need to get the customer from the database so we have his customer_id
-                Customer customer = customerService.getCustomerWithEmail(user.email);
+                Customer customer = customerService.getByEmail(user.email);             //Throws NoRecordException || DALException
                 Token token = new Token
                 {
                     customer = customer,
@@ -30,7 +28,10 @@ namespace LayeredBusinessModel.BLL.Model
                     timestamp = DateTime.Now,
                     token = Util.randomString(10)
                 };
-                tokenService.addToken(token);
+                if (new TokenService().add(token))
+                {
+                    //success
+                }
 
                 //send email asking for verification
                 EmailModel emailModel = new EmailModel();
@@ -51,23 +52,19 @@ namespace LayeredBusinessModel.BLL.Model
             //edit customer object to set verified to true
             Customer customer = token.customer;
             customer.isVerified = true;
-            CustomerService customerService = new CustomerService();
-            if (!customerService.updateCustomer(customer))
+            if (!new CustomerService().updateCustomer(customer))
             {
                 status = false;
             }
 
             //send a second email confirming the verification
-            EmailModel emailModel = new EmailModel();
-            emailModel.sendRegistrationCompleteEmail(customer);
+            new EmailModel().sendRegistrationCompleteEmail(customer);
 
             //delete the token since it will never be used again
-            TokenService tokenService = new TokenService();
-            if (!tokenService.deleteToken(token))
+            if (!new TokenService().deleteToken(token))
             {
                 status = false;
             }
-
             return status;
         }
 
@@ -76,31 +73,24 @@ namespace LayeredBusinessModel.BLL.Model
         {
             Boolean status = false;
 
-            CustomerService customerService = new CustomerService();
-            Customer customer = customerService.getCustomerWithEmail(email);
-            if (customer != null)
+            Customer customer = new CustomerService().getByEmail(email);          //Throws NoRecordException || DALException                        
+            List<Token> tokens = new TokenService().getByCustomer(customer);            //throws Throws NoRecordException
+            
+            Token verificationToken = null;
+            foreach (Token token in tokens)
             {
-                TokenService tokenService = new TokenService();
-                List<Token> tokens = tokenService.getTokensForCustomer(customer);
-                Token verificationToken = null;
-                if (tokens.Count > 0)
+                if (token.status == TokenStatus.VERIFICATION)
                 {
-                    foreach (Token token in tokens)
-                    {
-                        if (token.status == TokenStatus.VERIFICATION)
-                        {
-                            verificationToken = token;
-                        }
-                    }
-                    if (verificationToken != null)
-                    {
-                        status = true;
-
-                        EmailModel emailModel = new EmailModel();
-                        emailModel.sendRegistrationEmail(verificationToken);
-                    }
+                    verificationToken = token;
                 }
             }
+            if (verificationToken != null)
+            {
+                status = true;
+
+                new EmailModel().sendRegistrationEmail(verificationToken);
+            }
+
             return status;
         }
     }

@@ -9,6 +9,7 @@ using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Data;
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -23,17 +24,40 @@ namespace LayeredBusinessModel.WebUI
                 if (user != null)
                 {
                     String orderID = Request.QueryString["order"];
-                    Order order = orderService.getOrder(orderID);
-                    if (order != null)
+                    try
                     {
+                        Order order = orderService.getByID(orderID);           //Throws NoRecordException
                         if (order.customer.customer_id == user.customer_id)
                         {
+
+                            String currency = "€";
+                            if (Request.QueryString["currency"] == null)
+                            {
+                                //Check if the user has set the currencypreference
+                                if (CookieUtil.CookieExists("currency"))
+                                {
+                                    if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                                    {
+                                        currency = "$";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                switch (Request.QueryString["currency"])
+                                {
+                                    case "usd":
+                                        currency = "$";
+                                        break;
+                                }
+                            }
+
+
                             //all good
                             lblStatus.Text = orderID;
                             OrderModel helper = new OrderModel();
-                            lblCost.Text = Math.Round(helper.getOrderCost(order), 2).ToString();
-                            OrderLineService orderLineService = new OrderLineService();
-                            List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
+                            lblCost.Text = currency + " " + Math.Round(helper.getOrderCost(order), 2).ToString();
+                            List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException
 
                             Boolean hasRentItems = false;
 
@@ -47,14 +71,16 @@ namespace LayeredBusinessModel.WebUI
 
                             DataTable orderTable = new DataTable();
                             orderTable.Columns.Add("Item number");
-                            orderTable.Columns.Add("Name");                            
+                            orderTable.Columns.Add("Name");
                             orderTable.Columns.Add("Type");
                             orderTable.Columns.Add("Price");
-                            if(hasRentItems)
+                            if (hasRentItems)
                             {
                                 orderTable.Columns.Add("Start date");
                                 orderTable.Columns.Add("End date");
+
                             }                            
+
 
                             foreach (OrderLine item in orderLines)
                             {
@@ -62,19 +88,19 @@ namespace LayeredBusinessModel.WebUI
                                 orderRow[0] = item.orderline_id;
                                 orderRow[1] = item.dvdInfo.name;
                                 orderRow[2] = item.orderLineType.name;
-                                if(item.orderLineType.id == 1)
+                                if (item.orderLineType.id == 1)
                                 {
-                                    double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;                                    
-                                    orderRow[3] = Math.Round(cost, 2);
+                                    double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
+                                    orderRow[3] = currency + " " + Math.Round(cost, 2);
                                     orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
                                     orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
                                 }
                                 else
                                 {
                                     double cost = item.dvdInfo.buy_price;
-                                    orderRow[3] = Math.Round(cost,2);
+                                    orderRow[3] = currency + " " + Math.Round(cost, 2);
                                 }
-                                
+
                                 orderTable.Rows.Add(orderRow);
                             }
 
@@ -88,12 +114,10 @@ namespace LayeredBusinessModel.WebUI
                             lblStatus.Text = "Access denied";
                         }
                     }
-                    else
+                    catch (NoRecordException)
                     {
-                        //order does not exist, error
-                        lblStatus.Text = "404 - Page not found";
-                    }
 
+                    } 
                 }
                 else
                 {
@@ -112,26 +136,39 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if(user!=null)
             {
-                //get the order
-                String orderID = lblStatus.Text;
-                OrderService orderService = new OrderService();
-                Order order = orderService.getOrder(orderID);
+                try
+                {
+                    //get the order
+                    String orderID = lblStatus.Text;
+                    Order order = new OrderService().getByID(orderID);           //Throws NoRecordException
+                    new OrderModel().payOrder(order);       //Throws NoRecordException || DALException
 
-                //pay for the order
-                OrderModel helper = new OrderModel();
-                helper.payOrder(order);
+                    //get the orderLines
+                    List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException           
+                    //check if all orderLines can be given a dvdCopy
+                    Boolean allInStock = hasAllInStock(orderLines);
+                    //send the user an order confirmation
 
-                //get the orderLines
-                OrderLineService orderLineService = new OrderLineService();
-                List<OrderLine> orderLines = orderLineService.getOrderLinesForOrder(order);
-                //check if all orderLines can be given a dvdCopy
-                Boolean allInStock = hasAllInStock(orderLines);
-                //send the user an order confirmation
-                EmailModel emailModel = new EmailModel();
-                emailModel.sendOrderConfirmationEmail(user, order, orderLines, allInStock);
+                    String currency = "€";
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                        {
+                            currency = "$";
+                        }
+                    }
 
-                //redirect away from the payment page - todo: go to thank you/info page
-                Response.Redirect("~/Index.aspx");
+                    new EmailModel().sendOrderConfirmationEmail(user, order, orderLines, allInStock, currency);
+
+                    //redirect away from the payment page - todo: go to thank you/info page
+                    Response.Redirect("~/Index.aspx");
+                }
+                catch (NoRecordException)
+                {
+                    
+                }
+
+                
             }
             else
             {

@@ -11,12 +11,9 @@ namespace LayeredBusinessModel.BLL
 {
     public class DvdGenreService
     {
-        private DvdGenreDAO dvdGenreDAO;
-
-        public void addDvdGenre(Genre genre, DvdInfo dvdInfo)
+        public Boolean addDvdGenre(Genre genre, DvdInfo dvdInfo)
         {
-            dvdGenreDAO = new DvdGenreDAO();
-            dvdGenreDAO.addGenreForDvd(genre, dvdInfo);            
+            return new DvdGenreDAO().add(genre, dvdInfo);          //Throws NoRecordException            
         }
     }
 }

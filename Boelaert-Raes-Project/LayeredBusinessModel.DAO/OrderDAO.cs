@@ -7,11 +7,248 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class OrderDAO : DAO
     {
+        /*
+         * Returns an order based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public Order getByID(String id)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                    "Join Orderstatus " +
+                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
+                    "WHERE order_id = @order_id", cnn);
+                command.Parameters.Add(new SqlParameter("@order_id", id));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createOrder(reader);         //Throws NoRecordException || DALException  
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get an order based on an ID", ex);                    
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - OrderDAO getOrderWithId()");
+            }
+        }
+
+        /*
+         * Returns a list with orders for a customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<Order> getByCustomer(Customer customer)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
+                    "Join Orderstatus " +
+                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
+                    "WHERE customer_id = @customer_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        List<Order> orderList = new List<Order>();
+                        while (reader.Read())
+                        {
+                            orderList.Add(createOrder(reader));         //Throws NoRecordException || DALException  
+                        }
+                        return orderList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is NoRecordException || ex is DALException)
+                    {
+                        throw;
+                    }
+                    throw new DALException("Failed to get the order for a customer", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - OrderDAO getOrdersForCustomer()");
+            }
+        }
+
+        /*
+         * Updates an order
+         * Returns true if the order was updated, false if no order was updated
+         * Throws DALException if something else went wrong
+         */
+        public Boolean update(Order order)
+        {
+            SqlCommand command = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("UPDATE Orders " +
+                "SET customer_id = @customer_id, " +
+                "orderstatus_id = @orderstatus_id, " +
+                "date = @date " +
+                "WHERE order_id=@order_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id", order.customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus.id));
+                command.Parameters.Add(new SqlParameter("@date", order.date));
+                command.Parameters.Add(new SqlParameter("@order_id", order.order_id));
+
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to update order", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+        
+        /*
+         * Inserts an order for a customer
+         * Returns the ID from the newly added order
+         * Throws DALException if something else went wrong
+         */
+        public int add(Customer customer)
+        {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("INSERT INTO Orders" +
+                "(orderstatus_id, customer_id, date) " +
+                "OUTPUT INSERTED.order_id " +
+                //todo: left the date like this for now, seems to work in both versions of the site, don't want to risk breaking it
+                "VALUES(@orderstatus_id, @customer_id," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
+                command.Parameters.Add(new SqlParameter("@orderstatus_id", 1));
+                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
+                command.Parameters.Add(new SqlParameter("@date", DateTime.Today));
+
+                try
+                {
+                    cnn.Open();
+                    return (int)command.ExecuteScalar();
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to insert order for customer", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
+        /*
+         * Deletes all the orders
+         * Returns true if orders where deleted, false if no orders were deleted
+         * Throws DALException if something else went wrong
+         */
+        public Boolean deleteAll()
+        {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("DELETE FROM Orders", cnn);
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to delete all orders", ex);                    
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
+        /*
+         * Creates an Order-object
+         */ 
+        private Order createOrder(SqlDataReader reader)
+        {
+            return new Order
+            {
+                order_id = Convert.ToInt32(reader["order_id"]),
+                orderstatus = new OrderStatusDAO().getByID(reader["orderstatus_id"].ToString()),            //Throws NoRecordException
+                customer = new CustomerDAO().getByID(reader["customer_id"].ToString()),         //Throws NoRecordException || DALException         
+                date = Convert.ToDateTime(reader["date"])
+            };
+        }
+        
         //public List<Order> getAll()
         //{
         //    cnn = new SqlConnection(sDatabaseLocatie);
@@ -41,173 +278,5 @@ namespace LayeredBusinessModel.DAO
         //    }
         //    return orderList;
         //}
-
-        public Order getOrderWithId(String id)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                Order order = null;
-
-                SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
-                    "Join Orderstatus " +
-                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
-                    "WHERE order_id = @order_id", cnn);
-                command.Parameters.Add(new SqlParameter("@order_id", id));
-
-                try
-                {
-                    cnn.Open();
-
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Read();
-                    order = createOrder(reader);
-
-                    reader.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return order;
-            }
-        }
-
-        public void updateOrder(Order order)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-
-                SqlCommand command = new SqlCommand("UPDATE Orders " +
-                "SET customer_id = @customer_id, " +
-                "orderstatus_id = @orderstatus_id, " +
-                "date = @date " +
-                "WHERE order_id=@order_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", order.customer.customer_id));
-                command.Parameters.Add(new SqlParameter("@orderstatus_id", order.orderstatus.id));
-                command.Parameters.Add(new SqlParameter("@date", order.date));
-                command.Parameters.Add(new SqlParameter("@order_id", order.order_id));
-
-                try
-                {
-                    cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    reader.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-            }
-        }
-
-        public List<Order> getOrdersForCustomer(Customer customer)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                List<Order> orderList = new List<Order>();
-
-                SqlCommand command = new SqlCommand("SELECT order_id, customer_id, Orders.orderstatus_id, date, Orderstatus.name FROM Orders " +
-                    "Join Orderstatus " +
-                    "ON Orderstatus.orderstatus_id = Orders.orderstatus_id " +
-                    "WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-
-                try
-                {
-                    cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        orderList.Add(createOrder(reader));
-                    }
-
-                    reader.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return orderList;
-            }
-        }
-
-        /*Inserts new order for customer and returns the order_id*/
-        public int addOrderForCustomer(Customer customer)
-        {
-            int orderID = -1;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                SqlCommand command = new SqlCommand("INSERT INTO Orders" +
-                "(orderstatus_id, customer_id, date) " +
-                "OUTPUT INSERTED.order_id " +
-                //todo: left the date like this for now, seems to work in both versions of the site, don't want to risk breaking it
-                "VALUES(@orderstatus_id, @customer_id," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
-                command.Parameters.Add(new SqlParameter("@orderstatus_id", 1));
-                command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-                command.Parameters.Add(new SqlParameter("@date", DateTime.Today));
-
-                try
-                {
-                    cnn.Open();
-                    orderID = (int)command.ExecuteScalar();
-                }
-                catch (Exception ex)
-                {
-                    //return -1 on error
-                    orderID = -1;
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return orderID;
-            }
-        }
-
-        /*Delete ALL data from this table*/
-        public void clearTable()
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                SqlCommand command = new SqlCommand("DELETE FROM Orders", cnn);
-                try
-                {
-                    cnn.Open();
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-            }
-        }
-
-        private Order createOrder(SqlDataReader reader)
-        {
-            Order order = new Order
-            {
-                order_id = Convert.ToInt32(reader["order_id"]),
-                orderstatus = new OrderStatusDAO().getOrderStatusByID(Convert.ToInt32(reader["orderstatus_id"])),
-                customer = new CustomerDAO().getCustomerByID(Convert.ToInt32(reader["customer_id"])),
-                date = Convert.ToDateTime(reader["date"])
-            };
-            return order;
-        }
     }
 }

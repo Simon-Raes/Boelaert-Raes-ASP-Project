@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using CustomException;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,48 +11,58 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderStatusDAO : DAO
     {
-
-        public OrderStatus getOrderStatusByID(int id) 
+        /*
+         * Returns an Orderstatus based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public OrderStatus getByID(String id) 
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderStatus WHERE orderstatus_id = @orderstatus_id", cnn);
+                command = new SqlCommand("SELECT * FROM OrderStatus WHERE orderstatus_id = @orderstatus_id", cnn);
                 command.Parameters.Add(new SqlParameter("@orderstatus_id", id));
                 try
                 {
-                    OrderStatus orderstatus = null;
-
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if(reader.HasRows)
                     {
-                        orderstatus = createOrderStatus(reader);
-                    }   
-                    reader.Close();
-                    return orderstatus;
+                        reader.Read();
+                        return createOrderStatus(reader);
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get orderstatus based on an ID", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderStatusDAO getOrderStatusByID()");
             }        
         }
 
+        /*
+         * Creates an OrderStatus-Object
+         */ 
         private OrderStatus createOrderStatus(SqlDataReader reader)
         {
-            OrderStatus orderstatus = new OrderStatus
+            return new OrderStatus
             {
                 id = Convert.ToInt16(reader["orderstatus_id"]),
                 name = reader["name"].ToString()
             };
-            return orderstatus;
         }
- 
     }
 }

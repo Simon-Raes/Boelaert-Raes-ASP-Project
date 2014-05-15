@@ -11,54 +11,49 @@ namespace LayeredBusinessModel.BLL
 {
     public class OrderLineService
     {
-        private OrderLineDAO orderLineDAO;
-
-        public OrderLine getOrderLine(String orderLineID)
+        public OrderLine getByID(String orderLineID)
         {
-            orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getOrderLineById(orderLineID);
+            return new OrderLineDAO().getByID(orderLineID);           //Throws NoRecordExeption
         }
 
-        public Boolean removeOrderLine(OrderLine orderLine)
+        public List<OrderLine> getByOrder(Order order)
         {
-            orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.removeOrderLine(orderLine);
+            return new OrderLineDAO().getByOrder(order);         //Throws NoRecordException
         }
 
-        public List<OrderLine> getOrderLinesForOrder(Order order)
+        public List<OrderLine> getByCustomer(Customer customer)
         {
-            orderLineDAO = new OrderLineDAO();                       
-            return orderLineDAO.getOrderLinesForOrder(order);
+            return new OrderLineDAO().getByCustomer(customer);          //Throws NoRecordException
         }
 
-        public List<OrderLine> getOrderLinesForCustomer(Customer customer)
+        public List<OrderLine> getActiveRentOrderLinesByCustomer(Customer customer)
         {
-            orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getOrderLinesForCustomer(customer);
+            return new OrderLineDAO().getActiveRentOrderLinesByCustomer(customer);          //Throws NoRecordException
         }
 
-        public List<OrderLine> getActiveRentOrderLinesForCustomer(Customer customer)
+        public Boolean add(OrderLine orderLine)
         {
-            orderLineDAO = new OrderLineDAO();
-            return orderLineDAO.getActiveRentOrderLinesForCustomer(customer);
-        }       
+            return new OrderLineDAO().add(orderLine);
+        }
 
-        public void addOrderLine(OrderLine orderLine)
+        public Boolean delete(OrderLine orderLine)
         {
-            orderLineDAO = new OrderLineDAO();
-            orderLineDAO.addOrderLine(orderLine);
+            return new OrderLineDAO().delete(orderLine);            
+        }
+           
+        public Boolean deleteAll()
+        {
+            return new OrderLineDAO().deleteAll();
         }
 
         public void updateOrderLine(OrderLine orderLine)
         {
-            orderLineDAO = new OrderLineDAO();
-            orderLineDAO.updateOrderLine(orderLine);
+            //Stond geen code in
         }
-
-        public void clearTable()
+        /*
+        public Boolean update(OrderLine orderLine)
         {
-            orderLineDAO = new OrderLineDAO();
-            orderLineDAO.clearTable();
-        }
+            return new OrderLineDAO().update(orderLine);
+        }*/
     }
 }

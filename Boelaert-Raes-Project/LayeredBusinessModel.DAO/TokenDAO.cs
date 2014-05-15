@@ -2,156 +2,151 @@
 using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class TokenDAO : DAO
     {
-        public List<Token> getTokensForCustomer(Customer customer) {
+        /*
+         * Returns a list with tokens for customer
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public List<Token> getByCustomer(Customer customer) {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Tokens where customer_id=@customer_id", cnn);
+                command = new SqlCommand("SELECT * FROM Tokens where customer_id=@customer_id", cnn);
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
-
-                List<Token> tokens = new List<Token>();
+                
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        Token token = createToken(reader);
-                        token.customer = customer;
-                        tokens.Add(token);
+                        List<Token> tokens = new List<Token>();
+                        while (reader.Read())
+                        {
+                            tokens.Add(createToken(reader));
+                        }
+                        return tokens;
                     }
-                    reader.Close();
-                    return tokens;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get tokens for customer", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return null;
+                throw new NoRecordException("No records were found - TokenDAO getTokensForCustomer()");
             }
         }
 
-        public Token getTokenByToken(String token)
+        /*
+         * Returns a token based on the tokenstring
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public Token getByToken(String token)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM Tokens WHERE token = @token", cnn);
+                command = new SqlCommand("SELECT * FROM Tokens WHERE token = @token", cnn);
                 command.Parameters.Add(new SqlParameter("@token", token));
 
-                Token t = null;
                 try
                 {
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if(reader.HasRows)
                     {
-                        t = createToken(reader);
+                        reader.Read();                    
+                        return createToken(reader);
                     }
-                    reader.Close();
-                    return t;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get token based on tokenstring", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return null;
+                throw new NoRecordException("No records were found - TokenDAO getTokenByToken()");
             }
         }
 
-        //public Boolean removeToken(String token) {
-        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
-        //    {
-        //        SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
-        //        command.Parameters.Add(new SqlParameter("@token", token));
-        //        try
-        //        {
-        //            cnn.Open();
-        //            command.ExecuteNonQuery();
-        //            return true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //        finally
-        //        {
-        //            cnn.Close();
-        //        }
-        //        return false;
-        //    }
-        //}
-
-        public Boolean removeToken(Token token)
+        /*
+         * Removes a token
+         * Returns true if records were deleted, false if not
+         * Throws DALException if something else went wrong
+         */
+        public Boolean delete(Token token)
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
+                command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
                 command.Parameters.Add(new SqlParameter("@token", token.token));
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to delete token", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return false;
             }
         }
 
-        public Boolean removeTokensForCustomer(Customer customer) {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id",  customer.customer_id));
-                try
-                {
-                    cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return false;
-            }
-        }
-
-        public Boolean addToken(Token token) 
+        /*
+         * Adds a tokens
+         * Returns true if records were inserted, false if not
+         * Throws DALException if something else went wrong
+         */
+        public Boolean add(Token token) 
         {
+            SqlCommand command = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
 
-                SqlCommand command = new SqlCommand("INSERT INTO Tokens (tokenstatus_id,customer_id,token,timestamp)" +
+                command = new SqlCommand("INSERT INTO Tokens (tokenstatus_id,customer_id,token,timestamp)" +
                 "VALUES(@tokenstatus_id,@customer_id,@token,@timestamp)", cnn);
 
                 command.Parameters.Add(new SqlParameter("@tokenstatus_id", getTokenStatusID(token.status)));
@@ -162,31 +157,35 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to add a tokens", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return false;
             }
         }
 
         protected Token createToken(SqlDataReader reader)
         {
-            Token t = new Token
+            return new Token
             {
                 status = getTokenStatus(Convert.ToInt16(reader["tokenstatus_id"])),
                 token = reader["token"].ToString(),
                 customer = makeCustomer(Convert.ToInt16(reader["customer_id"])),
                 timestamp = Convert.ToDateTime(reader["timestamp"])  
             };
-            return t;
         }
 
         private TokenStatus getTokenStatus(int i)
@@ -211,12 +210,73 @@ namespace LayeredBusinessModel.DAO
             }
             return -1;
         }
-           
+        
+        /*
+         * Creates a Customer-Object
+         */ 
         private Customer makeCustomer(int i)
         {
             Customer c = new Customer();
             c.customer_id = i;
             return c;
         }
+
+        /*
+         * Removes tokens for customer
+         * Returns true if records were deleted, false if not
+         * Throws DALException if something else went wrong
+         */
+        /*
+        public Boolean deleteByCustomer(Customer customer) {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("DELETE FROM Tokens WHERE customer_id = @customer_id", cnn);
+                command.Parameters.Add(new SqlParameter("@customer_id",  customer.customer_id));
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to delete tokens for customers", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }*/
+
+        //public Boolean removeToken(String token) {
+        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
+        //    {
+        //        SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
+        //        command.Parameters.Add(new SqlParameter("@token", token));
+        //        try
+        //        {
+        //            cnn.Open();
+        //            command.ExecuteNonQuery();
+        //            return true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //        }
+        //        finally
+        //        {
+        //            cnn.Close();
+        //        }
+        //        return false;
+        //    }
+        //}
     }
 }

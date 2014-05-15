@@ -9,6 +9,7 @@ using LayeredBusinessModel.BLL.Database;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -22,11 +23,16 @@ namespace LayeredBusinessModel.WebUI
         protected void btnResendVerification_Click(object sender, EventArgs e)
         {
             String email = Request.QueryString["email"];
-            if(email!=null)
+            if(email != null)
             {
-                SignUpModel signUpModel = new SignUpModel();
-                signUpModel.sendVerificationForEmail(email);
-                
+                try
+                {
+                    new SignUpModel().sendVerificationForEmail(email);            //Throws NoRecordException || DALException  
+                }
+                catch (NoRecordException)
+                {
+                   
+                }
             }
         }
     }

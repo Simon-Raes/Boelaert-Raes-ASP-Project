@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -16,7 +17,15 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            checkQueryString();
+            try
+            {
+                checkQueryString();
+            }
+            catch (NoRecordException)
+            {
+     
+            }
+
             setupEID();
 
             if (!Page.IsPostBack)
@@ -33,7 +42,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 SignUpModel signUpModel = new SignUpModel();
                 TokenService tokenService = new TokenService();
-                Token token = tokenService.getTokenByTokenId(token_id);
+                Token token = tokenService.getByID(token_id);       //Throws NoRecordException
 
                 if(signUpModel.completeSignUpProcess(token))
                 {
@@ -105,17 +114,26 @@ namespace LayeredBusinessModel.WebUI
                     municipality = txtMunicipality.Text,
                     isVerified = false
                 };
-                SignUpModel signUpModel = new SignUpModel();
-                if (signUpModel.beginSignUpProcess(customer))
+                try
+                {
+                    SignUpModel signUpModel = new SignUpModel();
+                    if (signUpModel.beginSignUpProcess(customer))       //Throws NoRecordException || DALException
+                    {
+                        pnlSignup.Visible = false;
+                        lblHeader.Text = "Welcome to Taboelaert Raesa!";
+                        lblEmailSent.Text = "An email has been sent to " + customer.email + ". Please follow the instructions in the email to complete your registration.";
+                        pnlSignupCompleted.Visible = true;
+                    }
+                    else
+                    {
+                        pnlSignup.Visible = false;
+                        lblEmailSent.Text = "An error occured while completing your registration, please try again later. Contact our support if this problem persists.";
+                        pnlSignupCompleted.Visible = true;
+                    }
+                }
+                catch (NoRecordException)
                 {
                     pnlSignup.Visible = false;
-                    lblHeader.Text = "Welcome to Taboelaert Raesa!";
-                    lblEmailSent.Text = "An email has been sent to "+customer.email+". Please follow the instructions in the email to complete your registration.";
-                    pnlSignupCompleted.Visible = true;
-                }
-                else
-                {
-                    pnlSignup.Visible = false;                    
                     lblEmailSent.Text = "An error occured while completing your registration, please try again later. Contact our support if this problem persists.";
                     pnlSignupCompleted.Visible = true;
                 }
@@ -174,21 +192,16 @@ namespace LayeredBusinessModel.WebUI
 
         protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithEmail(txtEmail.Text);
-            if (cust == null)
+            try
             {
-                //email still available
-                args.IsValid = true;
-            }
-            else
-            {
-                //email already taken
+                Customer cust = new CustomerService().getByEmail(txtEmail.Text);          //Throws NoRecordException || DALException
                 args.IsValid = false;
             }
+            catch (NoRecordException)
+            {
+                args.IsValid = true;
+            }
         }
-
         #endregion
-
     }
 }

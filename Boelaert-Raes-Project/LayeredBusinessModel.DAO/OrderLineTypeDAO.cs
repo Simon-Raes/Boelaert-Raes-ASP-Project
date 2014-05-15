@@ -1,4 +1,5 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using CustomException;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,51 +11,58 @@ namespace LayeredBusinessModel.DAO
 {
     public class OrderLineTypeDAO : DAO
     {
-        public OrderLineType getOrderLineTypeForID(int id)
+        /*
+         * Returns an Orderlinetype based on an ID
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
+        public OrderLineType getByID(String id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("SELECT * FROM OrderLineType WHERE order_line_type_id = @order_line_type_id", cnn);
+                command = new SqlCommand("SELECT * FROM OrderLineType WHERE order_line_type_id = @order_line_type_id", cnn);
                 command.Parameters.Add(new SqlParameter("@order_line_type_id",id));
                 try
                 {
-                    OrderLineType orderLineType = null;
                     cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while(reader.Read()) 
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        orderLineType = createOrderLineStatus(reader);
-                    }                    
-                    reader.Close();
-                    return orderLineType;
-
+                        reader.Read();
+                        return createOrderLineStatus(reader);                        
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get orderlinetype based on an ID", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return null;
+                throw new NoRecordException("No records were found - OrderLineType getOrderLineTypeForID()");
             }
         }
 
-
-
+        /*
+         * Creates an OrdelineType-Object
+         */ 
         private OrderLineType createOrderLineStatus(SqlDataReader reader)
         {
-            OrderLineType orderLineType = new OrderLineType
+            return new OrderLineType
             {
                 id= Convert.ToInt16(reader["order_line_type_id"]),
                 name = reader["name"].ToString()
             };
-            return orderLineType;
         }
-
-
     }
 }

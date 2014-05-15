@@ -11,7 +11,15 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Page.Title = "Error occurred";
+ 
+            string PreviousUri = Request["aspxerrorpath"];
+ 
+            if (!string.IsNullOrEmpty(PreviousUri))
+            {
+                pnlError.Visible = true;
+                hlinkPreviousPage.NavigateUrl = PreviousUri;
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL.Model
 {
@@ -13,16 +14,13 @@ namespace LayeredBusinessModel.BLL.Model
     {
         public static Boolean isAvailableForBuying(String movieID)
         {
-            DvdInfoService dvdInfoService = new DvdInfoService();
-            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(movieID);
-
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            List<DvdCopy> availabeCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(dvdInfo);   
-            if(availabeCopies.Count>0)
+            try
             {
+                DvdInfo dvdInfo = new DvdInfoService().getByID(movieID);             //Throws NoRecordException
+                List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockBuyCopiesForDvdInfo(dvdInfo);        //Throws NoRecordException || DALException
                 return true;
             }
-            else
+            catch (NoRecordException)
             {
                 return false;
             }

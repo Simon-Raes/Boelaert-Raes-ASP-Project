@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -14,10 +15,17 @@ namespace LayeredBusinessModel.WebUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<Genre> genres = new GenreService().getGenres();
-            foreach (Genre g in genres)
+            try
             {
-                inputGenre.Items.Add(new ListItem(g.genre_id+", "+g.name));
+                List<Genre> genres = new GenreService().getAll();   //Throws NoRecordException
+                foreach (Genre g in genres)
+                {
+                    inputGenre.Items.Add(new ListItem(g.genre_id + ", " + g.name));
+                }
+            }
+            catch (NoRecordException)
+            {
+
             }
         }
 
@@ -52,7 +60,7 @@ namespace LayeredBusinessModel.WebUI
             };
 
             DvdInfoService dvdInfoService = new DvdInfoService();
-            int dvdInfoID = dvdInfoService.addDvdInfo(dvdInfo);
+            int dvdInfoID = dvdInfoService.add(dvdInfo);                    //Throws NorecordException
             if(dvdInfoID>=0)
             {
                 lblStatus.Text = "Movie added to database.";
@@ -63,13 +71,18 @@ namespace LayeredBusinessModel.WebUI
                 lblStatus.Text = "Something went wrong.";
                 lblStatus.ForeColor = System.Drawing.Color.Red;
             }
+            
+            Genre genre = new GenreService().getByID(genre_id);           //Throws NorecordException
 
-            //add genre record
-            GenreService genreService = new GenreService();
-            Genre genre = genreService.getGenre(genre_id);
+            try
+            {
+                //add genre record
+                new DvdGenreService().addDvdGenre(genre, dvdInfo);            //Throws NorecordException
+            }
+            catch (NoRecordException)
+            {
 
-            DvdGenreService dvdGenreService = new DvdGenreService();
-            dvdGenreService.addDvdGenre(genre, dvdInfo);
+            }
         }
 
         protected void Button1_Click(object sender, EventArgs e)

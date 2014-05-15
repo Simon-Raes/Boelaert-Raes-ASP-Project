@@ -11,38 +11,30 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class TokenService
     {
-        public Token getTokenByTokenId(String token_id)
+        public Token getByID(String token_id)
         {
-            TokenDAO tokenDAO = new TokenDAO();
-            Token token = tokenDAO.getTokenByToken(token_id);
-            if (token != null)
-            {
-                //token bestaat wel
-                //customer opvragen en in token plaatsen
-                CustomerService c = new CustomerService();
-                token.customer = c.getCustomerByID(token.customer.customer_id);
-            }
+            Token token = new TokenDAO().getByToken(token_id);          //throws Throws NoRecordException           
+            //customer opvragen en in token plaatsen
+            token.customer = new CustomerService().getByID(token.customer.customer_id.ToString());      //throws Throws NoRecordException || DALException            
             return token;
         }
 
-        public List<Token> getTokensForCustomer(Customer customer)
+        public List<Token> getByCustomer(Customer customer)
         {
-            TokenDAO tokenDAO = new TokenDAO();
-            return tokenDAO.getTokensForCustomer(customer);           
+            return new TokenDAO().getByCustomer(customer);          //throws Throws NoRecordException                    
         }
 
-        public void addToken(Token token)
+        public Boolean add(Token token)
         {
-            TokenDAO tokenDAO = new TokenDAO();
-            tokenDAO.addToken(token);
+            return new TokenDAO().add(token);
         }
 
         public Boolean deleteToken(Token token)
         {
-            TokenDAO tokenDAO = new TokenDAO();
-            return tokenDAO.removeToken(token);
+            return new TokenDAO().delete(token);
         }
 
+        /*
         public Boolean addTokenForCustomer(Customer customer, TokenStatus status)
         {
             Token token = new Token()
@@ -52,11 +44,9 @@ namespace LayeredBusinessModel.BLL.Database
                 timestamp = DateTime.Now,
                 status = status
             };
-            TokenDAO tokenDAO = new TokenDAO();
-            return tokenDAO.addToken(token);
-        }
-
-
+            return new TokenDAO().add(token);
+        }*/
+        
         private String generateToken()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();

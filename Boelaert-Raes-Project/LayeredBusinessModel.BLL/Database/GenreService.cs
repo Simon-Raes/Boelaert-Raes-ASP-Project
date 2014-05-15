@@ -11,30 +11,24 @@ namespace LayeredBusinessModel.BLL
 {
     public class GenreService
     {
-        private GenreDAO genreDAO;
-
-        public List<Genre> getGenres()
+        public List<Genre> getAll()
         {
-            genreDAO = new GenreDAO();
-            return genreDAO.getGenres();
+            return new GenreDAO().getAll();           //Throws NoRecordException
         }
 
-        public List<Genre> getGenresForCategory(int categoryID)
+        public List<Genre> getCategory(String categoryID)
         {
-            genreDAO = new GenreDAO();
-            return genreDAO.getGenresForCategory(categoryID);
+            return new GenreDAO().getByCategory(categoryID);          //Throws NoRecordException
         }
 
-        public List<Genre> getGenresForDvd(int categoryID)
+        public List<Genre> getGenresForDvd(String categoryID)
         {
-            genreDAO = new GenreDAO();
-            return genreDAO.getGenresForDvd(categoryID);
+            return new GenreDAO().getByDvd(categoryID);         //Throws NoRecordException
         }
 
-        public Genre getGenre(String id)
+        public Genre getByID(String id)
         {
-            genreDAO = new GenreDAO();
-            return genreDAO.getGenre(id);
+            return new GenreDAO().getByID(id);          //Throws NoRecordException
         }
     }
 }

@@ -11,103 +11,83 @@ namespace LayeredBusinessModel.BLL
 {
     public class DvdInfoService
     {
-        private DvdInfoDAO dvdInfoDAO;
-
+        /*
         public List<DvdInfo> getAll()
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getAllDvdInfos();
+            return new DvdInfoDAO().getAll();         //Throws NoRecordException
+        }*/
+
+        public List<DvdInfo> getAllWithBanner()
+        {
+            return new DvdInfoDAO().getAllWithBanner();           //Throws NoRecordException
         }
 
-        public List<DvdInfo> getAllDvdInfosWithBanner()
+        public int add(DvdInfo dvdInfo)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getAllDvdInfosWithBanner();
+            return new DvdInfoDAO().add(dvdInfo);                   //Throws NoRecordException
         }
 
-        public int addDvdInfo(DvdInfo dvdInfo)
+        public DvdInfo getByID(String id)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.addDvdInfo(dvdInfo);
-        }
-
-        public DvdInfo getDvdInfoWithID(String id)
-        {
-            dvdInfoDAO = new DvdInfoDAO();
-            DvdInfo dvd  = dvdInfoDAO.getDvdInfoWithId(id);
-            if(dvd!=null)
-            {
-                GenreService g = new GenreService();
-                dvd.genres = g.getGenresForDvd(Convert.ToInt32(id));
-            }            
-
+            DvdInfo dvd = new DvdInfoDAO().getByID(id);                   //Throws NoRecordException
+            dvd.genres = new GenreService().getGenresForDvd(id);                 //Throws NoRecordException           
             return dvd;
         }
 
-        public void updateDvdInfo(DvdInfo dvd)
+        public void update(DvdInfo dvd)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            dvdInfoDAO.updateDvdInfo(dvd); 
+            new DvdInfoDAO().update(dvd);                                 //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithText(String title)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdWithText(title);
+            return new DvdInfoDAO().getByText(title);           //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithTextAndCategory(String title, String categoryID)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdWithTextAndCategory(title, categoryID);
+            return new DvdInfoDAO().getByTextCategory(title, categoryID);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithTextAndGenre(String title, String genreID)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdWithTextAndGenre(title, genreID);
+            return new DvdInfoDAO().getByTextAndGenre(title, genreID);            //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdFromYear(String year)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdFromYear(year);
+            return new DvdInfoDAO().getByYear(year);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdFromDirector(String director)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdFromDirector(director);
+            return new DvdInfoDAO().getByDirector(director);          //Throws NoRecordException
         }
 
         public List<DvdInfo> searchDvdWithActor(String actor)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.searchDvdWithActor(actor);
+            return new DvdInfoDAO().getByActor(actor);            //Throws NoRecordException
         }
-
 
         public List<DvdInfo> getLatestDvds(int amount)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getLatestDvds(amount);
+            return new DvdInfoDAO().getLatestDvds(amount);            //Throws NoRecordException
         }
 
         public List<DvdInfo> getMostPopularDvds(int amount)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getMostPopularDvds(amount);
+            return new DvdInfoDAO().getMostPopularDvds(amount);           //Throws NoRecordException
         }
 
         public List<DvdInfo> getRelatedDvds(String id, int amount)
         {
             List<DvdInfo> relatedDvds = new List<DvdInfo>();
             DvdInfoService dvdInfoService = new DvdInfoService();
-            DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(id);
+            DvdInfo dvdInfo = dvdInfoService.getByID(id);                                      //Throws NoRecordException
 
-            foreach (int i in new DvdGenreDAO().findRelatedDvdsBasedOnGenre(dvdInfo, amount))
+            foreach (int i in new DvdGenreDAO().findRelatedDvdsBasedOnGenre(dvdInfo, amount))           //Throws NoRecordException
             {
-                relatedDvds.Add(new DvdInfoDAO().getDvdInfoWithId(i.ToString()));
+                relatedDvds.Add(new DvdInfoDAO().getByID(i.ToString()));                                //Throws NoRecordException
             }
 
             return relatedDvds;
@@ -115,8 +95,7 @@ namespace LayeredBusinessModel.BLL
 
         public List<int> getRecommendations(int[] values, int amount)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            return dvdInfoDAO.getRecommendations(values, amount);
+            return new DvdInfoDAO().getRecommendations(values, amount);                                 //Throws NoRecordException       
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.Security;
 using System.Web.SessionState;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -40,7 +41,19 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Application_Error(object sender, EventArgs e)
         {
-                    
+            Exception ex = Server.GetLastError();
+            if (ex.InnerException as NoRecordException != null) //.innerException moet weg wanner overal de exceptions correct worden opgegooid
+            {
+                //only NoRecordExceptions will be handled here
+                //Response.Redirect(string.Format("Error.aspx?aspxerrorpath={0}&nored=true", Request.Url.PathAndQuery));
+            }
+            else
+            {
+                //all other exceptions will be handled here
+                Response.Redirect(string.Format("Error.aspx?aspxerrorpath={0}", Request.Url.PathAndQuery));
+            }
+            Server.ClearError();
+            
         }
 
         protected void Session_End(object sender, EventArgs e)
@@ -52,5 +65,6 @@ namespace LayeredBusinessModel.WebUI
         {
 
         }
+
     }
 }

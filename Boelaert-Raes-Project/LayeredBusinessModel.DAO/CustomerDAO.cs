@@ -17,17 +17,107 @@ namespace LayeredBusinessModel.DAO
      */
     public class CustomerDAO : DAO
     {
-        private SqlCommand command;
-        private SqlDataReader reader;
-
         /*
-         *  Returns a list with all the customers 
+         * Returns a Customer based on an ID
+         * Throws a NoRecordException if no records were found
+         * Throws an DALException if something went wrong 
          */
-        public List<Customer> getAllCustomers()
+        public Customer getByID(String id)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("SELECT * FROM Customers", cnn);            
+                command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
+                command.Parameters.Add(new SqlParameter("@id", id));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createCustomer(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get a customer based on an ID", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CustomerDAO getByID()");
+            }
+        }
+
+        /*
+         *  Returns a customer based on an emailaddress
+         *  Throws a NoRecordException if no records were found
+         *  Throws an DALException if something went wrong 
+         */
+        public Customer getByEmail(String email)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
+                command.Parameters.Add(new SqlParameter("@email", email));
+
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createCustomer(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failedto get a customer based on a name", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CustomerDAO getByEmail()");
+            }
+        }
+
+        /*
+         *  Returns a list with all the customers
+         *  Throws a NoRecordException if no records were found
+         *  Throws an DALException if something went wrong 
+         */
+        public List<Customer> getAll()
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM Customers", cnn);
                 try
                 {
                     cnn.Open();
@@ -44,7 +134,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CustomerDAO getAll()", ex);
+                    throw new DALException("Failed to get all the customers", ex);
                 }
                 finally
                 {
@@ -57,91 +147,19 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
-            }
-        }
-
-        public Customer getCustomerByID(int id)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM Customers WHERE customer_id = @id", cnn);
-                command.Parameters.Add(new SqlParameter("@id", id));
-                
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return createCustomer(reader);                     
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new MyBaseException("CustomerDAO getCustomerByID", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                return null;
-            }
-        }
-
-        /*
-         *  Returns a customer based on an emailaddress
-         */
-        public Customer getCustomerByEmail(string email)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM Customers WHERE email = @email", cnn);
-                command.Parameters.Add(new SqlParameter("@email", email));
-                               
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        reader.Read();                        
-                        return createCustomer(reader);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new MyBaseException("CustomerDAO getCustomerByEmail()", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                return null;
+                throw new NoRecordException("No records were found - CustomerDAO getAll()");
             }
         }
 
         /*
          *      Updates a customer.
-         *      Returns true if succeeded, false if not
+         *      Returns true if the customer was updated, false if no customer was updated
+         *      Throws an DALException if something went wrong 
          */
-        public Boolean updateCustomer(Customer customer)
+        public Boolean update(Customer customer)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("UPDATE Customers SET name = @name, email = @email, password = @password, number_of_visits = @number_of_visits, street = @street, zip = @zip, municipality=@municipality,isVerrified=@verrified WHERE customer_id = @id", cnn);
@@ -158,12 +176,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery(); //rowsaffected gebruiken om te kijken of de update gelukt is?
-                    return true;
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;                    
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CustomerDAO updateCustomer", ex);
+                    throw new DALException("Failed to update the customer", ex);
                 }
                 finally
                 {
@@ -176,11 +197,14 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         *      Adds a new customer.
-         *      Returns true if succeeded, false if not
+         *  Adds a new customer
+         *  Returns true if the customer was added, false if no customer was added
+         *  Throws an DALException if something went wrong         * 
          */
-        public Boolean addCustomer(Customer customer)
+        public Boolean add(Customer customer)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("INSERT INTO Customers (name,email,password,number_of_visits,street,zip,municipality,isVerrified)" +
@@ -197,40 +221,15 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    throw new MyBaseException("CustomerDAO addCustomer()", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
+                    if (command.ExecuteNonQuery() > 0)
                     {
-                        cnn.Close();
+                        return true;
                     }
-                }
-            }
-        }
-
-        public Boolean verrifyCustomer(Customer customer)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
-                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
-                command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
-
-                try
-                {
-                    cnn.Open();
-                    command.ExecuteNonQuery();                    
-                    return true;
+                    return false;
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CustomerDAO verrifyCustomer()", ex);
+                    throw new DALException("Failed to insert a customer", ex);
                 }
                 finally
                 {
@@ -243,12 +242,49 @@ namespace LayeredBusinessModel.DAO
         }
 
         /*
-         *      Returns a customer based on a sqlReader
+         * Verrifies a customer. This method sets the isVerrified flag on true.
+         * Returs true if the customer was verrified successful, False if no customer was updated.
+         * Throws an DALException if something went wrong 
+         */
+        public Boolean verrify(Customer customer)
+        {
+            SqlCommand command = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("UPDATE Customers SET isVerrified=@verrified WHERE customer_id = @id", cnn);
+                command.Parameters.Add(new SqlParameter("@verrified", customer.isVerified));
+                command.Parameters.Add(new SqlParameter("@id", customer.customer_id));
+
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to verrify the customer", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
+        /*
+         *  Creates a Customer-Object
          */
         private Customer createCustomer(SqlDataReader reader)
         {
-            //gebruik van object initializer ipv constructor
-            Customer customer = new Customer
+            return new Customer
             {
                 customer_id = Convert.ToInt32(reader["customer_id"]),
                 name = Convert.ToString(reader["name"]),
@@ -260,8 +296,6 @@ namespace LayeredBusinessModel.DAO
                 zip = Convert.ToString(reader["zip"]),
                 isVerified = Convert.ToBoolean(reader["isVerrified"])
             };
-            return customer;
         }
-
     }
 }

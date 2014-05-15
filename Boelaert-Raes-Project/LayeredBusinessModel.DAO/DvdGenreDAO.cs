@@ -7,17 +7,24 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LayeredBusinessModel.Domain;
 using System.Configuration;
+using CustomException;
 
 namespace LayeredBusinessModel.DAO
 {
     public class DvdGenreDAO : DAO
     {
-        public void addGenreForDvd(Genre genre, DvdInfo dvdInfo)
+        /*
+         * Adds a genre for a dvd
+         * Returns true if rows were inserted, false if no rows were inserted
+         * Throws a DALException if something else went wrong
+         */
+        public Boolean add(Genre genre, DvdInfo dvdInfo)
         {
+            SqlCommand command = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-
-                SqlCommand command = new SqlCommand("INSERT INTO DvdGenre " +
+                command = new SqlCommand("INSERT INTO DvdGenre " +
                 "(dvd_info_id, genre_id) " +
                 "VALUES (@dvd_info_id, @genre_id)", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
@@ -26,50 +33,71 @@ namespace LayeredBusinessModel.DAO
                 try
                 {
                     cnn.Open();
-                    command.ExecuteNonQuery();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to add genre for dvd", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
             }
         }
 
+        /*
+         * Returns a list with ID from related dvd based on a genre
+         * Throws NoRecordException if no records were found
+         * Throws DALException if something else went wrong
+         */
         public List<int> findRelatedDvdsBasedOnGenre(DvdInfo dvdInfo, int amount)
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                List<int> dvdIds = new List<int>();
-
-                SqlCommand command = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != @dvd_info_id and genre_id in (select genre_id from dvdgenre where dvd_info_id = @dvd_info_id) group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+                command = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != @dvd_info_id and genre_id in (select genre_id from dvdgenre where dvd_info_id = @dvd_info_id) group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", amount));
                 command.Parameters.Add(new SqlParameter("@amount", amount));
                 try
                 {
                     cnn.Open();
-
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                        List<int> dvdIds = new List<int>();
+                        while (reader.Read())
+                        {
+                            dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                        }
+                        return dvdIds;
                     }
-
-                    reader.Close();
                 }
                 catch (Exception ex)
                 {
-
+                    throw new DALException("Failed to get related dvd's based on genre", ex);
                 }
                 finally
                 {
-                    cnn.Close();
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
                 }
-                return dvdIds;
+                throw new NoRecordException("No records were found - DvdGenreDAO findRelatedDvdsBasedOnGenre()");
             }
         }
     }

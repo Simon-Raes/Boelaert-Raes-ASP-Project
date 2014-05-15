@@ -20,15 +20,7 @@
         <div class="navbar-inverse header">
             <div class="container">
                 Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span>+32477073716
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Nederlands</a></li>
-                            <li><a href="#">English</a></li>
-                        </ul>
-                    </li>
-
+                <ul class="nav navbar-nav navbar-right">   
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="currencySymbol" runat="server" class="glyphicon glyphicon-euro"></span><b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -70,15 +62,16 @@
                                 </li>
 
                                 <li id="liSignup" runat="server"><a href="signup.aspx">Sign Up</a></li>
-                                <li id="liLogin" runat="server" class="dropdown">
+                                <li id="liLogin" runat="server" class="dropdown" >
                                     <a class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                                     <ul class="dropdown-menu" style="padding: 15px; min-width: 250px;">
                                         <li>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
+                                                        <asp:Label ID="txtEmailError" runat="server" Text=""></asp:Label>                                                        
                                                         <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                                                        <input type="email" runat="server" class="form-control" id="txtEmail" placeholder="Email address" required="required" />
+                                                        <input type="email" runat="server" class="form-control" id="txtEmail" placeholder="Email address" required="required" />                                                        
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="sr-only" for="exampleInputPassword2">Password</label>
@@ -93,7 +86,7 @@
                                         <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
-                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'Register.aspx'"/> 
+                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'signup.aspx'"/> 
                                         </li>
                                     </ul>
                                 </li>

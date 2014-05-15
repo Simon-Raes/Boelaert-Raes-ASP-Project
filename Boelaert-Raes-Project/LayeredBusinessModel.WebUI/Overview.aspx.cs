@@ -12,8 +12,6 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class Account : System.Web.UI.Page
     {
-        private List<Order> customerOrders;
-
         protected void Page_Load(object sender, EventArgs e)
         {
            

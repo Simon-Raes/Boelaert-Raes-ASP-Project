@@ -11,58 +11,53 @@ using LayeredBusinessModel.BLL.Database;
 namespace LayeredBusinessModel.BLL
 {
     /*
-     *  All servicemethods for Customer
+     *  All business methods for Customer
      */
     public class CustomerService
     {
-        private CustomerDAO customerDAO;
-
         /*
-         *  Returns a list with all the customers
-         */
+         * Returns a list off Customers
+         */ 
         public List<Customer> getAll()
         {
-            List<Customer> customerList = new List<Customer>();
-            customerDAO = new CustomerDAO();
-            customerList = customerDAO.getAllCustomers();
-            return customerList;  
-        }
-
-        public Customer getCustomerByID(int id)
-        {
-            customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerByID(id);
+            return new CustomerDAO().getAll();              //Throws NoRecordException || DALException
         }
 
         /*
-         *  Returns a customer based on an emailadress
+         * Returns a Customer based on an ID
          */
-        public Customer getCustomerWithEmail(String email)
+        public Customer getByID(String id)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.getCustomerByEmail(email);
+            return new CustomerDAO().getByID(id);                 //Throws NoRecordException || DALException       
         }
 
         /*
-         *  Updates a customer
-         *  Returns true if succeedes, false is not
+         * Returns a Customer based on an Email
          */
+        public Customer getByEmail(String email)
+        {
+            return new CustomerDAO().getByEmail(email);           //Throws NoRecordException || DALException
+        }
+
+        /*
+         * Updates a Customer
+         */ 
         public Boolean updateCustomer(Customer customer)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.updateCustomer(customer);
+            return new CustomerDAO().update(customer);            //Throws DALException
         }
 
         /*
-         *  Adds a new customer
-         *  Returns true if succeedes, false is not
+         * Adds a Customer
          */ 
         public Boolean addCustomer(Customer customer)
         {
-            customerDAO = new CustomerDAO();
-            return customerDAO.addCustomer(customer);
+            return new CustomerDAO().add(customer);               //Throws DALException
         }
 
+        /*
+         * Verrifies a Customer
+         */  
         public Boolean verrifyCustomer(Customer customer, Token strToken)
         {
             if (customer.isVerified)
@@ -70,14 +65,18 @@ namespace LayeredBusinessModel.BLL
                 return false;
             }
             else
-            {
-                customer.isVerified = true;
-                customerDAO = new CustomerDAO();
-                if (customerDAO.verrifyCustomer(customer))
+            {                
+                if (new CustomerDAO().verrify(customer))        //Throws DALException
                 {
-                    TokenService t = new TokenService();
-                    t.deleteToken(strToken);
-                    return true;
+                    if (new TokenService().deleteToken(strToken))
+                    {
+                        customer.isVerified = true;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 return false;
             }            

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -26,8 +27,7 @@ namespace LayeredBusinessModel.BLL
             List<DvdInfo> dvdList = new List<DvdInfo>();
             List<Genre> genres = new List<Genre>();
 
-            OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getOrderLinesForCustomer(customer);
+            List<OrderLine> orderLines = new OrderLineService().getByCustomer(customer);          //Throws NoRecordException          
             orderLinesDvdIds = new List<int>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
 
             GenreService genreService = new GenreService();
@@ -39,7 +39,7 @@ namespace LayeredBusinessModel.BLL
                 foreach (OrderLine line in orderLines)
                 {
                     int dvdID = line.dvdInfo.dvd_info_id;
-                    genres.AddRange(genreService.getGenresForDvd(dvdID));
+                    genres.AddRange(genreService.getGenresForDvd(dvdID.ToString()));            //Throws NoRecordException
 
                     //fill orderLinesDvdIds
                     if (!orderLinesDvdIds.Contains(dvdID))
@@ -95,7 +95,8 @@ namespace LayeredBusinessModel.BLL
                 }
 
                 //we now have the user's 3 favourite genres in maxGenres, use that info to get the dvds that match those 3 genres the most
-                List<int> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16); //get max 16 dvds. Index will always show maximum 4, but catalog can show up to 16
+                //get max 16 dvds. Index will always show maximum 4, but catalog can show up to 16
+                List<int> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16);            //Throws NoRecordException
 
                 List<int> dvdTempIds = new List<int>();
 
@@ -108,26 +109,24 @@ namespace LayeredBusinessModel.BLL
                     }
                 }
 
-
                 if (dvdTempIds.Count > 0)
                 {
                     foreach (int id in dvdTempIds)
                     {
-                        dvdList.Add(dvdInfoService.getDvdInfoWithID(id.ToString()));
+                        dvdList.Add(dvdInfoService.getByID(id.ToString()));            //Throws NoRecordException            
                     }
                 }
                 else
                 {
                     //customer has already bought or rented every suggestion, recommend the movies whose pages the user has viewed most often
-                    dvdList = getMostViewedDvdInfos(customer);
+                    dvdList = getMostViewedDvdInfos(customer);          //Throws NoRecordException
                 }
             }
             else
             {
                 //customer has no orderlines, recommend the movies whose pages the user has viewed the most
-                dvdList = getMostViewedDvdInfos(customer);
+                dvdList = getMostViewedDvdInfos(customer);              //Throws NoRecordException
             }
-
 
             //remove elements until the list size is the requested size (4 for index row, 16 for catalog page)
             //loop deletes a random item until the size is ok so the user gets different recommendations on every visit/refresh
@@ -144,32 +143,34 @@ namespace LayeredBusinessModel.BLL
         /**Returns a list of the most viewed pages.*/
         private List<DvdInfo> getMostViewedDvdInfos(Customer customer)
         {
-            PageVisitsService pageVisitsService = new PageVisitsService();
-            CustomerService customerService = new CustomerService();     
-            DvdInfoService dvdInfoService = new DvdInfoService();
-
-            List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);
             List<DvdInfo> dvdInfos = new List<DvdInfo>();
-            List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
-
-            foreach (PageVisits pageVisits in pageVisitsList)
+            try
             {
-                dvdInfos.Add(dvdInfoService.getDvdInfoWithID(pageVisits.dvdInfo.dvd_info_id.ToString()));
-            }
+                DvdInfoService dvdInfoService = new DvdInfoService();
 
+                List<PageVisits> pageVisitsList = new PageVisitsService().getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
+                
+                List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
 
-            //only return dvd's that the user hasn't bought before
-            foreach (DvdInfo dvdInfo in dvdInfos)
-            {
-                if (!orderLinesDvdIds.Contains(dvdInfo.dvd_info_id))
+                foreach (PageVisits pageVisits in pageVisitsList)
                 {
-                    dvdInfosFinal.Add(dvdInfo);
+                    dvdInfos.Add(dvdInfoService.getByID(pageVisits.dvdInfo.dvd_info_id.ToString()));           //Throws NoRecordException
                 }
+
+                //only return dvd's that the user hasn't bought before
+                foreach (DvdInfo dvdInfo in dvdInfos)
+                {
+                    if (!orderLinesDvdIds.Contains(dvdInfo.dvd_info_id))
+                    {
+                        dvdInfosFinal.Add(dvdInfo);
+                    }
+                }               
             }
+            catch (DALException)
+            {
 
+            }
             return dvdInfos;
-        }
-
-        
+        }        
     }
 }

@@ -11,6 +11,7 @@ using System.Net.Mail;
 using System.Net;
 
 using LayeredBusinessModel.BLL.Model;
+using CustomException;
 
 namespace LayeredBusinessModel.WebUI
 {
@@ -28,16 +29,21 @@ namespace LayeredBusinessModel.WebUI
                 divDefault.Visible = false;
                 divResetComplete.Visible = true;
 
-                PasswordResetModel passwordResetModel = new PasswordResetModel();
-                if(passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]))
+                try
                 {
-                    lblHeader.Text = "Password reset complete";
-                    lblStatusComplete.Text = "We've sent you an email with your new password.";
+                    if (new PasswordResetModel().checkResetRequestConfirmation(Request.QueryString["resetToken"]))        //Throws NoRecordException
+                    {
+                        lblHeader.Text = "Password reset complete";
+                        lblStatusComplete.Text = "We've sent you an email with your new password.";
+                    }
+                    else
+                    {
+                        lblHeader.Text = "An error occurred";
+                        lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
+                    }
                 }
-                else
+                catch (NoRecordException)
                 {
-                    lblHeader.Text = "An error occurred";
-                    lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
                 }
             }
             else
@@ -49,28 +55,21 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnReset_Click(object sender, EventArgs e)
         {
-            CustomerService customerService = new CustomerService();
-            Customer user = customerService.getCustomerWithEmail(txtPassword.Value);
-            if (user == null)
+            try
             {
-                user = customerService.getCustomerWithEmail(txtPassword.Value);
-            }
+                Customer user = new CustomerService().getByEmail(txtPassword.Value);          //Throws NoRecordException || DALException
 
-            if(user!=null)
-            {
                 lblStatus.Text = "We've sent you an email to reset your password.";
                 lblStatus.ForeColor = System.Drawing.Color.Green;
 
-                PasswordResetModel model = new PasswordResetModel();
-                model.sendPasswordResetRequest(user);               
-
+                new PasswordResetModel().sendPasswordResetRequest(user);
             }
-            else
+            catch (NoRecordException)
             {
+                //When no customer was found with the given e-mailadress
                 lblStatus.Text = "Unknown email-address.";
                 lblStatus.ForeColor = System.Drawing.Color.Red;
-            }
-            
+            }            
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
 using System.Net.Mail;
+using CustomException;
 
 
 namespace LayeredBusinessModel.WebUI
@@ -138,33 +139,32 @@ namespace LayeredBusinessModel.WebUI
 
         protected void valCustLogin_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithEmail(inputLogin.Value);
-            if (cust == null)
+            try
             {
-                //login name still available
-                args.IsValid = true;
-            }
-            else
-            {
-                //login name already taken
+                CustomerService customerService = new CustomerService();
+                Customer cust = customerService.getByEmail(inputLogin.Value);           //Throws NoRecordException || DALException
+                //If there was a customer found
                 args.IsValid = false;
+            }
+            catch (NoRecordException)
+            {
+                //When no records were found, this means that the loginname is still open
+                args.IsValid = true;
             }
         }
 
         protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomerService customerService = new CustomerService();
-            Customer cust = customerService.getCustomerWithEmail(inputEmail.Value);
-            if (cust == null)
+            try
             {
-                //email still available
-                args.IsValid = true;
-            }
-            else
-            {
-                //email already taken
+                CustomerService customerService = new CustomerService();
+                Customer cust = customerService.getByEmail(inputEmail.Value);               //Throws NoRecordException || DALException
                 args.IsValid = false;
+            }
+            catch (NoRecordException)
+            {
+                //When no records were found, this means that the email is still open
+                args.IsValid = true;
             }
         }
 

@@ -11,16 +11,64 @@ using System.Configuration;
 
 namespace LayeredBusinessModel.DAO
 {
+    /*
+     * All methods that rely on the methods defined in this class are surrounded with try catch blocks
+     */ 
     public class CategoryDAO : DAO
     {
-        private SqlCommand command;
-        private SqlDataReader reader;
+        /*
+         * Returns a category based on an ID
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
+         */
+        public Category getByID(String id)
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
+                command.Parameters.Add(new SqlParameter("@category_id", id));
+                try
+                {
+                    cnn.Open();
+                    reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return createCategory(reader);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to get a category based on an ID", ex);
+                }
+                finally
+                {
+                    if (reader != null)
+                    {
+                        reader.Close();
+                    }
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+                throw new NoRecordException("No records were found - CategorieDAO getByID()");
+            }
+        }
 
         /*
          * Returns a list with all the categories in it
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
         public List<Category> getAll() 
-        {  
+        {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("SELECT * FROM categories", cnn);
@@ -41,7 +89,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CategorieDAO getAll()", ex);
+                    throw new DALException("Failed to get all the categories", ex);
                 }
                 finally
                 {
@@ -54,33 +102,42 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
-                return null;
+                throw new NoRecordException("No records were found - CategorieDAO getAll()");
             }            
-        }    
+        }
 
         /*
-         * Returns a category based on an ID
+         * Returns a list with all the categories in it
+         * Throws a NoRecordException if no records were found
+         * Throws a DALException if something else went wrong
          */
-        public Category getCategoryByID(int id)
+        public List<Category> getAll_StoredProcedure()
         {
+            SqlCommand command = null;
+            SqlDataReader reader = null;
+
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("SELECT * FROM Categories WHERE category_id = @category_id", cnn);
-                command.Parameters.Add(new SqlParameter("@category_id", id));
+                command = new SqlCommand("getAllCategories", cnn);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
                 try
                 {
-                    Category category = null;
+                    List<Category> categoryList = new List<Category>();
                     cnn.Open();
                     reader = command.ExecuteReader();
 
-                    while(reader.Read()){
-                        category = createCategory(reader);
-                    }  
-                    return category;
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            categoryList.Add(createCategory(reader));
+                        }
+                        return categoryList;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    throw new MyBaseException("CategorieDAO getCategoryByID() " + ex.Message, ex);
+                    throw new DALException("Failed to get all the categories", ex);
                 }
                 finally
                 {
@@ -93,17 +150,20 @@ namespace LayeredBusinessModel.DAO
                         cnn.Close();
                     }
                 }
+                throw new NoRecordException("No records were found - CategorieDAO getAll()");
             }
         }
 
+        /*
+         * Creates a Category-Object
+         */ 
         private Category createCategory(SqlDataReader reader)
         {
-            Category category = new Category
+            return new Category
             {
                 category_id = Convert.ToInt32(reader["category_id"]),
                 name = Convert.ToString(reader["name"])
             };
-            return category;
         }
     }
 }

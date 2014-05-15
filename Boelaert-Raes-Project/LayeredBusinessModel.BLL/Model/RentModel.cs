@@ -1,4 +1,6 @@
-﻿using LayeredBusinessModel.Domain;
+﻿using CustomException;
+using LayeredBusinessModel.DAO;
+using LayeredBusinessModel.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +16,8 @@ namespace LayeredBusinessModel.BLL.Model
         {
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
             Dictionary<int, List<DateTime>> result = new Dictionary<int, List<DateTime>>();
-                       
-            dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);
+
+            dicCopyUnavailableDates = getAllUnavailableDaysPerCopyForDvdInfo(dvd, startdate);           //Throws NoRecordException
 
             foreach (int i in dicCopyUnavailableDates.Keys)
             {
@@ -35,7 +37,6 @@ namespace LayeredBusinessModel.BLL.Model
                 }
                 result[i] = freeDates;
             }
-
             return result;
         }
 
@@ -45,7 +46,7 @@ namespace LayeredBusinessModel.BLL.Model
             Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new Dictionary<int, List<DateTime>>();
 
             //alle bezettingen
-            List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startdate);
+            List<OrderLine> orders = new OrderLineDAO().getAllByDvdAndStartdate(dvd, startdate);           //Throws NoRecordException
 
             //bezettingen overlopen
             foreach (OrderLine order in orders)
@@ -72,16 +73,14 @@ namespace LayeredBusinessModel.BLL.Model
                     }
                 }
             }
-
             return dicCopyUnavailableDates;
         }
-
 
         /**Returns a list of all days where at least 1 copy is available.*/
         public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startDate)
         {
             List<DateTime> dates = new List<DateTime>();
-            
+
             if (fullCopiesAvailable(dvd, startDate))
             {
                 //at least 1 copy is fully available for the next 2 weeks, send back a full dates list
@@ -94,9 +93,8 @@ namespace LayeredBusinessModel.BLL.Model
             else
             {
                 //no copies are available for the full 2 weeks, get detailed information about all copies that have some availability in the next 2 weeks:
-                Dictionary<int, List<DateTime>> result = getAllAvailableDaysPerCopyForDvdInfo(dvd, startDate);
-
-
+                Dictionary<int, List<DateTime>> result = getAllAvailableDaysPerCopyForDvdInfo(dvd, startDate);          //Throws NoRecordException
+                
                 foreach (List<DateTime> list in result.Values)
                 {
                     for (int i = 0; i < list.Count; i++)
@@ -108,9 +106,7 @@ namespace LayeredBusinessModel.BLL.Model
                     }
                 }
             }
-
             return dates;
-
         }
 
         /**Returns the number of consecutive days the dvd_info is available, starting from the supplied date*/
@@ -118,7 +114,6 @@ namespace LayeredBusinessModel.BLL.Model
         {
             int days = -1;
 
-            
             if (fullCopiesAvailable(dvd, startDate))
             {
                 //there is at least 1 copy that is available for the full 14 days, no more checks are needed and the max number of days can be returned
@@ -131,12 +126,12 @@ namespace LayeredBusinessModel.BLL.Model
                 Dictionary<int, DateTime> unavailableDatesMap = new Dictionary<int, DateTime>();
 
                 //get all orderlines for copies that have some orderlines in the next 2 weeks
-                List<OrderLine> orders = new LayeredBusinessModel.DAO.OrderLineDAO().getAllOrderlinesForDvdFromStartdate(dvd, startDate);
-                                
+                List<OrderLine> orders = new OrderLineDAO().getAllByDvdAndStartdate(dvd, startDate);           //Throws NoRecordException
+
                 foreach (OrderLine order in orders)
                 {
                     if (!unavailableDatesMap.ContainsKey(order.dvdCopy.dvd_copy_id))
-                    {                       
+                    {
                         //set the default availability at 2 weeks from now 
                         unavailableDatesMap.Add(order.dvdCopy.dvd_copy_id, order.startdate);
                     }
@@ -151,7 +146,6 @@ namespace LayeredBusinessModel.BLL.Model
                 }
 
                 //we now have a dictionary with the copies and the first date on which they'll be UNavailable again
-
                 foreach (DateTime date in unavailableDatesMap.Values)
                 {
                     //only allow orderLines that start after the supplied date
@@ -162,29 +156,24 @@ namespace LayeredBusinessModel.BLL.Model
                             days = (date - startDate).Days;
                         }
                     }
-                    
                 }
             }
-
             return days;
         }
 
         /**Returns true if at least one copy is available for the full 14 days (= no orders in the next 14 days)*/
         private Boolean fullCopiesAvailable(DvdInfo dvd, DateTime startDate)
-        {            
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
-            List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(dvd, startDate);
-            if(dvdCopies.Count>0)
+        {
+            try
             {
-                return true;
+                //here: the result will contain duplicates (1 copy_id can return multiple records), but this does not affect the result of this code
+                new DvdCopyService().getAllFullyAvailableCopies(dvd, startDate);
+                return true;                
             }
-            else
+            catch (NoRecordException)
             {
                 return false;
             }
         }
-
-
     }
 }

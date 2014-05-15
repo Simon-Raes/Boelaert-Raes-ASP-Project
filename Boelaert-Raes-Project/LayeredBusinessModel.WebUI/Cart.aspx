@@ -11,8 +11,16 @@
             </p>
             <p>
                 <asp:GridView ID="gvCart" CssClass="gridViewStyle" runat="server" OnRowDeleting="gvCart_RowDeleting">
+
                     <Columns>
-                        <asp:CommandField AccessibleHeaderText="Remove" DeleteText="Remove" ShowDeleteButton="True" />
+                        <asp:TemplateField HeaderText="Delete"> 
+                        <ItemTemplate> 
+                            <asp:LinkButton ID="LinkBtnDelete" runat="server" 
+                                OnClientClick="return confirm('Are you sure?');" 
+                                CommandName="Delete">Delete 
+                            </asp:LinkButton> 
+                        </ItemTemplate> 
+                    </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
                 Total cost: <asp:Label ID="lblTotalCost" runat="server" Text=""></asp:Label>

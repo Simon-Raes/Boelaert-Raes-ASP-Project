@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL.Database;
+using CustomException;
 
 namespace LayeredBusinessModel.BLL
 {
@@ -145,28 +146,35 @@ namespace LayeredBusinessModel.BLL
         /**Returns a list of the most viewed pages.*/
         private List<DvdInfo> getMostViewedDvdInfos(Customer customer)
         {
-            PageVisitsService pageVisitsService = new PageVisitsService();
-            CustomerService customerService = new CustomerService();     
-            DvdInfoService dvdInfoService = new DvdInfoService();
-
-            List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
             List<DvdInfo> dvdInfos = new List<DvdInfo>();
-            List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
-
-            foreach (PageVisits pageVisits in pageVisitsList)
+            try
             {
-                dvdInfos.Add(dvdInfoService.getByID(pageVisits.dvdInfo.dvd_info_id.ToString()));           //Throws NoRecordException
-            }
+                PageVisitsService pageVisitsService = new PageVisitsService();
+                CustomerService customerService = new CustomerService();
+                DvdInfoService dvdInfoService = new DvdInfoService();
 
-            //only return dvd's that the user hasn't bought before
-            foreach (DvdInfo dvdInfo in dvdInfos)
-            {
-                if (!orderLinesDvdIds.Contains(dvdInfo.dvd_info_id))
+                List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
+                
+                List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
+
+                foreach (PageVisits pageVisits in pageVisitsList)
                 {
-                    dvdInfosFinal.Add(dvdInfo);
+                    dvdInfos.Add(dvdInfoService.getByID(pageVisits.dvdInfo.dvd_info_id.ToString()));           //Throws NoRecordException
                 }
-            }
 
+                //only return dvd's that the user hasn't bought before
+                foreach (DvdInfo dvdInfo in dvdInfos)
+                {
+                    if (!orderLinesDvdIds.Contains(dvdInfo.dvd_info_id))
+                    {
+                        dvdInfosFinal.Add(dvdInfo);
+                    }
+                }               
+            }
+            catch (DALException)
+            {
+
+            }
             return dvdInfos;
         }
 

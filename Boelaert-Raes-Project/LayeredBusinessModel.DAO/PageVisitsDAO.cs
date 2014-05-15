@@ -72,7 +72,7 @@ namespace LayeredBusinessModel.DAO
             SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("SELECT top @amount * FROM PageVisits WHERE customer_id = @customer_id ORDER BY number_of_visits DESC", cnn);
+                command = new SqlCommand("SELECT top (@amount) * FROM PageVisits WHERE customer_id = @customer_id ORDER BY number_of_visits DESC", cnn);
                 command.Parameters.Add(new SqlParameter("@amount", number_of_results));
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));
                 

@@ -55,8 +55,7 @@ namespace LayeredBusinessModel.BLL.Model
             {
                 customer = null;
             }
-            return customer;
-            
+            return customer;            
         }   
      
         public LoginStatusCode getLoginStatus(String loginName, String password)

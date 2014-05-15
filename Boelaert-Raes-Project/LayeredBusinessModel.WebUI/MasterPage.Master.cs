@@ -130,6 +130,7 @@ namespace LayeredBusinessModel.WebUI
                     //put user in session and send user back to his last active page
                     Session["user"] = customer;
                     Response.Redirect(Request.RawUrl);
+                    txtEmailError.Visible = false;
                 }
                 else
                 {
@@ -141,14 +142,19 @@ namespace LayeredBusinessModel.WebUI
                             Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);
                             break;
                         case LoginStatusCode.WRONGLOGIN:
-                            String script = "alert(\"Unknown login name.\");";
-                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            liLogin.Attributes["Class"] = "dropdown open";
+                            txtEmailError.Visible = true;
+                            txtEmailError.Text = "Unknown login name";
+                            //String script = "alert(\"Unknown login name.\");";
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                             break;
                         case LoginStatusCode.WRONGPASSWORD:
-                            script = "alert(\"Incorrect login/password combination.\");";
-                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            liLogin.Attributes["Class"] = "dropdown open";
+                            txtEmailError.Visible = true;
+                            txtEmailError.Text = "Incorrect login/password combination";
+                            //script = "alert(\"Incorrect login/password combination.\");";
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                             break;
-
                     }
                     //todo: find a better way to give feedback (without alert dialog)                    
                 }

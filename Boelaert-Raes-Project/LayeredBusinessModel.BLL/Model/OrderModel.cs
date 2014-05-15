@@ -15,32 +15,22 @@ namespace LayeredBusinessModel.BLL
     {
         public void payOrder(Order selectedOrder)
         {
-            OrderService orderService = new OrderService();
-
             //set the order status to PAID
             selectedOrder.orderstatus = new OrderStatusService().getByID("2");          //Throws NoRecordException
-            orderService.updateOrder(selectedOrder);            
+            new OrderService().updateOrder(selectedOrder);            
 
             //assign copies to the orderlines
             List<OrderLine> orderLines = new OrderLineService().getByOrder(selectedOrder);            //Throws NoRecordException
 
-            DvdCopyService dvdCopyService = new DvdCopyService();
-            List<DvdCopy> availableCopies = null;
-            DvdCopy copy = null;
-
-
             foreach (OrderLine orderLine in orderLines)
             {
-
                 if (orderLine.orderLineType.id == 1) //rent copy
                 {
-                    DvdInfoService dvdInfoService = new DvdInfoService();
                     DvdInfo thisDVD = orderLine.dvdInfo;
 
                     //get all available dates starting from TODAY 
                     //(also needs to check dates between today and start of requested rent period to determine smallest open window)
-                    RentModel rentService = new RentModel();
-                    Dictionary<int, List<DateTime>> dicCopyUnavailableDates = rentService.getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);          //Throws NoRecordException     
+                    Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new RentModel().getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);          //Throws NoRecordException     
                     Dictionary<int, int> dicDaysFreeForCopy = new Dictionary<int, int>();
 
                     int selectedCopyId = -1; //id of the copy that will be assigned to this orderLine
@@ -125,20 +115,18 @@ namespace LayeredBusinessModel.BLL
                         {
                             //No dvd's were found
                         }
-
                         new OrderLineService().updateOrderLine(orderLine);
 
                         //update the amount_sold field of the dvdInfo record
-                        DvdInfo dvdInfo = orderLine.dvdInfo;
-                        dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                        dvdInfoService.update(dvdInfo);                                                             //Throws NoRecordException
+                        orderLine.dvdInfo.amount_sold = orderLine.dvdInfo.amount_sold + 1;
+                        new DvdInfoService().update(orderLine.dvdInfo);                                                             //Throws NoRecordException
                     }
                     else
                     {
                         //no copies with future orderLines are suited for this reservation/rent order
                         //get all fully available copies to assign to this orderline
 
-                        List<DvdCopy> dvdCopies = dvdCopyService.getAllFullyAvailableCopies(thisDVD, orderLine.startdate);      //Throws NoRecordException || DALException
+                        List<DvdCopy> dvdCopies = new DvdCopyService().getAllFullyAvailableCopies(thisDVD, orderLine.startdate);      //Throws NoRecordException || DALException
                         //get the first available copy and assign it to this orderLine
                         selectedCopyId = dvdCopies[0].dvd_copy_id;
                         //set the found copy as the copy for this orderline
@@ -146,37 +134,29 @@ namespace LayeredBusinessModel.BLL
                         //update database
                         new OrderLineService().updateOrderLine(orderLine);
                         //update the amount_sold field of the dvdInfo record
-                        DvdInfo dvdInfo = dvdCopies[0].dvdinfo;
-                        dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                        dvdInfoService.update(dvdInfo);                                                                 //Throws NoRecordException
-
+                        dvdCopies[0].dvdinfo.amount_sold += 1;
+                        new DvdInfoService().update(dvdCopies[0].dvdinfo);                                                                 //Throws NoRecordException
                     }
                 }
-
-
                 else if (orderLine.orderLineType.id == 2) //sale copy
                 {
                     //get all available copies
                     //get this list again for every item so you can add a new, available copy to the order (todo: try do this without going to the database for every item)
-
-                    availableCopies = dvdCopyService.getAllInStockBuyCopiesForDvdInfo(orderLine.dvdInfo);           //Throws NoRecordException || DALException
+                    List<DvdCopy> availableCopies = new DvdCopyService().getAllInStockBuyCopiesForDvdInfo(orderLine.dvdInfo);           //Throws NoRecordException || DALException
 
                     //get the first available copy
-                    copy = availableCopies[0];
-
                     //set the found copy as the copy for this orderline
-                    orderLine.dvdCopy = copy;
+                    orderLine.dvdCopy = availableCopies[0];
                     new OrderLineService().updateOrderLine(orderLine);
 
                     //update the amount_sold field of the dvdInfo record
-                    DvdInfoService dvdInfoService = new DvdInfoService();
-                    DvdInfo dvdInfo = copy.dvdinfo;
+                    DvdInfo dvdInfo = availableCopies[0].dvdinfo;
                     dvdInfo.amount_sold = dvdInfo.amount_sold + 1;
-                    dvdInfoService.update(dvdInfo);         //Throws NoRecordException
+                    new DvdInfoService().update(dvdInfo);         //Throws NoRecordException
 
                     //mark the found copy as NOT in_stock
-                    copy.in_stock = false;
-                    if (dvdCopyService.updateCopy(copy))            //Throws NoRecordException || DALException  
+                    availableCopies[0].in_stock = false;
+                    if (new DvdCopyService().updateCopy(availableCopies[0]))            //Throws NoRecordException || DALException  
                     {
                         //Record updated
                     }
@@ -188,21 +168,16 @@ namespace LayeredBusinessModel.BLL
         {
             double totalCost = 0;
 
-            //OrderService orderService = new OrderService();
-            //Order order = orderService.getOrder(orderID);
             try
             {
                 List<OrderLine> orderLines = new OrderLineService().getByOrder(order);            //Throws NoRecordException
-
                 //set order total cost
                 foreach (OrderLine orderLine in orderLines)
                 {
                     if (orderLine.orderLineType.id == 1) //rent
                     {
                         TimeSpan duration = orderLine.enddate - orderLine.startdate;
-                        int durationDays = duration.Days;
-
-                        totalCost += orderLine.dvdInfo.rent_price * durationDays;
+                        totalCost += orderLine.dvdInfo.rent_price * duration.Days;
                     }
                     else if (orderLine.orderLineType.id == 2) //buy
                     {

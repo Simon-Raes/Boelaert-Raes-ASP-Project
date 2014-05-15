@@ -117,8 +117,6 @@ namespace LayeredBusinessModel.WebUI
 
             btnRentB.InnerText = "Rent " + currency + " " + rent_price;
 
-
-
         }
 
         //todo: fix postback bug

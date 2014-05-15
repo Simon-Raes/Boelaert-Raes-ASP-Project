@@ -27,8 +27,7 @@ namespace LayeredBusinessModel.BLL
             List<DvdInfo> dvdList = new List<DvdInfo>();
             List<Genre> genres = new List<Genre>();
 
-            OrderLineService orderLineService = new OrderLineService();
-            List<OrderLine> orderLines = orderLineService.getByCustomer(customer);          //Throws NoRecordException          
+            List<OrderLine> orderLines = new OrderLineService().getByCustomer(customer);          //Throws NoRecordException          
             orderLinesDvdIds = new List<int>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
 
             GenreService genreService = new GenreService();
@@ -110,7 +109,6 @@ namespace LayeredBusinessModel.BLL
                     }
                 }
 
-
                 if (dvdTempIds.Count > 0)
                 {
                     foreach (int id in dvdTempIds)
@@ -130,7 +128,6 @@ namespace LayeredBusinessModel.BLL
                 dvdList = getMostViewedDvdInfos(customer);              //Throws NoRecordException
             }
 
-
             //remove elements until the list size is the requested size (4 for index row, 16 for catalog page)
             //loop deletes a random item until the size is ok so the user gets different recommendations on every visit/refresh
             Random rnd = new Random();
@@ -149,11 +146,9 @@ namespace LayeredBusinessModel.BLL
             List<DvdInfo> dvdInfos = new List<DvdInfo>();
             try
             {
-                PageVisitsService pageVisitsService = new PageVisitsService();
-                CustomerService customerService = new CustomerService();
                 DvdInfoService dvdInfoService = new DvdInfoService();
 
-                List<PageVisits> pageVisitsList = pageVisitsService.getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
+                List<PageVisits> pageVisitsList = new PageVisitsService().getTopPageVisitsForCustomer(customer, 16);          //Throws NoRecordException
                 
                 List<DvdInfo> dvdInfosFinal = new List<DvdInfo>();
 
@@ -176,8 +171,6 @@ namespace LayeredBusinessModel.BLL
 
             }
             return dvdInfos;
-        }
-
-        
+        }        
     }
 }

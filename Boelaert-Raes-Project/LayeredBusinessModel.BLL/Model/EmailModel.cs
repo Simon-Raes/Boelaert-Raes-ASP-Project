@@ -21,9 +21,7 @@ namespace LayeredBusinessModel.BLL.Model
         /*Send an email asking for user confirmation.*/
         public void sendRegistrationEmail(Token token)
         {
-            var client = getSmtpClient();                      
-
-            client.Send("info@TaboelaertRaesa.com", token.customer.email, "Taboelaert Raesa account verification", "Dear " + token.customer.name + ",\n\n" +
+            getSmtpClient().Send("info@TaboelaertRaesa.com", token.customer.email, "Taboelaert Raesa account verification", "Dear " + token.customer.name + ",\n\n" +
                 "Thank you for registering with Taboelaert Raesa.\n\n" +
                 "To complete your registration process, please click the following link: \n" +
                 "http://simonraes-001-site1.smarterasp.net/signup.aspx?token=" + token.token + " \n\n" +
@@ -33,9 +31,7 @@ namespace LayeredBusinessModel.BLL.Model
         /*Send an email alerting the user he has been registered and verified.*/
         public void sendRegistrationCompleteEmail(Customer customer)
         {
-            var client = getSmtpClient();  
-
-            client.Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa registration completed", "Dear " + customer.name + ",\n\n" +
+            getSmtpClient().Send("info@TaboelaertRaesa.com", customer.email, "Taboelaert Raesa registration completed", "Dear " + customer.name + ",\n\n" +
                 "Your registration has been completed. Welcome to Taboelaert Raesa!\n\n" +
                 "Regards,\nThe Taboelaert Raesa team.");
         }
@@ -43,9 +39,7 @@ namespace LayeredBusinessModel.BLL.Model
         /*Send the user an email asking him to confirm his password reset request*/
         public void sendPasswordResetRequestEmail(Customer customer, Token token)
         {
-            var client = getSmtpClient();  
-
-            client.Send("info@TaboelaertRaesa.com", customer.email, "Password reset request", "Dear " + customer.name + ",\n\n" +
+            getSmtpClient().Send("info@TaboelaertRaesa.com", customer.email, "Password reset request", "Dear " + customer.name + ",\n\n" +
                 "We received a request to reset the password on your Taboelaert Raesa account. Click the following URL to complete the process:\n" +
                 "http://simonraes-001-site1.smarterasp.net/ForgotPassword.aspx?resetToken=" + token.token + " \n\n" +
                 "If you did not request this reset, you can ignore this email.\n\nRegards,\nThe Taboelaert Raesa team.");
@@ -54,9 +48,7 @@ namespace LayeredBusinessModel.BLL.Model
         /*Send the user an email with his new password.*/
         public void sendPasswordResetCompletedEmail(Customer customer)
         {
-            var client = getSmtpClient();  
-
-            client.Send("info@TaboelaertRaesa.com", customer.email, "Your Taboelaert Raesa password has been reset", "Dear " + customer.name + ",\n\n" +
+            getSmtpClient().Send("info@TaboelaertRaesa.com", customer.email, "Your Taboelaert Raesa password has been reset", "Dear " + customer.name + ",\n\n" +
                 "Your Taboelaert Raesa password has been reset to '" + CryptographyModel.decryptPassword(customer.password) + "'.\n\n" +
                 "For security reasons, we ask you to change this password the next time you log in." +
                 "\n\nRegards,\nThe Taboelaert Raesa team.");
@@ -65,8 +57,6 @@ namespace LayeredBusinessModel.BLL.Model
         //todo: include orderLine en Order price in email!
         public void sendOrderConfirmationEmail(Customer customer, Order order, List<OrderLine> orderLines, Boolean allInStock, String currency)
         {
-            var client = getSmtpClient();  
-
             //create HTML email content
             String messageContent = "Dear " + customer.name + ",<br /><br />" +
                 "Thank you for your business. Your order information can be found below.<br /><br />";
@@ -115,7 +105,7 @@ namespace LayeredBusinessModel.BLL.Model
             message.IsBodyHtml = true;
             message.Body = messageContent;
 
-            client.Send(message);
+            getSmtpClient().Send(message);
         }
 
         /*Returns SMTP credentials from web.config*/

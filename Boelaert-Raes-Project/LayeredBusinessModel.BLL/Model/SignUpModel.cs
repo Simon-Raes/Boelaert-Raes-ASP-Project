@@ -19,8 +19,6 @@ namespace LayeredBusinessModel.BLL.Model
             if (customerService.addCustomer(user))
             {
                 addedUser = true;
-                //create token
-                TokenService tokenService = new TokenService();
                 //need to get the customer from the database so we have his customer_id
                 Customer customer = customerService.getByEmail(user.email);             //Throws NoRecordException || DALException
                 Token token = new Token
@@ -30,7 +28,7 @@ namespace LayeredBusinessModel.BLL.Model
                     timestamp = DateTime.Now,
                     token = Util.randomString(10)
                 };
-                if (tokenService.add(token))
+                if (new TokenService().add(token))
                 {
                     //success
                 }
@@ -54,23 +52,19 @@ namespace LayeredBusinessModel.BLL.Model
             //edit customer object to set verified to true
             Customer customer = token.customer;
             customer.isVerified = true;
-            CustomerService customerService = new CustomerService();
-            if (!customerService.updateCustomer(customer))
+            if (!new CustomerService().updateCustomer(customer))
             {
                 status = false;
             }
 
             //send a second email confirming the verification
-            EmailModel emailModel = new EmailModel();
-            emailModel.sendRegistrationCompleteEmail(customer);
+            new EmailModel().sendRegistrationCompleteEmail(customer);
 
             //delete the token since it will never be used again
-            TokenService tokenService = new TokenService();
-            if (!tokenService.deleteToken(token))
+            if (!new TokenService().deleteToken(token))
             {
                 status = false;
             }
-
             return status;
         }
 
@@ -78,28 +72,23 @@ namespace LayeredBusinessModel.BLL.Model
         public Boolean sendVerificationForEmail(String email)
         {
             Boolean status = false;
-            
+
             Customer customer = new CustomerService().getByEmail(email);          //Throws NoRecordException || DALException                        
             List<Token> tokens = new TokenService().getByCustomer(customer);            //throws Throws NoRecordException
-                        
-
-            if (tokens.Count > 0)
+            
+            Token verificationToken = null;
+            foreach (Token token in tokens)
             {
-                Token verificationToken = null;
-                foreach (Token token in tokens)
+                if (token.status == TokenStatus.VERIFICATION)
                 {
-                    if (token.status == TokenStatus.VERIFICATION)
-                    {
-                        verificationToken = token;
-                    }
+                    verificationToken = token;
                 }
-                if (verificationToken != null)
-                {
-                    status = true;
+            }
+            if (verificationToken != null)
+            {
+                status = true;
 
-                    EmailModel emailModel = new EmailModel();
-                    emailModel.sendRegistrationEmail(verificationToken);
-                }
+                new EmailModel().sendRegistrationEmail(verificationToken);
             }
 
             return status;

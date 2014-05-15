@@ -15,7 +15,6 @@ namespace LayeredBusinessModel.BLL.Model
         public void sendPasswordResetRequest(Customer user)
         {
             //create a database record for this reset request
-            TokenService tokenService = new TokenService();
             Token token = new Token
             {
                 customer = user,
@@ -23,15 +22,13 @@ namespace LayeredBusinessModel.BLL.Model
                 timestamp = DateTime.Now,
                 token = Util.randomString(10)
             };
-            if (tokenService.add(token))
+            if (new TokenService().add(token))
             {
                 //succes
             }
 
-
             //send the user an email asking if he wants to reset his password
-            EmailModel emailModel = new EmailModel();
-            emailModel.sendPasswordResetRequestEmail(user, token);
+            new EmailModel().sendPasswordResetRequestEmail(user, token);
         }
 
         /*Checks the incoming password reset request.
@@ -40,7 +37,6 @@ namespace LayeredBusinessModel.BLL.Model
         public Boolean checkResetRequestConfirmation(String token_id)
         {
             Boolean didReset = false;
-
             TokenService tokenService = new TokenService();
             Token token = tokenService.getByID(token_id);           //Throws NoRecordException
             if (token != null)
@@ -48,12 +44,10 @@ namespace LayeredBusinessModel.BLL.Model
                 //give the user a new password
                 Customer customer = token.customer;
                 customer.password = CryptographyModel.encryptPassword(Util.randomString(10));
-                CustomerService customerService = new CustomerService();
-                customerService.updateCustomer(customer);
+                new CustomerService().updateCustomer(customer);
 
                 //send the user an email with his new password
-                EmailModel emailModel = new EmailModel();
-                emailModel.sendPasswordResetCompletedEmail(customer);
+                new EmailModel().sendPasswordResetCompletedEmail(customer);
                 didReset = true;
 
                 //remove the token from the database so the user can't reset his password again with the same url later
@@ -62,7 +56,6 @@ namespace LayeredBusinessModel.BLL.Model
                     //success
                 }
             }
-
             return didReset;
         }
 
@@ -70,7 +63,5 @@ namespace LayeredBusinessModel.BLL.Model
         {
 
         }
-
-
     }
 }

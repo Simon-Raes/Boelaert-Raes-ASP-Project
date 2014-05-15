@@ -19,10 +19,8 @@ namespace LayeredBusinessModel.BLL
             UTF8Encoding utf8 = new UTF8Encoding();
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 
-            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase));
-
             TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
-            encryptionProvider.Key = encryptionKey;
+            encryptionProvider.Key = md5.ComputeHash(utf8.GetBytes(passphrase));
             encryptionProvider.Mode = CipherMode.ECB;
             encryptionProvider.Padding = PaddingMode.PKCS7;
 
@@ -42,7 +40,6 @@ namespace LayeredBusinessModel.BLL
                 encryptionProvider.Clear();
                 md5.Clear();
             }
-
             //convert array back to a string
             return Convert.ToBase64String(results);
         }
@@ -54,10 +51,8 @@ namespace LayeredBusinessModel.BLL
             UTF8Encoding utf8 = new UTF8Encoding();
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 
-            byte[] encryptionKey = md5.ComputeHash(utf8.GetBytes(passphrase));
-
             TripleDESCryptoServiceProvider encryptionProvider = new TripleDESCryptoServiceProvider();
-            encryptionProvider.Key = encryptionKey;
+            encryptionProvider.Key = md5.ComputeHash(utf8.GetBytes(passphrase));
             encryptionProvider.Mode = CipherMode.ECB;
             encryptionProvider.Padding = PaddingMode.PKCS7;
 
@@ -77,7 +72,6 @@ namespace LayeredBusinessModel.BLL
                 encryptionProvider.Clear();
                 md5.Clear();
             }
-
             return utf8.GetString(results);
         }
     }

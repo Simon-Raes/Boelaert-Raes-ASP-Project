@@ -19,11 +19,6 @@ namespace LayeredBusinessModel.BLL.Model
                 CustomerService customerService = new CustomerService();
                 customer = customerService.getByEmail(loginName);          //Throws NoRecordException || DALException
 
-                //if (customer != null)
-                //{
-                //een null customer object geeft hier soms nog altijd true, daarom controle op password veld
-                //    if (customer.password != null)
-                //    {
                 if (CryptographyModel.decryptPassword(customer.password).Equals(password))
                 {
                     if (customer.isVerified)
@@ -43,13 +38,6 @@ namespace LayeredBusinessModel.BLL.Model
                     //incorrect password
                     customer = null;
                 }
-                //    }
-                //    else
-                //    {
-                //no such user 
-                //        customer = null;
-                //    }
-                //}
             }
             catch (NoRecordException)
             {
@@ -62,8 +50,7 @@ namespace LayeredBusinessModel.BLL.Model
         {            
             try 
             {
-                CustomerService customerService = new CustomerService();
-                Customer customer = customerService.getByEmail(loginName);          //Throws NoRecordException || DALException
+                Customer customer = new CustomerService().getByEmail(loginName);          //Throws NoRecordException || DALException
                 if (CryptographyModel.decryptPassword(customer.password).Equals(password))
                 {
                     if (customer.isVerified)

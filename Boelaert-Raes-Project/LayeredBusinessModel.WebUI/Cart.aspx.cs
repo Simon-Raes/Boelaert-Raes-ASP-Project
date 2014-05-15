@@ -15,32 +15,22 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class Cart : System.Web.UI.Page
     {
-        private ShoppingCartService shoppingCartService;
-        private DvdCopyService dvdCopyService;
-
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!Page.IsPostBack)
-            //{
-
-                if (Session["user"] != null)
-                {
-                    fillCartGridView();
-                }
-           // }
+            if (Session["user"] != null)
+            {
+                fillCartGridView();
+            }
         }
 
         private void fillCartGridView()
         {
             try
             {
-                String currency = "€";               
-
-
                 List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(((Customer)Session["user"]));            //Throws NoRecordException
 
                 Boolean hasRentItems = false;
+
                 double totalCost = 0;
 
                 divCartContent.Visible = true;
@@ -67,9 +57,9 @@ namespace LayeredBusinessModel.WebUI
                     cartTable.Columns.Add("End date");
                 }
 
+                String currency = "€";
                 if (Request.QueryString["currency"] == null)
                 {
-                    //Check if the user has set the currencypreference
                     if (CookieUtil.CookieExists("currency"))
                     {
                         if (CookieUtil.GetCookieValue("currency").Equals("usd"))
@@ -78,14 +68,9 @@ namespace LayeredBusinessModel.WebUI
                         }
                     }
                 }
-                else
+                else if(Request.QueryString["currency"].Equals("usd"))
                 {
-                    switch (Request.QueryString["currency"])
-                    {
-                        case "usd":
-                            currency = "$";
-                            break;
-                    }
+                    currency = "$";
                 }
 
                 foreach (ShoppingcartItem item in cartContent)
@@ -188,7 +173,6 @@ namespace LayeredBusinessModel.WebUI
                     int orderID = new OrderService().addOrderForCustomer(user);           //Throws NoRecordException
 
                     OrderLineService orderLineService = new OrderLineService();
-                    dvdCopyService = new DvdCopyService();
 
                     //add cart items to newly created order
                     foreach (ShoppingcartItem item in cartContent)

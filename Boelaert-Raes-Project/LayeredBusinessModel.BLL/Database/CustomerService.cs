@@ -15,9 +15,6 @@ namespace LayeredBusinessModel.BLL
      */
     public class CustomerService
     {
-        private CustomerDAO customerDAO;
-        private Validation validation;
-
         /*
          * Returns a list off Customers
          */ 

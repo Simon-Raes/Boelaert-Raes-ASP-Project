@@ -10,8 +10,6 @@ namespace LayeredBusinessModel.BLL.Database
 {
     public class DvdCopyTypeService
     {
-        private DvdCopyTypeDAO typeDAO;
-
         public DvdCopyType getByName(String name)
         {
             return new DvdCopyTypeDAO().getByName(name);         //Throws NoRecordException 

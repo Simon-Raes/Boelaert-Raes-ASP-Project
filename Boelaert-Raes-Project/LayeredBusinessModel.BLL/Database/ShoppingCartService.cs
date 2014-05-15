@@ -11,8 +11,6 @@ namespace LayeredBusinessModel.BLL
 {
     public class ShoppingCartService
     {
-        private ShoppingCartDAO shoppingCartDAO;
-
         public List<ShoppingcartItem> getCartContentForCustomer(Customer customer){
             return new ShoppingCartDAO().getByCustomer(customer);                 //Throws NoRecordException || DALException
         }

@@ -11,8 +11,6 @@ namespace LayeredBusinessModel.BLL
 {
     public class DvdInfoService
     {
-        private DvdInfoDAO dvdInfoDAO;
-
         /*
         public List<DvdInfo> getAll()
         {
@@ -31,14 +29,8 @@ namespace LayeredBusinessModel.BLL
 
         public DvdInfo getByID(String id)
         {
-            dvdInfoDAO = new DvdInfoDAO();
-            DvdInfo dvd = dvdInfoDAO.getByID(id);                   //Throws NoRecordException
-            if(dvd!=null)
-            {
-                GenreService g = new GenreService();
-                dvd.genres = g.getGenresForDvd(id);                 //Throws NoRecordException
-            }            
-
+            DvdInfo dvd = new DvdInfoDAO().getByID(id);                   //Throws NoRecordException
+            dvd.genres = new GenreService().getGenresForDvd(id);                 //Throws NoRecordException           
             return dvd;
         }
 

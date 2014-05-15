@@ -16,8 +16,6 @@ namespace LayeredBusinessModel.BLL
      */ 
     public class CategoryService
     {
-        private CategoryDAO categoryDAO;
-
         /*
          * Returns a list with all the Categories
          */

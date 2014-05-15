@@ -12,9 +12,7 @@ using CustomException;
 namespace LayeredBusinessModel.BLL
 {
     public class DvdCopyService
-    {
-        private DvdCopyDAO dvdCopyDAO;        
-
+    { 
         /*
          * Returns a DvdCopy based on an ID
          */
@@ -49,7 +47,7 @@ namespace LayeredBusinessModel.BLL
 
         public Boolean resetAllCopies()
         {
-            return new DvdCopyDAO().deleteAll();                                       //Throws NoRecordException || DALException 
+            return new DvdCopyDAO().deleteAll();                                            //Throws NoRecordException || DALException 
         }
 
         /*

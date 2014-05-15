@@ -341,7 +341,6 @@ namespace LayeredBusinessModel.DAO
         public Boolean delete(OrderLine orderLine)
         {
             SqlCommand command = null;
-            SqlDataReader reader = null;
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
                 command = new SqlCommand("DELETE FROM OrderLine WHERE orderline_id = @orderline_id", cnn);

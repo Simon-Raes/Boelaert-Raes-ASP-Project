@@ -61,11 +61,11 @@
                         </asp:Calendar>
                     </div>
                     <div class="col-md-3">
-                        <asp:Button ID="btnRent1" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
+                        <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
                         <br />
-                        <asp:Button ID="btnRent3" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent3_Click" /><br />
+                        <asp:Button ID="btnRent3" runat="server" Text="Add to cart" CssClass="btn btn-success form-control" OnClick="btnRent3_Click" /><br />
                         <br />
-                        <asp:Button ID="btnRent7" runat="server" Text="Add to cart" class="btn btn-success form-control" OnClick="btnRent7_Click" />
+                        <asp:Button ID="btnRent7" runat="server" Text="Add to cart" CssClass="btn btn-success form-control" OnClick="btnRent7_Click" />
 
 
                     </div>

@@ -14,8 +14,6 @@ namespace LayeredBusinessModel.WebUI
     public partial class Catalog : System.Web.UI.Page
     {
         private DvdInfoService dvdInfoService;
-        private CategoryService categoryService;
-        private GenreService genreService;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -101,7 +99,7 @@ namespace LayeredBusinessModel.WebUI
                     dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre_id);            //Throws NoRecordException
                     labelText = new GenreService().getByID(genre_id).name + " DVDs";          //Throws NorecordException
                 }
-                catch (NoRecordException ex)
+                catch (NoRecordException)
                 {
 
                 }
@@ -113,7 +111,7 @@ namespace LayeredBusinessModel.WebUI
                     dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);      //Throws NoRecordException
                     labelText = new CategoryService().getByID(category_id).name + " DVDs";         //Throws NoRecordException || DALException
                 }
-                catch (NoRecordException ex)
+                catch (NoRecordException)
                 {
 
                 }

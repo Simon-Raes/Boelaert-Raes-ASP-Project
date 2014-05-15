@@ -25,7 +25,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 fillSideBar();
             }
-            catch (NoRecordException ex)
+            catch (NoRecordException)
             {
                 //bacause this a main function - it fills the sidebar with the genres - this exception will be thrown up so that the global.asax can take care of the exception
                 //and redirect the user to the error page
@@ -33,7 +33,6 @@ namespace LayeredBusinessModel.WebUI
                 //for debugging reasons i will place a breakpoint here. I'll work my way throu the WebUI layer until i have handled every exception. After that i'll throws the exceptions 
                 //throw;
             }
-
 
             setupCurrencyLinks();
 
@@ -97,7 +96,6 @@ namespace LayeredBusinessModel.WebUI
                 dollerLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=usd";
             }
 
-
             //als de querystring het attribut currency bevat (als de gebruiker op één van de twee currencylinks heeft geklikt)
             if (Request.QueryString["currency"] != null)
             {
@@ -115,8 +113,6 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
-
-
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
@@ -145,18 +141,13 @@ namespace LayeredBusinessModel.WebUI
                             liLogin.Attributes["Class"] = "dropdown open";
                             txtEmailError.Visible = true;
                             txtEmailError.Text = "Unknown login name";
-                            //String script = "alert(\"Unknown login name.\");";
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                             break;
                         case LoginStatusCode.WRONGPASSWORD:
                             liLogin.Attributes["Class"] = "dropdown open";
                             txtEmailError.Visible = true;
                             txtEmailError.Text = "Incorrect login/password combination";
-                            //script = "alert(\"Incorrect login/password combination.\");";
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                             break;
-                    }
-                    //todo: find a better way to give feedback (without alert dialog)                    
+                    }                   
                 }
             }
         }
@@ -170,7 +161,6 @@ namespace LayeredBusinessModel.WebUI
         {
             Response.Redirect("~/dev.aspx");
         }
-
 
         /**
          * This method is fired when a user presses the Search button at the top of the page.
@@ -223,7 +213,5 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
-
-
     }
 }

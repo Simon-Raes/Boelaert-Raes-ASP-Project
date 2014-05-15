@@ -21,9 +21,9 @@ namespace LayeredBusinessModel.WebUI
             {
                 checkQueryString();
             }
-            catch (NoRecordException ex)
+            catch (NoRecordException)
             {
-                int i = 0;
+     
             }
 
             setupEID();

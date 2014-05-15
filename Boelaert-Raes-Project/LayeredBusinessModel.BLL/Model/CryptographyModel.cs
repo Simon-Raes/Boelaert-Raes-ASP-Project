@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.BLL
                 ICryptoTransform encryptor = encryptionProvider.CreateEncryptor();
                 results = encryptor.TransformFinalBlock(encrypt_data, 0, encrypt_data.Length);
             }
-            catch (CryptographicException ex)
+            catch (CryptographicException)
             {
 
             }
@@ -63,7 +63,7 @@ namespace LayeredBusinessModel.BLL
                 ICryptoTransform decryptor = encryptionProvider.CreateDecryptor();
                 results = decryptor.TransformFinalBlock(decrypt_data, 0, decrypt_data.Length);
             }
-            catch (CryptographicException ex)
+            catch (CryptographicException)
             {
 
             }

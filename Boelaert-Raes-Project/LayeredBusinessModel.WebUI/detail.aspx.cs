@@ -8,7 +8,6 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.BLL.Model;
 using CustomException;
 
@@ -60,20 +59,15 @@ namespace LayeredBusinessModel.WebUI
                 wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
                 String currency = "€";
 
-                DvdInfoService dvdbll = new DvdInfoService();
-                DvdInfo dvdInfo = dvdbll.getByID(id.ToString());           //Throws NoRecordException
-
-
-
+                DvdInfo dvdInfo = new DvdInfoService().getByID(id.ToString());           //Throws NoRecordException
+                
                 lblTitle.Text = dvdInfo.name + " ";
                 linkYear.Text = "(" + dvdInfo.year + ")";
                 linkYear.NavigateUrl = "~/Catalog.aspx?year=" + dvdInfo.year;
-
-
+                
                 linkDirector.Text = dvdInfo.author;
                 linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
-
-
+                
                 if (!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
                 {
                     foreach (String a in dvdInfo.actors)
@@ -94,7 +88,6 @@ namespace LayeredBusinessModel.WebUI
                 {
                     lblActors.Visible = false;
                 }
-
 
                 if (!dvdInfo.duration.Equals(""))
                 {
@@ -122,10 +115,8 @@ namespace LayeredBusinessModel.WebUI
                     genreLinks.Controls.RemoveAt(j - 1);
                 }
 
-
                 lblPlot.Text = dvdInfo.descripion;
-
-
+                
                 if (Request.QueryString["currency"] == null)
                 {
                     if (CookieUtil.CookieExists("currency"))
@@ -152,7 +143,6 @@ namespace LayeredBusinessModel.WebUI
                     }
                 }
 
-
                 if (AvailabilityModel.isAvailableForBuying(Request.QueryString["id"]))
                 {
                     lblBuyStatus.Text = "";
@@ -163,7 +153,6 @@ namespace LayeredBusinessModel.WebUI
                     lblBuyStatus.Text = "Item currently out of stock!";
                     btnBuyB.Attributes.Add("Class", "btn btn-warning");
                 }
-
 
                 btnBuyB.InnerText = "Buy " + currency + " " + dvdInfo.buy_price.ToString();
                 btnRent1.Text = "Rent 1 day " + currency + " " + dvdInfo.rent_price.ToString();
@@ -176,8 +165,6 @@ namespace LayeredBusinessModel.WebUI
                     {
                         imgDvdCoverFocus.ImageUrl = k.Value;
                     }
-
-
 
                     else if (k.Key == 2)
                     {
@@ -316,16 +303,7 @@ namespace LayeredBusinessModel.WebUI
                     //add rent item to cart       
                     DateTime startdate = calRent.SelectedDate;
                     DateTime enddate = startdate.AddDays(days - 1);
-
-                    DvdInfoService dvdInfoService = new DvdInfoService();
-                    /* Wordt niets mee gedaan
-                     * DvdInfo dvdInfo = dvdInfoService.getDvdInfoWithID(Request.QueryString["id"]);               //Throws NoRecordException
-                    */
-
-                    /* Wordt niets meegedaan
-                    List<DvdCopy> availabeCopies = new DvdCopyService().getAllInStockRentCopiesForDvdInfo(dvdInfo);           //Throws NoRecordException || DALException
-                    */
-
+                    
                     try
                     {
                         //check the number of rent items in the user's cart
@@ -376,15 +354,12 @@ namespace LayeredBusinessModel.WebUI
 
                     }
                 }
-
             }
             else
             {
                 string script = "alert(\"You have been logged out due to inactivity.\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-
             }
-
             ////todo:delete this popup
             //string scriptcz = "alert(\"what\");";
             //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptcz, true);
@@ -420,7 +395,6 @@ namespace LayeredBusinessModel.WebUI
                     e.Cell.BackColor = System.Drawing.Color.LightGray;
                 }
             }
-
         }
 
 
@@ -454,8 +428,5 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
-
-
-
     }
 }

@@ -21,9 +21,8 @@ namespace LayeredBusinessModel.WebUI
                     gvBeer.DataSource = new CustomerService().getAll();           //Throws NoRecordException
                     gvBeer.DataBind();
                 }
-                catch(NoRecordException ex) 
+                catch(NoRecordException) 
                 {
-                    int i = 0;
                 }
             }
         }

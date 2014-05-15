@@ -31,7 +31,7 @@ namespace LayeredBusinessModel.WebUI
                 }
                 catch (NoRecordException)
                 {
-                    int i = 0;
+                   
                 }
             }
         }

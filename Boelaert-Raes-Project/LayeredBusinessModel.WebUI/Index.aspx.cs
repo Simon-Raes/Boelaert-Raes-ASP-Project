@@ -102,8 +102,7 @@ namespace LayeredBusinessModel.WebUI
 
             }
         }
-
-
+        
         private void addTilesToRow(List<DvdInfo> dvds, HtmlGenericControl row)
         {
             foreach (DvdInfo d in dvds)

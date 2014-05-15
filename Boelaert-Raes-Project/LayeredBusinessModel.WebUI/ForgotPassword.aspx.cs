@@ -29,10 +29,9 @@ namespace LayeredBusinessModel.WebUI
                 divDefault.Visible = false;
                 divResetComplete.Visible = true;
 
-                PasswordResetModel passwordResetModel = new PasswordResetModel();
                 try
                 {
-                    if (passwordResetModel.checkResetRequestConfirmation(Request.QueryString["resetToken"]))        //Throws NoRecordException
+                    if (new PasswordResetModel().checkResetRequestConfirmation(Request.QueryString["resetToken"]))        //Throws NoRecordException
                     {
                         lblHeader.Text = "Password reset complete";
                         lblStatusComplete.Text = "We've sent you an email with your new password.";
@@ -43,9 +42,8 @@ namespace LayeredBusinessModel.WebUI
                         lblStatusComplete.Text = "Something went wrong when trying to reset your password. Please contact support if this problem persists.";
                     }
                 }
-                catch (NoRecordException ex)
+                catch (NoRecordException)
                 {
-                    int i = 0;
                 }
             }
             else
@@ -59,14 +57,12 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
-                CustomerService customerService = new CustomerService();
-                Customer user = customerService.getByEmail(txtPassword.Value);          //Throws NoRecordException || DALException
+                Customer user = new CustomerService().getByEmail(txtPassword.Value);          //Throws NoRecordException || DALException
 
                 lblStatus.Text = "We've sent you an email to reset your password.";
                 lblStatus.ForeColor = System.Drawing.Color.Green;
 
-                PasswordResetModel model = new PasswordResetModel();
-                model.sendPasswordResetRequest(user);
+                new PasswordResetModel().sendPasswordResetRequest(user);
             }
             catch (NoRecordException)
             {

@@ -21,20 +21,23 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
-            {
+            //if (!Page.IsPostBack)
+            //{
 
                 if (Session["user"] != null)
                 {
                     fillCartGridView();
                 }
-            }
+           // }
         }
 
         private void fillCartGridView()
         {
             try
             {
+                String currency = "€";               
+
+
                 List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(((Customer)Session["user"]));            //Throws NoRecordException
 
                 Boolean hasRentItems = false;
@@ -64,8 +67,30 @@ namespace LayeredBusinessModel.WebUI
                     cartTable.Columns.Add("End date");
                 }
 
+                if (Request.QueryString["currency"] == null)
+                {
+                    //Check if the user has set the currencypreference
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                        {
+                            currency = "$";
+                        }
+                    }
+                }
+                else
+                {
+                    switch (Request.QueryString["currency"])
+                    {
+                        case "usd":
+                            currency = "$";
+                            break;
+                    }
+                }
+
                 foreach (ShoppingcartItem item in cartContent)
                 {
+                    double cost = 0;
                     DataRow cartRow = cartTable.NewRow();
                     cartRow[0] = item.shoppingcart_item_id;
                     cartRow[1] = item.dvdInfo.name;
@@ -74,22 +99,24 @@ namespace LayeredBusinessModel.WebUI
 
                     if (item.dvdCopyType.id == 1)
                     {
-                        double cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
-                        totalCost += cost;
-                        cartRow[3] = Math.Round(cost, 2);
+                        cost = item.dvdInfo.rent_price * (item.enddate - item.startdate).Days;
                         cartRow[4] = item.startdate.ToString("dd/MM/yyyy");
                         cartRow[5] = item.enddate.ToString("dd/MM/yyyy");
                     }
                     else
                     {
-                        double cost = item.dvdInfo.buy_price;
-                        totalCost += cost;
-                        cartRow[3] = Math.Round(cost, 2);
+                        cost = item.dvdInfo.buy_price;
                     }
-                    cartTable.Rows.Add(cartRow);
-                }
+                    cost = setPriceInRightCurrency((float) cost, currency);
 
-                lblTotalCost.Text = Math.Round(totalCost, 2).ToString() + " (todo: euro/dollar)";
+                    totalCost += cost;
+
+                    cartRow[3] = currency + " " +  Math.Round(cost, 2);
+
+                    cartTable.Rows.Add(cartRow);
+                }  
+                
+                lblTotalCost.Text = currency  + " " +   Math.Round(totalCost, 2).ToString();
 
                 gvCart.DataSource = cartTable;
                 gvCart.DataBind();
@@ -101,6 +128,17 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
+        private float setPriceInRightCurrency(float price, String currency)
+        {
+            wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
+
+            if (currency.Equals("€"))
+            {
+                return price;
+            }
+            return (float) currencyWebService.convert(price, "usd");
+        }
+        
         /**Deletes item from cart*/
         protected void gvCart_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
@@ -132,7 +170,6 @@ namespace LayeredBusinessModel.WebUI
             {
                 fillCartGridView();
             }
-
         }
 
         /**Creates a new order and moves the cart content to that order*/
@@ -141,8 +178,6 @@ namespace LayeredBusinessModel.WebUI
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
-
-
                 try
                 {
                     //get all items currently in cart
@@ -152,14 +187,12 @@ namespace LayeredBusinessModel.WebUI
                     //problem here: an order will still be created if all cart items are out of stock (=not added to order)
                     int orderID = new OrderService().addOrderForCustomer(user);           //Throws NoRecordException
 
-
                     OrderLineService orderLineService = new OrderLineService();
                     dvdCopyService = new DvdCopyService();
 
                     //add cart items to newly created order
                     foreach (ShoppingcartItem item in cartContent)
                     {
-
                         OrderLine orderline = new OrderLine
                         {
                             order = new OrderService().getByID(orderID.ToString()),            //Throws NoRecordException
@@ -175,8 +208,6 @@ namespace LayeredBusinessModel.WebUI
                         {
                             //succes
                         }
-
-
                     }
 
                     //clear cart
@@ -192,14 +223,11 @@ namespace LayeredBusinessModel.WebUI
 
                     //redirect to payment page, with query string to connect to the order
                     Response.Redirect("~/OrderPayment.aspx?order=" + orderID);
-
                 }
                 catch (NoRecordException)
                 {
 
                 }
-
-
             }
         }
     }

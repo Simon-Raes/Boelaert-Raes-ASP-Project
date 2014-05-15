@@ -28,7 +28,11 @@ namespace LayeredBusinessModel.BLL.Database
 
         public Boolean updatePageVisits(PageVisits pageVisits)
         {
-            return new PageVisitsDAO().update(pageVisits);
+            if (pageVisits != null)
+            {
+                return new PageVisitsDAO().update(pageVisits);
+            }
+            return false;
         }
     }
 }

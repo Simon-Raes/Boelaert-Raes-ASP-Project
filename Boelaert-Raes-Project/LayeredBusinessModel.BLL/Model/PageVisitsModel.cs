@@ -19,7 +19,7 @@ namespace LayeredBusinessModel.BLL.Model
             PageVisits pageVisits = null;
             PageVisitsService pageVisitsService = new PageVisitsService();
             try
-            {                
+            {
                 pageVisits = pageVisitsService.getByDvdAndCustomer(customer, dvdInfo);           //Throws NoRecordException                
                 pageVisits.number_of_visits += 1;
             }
@@ -29,6 +29,10 @@ namespace LayeredBusinessModel.BLL.Model
                 pageVisits.customer = customer;
                 pageVisits.dvdInfo = dvdInfo;
                 pageVisits.number_of_visits = 1;
+            }
+            catch (DALException)
+            {
+                //komt hier altijd in omdat ik niet over de tabel PageVistits beschik??
             }
             if (pageVisitsService.updatePageVisits(pageVisits))
             {

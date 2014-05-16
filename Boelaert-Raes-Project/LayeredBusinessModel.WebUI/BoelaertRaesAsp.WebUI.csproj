@@ -105,9 +105,7 @@
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery-ui-1.10.4.custom.js" />
     <Content Include="OrderPayment.aspx" />
-    <Content Include="Register.aspx" />
     <Content Include="signup.aspx" />
-    <Content Include="tempMovie.aspx" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -251,25 +249,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Register.aspx.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Register.aspx.designer.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
-    </Compile>
     <Compile Include="signup.aspx.cs">
       <DependentUpon>signup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="signup.aspx.designer.cs">
       <DependentUpon>signup.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="tempMovie.aspx.cs">
-      <DependentUpon>tempMovie.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="tempMovie.aspx.designer.cs">
-      <DependentUpon>tempMovie.aspx</DependentUpon>
     </Compile>
     <Compile Include="Web References\wsCurrencyWebService\Reference.cs">
       <AutoGen>True</AutoGen>

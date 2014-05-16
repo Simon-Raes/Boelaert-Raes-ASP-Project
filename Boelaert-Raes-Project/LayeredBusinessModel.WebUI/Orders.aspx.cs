@@ -232,7 +232,11 @@ namespace LayeredBusinessModel.WebUI
                 try
                 {
                     //get the orderline
-                    int index = Convert.ToInt32(e.CommandArgument.ToString());
+                    GridViewRow gvr = (GridViewRow)(((Button)e.CommandSource).NamingContainer);
+
+                    int index = gvr.RowIndex; 
+
+                    //int index = Convert.ToInt32(e.CommandArgument.ToString());
                     String orderLineID = gvOrderDetails.Rows[index].Cells[1].Text;
 
                     OrderLine orderLine = new OrderLineService().getByID(orderLineID);            //Throws NoRecordException
@@ -284,6 +288,15 @@ namespace LayeredBusinessModel.WebUI
         {
             Session["user"] = null;
             Response.Redirect("~/Index.aspx");
+        }
+
+        protected void gvOrderDetails_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Button btnDelete = (Button)e.Row.Cells[0].Controls[1];
+                btnDelete.OnClientClick = "return confirm('Really cancel this order item?');";
+            }
         }
     }
 }

@@ -39,16 +39,23 @@
                 </h2>
                 <asp:Label ID="lblOrderStatusDetails" runat="server" Text=""></asp:Label>
 
-               <br />
-                <asp:GridView ID="gvOrderDetails" CssClass="gridViewStyle" runat="server" OnRowCommand="gvOrderDetails_RowCommand">
+                <br />
+                <asp:GridView ID="gvOrderDetails" CssClass="gridViewStyle" runat="server" OnRowCommand="gvOrderDetails_RowCommand" OnRowDataBound="gvOrderDetails_RowDataBound">
                     <Columns>
-                        <asp:ButtonField CommandName="CancelOrderLine" Text="Cancel" />
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Button ID="btnDeleter" runat="server" Text="Cancel" CommandName="CancelOrderLine" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        
                     </Columns>
                 </asp:GridView>
-                Total cost: <asp:Label ID="lblTotalCost" runat="server" Text=""></asp:Label>
-                 <br />
+                <!--<asp:ButtonField CommandName="CancelOrderLine" Text="Cancel" />-->
+                Total cost:
+                <asp:Label ID="lblTotalCost" runat="server" Text=""></asp:Label>
+                <br />
                 <asp:Label ID="lblPay" runat="server" Text="This order is still awaiting payment. Click here to go to the payment page: "></asp:Label><asp:Button ID="btnPay" runat="server" OnClick="btnPay_Click" Text="Go to payment page" />
-                
+
             </div>
         </div>
     </asp:Panel>

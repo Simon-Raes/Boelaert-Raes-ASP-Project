@@ -19,7 +19,7 @@ namespace LayeredBusinessModel.WebUI
         protected void Page_Load(object sender, EventArgs e)
         {
             //disabled for now so tiles reload after clicking the buy button on a movie tile
-
+            //todo: ajax panels around them?
             //if (!Page.IsPostBack)
             //{
             user = (Customer)Session["user"];
@@ -130,7 +130,7 @@ namespace LayeredBusinessModel.WebUI
         public void eventComplete(object sender, dvdInfoUserControl.CustomEvents e)
         {
             //add item to cart
-            int dvd_info_id = e.dvd_info_id;
+            String dvd_info_id = e.dvd_info_id;
 
             Customer user = (Customer)Session["user"];
 

@@ -293,13 +293,13 @@ namespace LayeredBusinessModel.WebUI
                         }
                         else if ((orderLine.startdate - DateTime.Today.Date) < TimeSpan.FromDays(0))
                         {
-                            //can't remove this copy anymore - too late
+                            //can't remove this copy anymore - too late (already shipped)
                             string script = "alert(\"Can't cancel an item that has already shipped!\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         }
                         else
                         {
-                            //can't remove this copy anymore - too late
+                            //can't remove this copy anymore - too late (shipping soon)
                             string script = "alert(\"This item will ship within 2 days and can no longer be cancelled.\");";
                             ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                         }

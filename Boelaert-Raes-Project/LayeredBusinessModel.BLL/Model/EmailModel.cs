@@ -73,7 +73,7 @@ namespace LayeredBusinessModel.BLL.Model
                 messageContent += orderLine.dvdInfo.name+"</td>";
                 if (orderLine.orderLineType.id == 1)
                 {
-                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>" + orderLine.orderLineType.name + " from " + orderLine.startdate + " until " + orderLine.enddate + "</td>";
+                    messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>" + orderLine.orderLineType.name + " from " + orderLine.startdate.ToString("dd/MM/yyyy") + " until " + orderLine.enddate.ToString("dd/MM/yyyy") + "</td>";
                     messageContent += "<td style='padding: 5px; border: 1px solid #ddd;'>" + currency + " " + orderLine.dvdInfo.rent_price + "</td>";
                     orderTotal += orderLine.dvdInfo.rent_price;
                 }

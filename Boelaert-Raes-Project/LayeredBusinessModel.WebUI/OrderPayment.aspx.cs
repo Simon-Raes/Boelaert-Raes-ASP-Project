@@ -125,10 +125,7 @@ namespace LayeredBusinessModel.WebUI
                     lblStatus.Text = "Please log in to access this page";
                 }
 
-            }
-            //check query string, get order
-
-            //check if the order belongs to the logged in user! Only grant access if the user and order.user match
+            }            
         }
 
         protected void btnPay_Click(object sender, EventArgs e)

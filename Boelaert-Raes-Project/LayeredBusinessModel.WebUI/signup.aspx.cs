@@ -157,6 +157,8 @@ namespace LayeredBusinessModel.WebUI
             txtPostalcode.Text = null;
             txtMunicipality.Text = null;
         }
+               
+        #region Validation
 
         private void disableValidation()
         {
@@ -185,10 +187,7 @@ namespace LayeredBusinessModel.WebUI
             rfvStreet.Enabled = true;
             rfvPostalcode.Enabled = true;
             rfvMunicipality.Enabled = true;
-
         }
-
-        #region Validation
 
         protected void valCustEmail_ServerValidate(object source, ServerValidateEventArgs args)
         {

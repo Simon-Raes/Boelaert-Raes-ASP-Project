@@ -11,7 +11,7 @@ namespace LayeredBusinessModel.Domain
      */
     public class DvdInfo
     {
-        public int dvd_info_id { get; set; }        //a unique id
+        public String dvd_info_id { get; set; }        //a unique id
         public String name { get; set; }            //name
         public String year { get; set; }            //year
         public String barcode { get; set; }         //barcode

@@ -84,7 +84,6 @@
     <Content Include="css\icons-classic\resultset_previous.png" />
     <Content Include="css\style.css" />
     <Content Include="CurrencyWebService.asmx" />
-    <Content Include="Customers.aspx" />
     <Content Include="detail.aspx" />
     <Content Include="dev.aspx" />
     <Content Include="dvdInfoUserControl.ascx" />
@@ -105,7 +104,6 @@
     <Content Include="jquery\jquery.min.js" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery-ui-1.10.4.custom.js" />
-    <Content Include="Login.aspx" />
     <Content Include="OrderPayment.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="signup.aspx" />
@@ -195,13 +193,6 @@
       <DependentUpon>CurrencyWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Customers.aspx.cs">
-      <DependentUpon>Customers.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Customers.aspx.designer.cs">
-      <DependentUpon>Customers.aspx</DependentUpon>
-    </Compile>
     <Compile Include="detail.aspx.cs">
       <DependentUpon>detail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -239,13 +230,6 @@
     </Compile>
     <Compile Include="Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="MasterPage.Master.cs">
       <DependentUpon>MasterPage.Master</DependentUpon>

@@ -20,10 +20,10 @@ namespace LayeredBusinessModel.WebUI
 
         public class CustomEvents : EventArgs
         {
-            public int dvd_info_id { get; set; }
+            public String dvd_info_id { get; set; }
         }
 
-        public int id { get; set; }
+        public String id { get; set; }
         public String imageUrl { get; set; }
         public String title { get; set; }
         public float buy_price { get; set; }
@@ -86,12 +86,11 @@ namespace LayeredBusinessModel.WebUI
             btnBuyB.InnerText = "Buy " + currency + " " + buy_price;
 
             //set rent button text           
-            RentModel rentService = new RentModel();
             DvdInfoService dvdbll = new DvdInfoService();
             try
             {
                 DvdInfo thisDVD = dvdbll.getByID(Convert.ToString(id));                //Throws NoRecordExample
-                List<DateTime> dates = rentService.getAvailabilities(thisDVD, DateTime.Now);            //Throws NoRecordException
+                List<DateTime> dates = new AvailabilityModel().getAvailabilities(thisDVD, DateTime.Now);            //Throws NoRecordException
 
 
                 if (dates.Count >= 14)

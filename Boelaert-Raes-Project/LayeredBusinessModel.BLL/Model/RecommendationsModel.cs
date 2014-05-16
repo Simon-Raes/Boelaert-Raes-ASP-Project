@@ -13,7 +13,7 @@ namespace LayeredBusinessModel.BLL
 {
     public class RecommendationsModel
     {
-        private List<int> orderLinesDvdIds;
+        private List<String> orderLinesDvdIds;
 
         /**Returns a list of recommendations based on the user's order history.
         1) Gets all past orders and determines the user's 3 favourite genres.
@@ -28,7 +28,7 @@ namespace LayeredBusinessModel.BLL
             List<Genre> genres = new List<Genre>();
 
             List<OrderLine> orderLines = new OrderLineService().getByCustomer(customer);          //Throws NoRecordException          
-            orderLinesDvdIds = new List<int>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
+            orderLinesDvdIds = new List<String>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
 
             GenreService genreService = new GenreService();
             DvdInfoService dvdInfoService = new DvdInfoService();
@@ -38,8 +38,8 @@ namespace LayeredBusinessModel.BLL
             {
                 foreach (OrderLine line in orderLines)
                 {
-                    int dvdID = line.dvdInfo.dvd_info_id;
-                    genres.AddRange(genreService.getGenresForDvd(dvdID.ToString()));            //Throws NoRecordException
+                    String dvdID = line.dvdInfo.dvd_info_id;
+                    genres.AddRange(genreService.getGenresForDvd(dvdID));            //Throws NoRecordException
 
                     //fill orderLinesDvdIds
                     if (!orderLinesDvdIds.Contains(dvdID))
@@ -96,12 +96,12 @@ namespace LayeredBusinessModel.BLL
 
                 //we now have the user's 3 favourite genres in maxGenres, use that info to get the dvds that match those 3 genres the most
                 //get max 16 dvds. Index will always show maximum 4, but catalog can show up to 16
-                List<int> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16);            //Throws NoRecordException
+                List<String> dvdIds = dvdInfoService.getRecommendations(maxGenres, 16);            //Throws NoRecordException
 
-                List<int> dvdTempIds = new List<int>();
+                List<String> dvdTempIds = new List<String>();
 
                 //only accept dvd's that the user had not watched yet
-                foreach (int id in dvdIds)
+                foreach (String id in dvdIds)
                 {
                     if (!orderLinesDvdIds.Contains(id))
                     {
@@ -111,7 +111,7 @@ namespace LayeredBusinessModel.BLL
 
                 if (dvdTempIds.Count > 0)
                 {
-                    foreach (int id in dvdTempIds)
+                    foreach (String id in dvdTempIds)
                     {
                         dvdList.Add(dvdInfoService.getByID(id.ToString()));            //Throws NoRecordException            
                     }

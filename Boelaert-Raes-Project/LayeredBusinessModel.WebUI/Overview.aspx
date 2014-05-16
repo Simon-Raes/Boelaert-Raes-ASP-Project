@@ -9,7 +9,7 @@
                 <li class="active"><a href="Overview.aspx">Overview</a></li>
                 <li><a href="Orders.aspx">Orders</a></li>
                 <li><a href="Settings.aspx">Settings</a></li>
-                <li class="pull-right"><button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
+                <li class="pull-right"><button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click" causesvalidation="false">Sign out</button></li>
             </ul>
             <br />
 

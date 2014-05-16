@@ -10,7 +10,7 @@
                 <li><a href="Orders.aspx">Orders</a></li>
                 <li class="active"><a href="Settings.aspx">Settings</a></li>
                 <li class="pull-right">
-                    <button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click">Sign out</button></li>
+                    <button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click" causesvalidation="false">Sign out</button></li>
 
             </ul>
 

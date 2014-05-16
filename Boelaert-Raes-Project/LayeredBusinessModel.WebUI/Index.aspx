@@ -28,6 +28,7 @@
     </div>
 
     <!-- Recent releases -->
+    <div id="divRecent" runat="server" visible="false">
     <div class="panel panel-default">
         <div class="panel-body">
             <asp:Label ID="Label2" runat="server" Text="Recent releases" Font-Size="20"></asp:Label>
@@ -38,8 +39,10 @@
             </div>
         </div>
     </div>
+        </div>
 
     <!-- Most popular -->
+    <div id="divPopular" runat="server" visible="false">
     <div class="panel panel-default">
         <div class="panel-body">
             <asp:Label ID="Label3" runat="server" Text="Most popular" Font-Size="20"></asp:Label>
@@ -50,6 +53,7 @@
             </div>
         </div>
     </div>
+        </div>
 
 
 

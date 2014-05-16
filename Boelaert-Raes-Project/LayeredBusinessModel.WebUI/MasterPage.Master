@@ -68,7 +68,7 @@
                                         <li>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSubmitLogin">
+                                                   <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSubmitLogin">
                                                     <div class="form-group">
                                                         <asp:Label ID="txtEmailError" runat="server" Text=""></asp:Label>                                                        
                                                         <label class="sr-only" for="exampleInputEmail2">Email address</label>
@@ -79,9 +79,9 @@
                                                         <input type="password" runat="server" class="form-control" id="txtPassword" placeholder="Password" required="required" />
                                                     </div>
                                                     <div class="form-group">
-                                                        <asp:Button ID="btnSubmitLogin" runat="server" Text="Sign in" CssClass="btn btn-success btn-block" OnClick="btnSubmitLogin_Click" />                                                        
+                                                        <asp:Button ID="btnSubmitLogin" runat="server" Text="Sign in" CssClass="btn btn-success btn-block" OnClick="btnSubmitLogin_Click" CausesValidation="false"/>                                                        
                                                     </div>
-                                                        </asp:Panel>
+                                                        </asp:Panel> 
                                                 </div>
                                             </div>
                                         </li>

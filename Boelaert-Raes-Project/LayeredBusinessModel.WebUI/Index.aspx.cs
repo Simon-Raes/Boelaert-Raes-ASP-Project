@@ -81,12 +81,13 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
+                divRecent.Visible = true;
                 List<DvdInfo> dvdList = new DvdInfoService().getLatestDvds(4);              //Throws NoRecordException()
                 addTilesToRow(dvdList, newReleases);
             }
             catch (NoRecordException)
             {
-                
+                divRecent.Visible = false;
             }
         }
 
@@ -94,12 +95,13 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
+                divPopular.Visible = true;
                 List<DvdInfo> dvdList = new DvdInfoService().getMostPopularDvds(4);         //Throws NoRecordException
                 addTilesToRow(dvdList, mostPopular);
             }
             catch (NoRecordException)
             {
-
+                divPopular.Visible = false;
             }
         }
         

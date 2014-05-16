@@ -18,6 +18,7 @@
 
 
             <div class="form-horizontal">
+                <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSignUp">
                 <fieldset>
                     <legend>Update information</legend>
 
@@ -100,11 +101,13 @@
                     <div class="form-group">
                         <div class="col-sm-4 control-label"></div>
 
-                        <div class="col-sm-4">
-                            <button class="btn btn-success form-control" id="btnSignUp" runat="server" onserverclick="btnUpdate_Click">Update</button>
+                        <div class="col-sm-4">                           
+                                <asp:Button ID="btnSignUp" runat="server" Text="Update" CssClass="btn btn-success form-control" OnClick="btnSignUp_Click" />
+                            
                         </div>
                     </div>
                 </fieldset>
+                    </asp:Panel>
             </div>
         </div>
     </div>

@@ -166,9 +166,9 @@ namespace LayeredBusinessModel.BLL
                     }
                 }               
             }
-            catch (DALException)
+            catch (DALException ex)
             {
-
+                throw new NoRecordException("failed to retrieve data", ex);
             }
             return dvdInfos;
         }        

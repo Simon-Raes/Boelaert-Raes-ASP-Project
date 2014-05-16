@@ -122,53 +122,49 @@ namespace LayeredBusinessModel.WebUI
                     dvdContent = dvdInfoService.searchDvdWithText(searchtext);                              //Throws NoRecordException  
                     labelText = "Catalog";
                 }
+
+                //set header text            
+                if (!searchtext.Equals(""))
+                {
+                    labelText += " matching '" + searchtext + "'";
+                }
+
+                foreach (DvdInfo d in dvdContent)
+                {
+                    dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                    dvdInfo.ChoiceComplete += new dvdInfoUserControl.delChoiceComplete(dvdInfo_ChoiceComplete);
+                    dvdInfo.id = d.dvd_info_id;
+                    foreach (KeyValuePair<int, String> k in d.media)
+                    {
+                        if (k.Key == 1)
+                        {
+                            dvdInfo.imageUrl = k.Value;
+                        }
+                    }
+                    dvdInfo.title = d.name;
+                    dvdInfo.buy_price = d.buy_price;
+                    dvdInfo.rent_price = d.rent_price;
+
+                    catalogContent.Controls.Add(dvdInfo);
+                }
+                lblHeader.Text = labelText;
             }
             catch (NoRecordException)
             {
-
-            }
-
-            //set header text            
-            if (!searchtext.Equals(""))
-            {
-                labelText += " matching '" + searchtext + "'";
-            }
-            lblHeader.Text = labelText;
-
-
-
-
-
-            foreach (DvdInfo d in dvdContent)
-            {
-                dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
-                dvdInfo.id = d.dvd_info_id;
-                foreach (KeyValuePair<int, String> k in d.media)
-                {
-                    if (k.Key == 1)
-                    {
-                        dvdInfo.imageUrl = k.Value;
-                    }
-                }
-                dvdInfo.title = d.name;
-                dvdInfo.buy_price = d.buy_price;
-                dvdInfo.rent_price = d.rent_price;
-
-                catalogContent.Controls.Add(dvdInfo);
-            }
-
-            if (dvdContent.Count < 1)
-            {
                 lblStatus.Text = "Could not find any results matching your criteria.";
-            }
+            } 
         }
 
-
-        /*DOESN'T WORK!*/
+        void dvdInfo_ChoiceComplete(object sender, dvdInfoUserControl.CustomEvents e)
+        {
+            int i = 0;
+        }
+       
         protected void btnSearch_Click2(object sender, EventArgs e)
         {
             String searchText = txtSearchNew.Text; 
             setDvdTiles(searchText);
-        }
+        }      
+
     }
 }

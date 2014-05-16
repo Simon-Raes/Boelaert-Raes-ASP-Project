@@ -22,24 +22,6 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Label Label4;
         
         /// <summary>
-        /// btnMailTest control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnMailTest;
-        
-        /// <summary>
-        /// Button1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
-        
-        /// <summary>
         /// anchorSpotlight control.
         /// </summary>
         /// <remarks>
@@ -85,6 +67,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl recommened;
         
         /// <summary>
+        /// divRecent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRecent;
+        
+        /// <summary>
         /// Label2 control.
         /// </summary>
         /// <remarks>
@@ -101,6 +92,15 @@ namespace LayeredBusinessModel.WebUI {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl newReleases;
+        
+        /// <summary>
+        /// divPopular control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPopular;
         
         /// <summary>
         /// Label3 control.

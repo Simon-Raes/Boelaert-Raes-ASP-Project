@@ -14,7 +14,7 @@
             Hosting by http://www.smarterasp.net/.
             <br /><br />
             Link to digital manual here.
-            2014
+            
             
         </div>
         <div class="row centeredRow">

@@ -213,5 +213,43 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
+
+        protected void btnSubmitLogin_Click(object sender, EventArgs e)
+        {
+            if (txtEmail.Value != null && txtEmail.Value != null)
+            {
+                LoginModel loginModel = new LoginModel();
+                Customer customer = loginModel.signIn(txtEmail.Value, txtPassword.Value);                       //Throws DALException
+
+                if (customer != null)
+                {
+                    //put user in session and send user back to his last active page
+                    Session["user"] = customer;
+                    Response.Redirect(Request.RawUrl);
+                    txtEmailError.Visible = false;
+                }
+                else
+                {
+                    //user couldn't be logged in, request the status code so the correct error can be displayed to the user
+                    LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);      //Throws DALException
+                    switch (status)
+                    {
+                        case LoginStatusCode.NOTVERIFIED:
+                            Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);
+                            break;
+                        case LoginStatusCode.WRONGLOGIN:
+                            liLogin.Attributes["Class"] = "dropdown open";
+                            txtEmailError.Visible = true;
+                            txtEmailError.Text = "Unknown login name";
+                            break;
+                        case LoginStatusCode.WRONGPASSWORD:
+                            liLogin.Attributes["Class"] = "dropdown open";
+                            txtEmailError.Visible = true;
+                            txtEmailError.Text = "Incorrect login/password combination";
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

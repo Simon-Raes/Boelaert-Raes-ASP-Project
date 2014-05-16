@@ -67,7 +67,7 @@ namespace LayeredBusinessModel.BLL
         {
             //set the order status to PAID
             selectedOrder.orderstatus = new OrderStatusService().getByID("2");          //Throws NoRecordException
-            new OrderService().updateOrder(selectedOrder);            
+            new OrderService().updateOrder(selectedOrder);
 
             //assign copies to the orderlines
             List<OrderLine> orderLines = new OrderLineService().getByOrder(selectedOrder);            //Throws NoRecordException
@@ -79,7 +79,7 @@ namespace LayeredBusinessModel.BLL
                     DvdInfo thisDVD = orderLine.dvdInfo;
 
                     //get all unavailable dates starting from TODAY          
-           
+
                     Dictionary<int, List<DateTime>> dicCopyUnavailableDates = new AvailabilityModel().getAllUnavailableDaysPerCopyForDvdInfo(thisDVD, DateTime.Today);          //Throws NoRecordException     
                     Dictionary<int, int> dicDaysFreeForCopy = new Dictionary<int, int>(); //contains the number of free days for the dvdCopy (copy-id, freedays)
 
@@ -179,23 +179,24 @@ namespace LayeredBusinessModel.BLL
                         try
                         {
                             List<DvdCopy> dvdCopies = new DvdCopyService().getAllFullyAvailableCopies(thisDVD, orderLine.startdate);      //Throws NoRecordException || DALException
-                           
+
                             //set the first available copy as the copy for this orderline
                             orderLine.dvdCopy = dvdCopies[0];
                             //update database
                             new OrderLineService().updateOrderLine(orderLine);
                             //update the amount_sold field of the dvdInfo record
                             dvdCopies[0].dvdinfo.amount_sold += 1;
-                            new DvdInfoService().update(dvdCopies[0].dvdinfo);                                                                 
-                        
-                        } catch(Exception ex)
+                            new DvdInfoService().update(dvdCopies[0].dvdinfo);
+
+                        }
+                        catch (Exception ex)
                         {
                             //no copy can be assigned at this time, this means someone else received the last copy between the time where
                             //this user added the item to his cart and when he payed for the order.
                         }
-                                                    
-                           
-                        
+
+
+
                     }
                 }
                 else if (orderLine.orderLineType.id == 2) //sale copy
@@ -222,7 +223,31 @@ namespace LayeredBusinessModel.BLL
                     }
                 }
             }
-        }        
+        }
+
+        /*Deletes the supplied orderLine from its order. Also deletes the order itself if it no longer contains any orderLines after deleting the supplied one.*/
+        public bool deleteItemFromOrder(OrderLine orderLine)
+        {
+            Order order = orderLine.order;
+            if (new OrderLineService().delete(orderLine))
+            {
+                try
+                {
+                    List<OrderLine> orderLines = new OrderLineService().getByOrder(order);
+                }
+                catch (NoRecordException ex)
+                {
+                    //this order no longer contains any orderlines, delete the entire order
+                    new OrderService().delete(order);
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public double getOrderCost(Order order)
         {

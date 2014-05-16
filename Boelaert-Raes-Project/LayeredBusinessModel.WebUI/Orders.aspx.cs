@@ -116,15 +116,14 @@ namespace LayeredBusinessModel.WebUI
                 }
 
 
-
-
-
                 //show details
                 pnlOrderDetails.Visible = true;
 
                 //get the order info
                 OrderService orderService = new OrderService();
                 Order selectedOrder = orderService.getByID(orderID);           //Throws NoRecordException
+
+
                 lblOrderStatus.Text = "(" + selectedOrder.orderstatus.name + ")"; //1 = new, 2 = paid, 3 = shipped
                 lblOrderID.Text = selectedOrder.order_id.ToString();
 
@@ -210,7 +209,8 @@ namespace LayeredBusinessModel.WebUI
             }
             catch (NoRecordException)
             {
-
+                //order does not exist, reload the current page to update the gridview and close this order's panel
+                Response.Redirect("Orders.aspx");
             }
         }
 
@@ -283,7 +283,7 @@ namespace LayeredBusinessModel.WebUI
                     {
                         if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
                         {
-                            if (new OrderLineService().delete(orderLine))       
+                            if (new OrderModel().deleteItemFromOrder(orderLine))       
                             {
                                 //succesfully removed - refresh the details gridview                            
                                 displayOrderDetails(orderLine.order.order_id.ToString());

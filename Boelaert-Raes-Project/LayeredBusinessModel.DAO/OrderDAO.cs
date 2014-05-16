@@ -201,6 +201,38 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
+        /*Removes the order from the database, will only work if it has no orderLines left*/
+        public Boolean remove(Order order)
+        {
+            SqlCommand command = null;
+            using (var cnn = new SqlConnection(sDatabaseLocatie))
+            {
+                command = new SqlCommand("DELETE FROM Orders WHERE order_id = @order_id", cnn);
+                command.Parameters.Add(new SqlParameter("@order_id", order.order_id))
+                    ;
+                try
+                {
+                    cnn.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new DALException("Failed to delete the order", ex);
+                }
+                finally
+                {
+                    if (cnn != null)
+                    {
+                        cnn.Close();
+                    }
+                }
+            }
+        }
+
         /*
          * Deletes all the orders
          * Returns true if orders where deleted, false if no orders were deleted

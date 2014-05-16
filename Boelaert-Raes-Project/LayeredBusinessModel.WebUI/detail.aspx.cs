@@ -60,14 +60,14 @@ namespace LayeredBusinessModel.WebUI
                 String currency = "€";
 
                 DvdInfo dvdInfo = new DvdInfoService().getByID(id.ToString());           //Throws NoRecordException
-                
+
                 lblTitle.Text = dvdInfo.name + " ";
                 linkYear.Text = "(" + dvdInfo.year + ")";
                 linkYear.NavigateUrl = "~/Catalog.aspx?year=" + dvdInfo.year;
-                
+
                 linkDirector.Text = dvdInfo.author;
                 linkDirector.NavigateUrl = "~/Catalog.aspx?director=" + dvdInfo.author;
-                
+
                 if (!dvdInfo.actors[0].Equals("")) //even dvd's without actors contain 1 empty string element
                 {
                     foreach (String a in dvdInfo.actors)
@@ -116,7 +116,7 @@ namespace LayeredBusinessModel.WebUI
                 }
 
                 lblPlot.Text = dvdInfo.descripion;
-                
+
                 if (Request.QueryString["currency"] == null)
                 {
                     if (CookieUtil.CookieExists("currency"))
@@ -204,20 +204,20 @@ namespace LayeredBusinessModel.WebUI
                 linkRelated.NavigateUrl = "~/Catalog.aspx?related=" + id;
                 foreach (DvdInfo d in list)
                 {
-                    dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
-                    dvdInfo.id = d.dvd_info_id;
+                    dvdInfoUserControl dvdInfoControl = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                    dvdInfoControl.id = d.dvd_info_id;
                     foreach (KeyValuePair<int, String> k in d.media)
                     {
                         if (k.Key == 1)
                         {
-                            dvdInfo.imageUrl = k.Value;
+                            dvdInfoControl.imageUrl = k.Value;
                         }
                     }
-                    dvdInfo.title = d.name;
-                    dvdInfo.buy_price = d.buy_price;
-                    dvdInfo.rent_price = d.rent_price;
+                    dvdInfoControl.title = d.name;
+                    dvdInfoControl.buy_price = d.buy_price;
+                    dvdInfoControl.rent_price = d.rent_price;
 
-                    relatedDvds.Controls.Add(dvdInfo);
+                    relatedDvds.Controls.Add(dvdInfoControl);
                 }
             }
             catch (NoRecordException)
@@ -260,14 +260,8 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                sb.Append("<script type = 'text/javascript'>");
-                sb.Append("window.onload=function(){");
-                sb.Append("alert('");
-                sb.Append("To do: alert user that he is not logged in");
-                sb.Append("')};");
-                sb.Append("</script>");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", sb.ToString());        
+                string script = "alert(\"You have been logged out due to inactivity.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
             }
         }
 
@@ -289,10 +283,6 @@ namespace LayeredBusinessModel.WebUI
 
         private void rentMovie(int days)
         {
-            //todo:delete this popup
-            //string scripta = "alert(\"You clicked the rent button (DELETE THIS AGAIN)\");";
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scripta, true);
-
             //only excecute if a user is logged in
             Customer user = ((Customer)Session["user"]);
 
@@ -300,58 +290,26 @@ namespace LayeredBusinessModel.WebUI
             {
                 if (Request.QueryString["id"] != null)
                 {
-                    //add rent item to cart       
-                    DateTime startdate = calRent.SelectedDate;
-                    DateTime enddate = startdate.AddDays(days - 1);
-                    
-                    try
+                    //check if the user can still rent additional items
+                    if (new RentModel().getNumberOfActiveRentCopiesForCustomer(user) < 5)
                     {
-                        //check the number of rent items in the user's cart
-                        List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(user);           //Throws NoRecordException
+                        DateTime startdate = calRent.SelectedDate;
+                        DateTime enddate = startdate.AddDays(days - 1);
 
-                        int numberOfCurrentlyRentedItems = 0;
-                        foreach (ShoppingcartItem item in cartContent)
+                        //add item to cart
+                        if (new ShoppingCartService().addByCustomerAndStartdateAndEnddate(user, Request.QueryString["id"].ToString(), startdate, enddate))
                         {
-                            if (item.dvdCopyType.name.Equals("Verhuur"))
-                            {
-                                numberOfCurrentlyRentedItems++;
-                            }
-                        }
-
-                        //check the number of items currently being rented by the user
-                        List<OrderLine> orderLines = new OrderLineService().getActiveRentOrderLinesByCustomer(user);          //Throws NoRecordException
-                        foreach (OrderLine orderLine in orderLines)
-                        {
-                            numberOfCurrentlyRentedItems++;
-                        }
-
-                        //check if the user can still rent additional items
-                        if (numberOfCurrentlyRentedItems < 5)
-                        {
-                            if (new ShoppingCartService().addByCustomerAndStartdateAndEndate(user, Request.QueryString["id"].ToString(), startdate, enddate))
-                            {
-                                ////all good
-                                ////todo:delete this popup
-                                //string scriptab = "alert(\"Item succesfully added to cart. (DELETE THIS AGAIN)\");";
-                                //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
-                            }
-                            else
-                            {
-                                ////something went wrong
-                                ////todo:delete this popup
-                                //string scriptab = "alert(\"Could not add this item to your cart. (DELETE THIS AGAIN)\");";
-                                //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptab, true);
-                            }
+                            //all good                                
                         }
                         else
                         {
-                            string script = "alert(\"You are already renting 5 items. (something something more info here) \");";
-                            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+                            //something went wrong                                
                         }
                     }
-                    catch (NoRecordException)
+                    else
                     {
-
+                        string script = "alert(\"You are already renting 5 items. \");";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
                     }
                 }
             }
@@ -360,9 +318,6 @@ namespace LayeredBusinessModel.WebUI
                 string script = "alert(\"You have been logged out due to inactivity.\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
             }
-            ////todo:delete this popup
-            //string scriptcz = "alert(\"what\");";
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", scriptcz, true);
         }
 
         protected void calRent_DayRender(object sender, DayRenderEventArgs e)
@@ -375,7 +330,7 @@ namespace LayeredBusinessModel.WebUI
                     try
                     {
                         DvdInfo thisDVD = new DvdInfoService().getByID(Request.QueryString["id"].ToString());                //Throws NoRecordException
-                        dates = new RentModel().getAvailabilities(thisDVD, DateTime.Now);           //Throws NoRecordException
+                        dates = new AvailabilityModel().getAvailabilities(thisDVD, DateTime.Now);           //Throws NoRecordException
                     }
                     catch (NoRecordException)
                     {
@@ -397,7 +352,7 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-
+        /*Shows the availabe rent period buttons.*/
         protected void calRent_SelectionChanged(object sender, EventArgs e)
         {
             if (Request.QueryString["id"] != null)
@@ -407,7 +362,7 @@ namespace LayeredBusinessModel.WebUI
                     DvdInfo dvdInfo = new DvdInfoService().getByID(Request.QueryString["id"].ToString());            //Throws NoRecordException
 
                     //get all dvd copies that are available on that date:
-                    int daysAvailable = new RentModel().getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);    //Throws NoRecordException
+                    int daysAvailable = new AvailabilityModel().getDaysAvailableFromDate(dvdInfo, calRent.SelectedDate);    //Throws NoRecordException
 
                     if (daysAvailable >= 1)
                     {

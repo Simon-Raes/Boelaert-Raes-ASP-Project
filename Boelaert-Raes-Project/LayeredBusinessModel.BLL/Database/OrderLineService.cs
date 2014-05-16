@@ -48,12 +48,8 @@ namespace LayeredBusinessModel.BLL
 
         public void updateOrderLine(OrderLine orderLine)
         {
-            //Stond geen code in
+            new OrderLineDAO().update(orderLine);            
         }
-        /*
-        public Boolean update(OrderLine orderLine)
-        {
-            return new OrderLineDAO().update(orderLine);
-        }*/
+        
     }
 }

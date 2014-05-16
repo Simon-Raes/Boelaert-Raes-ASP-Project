@@ -471,8 +471,7 @@ namespace LayeredBusinessModel.DAO
          * Updates an orderline 
          * Returns true if the orderline was updated, false if no orderline was updates
          * Throws DALException if something else went wrong
-         */
-        /*
+         */        
         public Boolean update(OrderLine orderline)
         {
             SqlCommand command = null;
@@ -489,8 +488,7 @@ namespace LayeredBusinessModel.DAO
                 command.Parameters.Add(new SqlParameter("@order_line_type_id", orderline.orderLineType.id));
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvdInfo.dvd_info_id));
                 command.Parameters.Add(new SqlParameter("@dvd_copy_id", orderline.dvdCopy.dvd_copy_id));
-
-                //TODO: betere oplossing voor dates
+                                
                 if (orderline.startdate == DateTime.MinValue)
                 {
                     orderline.startdate = (DateTime)SqlDateTime.Null;
@@ -525,7 +523,7 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }*/
+        }
 
         //public List<OrderLine> getOrderLinesForOrder(String order_id)
         //{

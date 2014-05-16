@@ -543,7 +543,7 @@ namespace LayeredBusinessModel.DAO
          * Throws NoRecordException if no records were found
          * Throws DALException if something else went wrong
          */
-        public List<int> getRecommendations(int[] genres, int amount)
+        public List<String> getRecommendations(int[] genres, int amount)
         {
             SqlCommand command = null;
             SqlDataReader reader = null;
@@ -573,10 +573,10 @@ namespace LayeredBusinessModel.DAO
                     reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        List<int> dvdIds = new List<int>();
+                        List<String> dvdIds = new List<String>();
                         while (reader.Read())
                         {
-                            dvdIds.Add(Convert.ToInt32(reader["dvd_info_id"]));
+                            dvdIds.Add(Convert.ToString(reader["dvd_info_id"]));
                         }
                         return dvdIds;
                     }
@@ -771,7 +771,7 @@ namespace LayeredBusinessModel.DAO
         {
             return new DvdInfo
             {
-                dvd_info_id = Convert.ToInt32(reader["dvd_info_id"]),
+                dvd_info_id = Convert.ToString(reader["dvd_info_id"]),
                 name = Convert.ToString(reader["name"]),
                 year = Convert.ToString(reader["year"]),
                 barcode = Convert.ToString(reader["barcode"]),

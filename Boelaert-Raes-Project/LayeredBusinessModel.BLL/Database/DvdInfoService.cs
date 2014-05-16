@@ -36,7 +36,7 @@ namespace LayeredBusinessModel.BLL
 
         public void update(DvdInfo dvd)
         {
-            new DvdInfoDAO().update(dvd);                                 //Throws NoRecordException
+            new DvdInfoDAO().update(dvd);                                
         }
 
         public List<DvdInfo> searchDvdWithText(String title)
@@ -93,7 +93,7 @@ namespace LayeredBusinessModel.BLL
             return relatedDvds;
         }
 
-        public List<int> getRecommendations(int[] values, int amount)
+        public List<String> getRecommendations(int[] values, int amount)
         {
             return new DvdInfoDAO().getRecommendations(values, amount);                                 //Throws NoRecordException       
         }

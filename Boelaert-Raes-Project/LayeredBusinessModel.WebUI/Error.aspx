@@ -1,13 +1,21 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="LayeredBusinessModel.WebUI.Error" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <asp:panel id="pnlError" runat="server" visible="false">
-        <asp:label id="lblError" runat="server" text="Oops! An error occurred while performing your request. Sorry for any convenience."></asp:label><br /><br />
-        <asp:label id="Label1" runat="server" text="You may want to get back to the previous page and perform other activities."></asp:label><br /><br />
-        <asp:hyperlink id="hlinkPreviousPage" runat="server">Go back</asp:hyperlink>
-    </asp:panel>
-    
+    <asp:Panel ID="pnlError" runat="server" Visible="false">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <asp:Label ID="lblError" runat="server" Text="Oops! An error occurred while performing your request. Sorry for any convenience."></asp:Label><br />
+                <br />
+                <asp:Label ID="Label1" runat="server" Text="You may want to get back to the previous page and perform other activities."></asp:Label><br />
+                <br />
+                <asp:HyperLink ID="hlinkPreviousPage" runat="server">Go back</asp:HyperLink>
+            </div>
+        </div>
+    </asp:Panel>
+
 
 
 </asp:Content>

@@ -199,7 +199,6 @@ namespace LayeredBusinessModel.WebUI
                 {
 
                     Boolean allInStock = hasAllInStock(orderLines);
-
                     updateOrderStatusDetails(allInStock);
                 }
                 else

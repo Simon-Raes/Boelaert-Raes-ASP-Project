@@ -60,6 +60,7 @@
                             <TitleStyle BackColor="#3399FF" ForeColor="White" />
                         </asp:Calendar>
                     </div>
+                    <asp:Label ID="lblItemAdded" runat="server" Text=""></asp:Label>
                     <div class="col-md-3">
                         <asp:Button ID="btnRent1" runat="server" Text="Add to cart" CssClass="btn btn-success form-control" OnClick="btnRent1_Click" /><br />
                         <br />

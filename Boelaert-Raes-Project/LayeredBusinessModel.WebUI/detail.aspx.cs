@@ -20,6 +20,7 @@ namespace LayeredBusinessModel.WebUI
         protected void Page_Load(object sender, EventArgs e)
         {
             //Hide rent buttons until the user selects a start date
+            lblItemAdded.Text = "";
             btnRent1.Visible = false;
             btnRent3.Visible = false;
             btnRent7.Visible = false;
@@ -251,6 +252,8 @@ namespace LayeredBusinessModel.WebUI
                     if (new ShoppingCartService().addByCustomerAndDvd(customer, dvdInfo))
                     {
                         //success
+                        lblBuyStatus.Text = "Item added to cart.";
+                        lblBuyStatus.ForeColor = System.Drawing.Color.Green;
                     }
                 }
                 catch (NoRecordException)
@@ -283,6 +286,7 @@ namespace LayeredBusinessModel.WebUI
 
         private void rentMovie(int days)
         {
+            
             //only excecute if a user is logged in
             Customer user = ((Customer)Session["user"]);
 
@@ -299,11 +303,15 @@ namespace LayeredBusinessModel.WebUI
                         //add item to cart
                         if (new ShoppingCartService().addByCustomerAndStartdateAndEnddate(user, Request.QueryString["id"].ToString(), startdate, enddate))
                         {
-                            //all good                                
+                            //all good 
+                            lblItemAdded.Text = "Item added to cart.";
+                            lblItemAdded.ForeColor = System.Drawing.Color.Green;                                                           
                         }
                         else
                         {
-                            //something went wrong                                
+                            //something went wrong  
+                            lblItemAdded.Text = "An error occurred when adding this item to your cart.";
+                            lblItemAdded.ForeColor = System.Drawing.Color.Red;                                                          
                         }
                     }
                     else

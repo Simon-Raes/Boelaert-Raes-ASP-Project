@@ -19,165 +19,114 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!Page.IsPostBack)
             {
-                setDvdTiles();
+                setDvdTiles(null);
             }
         }
 
-        private void setDvdTiles()
+        private void setDvdTiles(String search)
         {
+
+            //User dit not pressed the second searchbutton
+            if (search == null)
+            {
+                
+            }
+            else
+            {
+                
+            }
+
+
+            String type = Request.QueryString["type"];              
+
+
 
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;
 
             //hier nog wat geknoei omdat er 2 searchboxes zijn
-            String searchtext;
+
+            String searchtext = "";
             if (Request.QueryString["search"] != null)
             {
                 searchtext = Request.QueryString["search"];
-            }
-            else
-            {
-                searchtext = txtSearchNew.Value;
-            }
+            }            
 
             String labelText = "";
             String genre_id = Request.QueryString["genre"];
             String category_id = Request.QueryString["cat"];
-            String type = Request.QueryString["type"];
+            
             String year = Request.QueryString["year"];
             String director = Request.QueryString["director"];
             String actor = Request.QueryString["actor"];
             String related = Request.QueryString["related"];
 
-            if (type != null)
+
+            try
             {
 
-                if (type.Equals("popular"))
+                if (type != null)
                 {
-                    try
-                    {
-                        dvdContent = new DvdInfoService().getMostPopularDvds(16);           //Throws NoRecordException
-                        labelText = "Most popular DVDs";
-                    }
-                    catch (NoRecordException)
-                    {
 
+                    switch (type)
+                    {
+                        case "popular":
+                            dvdContent = new DvdInfoService().getMostPopularDvds(16);           //Throws NoRecordException
+                            labelText = "Most popular DVDs";
+                            break;
+                        case "recommended":
+                            if (Session["user"] != null)
+                            {
+                                dvdContent = new RecommendationsModel().getRecommendations(((Customer)Session["user"]), 16);          //Throws NoRecordException
+                                labelText = "Recommended for you";
+                            }
+                            break;
+                        case "recent":
+                            dvdContent = new DvdInfoService().getLatestDvds(16);                //Throws NoRecordException
+                            labelText = "Recent releases";
+                            break;
                     }
                 }
-                else if (type.Equals("recommended"))
-                {
-                    if (Session["user"] != null)
-                    {
-                        try
-                        {
-                            dvdContent = new RecommendationsModel().getRecommendations(((Customer)Session["user"]), 16);          //Throws NoRecordException
-                            labelText = "Recommended for you";
-                        }
-                        catch (NoRecordException)
-                        {
-
-                        }
-                    }
-                }
-                else if (type.Equals("recent"))
-                {
-                    try
-                    {
-                        dvdContent = new DvdInfoService().getLatestDvds(16);                //Throws NoRecordException
-                        labelText = "Recent releases";
-                    }
-                    catch (NoRecordException)
-                    {
-
-                    }
-                }
-            }
-            else if (genre_id != null)
-            {
-                try
+                else if (genre_id != null)
                 {
                     dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre_id);            //Throws NoRecordException
-                    labelText = new GenreService().getByID(genre_id).name + " DVDs";          //Throws NorecordException
+                    labelText = new GenreService().getByID(genre_id).name + " DVDs";                        //Throws NoRecordException
                 }
-                catch (NoRecordException)
-                {
-
-                }
-            }
-            else if (category_id != null)
-            {
-                try
+                else if (category_id != null)
                 {
                     dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);      //Throws NoRecordException
-                    labelText = new CategoryService().getByID(category_id).name + " DVDs";         //Throws NoRecordException || DALException
+                    labelText = new CategoryService().getByID(category_id).name + " DVDs";                  //Throws NoRecordException 
                 }
-                catch (NoRecordException)
+                else if (year != null)
                 {
-
-                }
-            }
-            else if (year != null)
-            {
-                try
-                {
-                    dvdContent = dvdInfoService.searchDvdFromYear(year);            //Throws NoRecordException
+                    dvdContent = dvdInfoService.searchDvdFromYear(year);                                    //Throws NoRecordException
                     labelText = "Dvd's from " + year;
                 }
-                catch (NoRecordException)
+                else if (director != null)
                 {
-
-                }
-            }
-            else if (director != null)
-            {
-                try
-                {
-                    dvdContent = dvdInfoService.searchDvdFromDirector(director);            //Throws NoRecordException
+                    dvdContent = dvdInfoService.searchDvdFromDirector(director);                            //Throws NoRecordException
                     labelText = "Dvd's from " + director;
                 }
-                catch (NoRecordException)
+                else if (actor != null)
                 {
-
-                }
-            }
-            else if (actor != null)
-            {
-                try
-                {
-                    dvdContent = dvdInfoService.searchDvdWithActor(actor);              //Throws NoRecordException        
+                    dvdContent = dvdInfoService.searchDvdWithActor(actor);                                   //Throws NoRecordException        
                     labelText = "Dvd's with " + actor;
                 }
-                catch (NoRecordException)
+                else if (related != null)
                 {
-
+                    dvdContent = dvdInfoService.getRelatedDvds(related, 16);                                //Throws NoRecordException
+                    labelText = "Related dvds for " + dvdInfoService.getByID(related).name;                 //Throws NoRecordException
+                }
+                else
+                {
+                    dvdContent = dvdInfoService.searchDvdWithText(searchtext);                              //Throws NoRecordException  
+                    labelText = "Catalog";
                 }
             }
-            else if (related != null)
+            catch (NoRecordException)
             {
-                try
-                {
-                    dvdContent = dvdInfoService.getRelatedDvds(related, 16);         //Throws NoRecordException
-                    labelText = "Related dvds for " + dvdInfoService.getByID(related).name;        //Throws NoRecordException
-                }
-                catch (NoRecordException)
-                {
-
-                }
 
             }
-            else
-            {
-                try
-                {
-                    dvdContent = dvdInfoService.searchDvdWithText(searchtext);          //Throws NoRecordException  
-                    labelText = "DVDs";
-                }
-                catch (NoRecordException)
-                {
-
-                }
-            }
-
 
             //set header text            
             if (!searchtext.Equals(""))
@@ -185,6 +134,10 @@ namespace LayeredBusinessModel.WebUI
                 labelText += " matching '" + searchtext + "'";
             }
             lblHeader.Text = labelText;
+
+
+
+
 
             foreach (DvdInfo d in dvdContent)
             {
@@ -214,16 +167,8 @@ namespace LayeredBusinessModel.WebUI
         /*DOESN'T WORK!*/
         protected void btnSearch_Click2(object sender, EventArgs e)
         {
-            setDvdTiles();
+            String searchText = txtSearchNew.Text; 
+            setDvdTiles(searchText);
         }
-
-
-
-        /*DOESN'T WORK?!*/
-        protected void Button1_Click1(object sender, EventArgs e)
-        {
-            setDvdTiles();
-        }
-
     }
 }

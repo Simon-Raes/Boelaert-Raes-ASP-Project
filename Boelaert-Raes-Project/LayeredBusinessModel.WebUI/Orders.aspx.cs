@@ -35,6 +35,24 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
+                String currency = "€";
+                if (Request.QueryString["currency"] == null)
+                {
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                        {
+                            currency = "$";
+                        }
+                    }
+                }
+                else if (Request.QueryString["currency"].Equals("usd"))
+                {
+                    currency = "$";
+                }
+
+
+
                 customerOrders = new OrderService().getOrdersForCustomer(((Customer)Session["user"]));            //Throws NoRecrdException
 
                 DataTable orderTable = new DataTable();
@@ -49,7 +67,7 @@ namespace LayeredBusinessModel.WebUI
                     orderRow[0] = item.order_id;
                     orderRow[1] = item.orderstatus.name;
                     OrderModel orderModel = new OrderModel();
-                    orderRow[2] = Math.Round(orderModel.getOrderCost(item), 2);
+                    orderRow[2] = currency + " " + setPriceInRightCurrency((float)orderModel.getOrderCost(item), currency);
                     orderRow[3] = item.date.ToString("dd/MM/yyyy");
                     orderTable.Rows.Add(orderRow);
                 }
@@ -81,6 +99,26 @@ namespace LayeredBusinessModel.WebUI
         {
             try
             {
+                String currency = "€";
+                if (Request.QueryString["currency"] == null)
+                {
+                    if (CookieUtil.CookieExists("currency"))
+                    {
+                        if (CookieUtil.GetCookieValue("currency").Equals("usd"))
+                        {
+                            currency = "$";
+                        }
+                    }
+                }
+                else if (Request.QueryString["currency"].Equals("usd"))
+                {
+                    currency = "$";
+                }
+
+
+
+
+
                 //show details
                 pnlOrderDetails.Visible = true;
 
@@ -143,7 +181,7 @@ namespace LayeredBusinessModel.WebUI
                     }
                     else
                     {
-                        orderRow[3] = Math.Round(item.dvdInfo.buy_price, 2);
+                        orderRow[3] = currency + " " + setPriceInRightCurrency(item.dvdInfo.buy_price, currency);
                     }
 
                     orderTable.Rows.Add(orderRow);
@@ -155,7 +193,7 @@ namespace LayeredBusinessModel.WebUI
 
                 //total cost
                 OrderModel orderModel = new OrderModel();
-                lblTotalCost.Text = orderModel.getOrderCost(order).ToString();
+                lblTotalCost.Text = currency + " " + setPriceInRightCurrency((float)orderModel.getOrderCost(order), currency);
 
                 //user has already paid, check status of copies in cart
                 if (selectedOrder.orderstatus.id > 1)
@@ -297,6 +335,17 @@ namespace LayeredBusinessModel.WebUI
                 Button btnDelete = (Button)e.Row.Cells[0].Controls[1];
                 btnDelete.OnClientClick = "return confirm('Really cancel this order item?');";
             }
+        }
+
+        private float setPriceInRightCurrency(float price, String currency)
+        {
+            wsCurrencyWebService.CurrencyWebService currencyWebService = new wsCurrencyWebService.CurrencyWebService();
+
+            if (currency.Equals("€"))
+            {
+                return price;
+            }
+            return (float)currencyWebService.convert(price, "usd");
         }
     }
 }

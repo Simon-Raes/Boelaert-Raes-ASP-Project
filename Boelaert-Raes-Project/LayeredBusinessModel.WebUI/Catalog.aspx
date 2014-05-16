@@ -11,7 +11,7 @@
 
             <div class="col-lg-4 pull-right">
                 <div class="input-group">
-                    <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
+                    <asp:TextBox ID="txtSearchNew" runat="server" CssClass="form-control"></asp:TextBox>
                     <span class="input-group-btn">
                         <button id="btnHtml" runat="server" onserverclick="btnSearch_Click2" class="btn btn-default">
                             <span class="glyphicon glyphicon-search"></span>

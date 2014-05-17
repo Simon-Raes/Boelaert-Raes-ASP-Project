@@ -14,7 +14,7 @@ namespace LayeredBusinessModel.WebUI
         {
             if (!IsPostBack)
             {
-                pnlStetp1.Visible = true;
+                pnlStep1.Visible = true;
                 pnlStep2.Visible = false;
             }
         }
@@ -26,7 +26,7 @@ namespace LayeredBusinessModel.WebUI
             String message = txtMessage.Text;
 
             new EmailModel().sendConactMail(email, subject, message);
-            pnlStetp1.Visible = false;
+            pnlStep1.Visible = false;
             pnlStep2.Visible = true;
         }
     }

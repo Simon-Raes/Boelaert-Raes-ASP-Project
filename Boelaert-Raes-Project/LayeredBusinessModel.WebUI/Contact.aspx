@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="panel panel-default" id="Div1" runat="server">
         <div class="panel-body">
-            <asp:Panel ID="pnlStetp1" runat="server">
+            <asp:Panel ID="pnlStep1" runat="server">
 
 
             <h2>Contact</h2>
@@ -29,7 +29,7 @@
 
            </asp:Panel>
             <asp:Panel ID="pnlStep2" runat="server">
-                <p>We have processedyou request. We will contact you as soon as possible.</p>
+                <p>We have received your request. We will contact you as soon as possible.</p>
             </asp:Panel>
 
 

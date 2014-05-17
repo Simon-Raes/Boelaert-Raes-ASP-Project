@@ -26,8 +26,15 @@ namespace LayeredBusinessModel.BLL
         {
             List<DvdInfo> dvdList = new List<DvdInfo>();
             List<Genre> genres = new List<Genre>();
-
-            List<OrderLine> orderLines = new OrderLineService().getByCustomer(customer);          //Throws NoRecordException          
+            List<OrderLine> orderLines;
+            try
+            {
+                orderLines = new OrderLineService().getByCustomer(customer);          //Throws NoRecordException 
+            } catch(Exception error)
+            {
+                orderLines = new List<OrderLine>();
+            }
+                     
             orderLinesDvdIds = new List<String>(); //list that contains the DVDids of the orderlines (=movies that the user has rented before)
 
             GenreService genreService = new GenreService();
@@ -169,6 +176,10 @@ namespace LayeredBusinessModel.BLL
             catch (DALException ex)
             {
                 throw new NoRecordException("failed to retrieve data", ex);
+            }
+            catch(NoRecordException ex)
+            {
+                
             }
             return dvdInfos;
         }        

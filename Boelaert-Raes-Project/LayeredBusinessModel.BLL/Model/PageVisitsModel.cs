@@ -32,7 +32,7 @@ namespace LayeredBusinessModel.BLL.Model
             }
             catch (DALException)
             {
-                //komt hier altijd in omdat ik niet over de tabel PageVistits beschik??
+
             }
             if (pageVisitsService.updatePageVisits(pageVisits))
             {

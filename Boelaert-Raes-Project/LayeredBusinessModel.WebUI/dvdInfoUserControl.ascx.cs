@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Reflection;
 
 using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL;
@@ -124,6 +125,20 @@ namespace LayeredBusinessModel.WebUI
         
         protected void btnBuy_Click(object sender, EventArgs e)
         {
+            //if (Session["dvd_info_id"] != null)
+            //{
+            //    string script = "alert(\"Found an id " + Session["dvd_info_id"] + ".\");";
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            //}
+            //else
+            //{
+            //    string script = "alert(\"state empty.\");";
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            //}
+            //Session["dvd_info_id"] = id;
+            
+
+
             //add item to cart
             String dvd_info_id = id;
 

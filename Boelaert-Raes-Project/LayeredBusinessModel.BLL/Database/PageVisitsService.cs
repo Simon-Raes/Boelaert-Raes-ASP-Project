@@ -30,7 +30,15 @@ namespace LayeredBusinessModel.BLL.Database
         {
             if (pageVisits != null)
             {
-                return new PageVisitsDAO().update(pageVisits);
+                if(pageVisits.number_of_visits>1)
+                {
+                    return new PageVisitsDAO().update(pageVisits);
+                }
+                else
+                {
+                    return new PageVisitsDAO().add(pageVisits);
+                }
+                
             }
             return false;
         }

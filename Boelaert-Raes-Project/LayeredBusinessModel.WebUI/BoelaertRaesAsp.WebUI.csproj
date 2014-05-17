@@ -65,6 +65,7 @@
     <Content Include="About.aspx" />
     <Content Include="ArcabaseEID.jar" />
     <Content Include="BoelaertRaesAsp.WebUI.PublishSettings.xml" />
+    <Content Include="Contact.aspx" />
     <Content Include="DLL\AjaxControlToolkit.dll" />
     <Content Include="DLL\Arcabase.EID.SDK.dll" />
     <Content Include="EIDCommunicationService.asmx" />
@@ -122,6 +123,13 @@
     </Compile>
     <Compile Include="About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Contact.aspx.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Contact.aspx.designer.cs">
+      <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>

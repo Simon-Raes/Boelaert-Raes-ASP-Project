@@ -108,6 +108,13 @@ namespace LayeredBusinessModel.BLL.Model
             getSmtpClient().Send(message);
         }
 
+        public void sendConactMail(String from, String subject, String message)
+        {
+            getSmtpClient().Send(from, "taboelaertraesa@gmail.com", subject, "Someone filled in the contactform \n \n From: " + from + "\n Subject: " + subject + "\n Message: " + message);
+        }
+
+
+
         /*Returns SMTP credentials from web.config*/
         private SmtpClient getSmtpClient()
         {

@@ -125,35 +125,35 @@ namespace LayeredBusinessModel.WebUI
         
         protected void btnBuy_Click(object sender, EventArgs e)
         {
-            CustomEvents ce = new CustomEvents();
-            ce.dvd_info_id = id;
-            ChoiceComplete(this, ce); 
+            //CustomEvents ce = new CustomEvents();
+            //ce.dvd_info_id = id;
+            //ChoiceComplete(this, ce); 
 
-            ////add item to cart
-            //String dvd_info_id = id;
+            //add item to cart
+            String dvd_info_id = id;
 
-            //Customer user = (Customer)Session["user"];
+            Customer user = (Customer)Session["user"];
 
-            //if (user != null)
-            //{
-            //    try
-            //    {
-            //        DvdInfo thisDvd = new DvdInfoService().getByID(dvd_info_id.ToString());          //Throws NoRecordException
-            //        if (new ShoppingCartService().addByCustomerAndDvd(user, thisDvd))
-            //        {
-            //            //success
-            //        }
-            //    }
-            //    catch (NoRecordException)
-            //    {
+            if (user != null)
+            {
+                try
+                {
+                    DvdInfo thisDvd = new DvdInfoService().getByID(dvd_info_id.ToString());          //Throws NoRecordException
+                    if (new ShoppingCartService().addByCustomerAndDvd(user, thisDvd))
+                    {
+                        //success
+                    }
+                }
+                catch (NoRecordException)
+                {
 
-            //    }
-            //}
-            //else
-            //{
-            //    string script = "alert(\"Please log in to buy this item.\");";
-            //    ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-            //}                   
+                }
+            }
+            else
+            {
+                string script = "alert(\"Please log in to buy this item.\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            }                   
         }
 
         protected void btnRent_Click(object sender, EventArgs e)

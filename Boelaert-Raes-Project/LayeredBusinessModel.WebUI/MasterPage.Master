@@ -123,11 +123,9 @@
 
         <div class="navbar-inverse">
             <div class="container footer">
-                <a href="NotYetVerified.aspx">Resend activation mail</a> | <a href="Contact.aspx">Contact</a> | Copyright Serafijn Boelaert & Simo Raes &copy;
+                <a href="NotYetVerified.aspx">Resend activation mail</a> | <a href="Contact.aspx">Contact</a> | Copyright Serafijn Boelaert & Simon Raes &copy; 2014
             </div>
         </div>
-
-
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

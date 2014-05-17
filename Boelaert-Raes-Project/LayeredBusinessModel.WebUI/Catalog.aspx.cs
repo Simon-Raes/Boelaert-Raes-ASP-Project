@@ -192,7 +192,7 @@ namespace LayeredBusinessModel.WebUI
 
         protected void btnSearch2_Click(object sender, EventArgs e)
         {
-            String searchText = txtSearchNew.Text;
+            String searchText = txtSearchNewer.Value;
             setDvdTiles(searchText);
         } 
     }

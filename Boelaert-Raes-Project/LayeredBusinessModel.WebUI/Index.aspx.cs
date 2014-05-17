@@ -131,7 +131,17 @@ namespace LayeredBusinessModel.WebUI
 
         public void eventComplete(object sender, dvdInfoUserControl.CustomEvents e)
         {
-            //not used at the moment, handled by the userControl itself
+            if (ViewState["id"] == null)
+            {
+                //not used at the moment, handled by the userControl itself
+                ViewState["id"] = e.dvd_info_id;
+            }
+            if(ViewState["id"] !=null)
+            {
+                string script = "alert(\"state " + ViewState["id"] + "!\");";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
+            }
+            
         }
 
 

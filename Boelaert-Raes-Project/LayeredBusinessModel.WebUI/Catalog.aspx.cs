@@ -17,15 +17,12 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
-            {
-                setDvdTiles(null);
-            }
+            setDvdTiles(null);
         }
 
         private void setDvdTiles(String search)
         {
-            String type = Request.QueryString["type"]; 
+            String type = Request.QueryString["type"];
 
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;
@@ -36,12 +33,12 @@ namespace LayeredBusinessModel.WebUI
             if (Request.QueryString["search"] != null)
             {
                 searchtext = Request.QueryString["search"];
-            }            
+            }
 
             String labelText = "";
             String genre_id = Request.QueryString["genre"];
             String category_id = Request.QueryString["cat"];
-            
+
             String year = Request.QueryString["year"];
             String director = Request.QueryString["director"];
             String actor = Request.QueryString["actor"];
@@ -59,20 +56,20 @@ namespace LayeredBusinessModel.WebUI
                         case "popular":
                             labelText = "Most popular DVDs";
                             dvdContent = new DvdInfoService().getMostPopularDvds(16);           //Throws NoRecordException
-                            
+
                             break;
                         case "recommended":
                             if (Session["user"] != null)
                             {
                                 labelText = "Recommended for you";
                                 dvdContent = new RecommendationsModel().getRecommendations(((Customer)Session["user"]), 16);          //Throws NoRecordException
-                                
+
                             }
                             break;
                         case "recent":
                             labelText = "Recent releases";
                             dvdContent = new DvdInfoService().getLatestDvds(16);                //Throws NoRecordException
-                            
+
                             break;
                     }
                 }
@@ -80,43 +77,43 @@ namespace LayeredBusinessModel.WebUI
                 {
                     labelText = new GenreService().getByID(genre_id).name + " DVDs";                        //Throws NoRecordException
                     dvdContent = dvdInfoService.searchDvdWithTextAndGenre(searchtext, genre_id);            //Throws NoRecordException
-                    
+
                 }
                 else if (category_id != null)
                 {
                     labelText = new CategoryService().getByID(category_id).name + " DVDs";                  //Throws NoRecordException 
                     dvdContent = dvdInfoService.searchDvdWithTextAndCategory(searchtext, category_id);      //Throws NoRecordException
-                    
+
                 }
                 else if (year != null)
                 {
                     labelText = "Dvd's from " + year;
                     dvdContent = dvdInfoService.searchDvdFromYear(year);                                    //Throws NoRecordException
-                    
+
                 }
                 else if (director != null)
                 {
                     labelText = "Dvd's from " + director;
                     dvdContent = dvdInfoService.searchDvdFromDirector(director);                            //Throws NoRecordException
-                    
+
                 }
                 else if (actor != null)
                 {
                     labelText = "Dvd's with " + actor;
                     dvdContent = dvdInfoService.searchDvdWithActor(actor);                                   //Throws NoRecordException        
-                    
+
                 }
                 else if (related != null)
                 {
                     labelText = "Related dvds for " + dvdInfoService.getByID(related).name;                 //Throws NoRecordException
                     dvdContent = dvdInfoService.getRelatedDvds(related, 16);                                //Throws NoRecordException
-                    
+
                 }
                 else
                 {
                     labelText = "Catalog";
                     dvdContent = dvdInfoService.searchDvdWithText(searchtext);                              //Throws NoRecordException  
-                    
+
                 }
 
                 //set header text            
@@ -172,7 +169,7 @@ namespace LayeredBusinessModel.WebUI
             {
                 lblHeader.Text = labelText;
                 lblStatus.Text = "Could not find any results matching your criteria.";
-            } 
+            }
         }
 
         void dvdInfo_ChoiceComplete(object sender, dvdInfoUserControl.CustomEvents e)
@@ -189,12 +186,12 @@ namespace LayeredBusinessModel.WebUI
             }
             return false;
         }
-       
+
         protected void btnSearch_Click2(object sender, EventArgs e)
         {
-            String searchText = txtSearchNew.Text; 
+            String searchText = txtSearchNew.Text;
             setDvdTiles(searchText);
-        }      
+        }
 
     }
 }

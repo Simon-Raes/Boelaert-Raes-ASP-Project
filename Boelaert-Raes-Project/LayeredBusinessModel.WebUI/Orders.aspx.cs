@@ -173,8 +173,12 @@ namespace LayeredBusinessModel.WebUI
                     orderRow[1] = item.dvdInfo.name;
                     orderRow[2] = item.orderLineType.name;
                     orderRow[3] = currency + " " + setPriceInRightCurrency(item.dvdInfo.buy_price, currency);
-                    orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
-                    orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    if(item.orderLineType.name.Equals("Verhuur"))
+                    {
+                        orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
+                        orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    }
+                    
                     
 
 

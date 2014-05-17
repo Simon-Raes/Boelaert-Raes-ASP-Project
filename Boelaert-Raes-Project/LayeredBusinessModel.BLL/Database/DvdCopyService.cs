@@ -50,6 +50,11 @@ namespace LayeredBusinessModel.BLL
             return new DvdCopyDAO().deleteAll();                                            //Throws NoRecordException || DALException 
         }
 
+        public void addCopiesForDvd(DvdInfo dvd)
+        {
+            new DvdCopyDAO().addCopiesForDvd(dvd);
+        }
+
         /*
         public Boolean add(DvdInfo dvdInfo)
         {

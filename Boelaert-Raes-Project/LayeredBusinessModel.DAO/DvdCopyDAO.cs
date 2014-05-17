@@ -366,7 +366,7 @@ namespace LayeredBusinessModel.DAO
          *  Returns true if insert was successful, false if no rows were inserted
          *  Throws a DALException if something went wrong
          */
-        /*
+        
         public Boolean addCopiesForDvd(DvdInfo dvdInfo)
         {
             SqlCommand command = null;
@@ -405,7 +405,7 @@ namespace LayeredBusinessModel.DAO
                 }
                 return status;
             }
-        }*/
+        }
 
         /*
          * Returns a List with dvdCopies for a certain dvdInfo that are in stock and for rent

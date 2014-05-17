@@ -89,9 +89,10 @@ namespace LayeredBusinessModel.WebUI
         {
             //disabled code so we don't accidentally add more copies than needed
 
-            // String id = txtDvdInfo.Text;
+            //String id = txtDvdInfo.Text;
             //DvdCopyService dvdCopyService = new DvdCopyService();
-            //dvdCopyService.addCopiesForDvd(id);
+            //DvdInfo dvd = new DvdInfoService().getByID(id);
+            //dvdCopyService.addCopiesForDvd(dvd);
         }
     }
 }

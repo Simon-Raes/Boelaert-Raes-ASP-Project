@@ -11,12 +11,13 @@
 
             <div class="col-lg-4 pull-right">
                 <div class="input-group">
+                    <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSearch2">
                     <asp:TextBox ID="txtSearchNew" runat="server" CssClass="form-control"></asp:TextBox>
-                    <span class="input-group-btn">
-                        <button id="btnHtml" runat="server" onserverclick="btnSearch_Click2" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
+                    <span class="input-group-btn">                           
+                        <asp:LinkButton ID="btnSearch2" runat="server" CssClass="btn btn-default" OnClick="btnSearch2_Click"><span class="glyphicon glyphicon-search"></span></asp:LinkButton>         
+                     
                     </span>
+                        </asp:Panel>
                 </div>
             </div>
 

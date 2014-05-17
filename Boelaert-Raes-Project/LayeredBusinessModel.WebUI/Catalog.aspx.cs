@@ -17,7 +17,10 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            setDvdTiles(null);
+            if (!IsPostBack)
+            {
+                setDvdTiles(null);
+            }
         }
 
         private void setDvdTiles(String search)
@@ -185,13 +188,12 @@ namespace LayeredBusinessModel.WebUI
                 return true;
             }
             return false;
-        }
+        }        
 
-        protected void btnSearch_Click2(object sender, EventArgs e)
+        protected void btnSearch2_Click(object sender, EventArgs e)
         {
             String searchText = txtSearchNew.Text;
             setDvdTiles(searchText);
-        }
-
+        } 
     }
 }

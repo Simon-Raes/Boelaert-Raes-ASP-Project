@@ -22,6 +22,15 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.Label lblHeader;
         
         /// <summary>
+        /// Panel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel1;
+        
+        /// <summary>
         /// txtSearchNew control.
         /// </summary>
         /// <remarks>
@@ -31,13 +40,13 @@ namespace LayeredBusinessModel.WebUI {
         protected global::System.Web.UI.WebControls.TextBox txtSearchNew;
         
         /// <summary>
-        /// btnHtml control.
+        /// btnSearch2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnHtml;
+        protected global::System.Web.UI.WebControls.LinkButton btnSearch2;
         
         /// <summary>
         /// catalogContent control.

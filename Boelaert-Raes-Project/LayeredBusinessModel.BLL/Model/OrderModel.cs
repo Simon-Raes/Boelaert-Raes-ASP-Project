@@ -276,5 +276,50 @@ namespace LayeredBusinessModel.BLL
             }
             return Math.Round(totalCost, 2);
         }
+
+        /*Returns a dictionary of (dvd, number_of_items_bought).*/
+        public int getNumberOfOrderLinesForCustomer(Customer customer)
+        {
+            List<OrderLine> orderLines;
+            try
+            {
+                orderLines = new OrderLineService().getByCustomer(customer);
+
+            }
+            catch (NoRecordException ex)
+            {
+                //user has never purchased anything
+                orderLines = new List<OrderLine>();
+            }
+
+            return orderLines.Count;
+        }
+
+        /*Returns a dictionary of (dvd, number_of_items_bought).*/
+        public Dictionary<String, int> getItemsBoughtByCustomer(Customer customer)
+        {
+            Dictionary<String, int> dvdAmount = new Dictionary<String, int>();
+            try
+            {
+                List<OrderLine> orderLines = new OrderLineService().getByCustomer(customer);
+
+                foreach (OrderLine orderLine in orderLines)
+                {
+                    if (!dvdAmount.ContainsKey(orderLine.dvdInfo.dvd_info_id))
+                    {
+                        dvdAmount.Add(orderLine.dvdInfo.dvd_info_id, 1);
+                    }
+                    else
+                    {
+                        dvdAmount[orderLine.dvdInfo.dvd_info_id] = dvdAmount[orderLine.dvdInfo.dvd_info_id] + 1;
+                    }
+                }
+            } catch(NoRecordException ex)
+            {
+                //user has never purchased anything
+            }
+
+            return dvdAmount;
+        }
     }
 }

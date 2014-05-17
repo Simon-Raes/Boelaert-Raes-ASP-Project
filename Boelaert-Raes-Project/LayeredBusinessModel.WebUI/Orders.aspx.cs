@@ -172,16 +172,11 @@ namespace LayeredBusinessModel.WebUI
                     orderRow[0] = item.orderline_id;
                     orderRow[1] = item.dvdInfo.name;
                     orderRow[2] = item.orderLineType.name;
-                    if (item.orderLineType.id == 1)
-                    {
-                        orderRow[3] = Math.Round(item.dvdInfo.rent_price * (item.enddate - item.startdate).Days, 2);
-                        orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
-                        orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
-                    }
-                    else
-                    {
-                        orderRow[3] = currency + " " + setPriceInRightCurrency(item.dvdInfo.buy_price, currency);
-                    }
+                    orderRow[3] = currency + " " + setPriceInRightCurrency(item.dvdInfo.buy_price, currency);
+                    orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
+                    orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
+                    
+
 
                     orderTable.Rows.Add(orderRow);
                 }
@@ -227,7 +222,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-                //todo= error about not being logged in
+                //todo: error about not being logged in
             }
 
         }
@@ -271,7 +266,7 @@ namespace LayeredBusinessModel.WebUI
                     //get the orderline
                     GridViewRow gvr = (GridViewRow)(((Button)e.CommandSource).NamingContainer);
 
-                    int index = gvr.RowIndex; 
+                    int index = gvr.RowIndex;
 
                     //int index = Convert.ToInt32(e.CommandArgument.ToString());
                     String orderLineID = gvOrderDetails.Rows[index].Cells[1].Text;
@@ -282,7 +277,7 @@ namespace LayeredBusinessModel.WebUI
                     {
                         if ((orderLine.startdate - DateTime.Today.Date) >= TimeSpan.FromDays(2)) //only allow cancelling if there is at least 2 days between today and the startdate
                         {
-                            if (new OrderModel().deleteItemFromOrder(orderLine))       
+                            if (new OrderModel().deleteItemFromOrder(orderLine))
                             {
                                 //succesfully removed - refresh the details gridview                            
                                 displayOrderDetails(orderLine.order.order_id.ToString());

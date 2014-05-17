@@ -11,9 +11,12 @@
                 <li><a href="Settings.aspx">Settings</a></li>
                 <li class="pull-right"><button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click" causesvalidation="false">Sign out</button></li>
             </ul>
+
             <br />
 
-            overview here
+            <asp:Label ID="lblOrderTotal" runat="server" Text="Label"></asp:Label><br /><br />         
+            <asp:Label ID="lblActiveRentCopies" runat="server" Text="Label"></asp:Label>
+            <asp:GridView ID="gvActiveRent" CssClass="gridViewStyle" runat="server" OnRowDataBound="gvActiveRent_RowDataBound"></asp:GridView>           
     
 
         </div>

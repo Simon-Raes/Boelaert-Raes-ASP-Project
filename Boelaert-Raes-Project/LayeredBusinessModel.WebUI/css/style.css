@@ -14,13 +14,24 @@ h2 {
 /*Reduce height of top and bottom info-bars*/
 .header {
     height: 26px;
-    color: grey;
+    color: lightgray;
 }
 
 .footer {
     height: 60px;
+    color: lightgray;
     text-align:center;
     padding:20px;
+}
+
+.footer a:link{    
+    color: lightgray;   
+}
+.footer a:hover{    
+    color: lightgray;   
+}
+.footer a:visited{    
+    color: lightgray;   
 }
 
 .navbar-inverse p {

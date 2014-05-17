@@ -86,7 +86,9 @@ namespace LayeredBusinessModel.WebUI
             }
             btnBuyB.InnerText = "Buy " + currency + " " + buy_price;
 
-            //set rent button text           
+            //set rent button properties and text                 
+            btnRentB.Attributes.Add("CommandArgument", id);
+            
             DvdInfoService dvdbll = new DvdInfoService();
             try
             {
@@ -118,17 +120,9 @@ namespace LayeredBusinessModel.WebUI
             btnRentB.InnerText = "Rent " + currency + " " + rent_price;
 
         }
-
-        //todo: fix postback bug
-        //site uses ID of movie that will take up the place of the selected movie
-        //click on godfather, page refreshes, pulp fiction takes up that place now, pulp fiction gets added to cart
-        
+           
         protected void btnBuy_Click(object sender, EventArgs e)
-        {
-            //CustomEvents ce = new CustomEvents();
-            //ce.dvd_info_id = id;
-            //ChoiceComplete(this, ce); 
-
+        {     
             //add item to cart
             String dvd_info_id = id;
 

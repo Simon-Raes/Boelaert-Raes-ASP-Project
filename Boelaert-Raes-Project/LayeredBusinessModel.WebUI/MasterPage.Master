@@ -22,7 +22,7 @@
                 Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span>+32477073716
                 <ul class="nav navbar-nav navbar-right">   
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="currencySymbol" runat="server" class="glyphicon glyphicon-euro"></span><b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Currency <span id="currencySymbol" runat="server" class="glyphicon glyphicon-euro"></span><b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#" id="euroLink" runat="server"><span class="glyphicon glyphicon-euro"></span>Euro</a></li>
                             <li><a href="#" id="dollerLink" runat="server"><span class="glyphicon glyphicon-usd"></span>Dollar</a></li>
@@ -121,7 +121,7 @@
 
         <div class="navbar-inverse">
             <div class="container footer">
-                <a href="NotYetVerified.aspx">Resend activation mail</a> | <a href="Contact.aspx">Contact</a> | Copyright Serafijn Boelaert & Simon Raes &copy; 2014
+                <a href="NotYetVerified.aspx">Resend activation mail</a>&nbsp;&nbsp; |&nbsp;&nbsp; <a href="Contact.aspx">Contact</a> &nbsp;&nbsp;|&nbsp;&nbsp; Copyright Serafijn Boelaert & Simon Raes &copy; 2014
             </div>
         </div>
     </form>

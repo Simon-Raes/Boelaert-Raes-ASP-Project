@@ -9,11 +9,11 @@
             <br />
             Development was done with the ASP.NET 4.5 Framework. The database uses Microsoft SQL Server 2008.
             <br />
-            The site layout was designed with help from Twitter Bootstrap.<br />
+            The site layout was designed with Twitter Bootstrap.<br />
             <br />
-            Hosting by http://www.smarterasp.net/.
+            Hosting provided by SmarterASP.
             <br /><br />
-            Link to digital manual here.
+            A digital manual can be found here: 
             
             
         </div>

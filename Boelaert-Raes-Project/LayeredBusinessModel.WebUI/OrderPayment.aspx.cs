@@ -157,8 +157,7 @@ namespace LayeredBusinessModel.WebUI
 
                     new EmailModel().sendOrderConfirmationEmail(user, order, orderLines, allInStock, currency);
 
-                    //redirect away from the payment page - todo: go to thank you/info page
-                    Response.Redirect("~/Index.aspx");
+                    Response.Redirect("~/ThankYou.aspx");
                 }
                 catch (NoRecordException)
                 {
@@ -169,7 +168,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-                //todo: error about not being logged in
+                lblStatus.Text = "Please log in to access this page";
             }
             
 

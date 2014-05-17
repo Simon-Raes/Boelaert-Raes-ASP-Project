@@ -15,9 +15,6 @@ namespace LayeredBusinessModel.BLL.Model
 {
     public class EmailModel
     {
-        //todo: a way to get the urls from a relative location so no domain-url hardcoding is requried
-
-
         /*Send an email asking for user confirmation.*/
         public void sendRegistrationEmail(Token token)
         {
@@ -54,7 +51,7 @@ namespace LayeredBusinessModel.BLL.Model
                 "\n\nRegards,\nThe Taboelaert Raesa team.");
         }
 
-        //todo: include orderLine en Order price in email!
+        
         public void sendOrderConfirmationEmail(Customer customer, Order order, List<OrderLine> orderLines, Boolean allInStock, String currency)
         {
             //create HTML email content

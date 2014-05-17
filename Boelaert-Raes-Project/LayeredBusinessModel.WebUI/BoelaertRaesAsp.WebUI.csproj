@@ -111,6 +111,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
+    <Content Include="ThankYou.aspx" />
     <Content Include="Web References\wsCurrencyWebService\CurrencyWebService.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -263,6 +264,13 @@
     </Compile>
     <Compile Include="signup.aspx.designer.cs">
       <DependentUpon>signup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ThankYou.aspx.cs">
+      <DependentUpon>ThankYou.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThankYou.aspx.designer.cs">
+      <DependentUpon>ThankYou.aspx</DependentUpon>
     </Compile>
     <Compile Include="Web References\wsCurrencyWebService\Reference.cs">
       <AutoGen>True</AutoGen>

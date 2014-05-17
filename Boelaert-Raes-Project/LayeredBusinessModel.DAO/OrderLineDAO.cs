@@ -298,7 +298,7 @@ namespace LayeredBusinessModel.DAO
                 command.Parameters.Add(new SqlParameter("@dvd_info_id", orderline.dvdInfo.dvd_info_id));
                 //command.Parameters.Add(new SqlParameter("@dvd_copy_id", null)); //a copy is not yet assigned here, will only be added after a customer pays
 
-                //TODO: betere oplossing voor dates
+                
                 if (orderline.startdate == DateTime.MinValue)
                 {
                     orderline.startdate = (DateTime)SqlDateTime.Null;

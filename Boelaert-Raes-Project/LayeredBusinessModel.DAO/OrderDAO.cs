@@ -175,8 +175,7 @@ namespace LayeredBusinessModel.DAO
             {
                 command = new SqlCommand("INSERT INTO Orders" +
                 "(orderstatus_id, customer_id, date) " +
-                "OUTPUT INSERTED.order_id " +
-                //todo: left the date like this for now, seems to work in both versions of the site, don't want to risk breaking it
+                "OUTPUT INSERTED.order_id " +                
                 "VALUES(@orderstatus_id, @customer_id," + "convert(datetime,'" + DateTime.Today + "',103)" + ")", cnn);
                 command.Parameters.Add(new SqlParameter("@orderstatus_id", 1));
                 command.Parameters.Add(new SqlParameter("@customer_id", customer.customer_id));

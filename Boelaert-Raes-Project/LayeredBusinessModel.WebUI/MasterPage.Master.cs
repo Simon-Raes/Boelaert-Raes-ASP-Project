@@ -42,11 +42,7 @@ namespace LayeredBusinessModel.WebUI
                 liCart.Visible = false;
                 liLogin.Visible = true;
                 liAccount.Visible = false;
-                liSignup.Visible = true;
-
-                //btnLogin.Text = "Login";
-                //todo: cart button dynamisch toevoegen ipv visibile/invisible setting te gebruiken
-                //btnCart.Visible = false;
+                liSignup.Visible = true;               
 
             }
             else

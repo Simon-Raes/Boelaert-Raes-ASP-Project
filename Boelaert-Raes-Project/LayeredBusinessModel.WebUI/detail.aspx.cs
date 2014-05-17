@@ -268,7 +268,7 @@ namespace LayeredBusinessModel.WebUI
             }
         }
 
-        //todo: put rent panel in Ajax element so whole page doesn't need to refresh
+        
         protected void btnRent1_Click(object sender, EventArgs e)
         {
             rentMovie(1);

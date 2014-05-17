@@ -18,8 +18,7 @@
 
             <div class="form-horizontal">
                 <fieldset>
-                    <legend>Add new DVD</legend>
-                    TODO: meerdere genres, media
+                    <legend>Add new DVD</legend>                    
 
                     <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label>
 

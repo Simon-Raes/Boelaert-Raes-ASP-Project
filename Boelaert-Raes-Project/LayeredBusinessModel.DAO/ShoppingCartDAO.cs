@@ -217,15 +217,7 @@ namespace LayeredBusinessModel.DAO
             }
         }
 
-        /*
-         * todo: COUNT items in cart
-         */
-        public int getCartContentCountForCustomer(String id)
-        {
-            //stub
-            return 0;
-        }
-
+        
         /*
          * Creates a ShoppingCartItem-Object
          */ 

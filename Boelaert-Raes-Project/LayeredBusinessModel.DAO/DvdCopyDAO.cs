@@ -183,11 +183,7 @@ namespace LayeredBusinessModel.DAO
             SqlCommand command = null;
 
             using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-
-                //todo: alternatief om deze zielige code mee te vervangen
-                //wat bedoel je hiermee? 
-
+            {     
                 command = new SqlCommand("UPDATE DvdCopy " +
                 "SET dvd_info_id = @dvd_info_id, copy_type_id = @copy_type_id, serialnumber = @serialnumber, note = @note, in_stock = @in_stock "+
                 "WHERE dvd_copy_id = @dvd_copy_id", cnn);

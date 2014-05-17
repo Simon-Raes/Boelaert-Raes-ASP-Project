@@ -123,9 +123,7 @@
 
         <div class="navbar-inverse">
             <div class="container footer">
-                <p>Footer ...sitemap<br />
-                    contact....legal info<br />
-                    ...</p>
+                <a href="NotYetVerified.aspx">Resend activation mail</a> | <a href="Contact.aspx">Contact</a> | Copyright Serafijn Boelaert & Simo Raes &copy;
             </div>
         </div>
 

@@ -19,6 +19,8 @@ h2 {
 
 .footer {
     height: 60px;
+    text-align:center;
+    padding:20px;
 }
 
 .navbar-inverse p {
@@ -36,6 +38,8 @@ h2 {
     padding: 6px 12px;
     margin: 0px;
 }
+
+
 
 
 /*Center the text in the columns on the about page*/
@@ -201,3 +205,9 @@ height: 30px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+a:link { color: #333; text-decoration: none}
+a:visited { color: #333; text-decoration: none}
+a:hover { color: #3366CC; text-decoration: underline}
+a:active { color: #333; text-decoration: none}

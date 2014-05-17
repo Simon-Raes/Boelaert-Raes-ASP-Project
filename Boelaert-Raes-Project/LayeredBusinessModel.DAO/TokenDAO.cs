@@ -183,7 +183,7 @@ namespace LayeredBusinessModel.DAO
             {
                 status = getTokenStatus(Convert.ToInt16(reader["tokenstatus_id"])),
                 token = reader["token"].ToString(),
-                customer = makeCustomer(Convert.ToInt16(reader["customer_id"])),
+                customer = makeCustomer(Convert.ToString(reader["customer_id"])),
                 timestamp = Convert.ToDateTime(reader["timestamp"])  
             };
         }
@@ -214,11 +214,13 @@ namespace LayeredBusinessModel.DAO
         /*
          * Creates a Customer-Object
          */ 
-        private Customer makeCustomer(int i)
+        private Customer makeCustomer(String i)
         {
-            Customer c = new Customer();
-            c.customer_id = i;
-            return c;
+            CustomerDAO customerDAO = new CustomerDAO();
+            return customerDAO.getByID(i);
+            //Customer c = new Customer();
+            //c.customer_id = i;
+            //return c;
         }
 
         /*

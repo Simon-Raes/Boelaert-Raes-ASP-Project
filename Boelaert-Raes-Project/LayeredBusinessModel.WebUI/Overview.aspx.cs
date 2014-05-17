@@ -37,8 +37,6 @@ namespace LayeredBusinessModel.WebUI
                 {
                     List<OrderLine> orderLines = new OrderLineService().getActiveRentOrderLinesByCustomer(user);
 
-
-
                     String currency = "€";
                     if (Request.QueryString["currency"] == null)
                     {

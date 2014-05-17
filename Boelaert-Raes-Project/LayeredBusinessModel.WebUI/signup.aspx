@@ -12,7 +12,7 @@
             <h3>Sign up</h3>
         </div>
         <div class="panel-body">
-
+            <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSignup">
 
             <div class="panel panel-info">
                 <div class="panel-heading">Account</div>
@@ -166,7 +166,10 @@
                     <asp:Button ID="btnSignup" runat="server" Text="Sign up" CssClass="btn btn-success" OnClick="btnSignup_Click" UseSubmitBehavior="false" CausesValidation="true" />
                 </div>
             </div>
+
+            </asp:Panel>
         </div>
+        
     </div>
 
     <div id="pnlSignupCompleted" runat="server">

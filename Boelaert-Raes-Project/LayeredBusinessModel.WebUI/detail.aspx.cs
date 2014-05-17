@@ -263,7 +263,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-                string script = "alert(\"You have been logged out due to inactivity.\");";
+                string script = "alert(\"Please log in to buy this item.\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
             }
         }
@@ -295,7 +295,7 @@ namespace LayeredBusinessModel.WebUI
                 if (Request.QueryString["id"] != null)
                 {
                     //check if the user can still rent additional items
-                    if (new RentModel().getNumberOfActiveRentCopiesForCustomer(user) < 5)
+                    if (new RentModel().getNumberOfActiveRentTotalCopiesForCustomer(user) < 5)
                     {
                         DateTime startdate = calRent.SelectedDate;
                         DateTime enddate = startdate.AddDays(days - 1);
@@ -323,7 +323,7 @@ namespace LayeredBusinessModel.WebUI
             }
             else
             {
-                string script = "alert(\"You have been logged out due to inactivity.\");";
+                string script = "alert(\"Please log in to buy this item.\");";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
             }
         }

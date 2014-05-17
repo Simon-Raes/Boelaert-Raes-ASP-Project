@@ -131,37 +131,7 @@ namespace LayeredBusinessModel.WebUI
 
         public void eventComplete(object sender, dvdInfoUserControl.CustomEvents e)
         {
-            //add item to cart
-            String dvd_info_id = e.dvd_info_id;
-
-            Customer user = (Customer)Session["user"];
-
-            if (user != null)
-            {
-                try
-                {
-                    DvdInfo thisDvd = new DvdInfoService().getByID(dvd_info_id.ToString());          //Throws NoRecordException
-                    if (new ShoppingCartService().addByCustomerAndDvd(user, thisDvd))
-                    {
-                        //success
-                    }
-                }
-                catch (NoRecordException)
-                {
-
-                }
-            }
-            else
-            {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                sb.Append("<script type = 'text/javascript'>");
-                sb.Append("window.onload=function(){");
-                sb.Append("alert('");
-                sb.Append("To do: alert user that he is not logged in");
-                sb.Append("')};");
-                sb.Append("</script>");
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", sb.ToString());
-            }
+            //not used at the moment, handled by the userControl itself
         }
 
 

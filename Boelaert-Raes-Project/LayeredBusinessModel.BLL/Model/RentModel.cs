@@ -12,12 +12,26 @@ namespace LayeredBusinessModel.BLL.Model
 {
     public class RentModel
     {
-        public int getNumberOfActiveRentCopiesForCustomer(Customer customer)
+        /*Returns the number of rent items in the user's cart + active orders.*/
+        public int getNumberOfActiveRentTotalCopiesForCustomer(Customer customer)
         {
             int numberOfCurrentlyRentedItems = 0;
+
+            numberOfCurrentlyRentedItems += getNumberOfActiveRentCartCopiesForCustomer(customer);
+            numberOfCurrentlyRentedItems += getNumberOfActiveRentOrdersCopiesForCustomer(customer);                    
+
+            return numberOfCurrentlyRentedItems;
+        }
+
+
+        /*Returns the number of rent items in the user's cart.*/
+        public int getNumberOfActiveRentCartCopiesForCustomer(Customer customer)
+        {
+            int numberOfCurrentlyRentedItems = 0;
+
             try
             {
-                //check the number of rent items in the user's cart
+                
                 List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(customer);           //Throws NoRecordException
 
 
@@ -29,12 +43,21 @@ namespace LayeredBusinessModel.BLL.Model
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //no rent items in the user's cart
-            }            
+                numberOfCurrentlyRentedItems = 0;
+            }
 
-            //check the number of items currently being rented by the user
+            return numberOfCurrentlyRentedItems;
+        }
+
+
+        /*Returns the number of items currently being rented by the user.*/
+        public int getNumberOfActiveRentOrdersCopiesForCustomer(Customer customer)
+        {
+            int numberOfCurrentlyRentedItems = 0;
+            
             try
             {
                 List<OrderLine> orderLines = new OrderLineService().getActiveRentOrderLinesByCustomer(customer);          //Throws NoRecordException
@@ -43,11 +66,10 @@ namespace LayeredBusinessModel.BLL.Model
                     numberOfCurrentlyRentedItems++;
                 }
             }
-            catch(NoRecordException ex)
+            catch (NoRecordException ex)
             {
                 //user has no active rent orders
-            }            
-
+            }
             return numberOfCurrentlyRentedItems;
         }
 

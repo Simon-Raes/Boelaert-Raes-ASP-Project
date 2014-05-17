@@ -183,7 +183,7 @@ namespace LayeredBusinessModel.WebUI
         private Boolean checkMatches(DvdInfo d, String text)
         {
             //Voorlopig enkel de naam ondersteunen
-            if (d.name.Contains(text))
+            if (d.name.ToLower().Contains(text.ToLower()))
             {
                 return true;
             }

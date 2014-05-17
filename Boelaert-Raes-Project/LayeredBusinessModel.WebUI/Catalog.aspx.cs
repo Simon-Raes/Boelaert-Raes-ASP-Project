@@ -25,21 +25,7 @@ namespace LayeredBusinessModel.WebUI
 
         private void setDvdTiles(String search)
         {
-
-            //User dit not pressed the second searchbutton
-            if (search == null)
-            {
-                
-            }
-            else
-            {
-                
-            }
-
-
-            String type = Request.QueryString["type"];              
-
-
+            String type = Request.QueryString["type"]; 
 
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;
@@ -139,23 +125,46 @@ namespace LayeredBusinessModel.WebUI
                     labelText += " matching '" + searchtext + "'";
                 }
 
+
+
+
+
                 foreach (DvdInfo d in dvdContent)
                 {
-                    dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
-                    dvdInfo.ChoiceComplete += new dvdInfoUserControl.delChoiceComplete(dvdInfo_ChoiceComplete);
-                    dvdInfo.id = d.dvd_info_id;
-                    foreach (KeyValuePair<int, String> k in d.media)
+                    if (search != null && checkMatches(d, search))
                     {
-                        if (k.Key == 1)
+                        dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                        dvdInfo.ChoiceComplete += new dvdInfoUserControl.delChoiceComplete(dvdInfo_ChoiceComplete);
+                        dvdInfo.id = d.dvd_info_id;
+                        foreach (KeyValuePair<int, String> k in d.media)
                         {
-                            dvdInfo.imageUrl = k.Value;
+                            if (k.Key == 1)
+                            {
+                                dvdInfo.imageUrl = k.Value;
+                            }
                         }
+                        dvdInfo.title = d.name;
+                        dvdInfo.buy_price = d.buy_price;
+                        dvdInfo.rent_price = d.rent_price;
+                        catalogContent.Controls.Add(dvdInfo);
                     }
-                    dvdInfo.title = d.name;
-                    dvdInfo.buy_price = d.buy_price;
-                    dvdInfo.rent_price = d.rent_price;
-
-                    catalogContent.Controls.Add(dvdInfo);
+                    else if (search == null)
+                    {
+                        dvdInfoUserControl dvdInfo = (dvdInfoUserControl)Page.LoadControl("dvdInfoUserControl.ascx");
+                        dvdInfo.ChoiceComplete += new dvdInfoUserControl.delChoiceComplete(dvdInfo_ChoiceComplete);
+                        dvdInfo.id = d.dvd_info_id;
+                        foreach (KeyValuePair<int, String> k in d.media)
+                        {
+                            if (k.Key == 1)
+                            {
+                                dvdInfo.imageUrl = k.Value;
+                            }
+                        }
+                        dvdInfo.title = d.name;
+                        dvdInfo.buy_price = d.buy_price;
+                        dvdInfo.rent_price = d.rent_price;
+                        catalogContent.Controls.Add(dvdInfo);
+                    }
                 }
                 lblHeader.Text = labelText;
             }
@@ -169,6 +178,16 @@ namespace LayeredBusinessModel.WebUI
         void dvdInfo_ChoiceComplete(object sender, dvdInfoUserControl.CustomEvents e)
         {
             int i = 0;
+        }
+
+        private Boolean checkMatches(DvdInfo d, String text)
+        {
+            //Voorlopig enkel de naam ondersteunen
+            if (d.name.Contains(text))
+            {
+                return true;
+            }
+            return false;
         }
        
         protected void btnSearch_Click2(object sender, EventArgs e)

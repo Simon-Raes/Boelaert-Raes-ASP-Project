@@ -11,11 +11,9 @@
                 <li class="active"><a href="Settings.aspx">Settings</a></li>
                 <li class="pull-right">
                     <button id="Button1" runat="server" class="btn btn-warning" onserverclick="btnLogOut_Click" causesvalidation="false">Sign out</button></li>
-
             </ul>
 
             <br />
-
 
             <div class="form-horizontal">
                 <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSignUp">
@@ -96,7 +94,6 @@
                     </div>
 
                     <br />
-
 
                     <div class="form-group">
                         <div class="col-sm-4 control-label"></div>

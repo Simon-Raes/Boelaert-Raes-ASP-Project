@@ -51,7 +51,6 @@ namespace LayeredBusinessModel.WebUI
                                 }
                             }
 
-
                             //all good
                             lblStatus.Text = orderID;
                             OrderModel helper = new OrderModel();
@@ -77,9 +76,7 @@ namespace LayeredBusinessModel.WebUI
                             {
                                 orderTable.Columns.Add("Start date");
                                 orderTable.Columns.Add("End date");
-
-                            }                            
-
+                            }
 
                             foreach (OrderLine item in orderLines)
                             {
@@ -116,7 +113,7 @@ namespace LayeredBusinessModel.WebUI
                     catch (NoRecordException)
                     {
 
-                    } 
+                    }
                 }
                 else
                 {
@@ -124,13 +121,13 @@ namespace LayeredBusinessModel.WebUI
                     lblStatus.Text = "Please log in to access this page";
                 }
 
-            }            
+            }
         }
 
         protected void btnPay_Click(object sender, EventArgs e)
         {
             Customer user = (Customer)Session["user"];
-            if(user!=null)
+            if (user != null)
             {
                 try
                 {
@@ -160,18 +157,13 @@ namespace LayeredBusinessModel.WebUI
                 }
                 catch (NoRecordException)
                 {
-                    
-                }
 
-                
+                }
             }
             else
             {
                 lblStatus.Text = "Please log in to access this page";
             }
-            
-
-            
         }
 
         private Boolean hasAllInStock(List<OrderLine> orderLines)
@@ -188,7 +180,5 @@ namespace LayeredBusinessModel.WebUI
 
             return allInStock;
         }
-
-
     }
 }

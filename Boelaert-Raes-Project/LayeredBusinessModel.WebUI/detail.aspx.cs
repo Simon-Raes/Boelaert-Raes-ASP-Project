@@ -15,7 +15,7 @@ namespace LayeredBusinessModel.WebUI
 {
     public partial class detail : System.Web.UI.Page
     {
-        private List<DateTime> dates;
+        private List<DateTime> availableDates;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,11 +24,7 @@ namespace LayeredBusinessModel.WebUI
             btnRent1.Visible = false;
             btnRent3.Visible = false;
             btnRent7.Visible = false;
-
-            //disabled to fix images not loading after postback,
-            //todo: ajax stuff
-            //if (!IsPostBack)
-            //{
+                        
             String dvd_info_id = Request.QueryString["id"];
             if (dvd_info_id != null)
             {
@@ -50,7 +46,6 @@ namespace LayeredBusinessModel.WebUI
                     }
                 }
             }
-            //}
         }
 
         private void setupDvdInfo(String id)
@@ -285,8 +280,7 @@ namespace LayeredBusinessModel.WebUI
         }
 
         private void rentMovie(int days)
-        {
-            
+        {            
             //only excecute if a user is logged in
             Customer user = ((Customer)Session["user"]);
 
@@ -333,12 +327,12 @@ namespace LayeredBusinessModel.WebUI
             if (Request.QueryString["id"] != null)
             {
                 //only get dates once per calendar build-up
-                if (dates == null)
+                if (availableDates == null)
                 {
                     try
                     {
                         DvdInfo thisDVD = new DvdInfoService().getByID(Request.QueryString["id"].ToString());                //Throws NoRecordException
-                        dates = new AvailabilityModel().getAvailabilities(thisDVD, DateTime.Now);           //Throws NoRecordException
+                        availableDates = new AvailabilityModel().getAvailabilities(thisDVD, DateTime.Now);           //Throws NoRecordException
                     }
                     catch (NoRecordException)
                     {
@@ -347,7 +341,7 @@ namespace LayeredBusinessModel.WebUI
                 }
 
                 //movie can be reserved between today and 14 days from now   
-                if (dates.Contains(e.Day.Date))
+                if (availableDates.Contains(e.Day.Date))
                 {
                     e.Day.IsSelectable = true;
                     e.Cell.BackColor = System.Drawing.Color.LightGreen;

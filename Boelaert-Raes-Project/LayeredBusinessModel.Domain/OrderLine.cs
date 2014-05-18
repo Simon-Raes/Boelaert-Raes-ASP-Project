@@ -16,7 +16,7 @@ namespace LayeredBusinessModel.Domain
         public OrderLineType orderLineType { get; set; }
         public DvdInfo dvdInfo { get; set; }
         public DvdCopy dvdCopy { get; set; }
-        public DateTime startdate { get; set; }             //in case of rent (or reservation?)
-        public DateTime enddate { get; set; }               //in case of rent (or reservation?)
+        public DateTime startdate { get; set; }             //in case of rent
+        public DateTime enddate { get; set; }               //in case of rent
     }
 }

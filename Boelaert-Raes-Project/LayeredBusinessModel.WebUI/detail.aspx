@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="detail.aspx.cs" Inherits="LayeredBusinessModel.WebUI.detail" %>
+
 <%@ MasterType VirtualPath="~/masterpage.master" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -31,17 +32,11 @@
                     <asp:Label ID="lblPlot" runat="server" CssClass="plot"></asp:Label>
                     <hr />
                     <div class="row">
-                        <%--                        <asp:Button ID="btnBuy" runat="server" Text="Add to cart" OnClick="btnBuy_Click" />--%>
                         <button id="btnBuyB" runat="server" type="submit" onserverclick="btnBuy_Click"></button>
-
                         <asp:Label ID="lblBuyStatus" runat="server" Text=""></asp:Label>
-
                     </div>
                 </div>
-
-
             </div>
-
         </div>
     </div>
     <a id="rent"></a>
@@ -52,7 +47,7 @@
 
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>
-                    
+
 
                     <div class="col-md-3">
                         <asp:Calendar ID="calRent" runat="server" OnDayRender="calRent_DayRender" OnSelectionChanged="calRent_SelectionChanged">
@@ -72,13 +67,7 @@
                     </div>
 
                 </ContentTemplate>
-
-            </asp:UpdatePanel>
-
-            <%--<div class="col-md-3">
-            </div>
-            <div class="col-md-3">
-            </div>--%>
+            </asp:UpdatePanel>                        
         </div>
     </div>
 
@@ -95,9 +84,6 @@
             </div>
         </div>
     </div>
-
-
-
 
     <div class="panel panel-default" runat="server" id="pnlRelatedDvds">
         <div class="panel-body">

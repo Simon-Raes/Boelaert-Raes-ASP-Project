@@ -13,6 +13,7 @@ namespace LayeredBusinessModel.BLL
 {
     public class AvailabilityModel
     {
+        /*Checks if a dvd has buy copies in stock.*/
         public static Boolean isAvailableForBuying(String movieID)
         {
             try
@@ -99,7 +100,7 @@ namespace LayeredBusinessModel.BLL
             return dicCopyUnavailableDates;
         }
 
-        /**Returns a list of all days where at least 1 copy is available.*/
+        /**Returns a list of all days (up to 14) where at least 1 copy is available, starting at the supplied date.*/
         public List<DateTime> getAvailabilities(DvdInfo dvd, DateTime startDate)
         {
             List<DateTime> dates = new List<DateTime>();

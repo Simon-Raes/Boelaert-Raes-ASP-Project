@@ -13,6 +13,6 @@ namespace LayeredBusinessModel.Domain
     {
         public Customer customer { get; set; }
         public DvdInfo dvdInfo { get; set; }
-        public int number_of_visits { get; set; }   //the amount the customer has visited this dvd
+        public int number_of_visits { get; set; }   //number of times the customer has visited the page of this dvd
     }
 }

@@ -11,6 +11,7 @@ namespace LayeredBusinessModel.BLL
 {
     public class LoginModel
     {
+        /*Signs in the user if credentials are correct.*/
         public Customer signIn(String loginName, String password)
         {
             Customer customer = null;
@@ -46,6 +47,7 @@ namespace LayeredBusinessModel.BLL
             return customer;            
         }   
      
+        /*Returns the status code of the attempted login.*/
         public LoginStatusCode getLoginStatus(String loginName, String password)
         {            
             try 
@@ -55,10 +57,12 @@ namespace LayeredBusinessModel.BLL
                 {
                     if (customer.isVerified)
                     {
-                       return LoginStatusCode.SUCCESFUL;
+                        //successfully logged in
+                        return LoginStatusCode.SUCCESFUL;
                     }
                     else
                     {
+                        //user has not yet verified his email address
                         return LoginStatusCode.NOTVERIFIED;
                     }
                 }

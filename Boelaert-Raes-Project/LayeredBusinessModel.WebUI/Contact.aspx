@@ -29,7 +29,7 @@
 
            </asp:Panel>
             <asp:Panel ID="pnlStep2" runat="server">
-                <p>We have received your request. We will contact you as soon as possible.</p>
+                <p>Your message has been sent. We will contact you as soon as possible.</p>
             </asp:Panel>
 
 

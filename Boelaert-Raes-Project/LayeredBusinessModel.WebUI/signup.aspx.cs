@@ -48,12 +48,7 @@ namespace LayeredBusinessModel.WebUI
                     Customer user = token.customer;
                     Session["user"] = user;
                     Response.Redirect("Index.aspx");
-                }
-                else
-                {
-                    //something went wrong (none existing token?)
-                    //todo:alert user?
-                }
+                }                
             }
         }
 
@@ -90,8 +85,6 @@ namespace LayeredBusinessModel.WebUI
             txtStreet.Text = curInfo.Street;
             txtPostalcode.Text = curInfo.Zip;
             txtMunicipality.Text = curInfo.Municipality;
-           
-            
 
             EID_Read1.Visible = false;
             enableValidation();

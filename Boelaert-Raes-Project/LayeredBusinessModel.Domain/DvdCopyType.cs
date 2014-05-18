@@ -11,7 +11,7 @@ namespace LayeredBusinessModel.Domain
      */
     public class DvdCopyType
     {
-        public int id { get; set; }         //a nique id
+        public int id { get; set; }         //a unique id
         public String name { get; set; }    //a name
     }
 }

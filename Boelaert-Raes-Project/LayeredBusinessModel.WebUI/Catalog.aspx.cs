@@ -29,9 +29,7 @@ namespace LayeredBusinessModel.WebUI
 
             dvdInfoService = new DvdInfoService();
             List<DvdInfo> dvdContent = null;
-
-            //hier nog wat geknoei omdat er 2 searchboxes zijn
-
+            
             String searchtext = "";
             if (Request.QueryString["search"] != null)
             {
@@ -46,8 +44,7 @@ namespace LayeredBusinessModel.WebUI
             String director = Request.QueryString["director"];
             String actor = Request.QueryString["actor"];
             String related = Request.QueryString["related"];
-
-
+            
             try
             {
 
@@ -103,20 +100,17 @@ namespace LayeredBusinessModel.WebUI
                 else if (actor != null)
                 {
                     labelText = "Dvd's with " + actor;
-                    dvdContent = dvdInfoService.searchDvdWithActor(actor);                                   //Throws NoRecordException        
-
+                    dvdContent = dvdInfoService.searchDvdWithActor(actor);                                   //Throws NoRecordException    
                 }
                 else if (related != null)
                 {
                     labelText = "Related dvds for " + dvdInfoService.getByID(related).name;                 //Throws NoRecordException
                     dvdContent = dvdInfoService.getRelatedDvds(related, 16);                                //Throws NoRecordException
-
                 }
                 else
                 {
                     labelText = "Catalog";
                     dvdContent = dvdInfoService.searchDvdWithText(searchtext);                              //Throws NoRecordException  
-
                 }
 
                 //set header text            
@@ -124,9 +118,6 @@ namespace LayeredBusinessModel.WebUI
                 {
                     labelText += " matching '" + searchtext + "'";
                 }
-
-
-
 
 
                 foreach (DvdInfo d in dvdContent)
@@ -177,19 +168,19 @@ namespace LayeredBusinessModel.WebUI
 
         void dvdInfo_ChoiceComplete(object sender, dvdInfoUserControl.CustomEvents e)
         {
-            int i = 0;
+            //not used, event is handled by the userControl
         }
 
         private Boolean checkMatches(DvdInfo d, String text)
-        {
-            //Voorlopig enkel de naam ondersteunen
+        {            
             if (d.name.ToLower().Contains(text.ToLower()))
             {
                 return true;
             }
             return false;
-        }        
+        }
 
+        /*Lets a user refine his catalog result with a second search.*/
         protected void btnSearch2_Click(object sender, EventArgs e)
         {
             String searchText = txtSearchNewer.Value;

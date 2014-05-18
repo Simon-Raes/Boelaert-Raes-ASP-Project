@@ -18,7 +18,6 @@ namespace LayeredBusinessModel.WebUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             Customer user = (Customer)Session["user"];
             if (user != null)
             {
@@ -49,8 +48,6 @@ namespace LayeredBusinessModel.WebUI
                 {
                     currency = "$";
                 }
-
-
 
                 customerOrders = new OrderService().getOrdersForCustomer(((Customer)Session["user"]));            //Throws NoRecrdException
 
@@ -177,9 +174,6 @@ namespace LayeredBusinessModel.WebUI
                         orderRow[4] = item.startdate.ToString("dd/MM/yyyy");
                         orderRow[5] = item.enddate.ToString("dd/MM/yyyy");
                     }
-                    
-                    
-
 
                     orderTable.Rows.Add(orderRow);
                 }
@@ -195,14 +189,10 @@ namespace LayeredBusinessModel.WebUI
                 //user has already paid, check status of copies in cart
                 if (selectedOrder.orderstatus.id > 1)
                 {
-
                     Boolean allInStock = hasAllInStock(orderLines);
                     updateOrderStatusDetails(allInStock);
                 }
-                else
-                {
-                    //user hasn't paid yet, check status of copies in store: (todo) (?)
-                }
+                
             }
             catch (NoRecordException)
             {
@@ -227,7 +217,6 @@ namespace LayeredBusinessModel.WebUI
             {
                 //todo: error about not being logged in
             }
-
         }
 
         private Boolean hasAllInStock(List<OrderLine> orderLines)

@@ -12,6 +12,6 @@ namespace LayeredBusinessModel.Domain
     public class MediaType
     {
         public int media_id { get; set; }       //a unique id
-        public String name { get; set; }   //description
+        public String name { get; set; }        //description
     }
 }

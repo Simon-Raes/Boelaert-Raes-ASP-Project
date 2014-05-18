@@ -16,8 +16,7 @@
 
             <asp:Label ID="lblOrderTotal" runat="server" Text="Label"></asp:Label><br /><br />         
             <asp:Label ID="lblActiveRentCopies" runat="server" Text="Label"></asp:Label>
-            <asp:GridView ID="gvActiveRent" CssClass="gridViewStyle" runat="server" OnRowDataBound="gvActiveRent_RowDataBound"></asp:GridView>           
-    
+            <asp:GridView ID="gvActiveRent" CssClass="gridViewStyle" runat="server" OnRowDataBound="gvActiveRent_RowDataBound"></asp:GridView>       
 
         </div>
     </div>

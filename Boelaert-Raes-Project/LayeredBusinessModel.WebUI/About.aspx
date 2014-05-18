@@ -13,7 +13,7 @@
             <br />
             Hosting provided by SmarterASP.
             <br /><br />
-            A digital manual can be found here: 
+            
             
             
         </div>

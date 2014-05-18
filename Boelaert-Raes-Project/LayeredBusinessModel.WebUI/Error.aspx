@@ -4,7 +4,6 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:Panel ID="pnlError" runat="server" Visible="false">
-
         <div class="panel panel-default">
             <div class="panel-body">
                 <asp:Label ID="lblError" runat="server" Text="Oops! An error occurred while performing your request. Sorry for any convenience."></asp:Label><br />
@@ -15,7 +14,4 @@
             </div>
         </div>
     </asp:Panel>
-
-
-
 </asp:Content>

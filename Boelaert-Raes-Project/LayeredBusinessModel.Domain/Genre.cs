@@ -11,10 +11,8 @@ namespace LayeredBusinessModel.Domain
      */
     public class Genre
     {
-        public int genre_id { get; set; }       //an unique id
-
+        public int genre_id { get; set; }       //a unique id
         public Category category { get; set; }  //the category
-
         public String name { get; set; }        //description
     }
 }

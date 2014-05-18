@@ -11,7 +11,6 @@ namespace LayeredBusinessModel.Domain
      */
     public class Customer
     {
-
         public int customer_id { get; set; }        //unique id      
         public String email { get; set; }           //emailaddress
         public String password { get; set; }        //password
@@ -20,6 +19,6 @@ namespace LayeredBusinessModel.Domain
         public String zip { get; set; }             //zip
         public String municipality { get; set; }    //municipality    
         public int numberOfVisits { get; set; }     //number of visits
-        public Boolean isVerified { get; set; }    //flag indicating if an account is verrified
+        public Boolean isVerified { get; set; }     //flag indicating if an account is verified
     }
 }

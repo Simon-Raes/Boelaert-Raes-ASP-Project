@@ -248,6 +248,7 @@ namespace LayeredBusinessModel.BLL
             }
         }
 
+        /*Returns the total cost of all items in the supplied order.*/
         public double getOrderCost(Order order)
         {
             double totalCost = 0;
@@ -276,7 +277,7 @@ namespace LayeredBusinessModel.BLL
             return Math.Round(totalCost, 2);
         }
 
-        /*Returns a dictionary of (dvd, number_of_items_bought).*/
+        /*Returns the number of items the user has purchased.*/
         public int getNumberOfOrderLinesForCustomer(Customer customer)
         {
             List<OrderLine> orderLines;
@@ -294,7 +295,7 @@ namespace LayeredBusinessModel.BLL
             return orderLines.Count;
         }
 
-        /*Returns a dictionary of (dvd, number_of_items_bought).*/
+        /*Returns a dictionary of (dvd_info_id, number_of_times_bought).*/
         public Dictionary<String, int> getItemsBoughtByCustomer(Customer customer)
         {
             Dictionary<String, int> dvdAmount = new Dictionary<String, int>();

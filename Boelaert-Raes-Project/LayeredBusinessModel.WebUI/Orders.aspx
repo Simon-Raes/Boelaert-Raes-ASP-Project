@@ -47,7 +47,7 @@
                                 <asp:Button ID="btnDeleter" runat="server" Text="Cancel" CommandName="CancelOrderLine" />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        
+
                     </Columns>
                 </asp:GridView>
                 <!--<asp:ButtonField CommandName="CancelOrderLine" Text="Cancel" />-->

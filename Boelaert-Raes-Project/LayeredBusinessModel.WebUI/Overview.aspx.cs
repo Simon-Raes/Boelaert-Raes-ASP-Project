@@ -73,7 +73,6 @@ namespace LayeredBusinessModel.WebUI
                         orderTable.Columns.Add("End date");
                     }
 
-
                     foreach (OrderLine item in orderLines)
                     {
                         DataRow orderRow = orderTable.NewRow();
@@ -90,10 +89,7 @@ namespace LayeredBusinessModel.WebUI
                     gvActiveRent.DataSource = orderTable;
                     gvActiveRent.DataBind();
                 }
-
-
             }
-
         }
 
         public void btnLogOut_Click(object sender, EventArgs e)
@@ -101,7 +97,6 @@ namespace LayeredBusinessModel.WebUI
             Session["user"] = null;
             Response.Redirect("~/Index.aspx");
         }
-
 
         private float setPriceInRightCurrency(float price, String currency)
         {
@@ -114,6 +109,7 @@ namespace LayeredBusinessModel.WebUI
             return (float)currencyWebService.convert(price, "usd");
         }
 
+        /*Changes period enddate color to warn the user.*/
         protected void gvActiveRent_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)

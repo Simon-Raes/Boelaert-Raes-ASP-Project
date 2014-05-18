@@ -11,7 +11,7 @@ namespace LayeredBusinessModel.Domain
      */  
     public class Category
     {
-        public int category_id { get; set; }    //an unique id
+        public int category_id { get; set; }    //a unique id
         public String name { get; set; }        //a description
     }
 }

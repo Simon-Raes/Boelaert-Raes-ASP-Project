@@ -28,9 +28,6 @@ namespace LayeredBusinessModel.WebUI
             {
                 //bacause this a main function - it fills the sidebar with the genres - this exception will be thrown up so that the global.asax can take care of the exception
                 //and redirect the user to the error page
-
-                //for debugging reasons i will place a breakpoint here. I'll work my way throu the WebUI layer until i have handled every exception. After that i'll throws the exceptions 
-                //throw;
             }
 
             setupCurrencyLinks();
@@ -68,15 +65,13 @@ namespace LayeredBusinessModel.WebUI
         }
 
         private void setupCurrencyLinks()
-        {
-            //als de querystring leeg is
+        {            
             if (Request.QueryString.Count == 0)
             {
-                //query string aanmaken
+                //No query string exists, create one
                 euroLink.HRef = Request.Url.AbsoluteUri + "?currency=euro";
                 dollerLink.HRef = Request.Url.AbsoluteUri + "?currency=usd";
-            }
-            //als de querystring al bestaat
+            }            
             else
             {
                 string url = HttpContext.Current.Request.Url.AbsoluteUri;
@@ -86,7 +81,7 @@ namespace LayeredBusinessModel.WebUI
                 {
                     queryString.Remove("currency");
                 }
-                //als de querystring al bestaat, deze uitbreiden
+                //Extend the existing querystring
                 euroLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=euro";
                 dollerLink.HRef = separateURL[0] + "?" + queryString.ToString() + "&currency=usd";
             }
@@ -108,44 +103,7 @@ namespace LayeredBusinessModel.WebUI
                 }
             }
         }
-
-        protected void btnLogin_Click(object sender, EventArgs e)
-        {
-            if (txtEmail.Value != null && txtEmail.Value != null)
-            {
-                LoginModel loginModel = new LoginModel();
-                Customer customer = loginModel.signIn(txtEmail.Value, txtPassword.Value);                       //Throws DALException
-
-                if (customer != null)
-                {
-                    //put user in session and send user back to his last active page
-                    Session["user"] = customer;
-                    Response.Redirect(Request.RawUrl);
-                    txtEmailError.Visible = false;
-                }
-                else
-                {
-                    //user couldn't be logged in, request the status code so the correct error can be displayed to the user
-                    LoginStatusCode status = loginModel.getLoginStatus(txtEmail.Value, txtPassword.Value);      //Throws DALException
-                    switch (status)
-                    {
-                        case LoginStatusCode.NOTVERIFIED:
-                            Response.Redirect("NotYetVerified.aspx?email=" + txtEmail.Value);
-                            break;
-                        case LoginStatusCode.WRONGLOGIN:
-                            liLogin.Attributes["Class"] = "dropdown open";
-                            txtEmailError.Visible = true;
-                            txtEmailError.Text = "Unknown login name";
-                            break;
-                        case LoginStatusCode.WRONGPASSWORD:
-                            liLogin.Attributes["Class"] = "dropdown open";
-                            txtEmailError.Visible = true;
-                            txtEmailError.Text = "Incorrect login/password combination";
-                            break;
-                    }                   
-                }
-            }
-        }
+                
 
         protected void btnCart_Click(object sender, EventArgs e)
         {

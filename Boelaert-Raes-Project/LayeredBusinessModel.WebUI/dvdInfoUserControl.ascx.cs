@@ -86,8 +86,8 @@ namespace LayeredBusinessModel.WebUI
             btnBuyB.InnerText = "Buy " + currency + " " + buy_price;
 
             //set rent button properties and text                 
-            btnRentB.Attributes.Add("CommandArgument", id);
-            
+            btnRentB.Attributes.Add("CommandArgument", id);            
+
             DvdInfoService dvdbll = new DvdInfoService();
             try
             {

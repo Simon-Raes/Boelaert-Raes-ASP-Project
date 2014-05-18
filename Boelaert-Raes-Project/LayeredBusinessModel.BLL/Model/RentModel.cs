@@ -30,11 +30,9 @@ namespace LayeredBusinessModel.BLL
             int numberOfCurrentlyRentedItems = 0;
 
             try
-            {
-                
+            {                
                 List<ShoppingcartItem> cartContent = new ShoppingCartService().getCartContentForCustomer(customer);           //Throws NoRecordException
-
-
+                
                 foreach (ShoppingcartItem item in cartContent)
                 {
                     if (item.dvdCopyType.name.Equals("Verhuur"))
@@ -72,7 +70,5 @@ namespace LayeredBusinessModel.BLL
             }
             return numberOfCurrentlyRentedItems;
         }
-
-
     }
 }

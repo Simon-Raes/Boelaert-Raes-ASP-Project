@@ -35,7 +35,7 @@ namespace LayeredBusinessModel.BLL
 
                 //send email asking for verification
                 EmailModel emailModel = new EmailModel();
-                emailModel.sendRegistrationEmail(token);
+                emailModel.sendRegistrationVerificationEmail(token);
             }
             else
             {
@@ -87,10 +87,8 @@ namespace LayeredBusinessModel.BLL
             if (verificationToken != null)
             {
                 status = true;
-
-                new EmailModel().sendRegistrationEmail(verificationToken);
+                new EmailModel().sendRegistrationVerificationEmail(verificationToken);
             }
-
             return status;
         }
     }

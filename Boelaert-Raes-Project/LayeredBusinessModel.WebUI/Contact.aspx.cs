@@ -26,7 +26,7 @@ namespace LayeredBusinessModel.WebUI
             String subject = txtSubject.Text;
             String message = txtMessage.Text;
 
-            new EmailModel().sendConactMail(email, subject, message);
+            new EmailModel().sendContactMail(email, subject, message);
             pnlStep1.Visible = false;
             pnlStep2.Visible = true;
         }

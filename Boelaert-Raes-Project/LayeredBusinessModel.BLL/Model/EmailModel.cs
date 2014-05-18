@@ -15,8 +15,8 @@ namespace LayeredBusinessModel.BLL
 {
     public class EmailModel
     {
-        /*Send an email asking for user confirmation.*/
-        public void sendRegistrationEmail(Token token)
+        /*Send an email asking for user verification during registration process.*/
+        public void sendRegistrationVerificationEmail(Token token)
         {
             getSmtpClient().Send("info@TaboelaertRaesa.com", token.customer.email, "Taboelaert Raesa account verification", "Dear " + token.customer.name + ",\n\n" +
                 "Thank you for registering with Taboelaert Raesa.\n\n" +
@@ -51,7 +51,7 @@ namespace LayeredBusinessModel.BLL
                 "\n\nRegards,\nThe Taboelaert Raesa team.");
         }
 
-        
+        /*Send the user an email with the details of the order he just paid.*/
         public void sendOrderConfirmationEmail(Customer customer, Order order, List<OrderLine> orderLines, Boolean allInStock, String currency)
         {
             //create HTML email content
@@ -85,13 +85,10 @@ namespace LayeredBusinessModel.BLL
             }
             messageContent += "</table>";
 
-
             messageContent += "</br>";
             messageContent += "Total " + currency + " " +Math.Round(orderTotal, 2);
 
-
-            messageContent += "<br /><br />Regards,<br />The Taboelaert Raesa team.";
-            
+            messageContent += "<br /><br />Regards,<br />The Taboelaert Raesa team.";            
             
             MailMessage message = new MailMessage();
             MailAddress fromAddress = new MailAddress("info@taboelaertraesa.com");
@@ -105,13 +102,12 @@ namespace LayeredBusinessModel.BLL
             getSmtpClient().Send(message);
         }
 
-        public void sendConactMail(String from, String subject, String message)
+        /*Send the contact form information to the Taboelaert Raesa email.*/
+        public void sendContactMail(String from, String subject, String message)
         {
             getSmtpClient().Send(from, "taboelaertraesa@gmail.com", subject, "Someone filled in the contactform \n \n From: " + from + "\n Subject: " + subject + "\n Message: " + message);
         }
-
-
-
+        
         /*Returns SMTP credentials from web.config*/
         private SmtpClient getSmtpClient()
         {

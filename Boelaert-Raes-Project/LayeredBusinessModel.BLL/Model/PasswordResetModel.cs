@@ -57,11 +57,6 @@ namespace LayeredBusinessModel.BLL
                 }
             }
             return didReset;
-        }
-
-        public void resetPassword(Customer user)
-        {
-
-        }
+        }                
     }
 }

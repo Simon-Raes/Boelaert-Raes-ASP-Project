@@ -13,16 +13,17 @@ using System.Drawing;
 namespace LayeredBusinessModel.WebUI
 {
     public partial class NotYetVerified : System.Web.UI.Page
-    {        
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
-                String email = Request.QueryString["email"];
-                if (email != null)
-                {
-                    pnlNoEmail.Visible = false;
-                    pnlWithEmail.Visible = true;
-                }
-            else {
+            String email = Request.QueryString["email"];
+            if (email != null)
+            {
+                pnlNoEmail.Visible = false;
+                pnlWithEmail.Visible = true;
+            }
+            else
+            {
                 pnlNoEmail.Visible = true;
                 pnlWithEmail.Visible = false;
             }
@@ -32,7 +33,7 @@ namespace LayeredBusinessModel.WebUI
         {
             String email = Request.QueryString["email"];
             if (email != null)
-            {                
+            {
                 try
                 {
                     new SignUpModel().sendVerificationForEmail(email);            //Throws NoRecordException || DALException  
@@ -42,7 +43,6 @@ namespace LayeredBusinessModel.WebUI
 
                 }
             }
-            
         }
 
         protected void btnSend_Click(object sender, EventArgs e)
@@ -62,7 +62,6 @@ namespace LayeredBusinessModel.WebUI
                     txtEmailError.Text = "We've send you an email with further instructions.";
                     txtEmailError.ForeColor = Color.Black;
                 }
-
             }
             else
             {

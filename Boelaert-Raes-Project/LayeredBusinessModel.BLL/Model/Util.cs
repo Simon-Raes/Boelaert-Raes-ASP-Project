@@ -9,6 +9,7 @@ namespace LayeredBusinessModel.BLL
     public class Util
     {
         private static Random random = new Random((int)DateTime.Now.Ticks);
+        /*Returns a string of random characters.*/
         public static String randomString(int size)
         {
             StringBuilder builder = new StringBuilder();
@@ -18,7 +19,5 @@ namespace LayeredBusinessModel.BLL
             }
             return builder.ToString();
         }
-
-
     }
 }

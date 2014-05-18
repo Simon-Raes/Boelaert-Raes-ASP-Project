@@ -5,8 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Taboelaert Raesa</title>
-    
-
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
@@ -17,10 +15,11 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <!-- Header bar -->
         <div class="navbar-inverse header">
             <div class="container">
                 Support available 24/7 at <span class="glyphicon glyphicon-phone-alt"></span>+32477073716
-                <ul class="nav navbar-nav navbar-right">   
+                <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Currency <span id="currencySymbol" runat="server" class="glyphicon glyphicon-euro"></span><b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -36,13 +35,14 @@
         <header>
             <div class="container">
 
+                <!-- Header title -->
                 <div class="page-header">
                     <h1>Taboelaert Raesa<br />
                         <small>A clean slate for online dvd shops</small></h1>
                 </div>
 
+                <!-- Navbar -->
                 <nav class="main-nav">
-
                     <nav class="navbar navbar-default" role="navigation">
                         <div class="container-fluid">
                             <ul class="nav navbar-nav">
@@ -52,7 +52,7 @@
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>                                
+                                <li><a id="liCart" href="Cart.aspx" runat="server">Cart</a></li>
 
                                 <li class="navbar-form navbar-left" role="search">
                                     <input id="txtSearchNew" runat="server" type="text" class="form-control" placeholder="Search" />
@@ -60,33 +60,33 @@
                                 </li>
 
                                 <li id="liSignup" runat="server"><a href="signup.aspx">Sign Up</a></li>
-                                <li id="liLogin" runat="server" class="dropdown" >
+                                <li id="liLogin" runat="server" class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                                     <ul class="dropdown-menu" style="padding: 15px; min-width: 250px;">
                                         <li>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                   <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSubmitLogin">
-                                                    <div class="form-group">
-                                                        <asp:Label ID="txtEmailError" runat="server" Text=""></asp:Label>                                                        
-                                                        <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                                                        <input type="email" runat="server" class="form-control" id="txtEmail" placeholder="Email address" required="required" />                                                        
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="sr-only" for="exampleInputPassword2">Password</label>
-                                                        <input type="password" runat="server" class="form-control" id="txtPassword" placeholder="Password" required="required" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <asp:Button ID="btnSubmitLogin" runat="server" Text="Sign in" CssClass="btn btn-success btn-block" OnClick="btnSubmitLogin_Click" CausesValidation="false"/>                                                        
-                                                    </div>
-                                                        </asp:Panel> 
+                                                    <asp:Panel ID="Panel1" runat="server" DefaultButton="btnSubmitLogin">
+                                                        <div class="form-group">
+                                                            <asp:Label ID="txtEmailError" runat="server" Text=""></asp:Label>
+                                                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                                                            <input type="email" runat="server" class="form-control" id="txtEmail" placeholder="Email address" required="required" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="exampleInputPassword2">Password</label>
+                                                            <input type="password" runat="server" class="form-control" id="txtPassword" placeholder="Password" required="required" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <asp:Button ID="btnSubmitLogin" runat="server" Text="Sign in" CssClass="btn btn-success btn-block" OnClick="btnSubmitLogin_Click" CausesValidation="false" />
+                                                        </div>
+                                                    </asp:Panel>
                                                 </div>
                                             </div>
                                         </li>
                                         <li><a href="ForgotPassword.aspx">Forgot your password?</a></li>
                                         <li class="divider"></li>
                                         <li>
-                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'signup.aspx'"/> 
+                                            <input class="btn btn-info btn-block" type="button" value="Sign up" onclick="window.location.href = 'signup.aspx'" />
                                         </li>
                                     </ul>
                                 </li>
@@ -118,7 +118,7 @@
             </div>
         </div>
 
-
+        <!-- Footer -->
         <div class="navbar-inverse">
             <div class="container footer">
                 <a href="NotYetVerified.aspx">Resend activation mail</a>&nbsp;&nbsp; |&nbsp;&nbsp; <a href="Contact.aspx">Contact</a> &nbsp;&nbsp;|&nbsp;&nbsp; Copyright Serafijn Boelaert & Simon Raes &copy; 2014

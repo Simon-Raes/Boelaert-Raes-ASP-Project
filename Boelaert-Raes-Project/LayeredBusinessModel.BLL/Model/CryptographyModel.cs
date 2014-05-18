@@ -11,6 +11,7 @@ namespace LayeredBusinessModel.BLL
 {
     public class CryptographyModel
     {
+        //get the passphrase from web.config
         private static String passphrase = ConfigurationManager.AppSettings["PassPhrase"];
 
         public static string encryptPassword(string message)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
 
-namespace LayeredBusinessModel.BLL.Database
+namespace LayeredBusinessModel.BLL
 {
     public class PageVisitsService
     {

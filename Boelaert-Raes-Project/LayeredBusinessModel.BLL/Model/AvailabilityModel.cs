@@ -9,7 +9,7 @@ using LayeredBusinessModel.DAO;
 using LayeredBusinessModel.Domain;
 using CustomException;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class AvailabilityModel
     {

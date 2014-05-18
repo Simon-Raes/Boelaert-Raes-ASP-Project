@@ -7,7 +7,6 @@ using System.Web.UI.WebControls;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.BLL;
-using LayeredBusinessModel.BLL.Model;
 
 using System.Web.UI.HtmlControls;
 using System.Text;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
 using LayeredBusinessModel.DAO;
-using LayeredBusinessModel.BLL.Database;
+using LayeredBusinessModel.BLL;
 
 namespace LayeredBusinessModel.BLL
 {

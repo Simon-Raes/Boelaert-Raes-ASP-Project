@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-using LayeredBusinessModel.BLL.Model;
+using LayeredBusinessModel.BLL;
 using CustomException;
 
 namespace LayeredBusinessModel.WebUI

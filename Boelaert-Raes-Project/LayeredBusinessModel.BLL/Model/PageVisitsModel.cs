@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
-using LayeredBusinessModel.BLL.Database;
+using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.DAO;
 using CustomException;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class PageVisitsModel
     {

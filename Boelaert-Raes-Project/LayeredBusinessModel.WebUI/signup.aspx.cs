@@ -1,14 +1,12 @@
-﻿using LayeredBusinessModel.BLL;
-using LayeredBusinessModel.BLL.Model;
-using LayeredBusinessModel.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using LayeredBusinessModel.BLL.Database;
+using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.Domain;
 using CustomException;
 
 namespace LayeredBusinessModel.WebUI

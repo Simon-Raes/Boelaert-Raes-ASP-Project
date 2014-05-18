@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
-using LayeredBusinessModel.BLL.Model;
-using LayeredBusinessModel.BLL.Database;
+using LayeredBusinessModel.BLL;
 using CustomException;
 
 namespace LayeredBusinessModel.BLL

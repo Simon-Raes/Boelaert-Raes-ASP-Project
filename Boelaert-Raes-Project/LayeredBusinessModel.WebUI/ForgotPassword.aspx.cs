@@ -4,13 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using LayeredBusinessModel.BLL;
-using LayeredBusinessModel.Domain;
 using System.Net.Mail;
 using System.Net;
 
-using LayeredBusinessModel.BLL.Model;
+using LayeredBusinessModel.BLL;
+using LayeredBusinessModel.Domain;
 using CustomException;
 
 namespace LayeredBusinessModel.WebUI

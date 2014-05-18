@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.Domain;
 using CustomException;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class LoginModel
     {

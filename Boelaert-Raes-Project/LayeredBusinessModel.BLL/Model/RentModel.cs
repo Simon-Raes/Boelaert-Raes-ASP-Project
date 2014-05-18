@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using LayeredBusinessModel.DAO;
 using LayeredBusinessModel.Domain;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class RentModel
     {

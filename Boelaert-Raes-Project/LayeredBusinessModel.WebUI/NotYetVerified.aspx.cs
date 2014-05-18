@@ -5,8 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-using LayeredBusinessModel.BLL.Database;
-using LayeredBusinessModel.BLL.Model;
 using LayeredBusinessModel.BLL;
 using LayeredBusinessModel.Domain;
 using CustomException;

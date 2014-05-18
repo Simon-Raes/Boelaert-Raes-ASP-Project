@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace LayeredBusinessModel.BLL.Database
+namespace LayeredBusinessModel.BLL
 {
     public class TokenService
     {

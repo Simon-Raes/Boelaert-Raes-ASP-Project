@@ -11,7 +11,7 @@ using System.Configuration;
 using System.Net.Configuration;
 
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class EmailModel
     {

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using LayeredBusinessModel.Domain;
-using LayeredBusinessModel.BLL.Database;
+using LayeredBusinessModel.BLL;
 
-namespace LayeredBusinessModel.BLL.Model
+namespace LayeredBusinessModel.BLL
 {
     public class SignUpModel
     {

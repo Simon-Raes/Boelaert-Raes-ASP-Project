@@ -65,6 +65,14 @@ namespace LayeredBusinessModel.WebUI
                 divRecommended.Visible = true;
                 List<DvdInfo> dvdList = new RecommendationsModel().getRecommendations(user, 4);           //Throws NoRecordException()
                 addTilesToRow(dvdList, recommened);
+                if(dvdList.Count>0)
+                {
+                    divRecommended.Visible = true;
+                }
+                else
+                {
+                    divRecommended.Visible = false;
+                }
             }
             catch (NoRecordException)
             {

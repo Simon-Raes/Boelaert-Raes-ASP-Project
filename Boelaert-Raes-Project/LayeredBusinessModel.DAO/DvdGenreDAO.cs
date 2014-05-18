@@ -65,8 +65,8 @@ namespace LayeredBusinessModel.DAO
 
             using (var cnn = new SqlConnection(sDatabaseLocatie))
             {
-                command = new SqlCommand("select top(@amount) dvd_info_id from dvdGenre where dvd_info_id != @dvd_info_id and genre_id in (select genre_id from dvdgenre where dvd_info_id = @dvd_info_id) group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", amount));
+                command = new SqlCommand("select top (@amount) dvd_info_id from dvdGenre where dvd_info_id != @dvd_info_id and genre_id in (select genre_id from dvdgenre where dvd_info_id = @dvd_info_id) group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
+                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
                 command.Parameters.Add(new SqlParameter("@amount", amount));
                 try
                 {

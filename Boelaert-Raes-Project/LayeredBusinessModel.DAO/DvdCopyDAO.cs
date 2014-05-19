@@ -303,59 +303,8 @@ namespace LayeredBusinessModel.DAO
                 note = Convert.ToString(reader["note"]),
                 in_stock = Convert.ToBoolean(reader["in_stock"])
             };
-        }
-
-        /*
-         * Returns a list of dvdcopies for a dvd
-         * Throws a NoRecordException if no records were found
-         * Throws a DALException if something else went wrong
-         */
-        /*
-        public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {       
-                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdCopy> dvdCopies = new List<DvdCopy>();
-                        while (reader.Read())
-                        {
-                            dvdCopies.Add(createDvdCopy(reader));       //Throws NoRecordException
-                        }
-                        return dvdCopies;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is NoRecordException || ex is DALException)
-                    {
-                        throw;
-                    }
-                    throw new DALException("Failed to get all copies for dvdinfo", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdCopyDAO getAllCopiesForDvdInfo()");
-            }
-        }*/
+        }      
+       
 
         /*
          *  Adds a dvdCopy for a dvd
@@ -401,86 +350,6 @@ namespace LayeredBusinessModel.DAO
                 }
                 return status;
             }
-        }
-
-        /*
-         * Returns a List with dvdCopies for a certain dvdInfo that are in stock and for rent
-         */
-        /*
-        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                //is hier nog met hardcoded type_id
-                command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 1 AND in_stock = 1;", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdCopy> dvdCopies = new List<DvdCopy>();
-                        while (reader.Read())
-                        {
-                            dvdCopies.Add(createDvdCopy(reader));
-                        }
-                        return dvdCopies;
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                return null;
-            }
-        }
-
-        public List<DvdCopy> getAllInStockBuyCopiesForDvdInfo(DvdInfo dvdInfo)
-        {
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                List<DvdCopy> dvdCopies = new List<DvdCopy>();
-
-                //is hier nog met hardcoded type_id
-                SqlCommand command = new SqlCommand("SELECT * FROM DvdCopy WHERE dvd_info_id = @dvd_info_id AND copy_type_id = 2 AND in_stock = 1;", cnn);
-                command.Parameters.Add(new SqlParameter("@dvd_info_id", dvdInfo.dvd_info_id));
-
-                try
-                {
-                    cnn.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        dvdCopies.Add(createDvdCopy(reader));
-                    }
-
-                    reader.Close();
-
-                }
-                catch (Exception ex)
-                {
-                }
-                finally
-                {
-                    cnn.Close();
-                }
-                return dvdCopies;
-            }
-        }
-         * */
+        }        
     }
 }

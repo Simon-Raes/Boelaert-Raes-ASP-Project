@@ -21,8 +21,7 @@ namespace LayeredBusinessModel.BLL
             return new ShoppingCartDAO().add(customer, dvdInfo);           
         }
 
-        //overloaded method for adding rent items with dates
-        
+        //overloaded method for adding rent items with dates        
         public Boolean addByCustomerAndStartdateAndEnddate(Customer customer, String dvdInfoID, DateTime startdate, DateTime enddate)
         {
             return new ShoppingCartDAO().addByCustomerAndStartdateAndEndate(customer, dvdInfoID, startdate, enddate);

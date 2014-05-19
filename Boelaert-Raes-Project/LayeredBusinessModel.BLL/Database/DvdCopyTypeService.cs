@@ -13,14 +13,6 @@ namespace LayeredBusinessModel.BLL
         public DvdCopyType getByName(String name)
         {
             return new DvdCopyTypeDAO().getByName(name);         //Throws NoRecordException 
-        }
-
-        /*
-        public DvdCopyType getByID(String id)
-        {
-            typeDAO = new DvdCopyTypeDAO();
-            return typeDAO.getByID(id);            //Throws NoRecordException 
-        }
-        */
+        }        
     }
 }

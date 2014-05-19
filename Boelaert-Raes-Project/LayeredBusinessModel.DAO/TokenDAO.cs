@@ -217,68 +217,7 @@ namespace LayeredBusinessModel.DAO
         private Customer makeCustomer(String i)
         {
             CustomerDAO customerDAO = new CustomerDAO();
-            return customerDAO.getByID(i);
-            //Customer c = new Customer();
-            //c.customer_id = i;
-            //return c;
+            return customerDAO.getByID(i);            
         }
-
-        /*
-         * Removes tokens for customer
-         * Returns true if records were deleted, false if not
-         * Throws DALException if something else went wrong
-         */
-        /*
-        public Boolean deleteByCustomer(Customer customer) {
-            SqlCommand command = null;
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("DELETE FROM Tokens WHERE customer_id = @customer_id", cnn);
-                command.Parameters.Add(new SqlParameter("@customer_id",  customer.customer_id));
-                try
-                {
-                    cnn.Open();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to delete tokens for customers", ex);
-                }
-                finally
-                {
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-            }
-        }*/
-
-        //public Boolean removeToken(String token) {
-        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
-        //    {
-        //        SqlCommand command = new SqlCommand("DELETE FROM Tokens WHERE token = @token", cnn);
-        //        command.Parameters.Add(new SqlParameter("@token", token));
-        //        try
-        //        {
-        //            cnn.Open();
-        //            command.ExecuteNonQuery();
-        //            return true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //        finally
-        //        {
-        //            cnn.Close();
-        //        }
-        //        return false;
-        //    }
-        //}
     }
 }

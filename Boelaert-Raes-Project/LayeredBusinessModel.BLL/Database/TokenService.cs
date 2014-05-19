@@ -33,20 +33,7 @@ namespace LayeredBusinessModel.BLL
         {
             return new TokenDAO().delete(token);
         }
-
-        /*
-        public Boolean addTokenForCustomer(Customer customer, TokenStatus status)
-        {
-            Token token = new Token()
-            {
-                customer = customer,
-                token = generateToken(),
-                timestamp = DateTime.Now,
-                status = status
-            };
-            return new TokenDAO().add(token);
-        }*/
-        
+            
         private String generateToken()
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();

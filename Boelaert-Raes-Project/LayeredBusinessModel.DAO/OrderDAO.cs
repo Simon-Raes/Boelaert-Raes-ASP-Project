@@ -279,35 +279,5 @@ namespace LayeredBusinessModel.DAO
                 date = Convert.ToDateTime(reader["date"])
             };
         }
-        
-        //public List<Order> getAll()
-        //{
-        //    cnn = new SqlConnection(sDatabaseLocatie);
-        //    List<Order> orderList = new List<Order>();
-
-        //    SqlCommand command = new SqlCommand("SELECT * FROM Orders", cnn);
-        //    try
-        //    {
-        //        cnn.Open();
-        //        SqlDataReader reader = command.ExecuteReader();
-
-        //        while (reader.Read())
-        //        {
-        //            orderList.Add(createOrder(reader));
-        //        }
-
-        //        reader.Close();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //    finally
-        //    {
-        //        cnn.Close();
-        //    }
-        //    return orderList;
-        //}
     }
 }

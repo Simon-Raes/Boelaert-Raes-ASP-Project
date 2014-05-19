@@ -10,13 +10,7 @@ using LayeredBusinessModel.Domain;
 namespace LayeredBusinessModel.BLL
 {
     public class OrderService
-    {
-        //public List<Order> getAll()
-        //{
-        //    orderDAO = new OrderDAO();
-        //    return orderDAO.getAll();
-        //}
-
+    {      
         public Order getByID(String id)
         {
             return new OrderDAO().getByID(id);            //Throws NoRecordException

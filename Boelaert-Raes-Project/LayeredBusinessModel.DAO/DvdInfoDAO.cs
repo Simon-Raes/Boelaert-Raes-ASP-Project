@@ -553,19 +553,7 @@ namespace LayeredBusinessModel.DAO
                 command = new SqlCommand("select top (@amount) dvd_info_id from dvdGenre where genre_id in (" + genres[0] + "," + genres[1] + "," + genres[2] + ") group by dvd_info_id order by COUNT(dvd_info_id) desc  ", cnn);
 
                 command.Parameters.Add(new SqlParameter("@amount", amount));
-
-                //create a string out of the received genres
-                //String values = "";
-                //for (int i = 1; i <= genres.Length; i++)
-                //{
-                //    values += genres[i - 1];
-                //    if (i < genres.Length)
-                //    {
-                //        values += ",";
-                //    }
-                //}
-
-                //sql.Parameters.Add(new SqlParameter("@values", values));
+                               
 
                 try
                 {
@@ -786,52 +774,5 @@ namespace LayeredBusinessModel.DAO
                 duration = Convert.ToString(reader["duration"])
             };
         }
-
-        /*
-         * Returns a List with all the dvd's
-         * Throws NoRecordException if no records were found
-         * Throws DALException if something else went wrong
-         */
-        /*
-        public List<DvdInfo> getAll()
-        {
-            SqlCommand command = null;
-            SqlDataReader reader = null;
-
-            using (var cnn = new SqlConnection(sDatabaseLocatie))
-            {
-                command = new SqlCommand("SELECT * FROM DvdInfo", cnn);
-                try
-                {
-                    cnn.Open();
-                    reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        List<DvdInfo> dvdlist = new List<DvdInfo>();
-                        while (reader.Read())
-                        {
-                            dvdlist.Add(createDvdInfo(reader));
-                        }
-                        return dvdlist;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new DALException("Failed to get all the dvd's", ex);
-                }
-                finally
-                {
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                    if (cnn != null)
-                    {
-                        cnn.Close();
-                    }
-                }
-                throw new NoRecordException("No records were found - DvdInfoDAO getAllDvdInfos()");
-            }
-        }*/
     }
 }

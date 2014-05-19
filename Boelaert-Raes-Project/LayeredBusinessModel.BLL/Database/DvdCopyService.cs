@@ -38,11 +38,10 @@ namespace LayeredBusinessModel.BLL
         {
             return new DvdCopyDAO().update(copy);                                           //Throws NoRecordException || DALException            
         }
-
-        //Nog veranderen naar boolean? 
-        public void updateStockStatus(DvdCopy dvdCopy, bool in_stock)
+                
+        public Boolean updateStockStatus(DvdCopy dvdCopy, bool in_stock)
         {
-            new DvdCopyDAO().updateStockStatus(dvdCopy, in_stock);                          //Throws NoRecordException || DALException         
+            return new DvdCopyDAO().updateStockStatus(dvdCopy, in_stock);                          //Throws NoRecordException || DALException         
         }
 
         public Boolean resetAllCopies()
@@ -53,28 +52,6 @@ namespace LayeredBusinessModel.BLL
         public void addCopiesForDvd(DvdInfo dvd)
         {
             new DvdCopyDAO().addCopiesForDvd(dvd);
-        }
-
-        /*
-        public Boolean add(DvdInfo dvdInfo)
-        {
-            DvdCopyDAO dvdCopyDAO = new DvdCopyDAO();
-            return dvdCopyDAO.addCopiesForDvd(dvdInfo);
-        }
-        */
-
-        /*
-        public List<DvdCopy> getAllInStockRentCopiesForDvdInfo(DvdInfo dvdInfo)
-        {
-            dvdCopyDAO = new DvdCopyDAO();
-            DvdCopyType type = new DvdCopyTypeService().getTypeByName("Verhuur");
-            return dvdCopyDAO.getAllInStockCopiesForDvdInfo(dvdInfo,type);                  //Throws NoRecordException || DALException
-        }*/
-
-        /*
-        public List<DvdCopy> getAllCopiesForDvdInfo(DvdInfo dvdInfo)            
-        {
-            return new DvdCopyDAO().getAllCopiesForDvdInfo(dvdInfo);                       //Throws NoRecordException || DALException
-        }*/
+        }        
     }
 }

@@ -523,41 +523,6 @@ namespace LayeredBusinessModel.DAO
                     }
                 }
             }
-        }
-
-        //public List<OrderLine> getOrderLinesForOrder(String order_id)
-        //{
-        //    using (var cnn = new SqlConnection(sDatabaseLocatie))
-        //    {
-        //        List<OrderLine> orderList = new List<OrderLine>();
-
-        //        //todo: exacte query
-        //        SqlCommand command = new SqlCommand("SELECT * FROM OrderLine WHERE order_id = @order_id", cnn);
-        //        command.Parameters.Add(new SqlParameter("@order_id", order_id));
-
-        //        try
-        //        {
-        //            cnn.Open();
-        //            SqlDataReader reader = command.ExecuteReader();
-
-        //            while (reader.Read())
-        //            {
-        //                orderList.Add(createOrderLine(reader));
-        //            }
-
-        //            reader.Close();
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //        finally
-        //        {
-        //            cnn.Close();
-        //        }
-        //        return orderList;
-        //    }
-        //}
+        }        
     }
 }

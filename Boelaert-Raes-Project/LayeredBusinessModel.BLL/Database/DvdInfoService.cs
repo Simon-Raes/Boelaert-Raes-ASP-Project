@@ -10,13 +10,7 @@ using LayeredBusinessModel.DAO;
 namespace LayeredBusinessModel.BLL
 {
     public class DvdInfoService
-    {
-        /*
-        public List<DvdInfo> getAll()
-        {
-            return new DvdInfoDAO().getAll();         //Throws NoRecordException
-        }*/
-
+    {     
         public List<DvdInfo> getAllWithBanner()
         {
             return new DvdInfoDAO().getAllWithBanner();           //Throws NoRecordException

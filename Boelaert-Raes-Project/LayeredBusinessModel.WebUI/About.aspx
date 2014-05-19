@@ -13,6 +13,7 @@
             <br />
             Hosting provided by SmarterASP.
             <br /><br />
+            A digital manual (Dutch) can be be found here: <a href="https://www.dropbox.com/s/761ntzlnnholnb7/Boelaert-Raes-Handleiding.pdf">DigitalManual.pdf</a>
             
             
             
